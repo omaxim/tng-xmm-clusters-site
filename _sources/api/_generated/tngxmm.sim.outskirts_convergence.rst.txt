@@ -1,0 +1,52 @@
+tngxmm.sim.outskirts\_convergence
+=================================
+
+.. automodule:: tngxmm.sim.outskirts_convergence
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ANNULI_R500
+      X_R500
+      SHAPES
+      CORNER_H6_R500
+      N_VOX
+      SIGNAL_ANNULI
+      DEPTH_R500
+      BLOCK_ROWS
+      PERCENTILE
+      NH_DEFAULT
+      ECF_FILTER
+      BKG_COLUMN
+      KPC_CM
+      SNAPS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      accumulate
+      annulus_area_arcmin2
+      background_reference
+      beyond
+      cell_rate
+      ecf_curve
+      halo_emission
+      halo_table
+      load_halo_file
+      long_table
+      main
+      make_figures
+      mark_voxels
+      new_histograms
+      r3d_edges
+      region_radius
+      row_blocks
+      save_halo
+      select_halos
+      summarize
+      zoom_gas_cells
+      zoom_gas_ranges
+   

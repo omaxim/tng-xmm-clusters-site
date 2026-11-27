@@ -1,0 +1,29 @@
+tngxmm.bank.lint\_ml\_columns
+=============================
+
+.. automodule:: tngxmm.bank.lint_ml_columns
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FORBIDDEN_PATTERNS
+      FORBIDDEN_COLUMNS
+      ML_KEY_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_ml_view
+      find_forbidden_columns
+      forbidden_reason
+      lint_ml_columns
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ForbiddenColumnError
+   

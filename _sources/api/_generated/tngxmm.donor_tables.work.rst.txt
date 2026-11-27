@@ -1,0 +1,22 @@
+tngxmm.donor\_tables.work
+=========================
+
+.. automodule:: tngxmm.donor_tables.work
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_shard
+      donor_path
+      finish_shard
+      products_signature
+      run_donors
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ShardDone
+   

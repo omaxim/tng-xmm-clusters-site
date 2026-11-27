@@ -1,0 +1,36 @@
+--- a/xmm_simulator/utils.py
++++ b/xmm_simulator/utils.py
+@@ -1,6 +1,6 @@
+ import pkg_resources
+ import os
+-from scipy.interpolate import interp1d, interp2d
++from scipy.interpolate import interp1d, RectBivariateSpline
+ import numpy as np
+ from astropy.io import fits
+ from astropy.wcs import WCS
+@@ -40,9 +40,13 @@
+     ene_corr = xmmsim.corrarea['ENERGY'] / 1e3
+     corr_fact = xmmsim.corrarea['FACTOR']
+ 
+-    fvig_interp = interp2d(rads, ene_vig, vig_fact, kind='cubic')
++    # interp2d removed in scipy 1.14; RectBivariateSpline is the equivalent for
++    # regular grids. vig_fact shape is (n_ene, n_rads); RectBivariateSpline
++    # expects (n_rads, n_ene), so transpose. Wrap scalar theta in a list so
++    # __call__ returns (1, n_ene) which flattens identically to the old code.
++    fvig_interp = RectBivariateSpline(rads, ene_vig, vig_fact.T, kx=3, ky=3)
+ 
+-    vig_theta = fvig_interp(theta, ene_vig).flatten()
++    vig_theta = fvig_interp([theta], ene_vig).flatten()
+ 
+     ebound = (ebound_lo + ebound_hi) / 2.
+ 
+@@ -66,7 +70,8 @@
+ 
+     corr_ebound = fcorr_interp(ebound)
+ 
+-    fqeff = interp1d(xmmsim.ene_qeff.flatten(), xmmsim.qeff.flatten(), kind='cubic', fill_value="extrapolate")
++    # CCF QE data has NaN at E=0; replace with 0 before interpolating (cubic spline propagates NaN everywhere)
++    fqeff = interp1d(xmmsim.ene_qeff.flatten(), np.nan_to_num(xmmsim.qeff.flatten(), nan=0.0), kind='cubic', fill_value="extrapolate")
+ 
+     qeff_ebound = fqeff(ebound)
+ 

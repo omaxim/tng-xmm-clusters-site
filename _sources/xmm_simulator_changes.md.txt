@@ -1,0 +1,150 @@
+# Changes to xmm_simulator
+
+The instrument stage builds on [xmm_simulator](https://github.com/domeckert/xmm_simulator) 0.2.0 (D. Eckert), pinned
+at commit [`9fdedb4e`](https://github.com/domeckert/xmm_simulator/tree/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5).
+This page lists every way the v1 stage (`conf/base/parameters/v1.yml`, block `instrument`) differs from running that
+commit as shipped. It is the source for the paper's description of the instrument model.
+
+**In short.** Two lines of upstream source are patched (U1, U2). The event loop is re-implemented in `tngxmm.instrument`.
+The re-implementation reuses upstream's calibration-file selection, packaged masks, RMFs and FWC spectra, sky-model
+constants and AGN template, and `calc_arf` when `arf_model` is unset (the presets fold the fit's effective area, F8).
+Everything else is an addition, listed below with its switch and source.
+
+## How to maintain this page
+
+* One row per change, under a stable ID (U, F, R, C, B, S, P). Edit rows in place; never append a change log.
+* A change that is undone moves to **Retired** with the date and commit. Its ID is not reused.
+* **Upstream** links point into the pinned commit, so the line numbers do not drift. **Ours** names a module and
+  symbol, not a line.
+* `tests/unit/test_xmm_simulator_changes.py` checks:
+  * every **Ours** symbol exists;
+  * every `switch: value` matches `v1.yml`;
+  * every realism switch of `InstrumentOptions` appears on this page.
+
+  A new switch fails the test until it has a row here.
+* **Status**: `v1` is in the v1 preset on `main`; `branch <name>` is not merged yet. **Open** points to the list at
+  the end.
+
+Upstream base URL below: `U` = `https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/`.
+
+## U. Edits to upstream source
+
+These are the only edits to upstream source: [`environment/patches/xmm_simulator-9fdedb4e-utils.patch`](../environment/patches/xmm_simulator-9fdedb4e-utils.patch),
+applied to the installed `utils.py`.
+
+| ID | Change | Upstream | Status |
+|---|---|---|---|
+| U1 | `interp2d(rads, ene_vig, vig_fact, kind='cubic')` → `RectBivariateSpline(rads, ene_vig, vig_fact.T, kx=3, ky=3)`, scalar θ wrapped in a list. `interp2d` was removed in scipy 1.14. | [utils.py:43](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/utils.py#L43) | v1 |
+| U2 | `qeff` → `np.nan_to_num(qeff, nan=0.0)` before the cubic `interp1d`. The CCF MOS QE tables have NaN at E = 0, which made the MOS ARF zero everywhere. | [utils.py:69](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/utils.py#L69) | v1 |
+
+## F. Upstream behaviour corrected in our implementation
+
+| ID | Upstream → ours | Upstream | Ours | Switch (v1) | Source | Status |
+|---|---|---|---|---|---|---|
+| F1 | King PSF CDF built by `cumsum` of surface brightness without the 2πr element (PSF about 50× too narrow) → analytic inverse of the enclosed-energy fraction, `r = r0·sqrt(u^(-1/(α-1)) - 1)` | [imaging.py:78–83](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/imaging.py#L78) | [`simulate_instrument.king_offsets`](../src/tngxmm/instrument/simulate_instrument.py) | `psf_fix: true` | King profile EEF; the formula is upstream's own commented line 78 | v1 |
+| F2 | MOS2 area and vignetting read from `XRT1_XAREAEF` (MOS1 mirror) → `XRT2_XAREAEF` | [utils.py:207](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/utils.py#L207) | [`load_responses.set_mirror_area_file`](../src/tngxmm/instrument/load_responses.py) | `mos2_mirror: XRT2` | CCF XRT2_XAREAEF | v1 |
+| F3 | Energy grid ends at 10.01 keV → 15 keV, 0.02 keV bins (with `arf_model` unset; under F8 the RMF's bins and one bin of zero area above them, to 100 keV) | [simulator.py:88](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/simulator.py#L88) | [`load_responses.get_response`](../src/tngxmm/instrument/load_responses.py) | `arf_energy_max_kev: 15.0` | PPS band 5 ends at 12 keV observed (Rosen et al. 2016) | v1, open O1 |
+| F4 | `sample_rmf` normalises the caller's RMF in place → channel CDF built once per spectrum from the RMF, which is never modified | [event_file.py:163](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/event_file.py#L163) | [`simulate_instrument.channel_cdf_from_coarse`](../src/tngxmm/instrument/simulate_instrument.py) | none | — | v1 |
+| F5 | Two AGN in one pixel overwrite each other (`box_pts[iY, iX, :] =`) → events drawn per source | [point_sources.py:156](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/point_sources.py#L156) | [`simulate_instrument.generate_agn_sources`](../src/tngxmm/instrument/simulate_instrument.py) | none | — | v1 |
+| F6 | Filter hard-coded to Medium → each donor camera's filter (Thin1/Thin2/Medium/Thick) | [simulator.py:127](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/simulator.py#L127) | [`load_responses.set_filter_transmission`](../src/tngxmm/instrument/load_responses.py) | `filter: per-donor` | CCF E*_FILTERTRANSX; Webb et al. 2020 Table 1 | v1 |
+| F7 | AGN log N–log S uses the hard-band constants of Moretti et al. (α 1.57/0.44, S0 4.5e-15, N 5300) with flux read from a 2–10 keV template; the docstring says 0.5–2 keV → the soft-band constants (1.82/0.60, 1.48e-14, 6150) on each source's observed 0.5–2 keV flux; log N_H uniform 20.5–22 | [point_sources.py:8–21](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/point_sources.py#L8) | [`point_sources.moretti03_draw`](../src/tngxmm/instrument/point_sources.py) | `agn_lognlogs: moretti03-soft` | Moretti et al. 2003 Eq. 2, Sect. 7 | v1, open O2 |
+| F8 | ARF sampled at the centres of 0.02 keV bins: the 0.52–0.54 keV bin takes the area below the O-K edge (0.532 keV) for all of it, 33 % high for MOS, so the MOS 0.5–1 keV area is 1.1–1.2 % high (pn 0.2 %) → the fit's on-axis ARF on the RMF's energy bins times the CCF vignetting, linear in angle and energy, and no area above the RMF: the generator and the fitter fold one effective area (on the RMF's bins `calc_arf` agrees with it to 2e-4) | [utils.py:47](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/utils.py#L47) | [`effective_area.effective_area_theta`](../src/tngxmm/instrument/effective_area.py) | `arf_model: fit-linear` | CCF XRT*_XAREAEF, E*_QUANTUMEF, E*_FILTERTRANSX; massfit.build_responses | v1 |
+
+## R. Re-implementation (same model, different numerics)
+
+| ID | Upstream → ours | Upstream | Ours | Switch (v1) | Source | Status |
+|---|---|---|---|---|---|---|
+| R1 | Per-pixel ARF cube, per-photon loops, FFT PSF on the flat sky, per-camera thinning → per-θ-bin expectation, Poisson per active pixel, one categorical camera draw per photon (p_i = ARF_i/A_gen · t_i/t_gen), no PSF on the flat sky | [event_file.py:518](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/event_file.py#L518) | [`simulate_instrument.camera_events`](../src/tngxmm/instrument/simulate_instrument.py) | `sampler: per-particle`, `camera_partition: true` | Poisson thinning and splitting (exact) | v1, open O3 |
+| R2 | Images on the 900×900 2.5″ mask grid, rotated as images → events rotated by the donor roll and binned at 4″ (the PPS scale) on a 648×648 canvas | [event_file.py:579](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/event_file.py#L579) | [`write_camera_products.write_camera_products`](../src/tngxmm/instrument/write_camera_products.py) | `target_pix_arcsec: 4.0`, `merged_npix: 648` | XMM-Newton UHB (PPS image scale) | v1 |
+| R3 | Exposure map = vignetting × mask × t → exact inverse of the event transform, 4×4 sub-samples per pixel | [background.py:94](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/background.py#L94) | [`make_exposure_maps.make_exposure_maps`](../src/tngxmm/instrument/make_exposure_maps.py) | `expmap_method: inverse-map`, `expmap_subsamples: 4` | consistency with the event transform | v1, open O1 |
+| R4 | One band `[elow, ehigh]`, whitespace source list, `FILTER`/`OBS_MODE` fixed → five PPS bands `[elo, ehi)`, per-camera IMAGE/EXPMAP, FITS source list, SAS-readable headers | [event_file.py:738](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/event_file.py#L738) | [`sas_headers.add_sas_keys`](../src/tngxmm/instrument/sas_headers.py) | `product_bands: pps-1-5`, `sas_headers: on`, `header_style: v4` | Rosen et al. 2016 Sect. 3.5; Webb et al. 2020 | v1 |
+
+## B. Detector response from calibration files (additions)
+
+| ID | Ours | Code | Switch (v1) | Source | Status |
+|---|---|---|---|---|---|
+| B1 | pn ARF × PATTERN ≤ 4 fraction (FRAC_SD); MOS unchanged | [`apply_pattern_loss.apply_pattern_loss`](../src/tngxmm/instrument/apply_pattern_loss.py) | `pattern_efficiency: sas` | CCF EPN_QUANTUMEF; UHB Table 7; checked against SAS `arfgen` to 0.2 % | v1, open O4 |
+| B2 | pn 0.2–0.5 keV image: single-pixel events only, RAWY > 12 | [`apply_pattern_loss.pn_single_pixel_keep`](../src/tngxmm/instrument/apply_pattern_loss.py) | `pn_band1_events: single-pixel` | PPS DSS keywords of the donors | v1 |
+| B4 | Events on zero-area pixels dropped | [`simulate_instrument.drop_out_of_fov`](../src/tngxmm/instrument/simulate_instrument.py) | `out_of_fov_events: drop` | Snowden et al. 2008; PPS OUT_OF_FOV flag | v1 |
+| B5 | pn 4.5–12 keV image and QPB exclude 7.8–8.2 keV (Cu lines) | [`simulate_instrument.band_gaps`](../src/tngxmm/instrument/simulate_instrument.py) | `pn_hard_band: pps` | Mateos et al. 2009 Sect. 2 fn. 4 | v1 |
+| B6 | Effective area beyond 15′ held at the last tabulated angle (upstream: zero) | [`load_responses.get_response`](../src/tngxmm/instrument/load_responses.py) | `vignetting_beyond: ccf-edge` | TN-0018 Sect. 4.5 | v1, open O5 |
+| B7 | Vignetting centred on the CCF telescope axis per camera (upstream: pointing) | [`calibration_axis.telescope_axis_arcmin`](../src/tngxmm/instrument/calibration_axis.py) | `vig_axis: ccf` | CCF XMM_MISCDATA; Lumb et al. 2003 | v1 |
+| B8 | Exposure-map vignetting at the band centre | [`make_exposure_maps.vignetting_energy`](../src/tngxmm/instrument/make_exposure_maps.py) | `vig_energy_rule: band-centre` | SAS `eexpmap` | v1, open O5 |
+| B9 | AGN photons get the SAS elliptical King PSF at their energy and off-axis angle | [`point_sources.ellbeta_offsets`](../src/tngxmm/instrument/point_sources.py) | `agn_psf: ellbeta` | CCF XRT*_XPSF; Read et al. 2011 | v1 |
+| B10 | pn out-of-time events: each X-ray event moved, with the mode's probability, to a uniform position along its CCD column | [`simulate_instrument.pn_out_of_time`](../src/tngxmm/instrument/simulate_instrument.py) | `pn_oot_model: full-column`, `pn_readout_tilt_deg: -24.434` | UHB Table 6, Sect. 3.3.10; Webb et al. 2020 | v1, open O1 |
+| B11 | Out-of-time energies carry the CTI correction applied at the wrong row, E·exp(k(A)(y_rec − y_true)), with k from CCF EPN_CTI through the SAS CAL at the pn CCD temperature (183.2 K, housekeeping F1128), checked against the PPS event lists | [`pn_oot_energy.cti_line`](../src/tngxmm/instrument/pn_oot_energy.py) | `pn_oot_energy: ccf-cti` | CCF EPN_CTI; SAS `epevents` | v1 |
+| B12 | Photons redistributed with the conditions donor's own RMF (SAS 22.1 rmfgen for its date, camera, mode and cluster region) instead of the packaged RMF of 2020; with the value donor also the on-axis energy dependence of its arfgen ARF, the CCF vignetting kept (before the adoption: the packaged RMF) | [`obs_responses.apply_observation_responses`](../src/tngxmm/instrument/obs_responses.py) | `responses: donor` | SAS rmfgen and arfgen; CCF EMOSn_REDIST by epoch; TN-0018 Sect. 2.2 | v1 (the response set must be built first), open O9 |
+| B13 | Calibration-error arms: the effective area of every camera times a published difference (the ACIS/PN spline of Schellenberger et al. 2015 divided out, the paper's case of a correct ACIS calibration, with the multiplied direction as a diagnostic; or the CCF's EPIC-to-NuSTAR correction, both directions); exposure maps and model images nominal. Closure arms only | [`area_perturbation.perturbed_response`](../src/tngxmm/instrument/area_perturbation.py) | `area_perturbation: None` | Schellenberger et al. 2015 Table A.3; TN-0018 Sect. 4; CCF XRT3_XAREAEF | branch todo/r5-responses (closure arms only), open O9 |
+| B14 | CCF file of each type (quantum efficiency, filter, mirror area, PSF, FWC) as SAS cifbuild selects it for the conditions donor's date: valid at the date, submitted by the analysis date, highest header issue (upstream: highest number in the file name); the fit's shared ARFs alike, one set per validity interval | [`ccf_select.select`](../src/tngxmm/instrument/ccf_select.py), [`load_responses.use_ccf_files`](../src/tngxmm/instrument/load_responses.py), [`build_responses.ccf_epoch_dir`](../src/tngxmm/massfit/build_responses.py) | `ccf_selection: valid-at-date` | SAS cifbuild task document Sects. 3.6 and 8 | v1, open O9 |
+
+## C. Observing conditions copied from a real (donor) observation
+
+| ID | Ours (upstream: one generic setup) | Code | Switch (v1) | Source | Status |
+|---|---|---|---|---|---|
+| C1 | pn submode sets the out-of-time fraction and headers | [`select_pn_mode.select_pn_mode`](../src/tngxmm/instrument/select_pn_mode.py) | `pn_submode_header: per-donor` | UHB Table 6 | v1 |
+| C2 | Readout windows (pn LW/SW, MOS central-CCD windows) | [`readout_windows.apply_readout_windows`](../src/tngxmm/instrument/readout_windows.py) | `readout_windows: donor` | UHB Table 3; Webb et al. 2020 Table 2 | v1 |
+| C3 | Active CCDs from the donor's PPS map, else the epoch rule | [`active_ccds.apply_active_ccds`](../src/tngxmm/instrument/active_ccds.py) | `active_ccds: donor` | Snowden et al. 2008; UHB Sect. 3.3 | v1 |
+| C4 | Detector footprint from the donor's PPS exposure map; it also ends the pn at its readout rows (zero exposure at RAWY ≤ 12), with no row cut on top | [`donor_footprint.apply_detector_footprint`](../src/tngxmm/instrument/donor_footprint.py) | `detector_footprint: donor-pps`, `pn_edge_rows: footprint` | SAS `eexpmap`; Rosen et al. 2016; UHB Table 3 note 5; the PPS exposure maps and event lists of three donors | v1, open O1 |
+| C5 | Live time = the donor's on-axis exposure-map level (upstream: EXPOSURE keyword) | [`donor_background.donor_live_times`](../src/tngxmm/instrument/donor_background.py) | `live_time: donor-expmap` | SAS `eexpmap`; UHB Table 3 | v1, open O1 |
+| C6 | Cluster at the donor's core offset (upstream: box centre) | [`simulate_instrument.donor_offset_displacement`](../src/tngxmm/instrument/simulate_instrument.py) | `placement: donor-offset` | UHB Sect. 3.3.1 | v1 |
+| C7 | Replicas: conditions from the 5 nearest real observations, with exposure, roll and pointing jitter | [`conditions_donor.draw_view_conditions`](../src/tngxmm/instrument/conditions_donor.py) | `donors.observing_conditions` | UHB Sect. 4.2.2, 4.4 | v1, open O6 |
+
+## S. Background and absorption (additions)
+
+| ID | Ours (upstream in brackets) | Code | Switch (v1) | Source | Status |
+|---|---|---|---|---|---|
+| S1 | QPB level per PPS band = donor corner rate / CCF FWC corner rate, within the flare GTIs; pn corners corrected for out-of-time events (FWC spectrum at nominal level) | [`donor_corner_qpb.corner_scale`](../src/tngxmm/instrument/donor_corner_qpb.py) | `background: donor`, `qpb_level: corners` | De Luca & Molendi 2004 Sect. 3; Leccardi & Molendi 2008 App. B; Snowden et al. 2008 Sect. 3.1.1; Kuntz & Snowden 2008 | v1 |
+| S2 | QPB spatial form from the CCF FWC event lists (flat over the mask) | [`donor_background.fwc_qpb_maps`](../src/tngxmm/instrument/donor_background.py) | `qpb_spatial: fwc` | Snowden et al. 2008 Fig. 2; Kuntz & Snowden 2008 | v1, open O1 |
+| S3 | MOS residual soft protons, flat in the field of view, Leccardi & Molendi broken power law, rate from the 10–12 keV IN/OUT excess (none) | [`donor_inout_sp.sp_rate_from_excess`](../src/tngxmm/instrument/donor_inout_sp.py) | `soft_protons: inout` | De Luca & Molendi 2004; Leccardi & Molendi 2008 App. B | v1, open O7 |
+| S4 | The same for the pn, from the pn IN/OUT excess (none) | [`donor_inout_sp.donor_soft_protons`](../src/tngxmm/instrument/donor_inout_sp.py) | `cameras: [MOS1, MOS2, PN]` (donor table) | as S3; the excess is a lower bound because the pn corners also see soft protons (Marelli et al. 2021) | v1 (the data-package table has the pn columns since 2026-11-03), open O7 |
+| S5 | Soft excess of anomalous MOS CCDs (none) | [`donor_soft_ccd.soft_ccd_events`](../src/tngxmm/instrument/donor_soft_ccd.py) | `mos_soft_ccd: donor` | Kuntz & Snowden 2008 Sect. 3.3 | v1, open O1 |
+| S6 | Total Galactic column N_HI + 2 N_H2 for cluster, sky and AGN (the N_H passed in) | [`galactic_column.total_column`](../src/tngxmm/instrument/galactic_column.py) | `galactic_nh: willingale13` | Willingale et al. 2013 Eq. 7 | v1 |
+| S7 | AGN also absorbed by the Galactic column (intrinsic only) | [`galactic_column.extra_absorption_keep`](../src/tngxmm/instrument/galactic_column.py) | `agn_galactic_nh: view` | Mateos et al. 2008 Sect. 2.4 | v1 |
+| S8 | Sky: LHB and Galactic-halo levels of the donor field from its RASS spectrum (1–2° annulus) at the published median temperatures 0.111 and 0.191 keV; the unresolved CXB the drawn AGN leave out of the Moretti et al. counts, photon index 1.41 (one MACS J0949 fit for every donor) | [`simulate_instrument.skybkg_spectrum`](../src/tngxmm/instrument/simulate_instrument.py), [`rass_sky.fit`](../src/tngxmm/donor_tables/rass_sky.py) | `sky_model: donor-rass` | Snowden et al. 2008 Sects. 3.4.1, 4.4; Yeung et al. 2024; Henley & Shelton 2013; Moretti et al. 2003; De Luca & Molendi 2004 | v1, open O8 |
+| S9 | Residual soft protons on the CCF flare maps of the filter and band, smoothed 1′ (flat) | [`donor_background.flare_maps_stage`](../src/tngxmm/instrument/donor_background.py) | `soft_proton_map: flare` | Kuntz & Snowden 2008 Sect. 4.3; SAS `proton` | v1 |
+| S10 | QPB of each MOS CCD and pn quadrant scaled by its own corner level (one level per camera) | [`donor_corner_qpb.donor_unit_factors`](../src/tngxmm/instrument/donor_corner_qpb.py) | `qpb_units: corners` | Snowden et al. 2008 Sect. 3.1.1; Kuntz & Snowden 2008 | v1 |
+| S11 | MOS vignetting modulated in azimuth by the RGA obscuration of the SAS calibration layer (none) | [`rga_obscuration.camera_dipole`](../src/tngxmm/instrument/rga_obscuration.py) | `mos_rga_vignetting: ccf` | XMM CAL handbook; CCF RGSn_QUANTUMEF | v1 |
+| S12 | A camera whose donor has no IN/OUT rate (the cluster fills the IN region, or no usable corner level) takes the measured rate of the nearest pool donor of its donor fold, recorded in SPRFLAG / SPSUBST and obs_meta (none) | [`donor_inout_sp.nearest_measured_in_fold`](../src/tngxmm/instrument/donor_inout_sp.py) | `sp_rate_unmeasured: nearest-in-fold` | ours (no published transfer of an IN/OUT rate between observations); ledger `instrument.sp_rate_unmeasured` | v1 |
+
+Upstream inputs used unchanged: CCF file selection, packaged masks, RMFs, FWC spectra and AGN template (`calc_arf` only
+with `arf_model` unset). The
+upstream sky model with its constants ([event_file.py:19–23](https://github.com/domeckert/xmm_simulator/blob/9fdedb4e8c6375a0be18e1307c12d9dc63fc6fb5/xmm_simulator/event_file.py#L19),
+the MACS J0949 values) stays available as `sky_model: xmm_simulator`; the presets use S8. `agn_norm: moretti03` keeps upstream's normalisation.
+`agn_lognlogs`, `agn_psf`, `agn_galactic_nh` and `galactic_nh` are rows F7, B9, S7 and S6.
+
+## Retired
+
+| ID | Change | Retired | Why |
+|---|---|---|---|
+| — | pn background factor 0.947, the 0.0959 level, band shrinkage priors, QPB clip 0.2–10, MOS RGA dipole, OoT CTI 1.4e-3 per row | 2026-10-30, `main` | tuned to replays; no factors fitted to mocks |
+| — | B3: pn events within 12 rows of the footprint's readout edge dropped in every band, the EXPMAP unchanged | 2026-11-03, `todo/b11-chain-fixes` | the PPS exposure maps are zero and the cleaned event lists empty at RAWY ≤ 12, so the footprint (C4) already ends there; counted from its edge, the rule removed the real rows 14–25 (3.6–6.9 % of the pn events) |
+
+## Open
+
+* **O1** A number with no published source: 15 keV grid (F3), 4×4 sub-samples (R3), footprint level radius 8′ and floor
+  0.5 (C4), live time as the 95th percentile within 1.5′ (C5), anomalous-CCD thresholds 5σ and 0.25 (S5). The pn readout
+  tilt (B10) and the placement of the FWC and soft-proton detector maps (S2) come from SAS's own DET → sky solution of
+  the observation behind the packaged masks since 2026-11-03 (`donor_background.DET_TO_MASK`, `tools/det_to_mask.py`).
+* **O2** Closed 2026-11-03: the AGN redshift, N_H and photon index come from the Ueda et al. (2014) population at each source's soft flux (`agn_population: ueda14`); the N_H cap 22, calibrated against Moretti's hard-band counts, stays only in the earlier draw.
+* **O3** The claim that R1 matches upstream statistically rests on one A/B ratio (1.0044) recorded in a legacy document.
+  Rerun `run_xmm_simulator.run_upstream_reference` on one view before the paper says so.
+* **O4** `pattern_loss_factor: 0.92` was read only as a switch and never multiplied in. Done (2026-11-03): the field is
+  now the switch `pattern_loss = 'ccf'`.
+* **O5** Chosen to reproduce the donors' PPS maps rather than taken from a calibration: B6, B8.
+* **O6** Condition-space weights 9/9/4 and n = 5 are design choices (C7).
+* **O7** The Leccardi & Molendi spectral shape was fitted to MOS data over 0.7–10 keV and is used over 0.5–12 keV and for
+  the pn (S3, S4). With S4 the pn background matches real data to ±0.03 dex at 1–12 keV, but 0.2–0.5 keV is 0.05–0.07 dex high.
+* **O8** The sky model takes each donor field's own LHB and halo levels from its RASS spectrum since 2026-11-03 (S8);
+  the check against the donors' own XMM soft-band field (STATUS A2) is still to run (ledger `instrument.sky_background`).
+* **O9** Upstream's CCF selection takes the highest issue number in each file name, not the constituent valid at a
+  date. For the MOS quantum efficiency that is EMOS1_QUANTUMEF_0026 and EMOS2_QUANTUMEF_0024, files of 2002 whose
+  header issue is 14 and which SAS no longer selects (it takes 0020 before 2002-11-08 and 0021 after): the MOS on-axis
+  area is 6.4 / 2.9 per cent lower at 0.5-1 keV and 2.0 / 1.7 per cent lower at 1-2 keV than with the issues SAS uses.
+  Alone it moves the temperature of a real observation fitted with the shared ARFs by -4.9 / -6.5 / -9.1 per cent
+  (MOS1), -2.3 / -3.3 / -4.8 (MOS2) and -1.2 / -1.7 / -2.4 (three cameras) at 3 / 5 / 8 keV, about the size of the
+  EPIC-to-NuSTAR term with the opposite sign. The shared fit ARFs (`massfit.build_responses`) use the same rule, so
+  mocks are generated and fitted alike; a real MOS fit is not. B14 (`ccf_selection: valid-at-date`, generator and fit
+  together) follows SAS; with the shared responses the real-side error of the three cameras is then +2.2 / +3.9 / +6.7
+  per cent instead of +1.0 / +2.2 / +4.1 (median of 13 epochs). B12 with `massfit.responses: per-observation`
+  removes the response terms (ledger `instrument.response`); the presets use B12 and B14 since the author's
+  adoption of 2026-11-04.

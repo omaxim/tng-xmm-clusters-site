@@ -1,0 +1,306 @@
+# A production run from the target list to the masses
+
+This page follows one run from its first command to its last table: pass 1 of the pairing on the fit mass on
+FLAMINGO L1_m8 (PREREGISTRATION section 6). Pass 1 observes projection 0 of each of the 5,001 halo-snapshots under
+one reference observation, 0762440401, and fits every view. The fit mass of a view is the first matching mass of its
+halo-snapshot. The preset is `v1_flamingo_l1m8_pass1`; the list, the reference and the choices behind them are in
+`campaigns/v4_flamingo_l1m8_pass1/README.md`.
+
+The same steps serve any target list. A list with six views per halo-snapshot, each under its own paired observation
+(pass 2), takes a pass-2 preset (`config.PASS2_PRESETS`) in place of the pass-1 preset; `tngxmm donors
+pair-projections` writes that list from the fit tables of pass 1 and of the real observations ({doc}`PIPELINE`,
+stage 2).
+
+Pass 1 has been run. The 5,001 views were generated, and fitted with the short chains: about 4,000 on the home
+cluster, and the remaining 978 on a second cluster on 2026-11-26 with `massfit.psf_eval = 'window'` and
+`massfit.projection = 'matrix'` ({doc}`dev/PSF_WINDOW_VALIDATION`). Some fits of the largest z = 0.055 mocks stop
+when the start points of the sampler are drawn; the cause is understood and the fix is pending ({doc}`dev/STATUS`).
+
+## Before the first job
+
+The commands below use the following names. Machine paths enter through the site file and these placeholders only.
+
+| name | what |
+|---|---|
+| `P` | the preset, `v1_flamingo_l1m8_pass1` |
+| `<list>` | `campaigns/v4_flamingo_l1m8_pass1/targets_v4_flamingo_l1m8_pass1.csv` |
+| `<cubes>` | the root of the canonical cubes of FLAMINGO L1_m8 ({doc}`PIPELINE`, section 0) |
+| `<out>` | the output root of the run: logs, plans, fit work directory, rate caches |
+| `<tree>` | the campaign tree, `<out>/P`: the views, their source lists and the fit targets |
+| `<sim python>`, `<massfit python>` | the interpreters of the `sim` and `massfit` environments with the package's command line (`environment/thin_venv.sh`) |
+| `$TNGXMM_DATA` | the data package whose donor tables are current for the code |
+
+A production job runs from a clean commit. The runner refuses a tree with uncommitted changes, and a commit
+without a tag unless `--allow-untagged` is given. The job stamps its commit and spec hash into
+`<out root>/provenance/` and stops if either moved between submission and start.
+
+Every job goes through the runner:
+
+```bash
+python -m tngxmm.core.runner slurm submit <template> --out-root <dir> [--preset P] \
+    --set KEY=VALUE ... [--log <out>/logs/<step>_%j.log] [--allow-untagged] [--go]
+```
+
+Without `--go` the runner only tests the submission (`sbatch --test-only`) and names what a real submission would
+refuse. The standing rules of a run:
+
+* Every submission is made by hand: one `--go`, one job. No job submits another.
+* At most two nodes are occupied at once. The runner allows one job of the user by default; the second is submitted
+  with `--max-jobs 2`.
+* Each node is fully used: a fit job holds more fits than it has workers, so that a worker that ends a fit finds
+  another (`fit-plan jobs` builds the plans that way).
+* A job runs for at most 48 hours. Where a template's own limit is shorter, sbatch's variable
+  `SBATCH_TIMELIMIT=48:00:00` in front of the runner command raises it.
+
+The preset does not keep the photon lists of a view (`runtime.drop_events`; about 18 MB a view, 90 GB
+over the list). A replay of a view makes them again from its seeds. The runner and the job scripts of the
+generation, the SAS queue and the fits write a few MB into the output root before they compute anything, and stop
+with exit code 28 if that fails ({doc}`when-a-run-stops`).
+
+The seed hash of the fit changed with the concentration prior (67670d464ce8f888). The real seed table
+and the guarded centres carry the hash they were measured under and are refused when it is not the current one, so
+they are built again before a fit ({doc}`dev/STATUS`).
+
+## 1. The target list
+
+```bash
+tngxmm donors pass1-targets campaigns/v4_flamingo_l1m8/targets_v4_flamingo_l1m8.csv \
+    --preset P --out-dir campaigns/v4_flamingo_l1m8_pass1
+```
+
+It takes view 0 of every halo-snapshot of the source list, puts it under the reference observation at the halo's
+redshift and writes the list with a provenance sidecar (commit, spec hash, sha256), `pass1_reference.json` and the
+ranked pool. The list is committed; the command is repeated only when the sidecar should name another commit. The
+list itself (sha256 9298e369...) does not change with the commit.
+
+The 665 views of the z = 0 snapshot keep the redshift of their row in the source list, since a halo at z = 0 has no
+distance. All of them are predicted outside the domain of the fit (step 4); they are generated and fitted like the
+others.
+
+## 2. Generation
+
+Plan first, on the login node. It writes nothing and lists the tasks, 5,001 halos with one view each:
+
+```bash
+python -m tngxmm.core.runner campaign run --preset P --targets-csv <list> --out-root <tree> \
+    --cube-root <cubes> --workers 40 --dry-run
+```
+
+Then the job (an estimate: about 10 node-hours at 40 workers):
+
+```bash
+python -m tngxmm.core.runner slurm submit slurm/campaign.sh --preset P --out-root <tree> \
+    --set TARGETS_CSV=<list> --set TNGXMM_CUBE_STORE=canonical --set TNGXMM_CUBE_ROOT=<cubes> \
+    --set WORKERS=40 --set TNGXMM_PY=<sim python> --set TNGXMM_DATA=$TNGXMM_DATA --go
+```
+
+Each view lands in `<tree>/<sim>/<snap>/<halo>/view0/` and gets one row of
+`<tree>/results_<sim>_snap_<snap>.csv`. A view is finished when its `obs_meta.json` exists: the file is written
+last, after every product of the view has reached the disk. The job ends with the acceptance checks of the tree
+(`checks/campaign_check.md`). Submitting the same command again continues the run: finished views are kept, the
+others are made.
+
+## 3. SAS source lists
+
+The fit masks the point sources that ESA's `edetect_chain` finds on the view, as on a real observation. The queue is
+built on the login node from the target list:
+
+```bash
+tngxmm instrument sas-queue build-mock --targets <list> --tree <tree> --queue <tree>/sas/queue.json
+```
+
+`--dry-run` counts the listed views and those that have products. The command stops when a listed view has no
+products; `--skip-missing` queues the others and names the missing ones. Then the job, one detection per core (an
+estimate: about 22 node-hours for 5,001 views, so the template's 6 hours are raised):
+
+```bash
+SBATCH_TIMELIMIT=30:00:00 python -m tngxmm.core.runner slurm submit slurm/sas_detect.sh \
+    --out-root <tree> --set QUEUE=<tree>/sas/queue.json --set TNGXMM_PY=<sim python> \
+    --set TNGXMM_DATA=$TNGXMM_DATA --go
+```
+
+The list of a view is `<view>/sas_detect/sources.csv`. A detection is finished when its `provenance.json` exists
+and the files it records are whole. An entry that fails is tried once more and then logged as failed in
+`progress.jsonl` beside the queue; the job then ends with exit code 1. The same submission repeats only what is
+missing.
+
+## 4. Fit targets
+
+A fit target is a view with its centre, its first-guess mass from the image (`massfit.guess_mass.seed_lx_iterated`)
+and the links to its per-camera products. The seed photometry takes tens of seconds a view, so the list is cut into
+pieces and built on a node, one piece per core:
+
+```bash
+tngxmm massfit fit-plan pieces --targets <list> --root <tree> --preset P --out-dir <tree>/fit --pieces 70
+python -m tngxmm.core.runner slurm submit slurm/fit_targets.sh --out-root <tree> \
+    --set QUEUE=<tree>/fit/queue_fit_targets.json --set TNGXMM_PY=<sim python> \
+    --set TNGXMM_DATA=$TNGXMM_DATA --go
+```
+
+After the job, on the login node:
+
+```bash
+tngxmm massfit fit-plan merge --targets <list> --out-dir <tree>/fit --out <tree>/fit/targets_pass1.csv
+```
+
+The merge writes one fit-target table in the order of the list and, beside it, `targets_pass1.missing.csv`: the
+listed views without a fit target. That file must be empty before the fits are planned; otherwise the missing views
+are generated first.
+
+The domain flags known before the fit ({doc}`glossary`, "domain") are then predicted from the fit targets, with the
+fit's own rules and its first-guess R500, and the merge is repeated with them:
+
+```bash
+tngxmm massfit predict-domain --targets <tree>/fit/targets_pass1.csv --img-root <tree>/fitimg \
+    --kind mock --preset P --out <tree>/fit/domain_targets_pass1.csv
+tngxmm massfit fit-plan merge --targets <list> --out-dir <tree>/fit --out <tree>/fit/targets_pass1.csv \
+    --domain <tree>/fit/domain_targets_pass1.csv
+```
+
+`--domain` adds the flags as columns (`pred_bg_fallback`, `pred_field_edge`, `pred_out`). They are a record: no
+step selects or orders by them, and every target is fitted. The prediction from the fit targets has not been timed
+on a list of this length. Before any view exists, `predict-domain --targets <list> --reference 0762440401
+--img-root <PPS images> --out <csv>` predicts the same from the geometry of the reference with the true R500 in
+place of the first guess: 2,290 of the 5,001 views are predicted outside the domain, all by the background rule.
+That table can be given to `--domain` as well.
+
+## 5. Fit plans
+
+```bash
+tngxmm massfit fit-plan jobs --targets <tree>/fit/targets_pass1.csv --out-dir <out>/plan --tag pass1 \
+    --img-root <tree>/fitimg --work <out>/work --cache <out>/caches/seed/mbproj2d_cache \
+    --worker-caches <out>/caches --preset P --workers 68 --job-hours 48 --costs <cost table> \
+    --fitter-args "--seed 20261008 --crop-r500 3 --fallback-bg-prior-dex 0.3 --resp <responses>"
+```
+
+`--dry-run` prints the split and writes nothing. The command writes, under `<out>/plan`:
+
+| file | content |
+|---|---|
+| `targets_pass1_jobNN.csv` | the fit targets of job NN: those of job NN-1 first, then its own |
+| `FIT_PLAN_pass1_jobNN.txt` | the plan file of job NN (the format of `slurm/fits.sh`) |
+| `FIT_PLAN_pass1_sweep.txt` | a last plan that lists every target |
+| `fit_jobs_pass1.csv`, `fit_jobs_pass1.json` | target, job and cost estimate; the summary |
+
+A job has `workers` times `job-hours` core-hours, here 68 x 48 = 3,264. The cost table gives
+an estimate per fit in core-hours (`name, core_h`); without one, `--fits-per-job` sets the split. The targets are
+sorted by cost, longest first, and dealt to the jobs in turn, so every job holds the same mix of long and short fits
+and several fits for each worker. With the pilot's runtimes as the estimate (5.8 to 12.9 hours a fit by angular
+size, 9.9 on average) the list makes 16 jobs of about 313 fits. The pilot ran before the likelihood became about
+four times faster, so the estimate is probably high.
+
+`--cache` is the seed rate cache, a directory named `mbproj2d_cache`; each worker gets a private copy under
+`--worker-caches`. All plans share the tag, the work directory and the worker caches. That is what lets a later job
+find the fits of an earlier one.
+
+## 6. Fit jobs
+
+Jobs 01, 02, ... in order, then the sweep:
+
+```bash
+SBATCH_TIMELIMIT=48:00:00 python -m tngxmm.core.runner slurm submit slurm/fits_vera.sh --out-root <out> \
+    --set FIT_PLAN=<out>/plan/FIT_PLAN_pass1_job01.txt --set QUICK=1 --set PER_FIT_TIMEOUT_S=140000 \
+    --set FITS_MAX_WORKERS=68 --set TNGXMM_PY=<massfit python> --set TNGXMM_DATA=$TNGXMM_DATA --go
+```
+
+`QUICK=1` asks for the short chains (150 + 300 steps), the pilot's setting; the cost estimate above is for them. The
+sampler of PREREGISTRATION section 5 is not chosen yet. `PER_FIT_TIMEOUT_S` ends a single fit after that many
+seconds (the template's default is 4 hours; the pilot's mock fits took longer).
+
+The fitter runs with `--resume --order as-listed`. In job NN it first meets the targets of job NN-1: it keeps those
+with a fit that ran to its end (status `ok` or `unconstrained`) and fits the others again, then goes on to its own. A fit that job NN-1 did not
+finish, or that failed there, is therefore tried once more in job NN and after that only in the sweep. The sweep
+plan lists every target and is submitted until the first line of its stream log, `--resume: N finished fits kept, M
+to run`, shows nothing to run. A fit that fails in the same way each time is repeated by every sweep, so read the
+failures (section 8) before another sweep is submitted.
+
+The jobs of one set of plans run one after another. Job NN lists the targets of job NN-1, and all jobs share one
+work directory and one set of worker caches, so two jobs of the same plans must not run at the same time: they would
+fit the same targets into the same directories.
+
+To fit on two nodes at once, give `fit-plan jobs` the option `--lanes 2`. The targets are then dealt to two lanes
+in the order of their cost, so the lanes hold no target in common and the same mix of long and short fits. Each
+lane has its own target table, plans and sweep under `<out>/plan/lane<L>`, its own work directory
+`<out>/work/lane<L>` and its own worker caches. One job of each lane may run at the same time; within a lane the
+jobs still run one after another. The results of the run are then the two tables `<out>/work/lane<L>/fits/results_all.csv`
+of the two sweeps.
+
+### Lists from the results so far
+
+Three commands read the result tables of a run and its fit targets (`massfit.fit_lists`). A status that starts
+with `ok` or `unconstrained` is a finished fit; an error or a timeout is not.
+
+```bash
+R="<out>/work/lane1/fits/results_all.csv <out>/work/lane2/fits/results_all.csv"
+T="<out>/plan/lane1/targets_pass1_lane1.csv <out>/plan/lane2/targets_pass1_lane2.csv"
+# the targets without a finished fit, largest theta500 first
+tngxmm massfit fit-plan remaining --targets $T --results $R --out targets_remaining.csv
+# 75 finished z = 0.1 fits to repeat: 5 from each cell of 5 run-time classes x 3 fitted-mass classes
+tngxmm massfit fit-plan refit-sample --targets $T --results $R --seed 20261126 --z 0.1 \
+    --out-targets targets_control.csv --out-results control_results.csv
+# per redshift the fits at evenly spaced ranks of fitted mass
+tngxmm massfit fit-plan rank-sample --results $R --per-group 0.1=10 0.2=5 1.0=4 1.5=3 \
+    --among views_on_disk.csv --exclude control_results.csv --max-sampler-h 3 \
+    --out-names names_pilot.txt --out-results pilot_results.csv
+```
+
+* `remaining` is the list a further job or another cluster gets ({doc}`LOCAL`, "On another cluster":
+  `fit-plan streams`).
+* `refit-sample` cuts the finished fits of one redshift at the quantiles of `runtime_s` (5 classes) and of
+  `m500_1e14` (3 classes) and draws 5 names from each of the 15 cells with `numpy.random.default_rng(seed)`. The
+  draw depends on the order of the rows of the result tables, which changes while a run goes on, so a sample is
+  kept as the files the command wrote and not drawn again later. The control sample of 2026-11-26 (seed 20261126,
+  1,511 finished z = 0.1 fits) is pinned with its input rows in `tests/unit/data/fit_lists`.
+* `rank-sample` sorts the candidates of each redshift by fitted mass and takes those at the ranks
+  `round(linspace(0, n-1, k))`. `--among` is a table of the names with a view on disk, `--exclude` the tables of
+  other samples, `--max-sampler-h` a limit on `runtime_s - runtime_optimiser_s`.
+
+These samples choose fits to repeat on another machine or code state. They select nothing for an analysis.
+
+## 7. When a job stops
+
+A time limit, a full disk, a failed or timed-out fit: what each looks like and what to do is on
+{doc}`when-a-run-stops`. In every case the command that was submitted is submitted again; nothing has to be
+cleaned by hand.
+
+## 8. Where the results are
+
+| what | where |
+|---|---|
+| a fit | `<out>/work/fits/<name>_pass1/`: `chain.hdf5`, `mass_profile_samples.npz`, `result.json`, `provenance.json` |
+| the table of a job | `<out>/work/fits/results_all.csv`, rewritten every time a fit ends |
+| the log of a job's fits | `<out>/work/stream_pass1_<job id>.log`: one line per fit, `[i/n] <name>: M500=...e14` or its status |
+| the job log | the `--log` file: the stamp, the pre-flight, and the last line `=== ALL DONE ... (status N) ===` |
+
+`provenance.json` is written last and marks a fit as finished; a directory without it is a fit that was cut and
+will be made again.
+
+`results_all.csv` holds the targets of the plan that wrote it last: after job NN those of jobs NN-1 and NN, after
+the sweep all of them. The table of the whole run is the one the sweep writes. Its columns are those of
+`result.json` (INTERFACES section 4.3):
+
+* `status`: `ok`, `unconstrained (no R500 crossing)`, or `error: ...` with the exception. A fit stopped by a full
+  disk is in no table.
+* `m500_1e14`, `m500_lo`, `m500_hi`: the median and the 16th and 84th percentiles of M500 over the chain, in
+  1e14 Msun. R500 (proper kpc) and M200 are given the same way.
+* `c200`, `c200_lo`, `c200_hi`; `c200_prior_range`, the hard range the fit had (0.5-20 under the Dutton & Maccio
+  prior); `c200_prior_offset_sd`, the median offset of the chain from the relation at each sample's own M200, in
+  standard deviations of the prior. The offset is reported and cuts nothing.
+* `mass_seed_source` (`converged`, `field-edge`, `not-converged`, `pivot`) and `n_bg_fallback`: what the first
+  guess and the background seed rested on.
+* `runtime_s` and `quick` (short chains). The commit, the spec hash and the resolved fit switches of a fit are in
+  its `provenance.json`.
+
+`massfit.fit_qc.qc_flags` turns a result into its flags. Four are known before the fit and define
+the domain: `centre`, `bg_fallback`, `field_edge`, `no_seed`. Three come from the fit's own result:
+`prior_edge_c200`, `prior_edge_Z`, `pout_runaway`. A flagged fit stays in the table. The statistics of a run are
+given inside the domain, once without the fits flagged by their own result and once with them, and the fits outside
+the domain are reported apart ({doc}`dev/PILOT`, "What is measured"). No command writes that report for a pass-1
+run yet: the pilot's report (`python -m tngxmm.analysis.pilot_report`) takes a real and a mock fit table, and
+`python -m tngxmm.analysis.fit_vs_truth`, which compares the gas and mass profiles of each mock fit with the
+simulation's, reads the mock table of that report.
+
+A pass-1 mass is the fit of one projection under one observation with the short chains (150 burn-in and 300
+sampling steps), which are short of convergence by the diagnostics the fit records. It serves the pairing and is not
+a bias measurement: the pilot's mock fits lay above the simulation's own hydrostatic mass, and the cause is not
+established ({doc}`dev/STATUS`).

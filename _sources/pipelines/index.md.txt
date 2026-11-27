@@ -1,0 +1,59 @@
+# Pipelines
+
+Every Kedro pipeline registered by `tngxmm.pipeline_registry.register_pipelines`.  The ten stages with nodes
+(`tngxmm.STAGES` less `ml`, which is not implemented) make up `__default__` in data-flow order, except
+`viz.plot_mock_truth`, whose input comes from the `analysis` pipeline (`NOT_IN_DEFAULT`).  Two stage nodes do
+nothing unless a parameter asks for them: `ingest.build_canonical_cubes` writes nothing while
+`params:ingest.cube_root` is null (the generation then reads the snapshots through the cube index files), and
+`instrument.replay_views` replays nothing unless a table of views is given (the `realism` environment gives one).
+The other six pipelines run on request: `validation` (the closure grid, about three node-hours), `analysis`,
+`certify`, `donor_tables`, `realism` and `setup` (the downloads of a machine away from the cluster).
+
+Each node carries one `env.<stack>` tag, the software environment it runs in (`sim`, `massfit` with XSPEC,
+`embed`), and a `cite.<key>` tag for every scientific reference, data set, instrument document and scientific code
+it implements or calls (general-purpose libraries are credited in the bibliography, not tagged).  A node is a thin
+wrapper around the function that the command line and the SLURM job of the stage call, so a Kedro run and a
+production job write the same bytes.
+
+Each pipeline page lists its nodes in execution order, generated from the registry: the function, the first
+paragraph of its docstring, and every input and output with its catalog entry (a dataset without one stays in
+memory).  One node runs with `kedro run --pipeline <name> --nodes <name>.<node>`.  Per-stage instructions:
+{doc}`/PIPELINE`; the node-to-command map: {doc}`/dev/KEDRO`.
+
+## Inputs read outside the catalog
+
+`sim.generate_views` runs the whole per-view chain (gas, photons, instrument, photometry, truth) inside one node and
+reads these inputs from the data package and the site, not as Kedro datasets: the donor tables of the `donor_tables`
+pipeline (`donor_background.csv`, `donor_mos_background.csv`, `donor_qpb_corners.csv`, `donor_soft_ccd.csv`, `donor_nh_total.csv`,
+`donor_conditions.csv`) and the donor core offsets and active CCDs (`$TNGXMM_DATA/tables/`); the APEC tables and the
+reference emission tables; the XMM calibration files (`$CCF_PATH`) and responses; the simulation data through the
+cube index files or the canonical cubes (`runtime.cube_store`). The cubes of the simulations served over the network
+(FLAMINGO L1_m8, SIMBA, EAGLE) are streamed beforehand on a node with network access (`ingest.swift_remote`,
+`ingest.simba_remote`, `ingest.eagle_remote`; {doc}`/PIPELINE`, section 0); the ingest node checks that they exist,
+and with `ingest.stream_missing=true` it first streams the missing halos of FLAMINGO L1_m8. The real-data branch of the fit starts
+from fit-target tables built by `tngxmm massfit build-realfit-targets` (CLI only; `massfit.fit_targets_input` is
+that table), and `analysis` reads the fit directories named in its parameters.
+
+```{kedro-pipelines}
+```
+
+```{toctree}
+:maxdepth: 1
+
+ingest
+sim
+instrument
+donors
+obs
+photometry
+massfit
+bank
+embed
+viz
+validation
+analysis
+certify
+donor_tables
+realism
+setup
+```

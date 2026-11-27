@@ -1,0 +1,40 @@
+tngxmm.instrument.pn\_oot\_energy
+=================================
+
+.. automodule:: tngxmm.instrument.pn_oot_energy
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      OOT_ENERGY_RULES
+      CAL_MODE_IDS
+      FIRST_ROW
+      EV_PER_ADU
+      TEMPERATURE_SOURCE
+      MIN_AMPLITUDE_ADU
+      PPS_CHECK_PHA_BINS
+      PPS_CHECK_MIN_EVENTS
+      PPS_CHECK_TOLERANCE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cti_line
+      date_to_mjd
+      main
+      pps_check
+      pps_column_sums
+      pps_slopes
+      read_table
+      table_path
+      write_table
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PnCtiLine
+   

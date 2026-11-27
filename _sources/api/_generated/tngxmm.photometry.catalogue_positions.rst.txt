@@ -1,0 +1,50 @@
+tngxmm.photometry.catalogue\_positions
+======================================
+
+.. automodule:: tngxmm.photometry.catalogue_positions
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      R90_OVER_SIGMA
+      ACT_DR6_SIGMA_SNR_ARCMIN
+      SZ_CATALOGUES
+      Z_TYPES
+      REDSHIFT_RULE_VERSION
+      PHOTZ_COUNTERPARTS
+      ACT_COUNTERPART_PREFIX
+      PSZ2_ACT_MATCH_ARCMIN
+      PHOTZ_PAPER_SIGMA
+      Z_MATCH_TOL
+      INPUT_PINS
+      ACT_DR6_POSITION_FILTER_ARCMIN
+      ACT_DR6_BEAM_FWHM_ARCMIN
+      ACT_DR6_SEGMENT_SNR
+      PSZ2_BEAM_FWHM_ARCMIN
+      PSZ2_MERGE_ARCMIN
+      ACT_DR6_WHITE_NOISE_UK_ARCMIN
+      POSITION_RULE_VERSION
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      act_counterpart
+      build_table
+      catalogue_entry
+      default_table_path
+      main
+      mock_catalogue_offset
+      mock_redshift
+      mock_redshift_offset
+      photz_paper_sigma
+      position_error
+      position_rule
+      psz2_redshift
+      psz2_theta500_arcmin
+      read_counterparts
+      read_table
+      redshift_error
+   

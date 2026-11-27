@@ -1,0 +1,31 @@
+tngxmm.realism.matching
+=======================
+
+.. automodule:: tngxmm.realism.matching
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      COLUMNS
+      BKG_FIELD_R500
+      BKG_FALLBACK_R500
+      BKG_OUTER_FRACTION
+      BKG_RULES
+      ESTIMATOR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      annulus_counts
+      donor_counts
+      exposure_ratio
+      measure_factors
+      read_thin_table
+      summarise_factors
+      thin_factors
+      view_counts
+      vignetted_flat_background
+   

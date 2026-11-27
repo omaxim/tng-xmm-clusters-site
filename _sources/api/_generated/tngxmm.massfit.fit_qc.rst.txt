@@ -1,0 +1,25 @@
+tngxmm.massfit.fit\_qc
+======================
+
+.. automodule:: tngxmm.massfit.fit_qc
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PRIOR_EDGE_FRAC
+      QC_EXCLUDING
+      LP_RISE_FLAG_SD
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      blue_mass_within
+      fit_prior_ranges
+      load_mass_profile_samples
+      qc_flags
+      rho_crit_msun_kpc3
+      write_mass_profile_samples
+   

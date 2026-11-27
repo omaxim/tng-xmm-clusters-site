@@ -1,0 +1,37 @@
+tngxmm.instrument.sas\_detect
+=============================
+
+.. automodule:: tngxmm.instrument.sas_detect
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CCF_ANALYSIS_DATE
+      PI_MIN
+      CAMERAS
+      CAMERA_ORDER
+      ECF
+      DET_ML_MIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      detection_complete
+      ecf_for
+      edetect_chain_command
+      filter_key
+      read_source_list
+      run_detection
+      sasrun_path
+      stage_inputs
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DetectSettings
+      StagedInputs
+   

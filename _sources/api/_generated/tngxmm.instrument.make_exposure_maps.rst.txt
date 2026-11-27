@@ -1,0 +1,26 @@
+tngxmm.instrument.make\_exposure\_maps
+======================================
+
+.. automodule:: tngxmm.instrument.make_exposure_maps
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      VIG_ENERGY_RULES
+      EXPFIX_TAG
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      band_vignetting_energies
+      count_weighted_energy
+      inverse_map_average
+      inverse_map_samples
+      make_exposure_maps
+      photon_spectrum_on_grid
+      vig_on_mask
+      vignetting_energy
+   

@@ -1,0 +1,25 @@
+tngxmm.obs
+==========
+
+.. automodule:: tngxmm.obs
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   build_observations
+   candidate_quality
+   cli
+   extra_observations
+   hydrostatic_bias
+   mass_conversion
+   pipeline
+   pps_products
+   read_observation_meta
+   reference_masses
+   references
+   schemas
+   sky_columns

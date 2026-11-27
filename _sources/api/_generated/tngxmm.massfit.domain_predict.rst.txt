@@ -1,0 +1,30 @@
+tngxmm.massfit.domain\_predict
+==============================
+
+.. automodule:: tngxmm.massfit.domain_predict
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BG_ANNULUS_MIN_PIXELS
+      MIN_HALFBOX
+      DOMAIN_FLAGS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bg_annulus_pixels
+      bg_limit_arcmin
+      fit_geometry
+      main
+      observation_seed_radius
+      predict_from_geometry
+      predict_targets
+      reference_bg_curve
+      row_flags
+      seed_measurable_radius
+      target_bg_pixels
+   

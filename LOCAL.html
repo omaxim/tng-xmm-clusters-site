@@ -1,0 +1,1058 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Pipelines" href="pipelines/index.html"><link rel="prev" title="The data package, bundles and fixtures" href="data.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>Running tngxmm on a laptop - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/_generated/tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/_generated/tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/_generated/tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/_generated/tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="api/_generated/tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="api/_generated/tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="api/_generated/tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/_generated/tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/_generated/tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/_generated/tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/_generated/tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dev/index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="running-tngxmm-on-a-laptop">
+<h1>Running tngxmm on a laptop<a class="headerlink" href="#running-tngxmm-on-a-laptop" title="Link to this heading">¶</a></h1>
+<p>The simulation, the instrument stage and the hydrostatic <em>fits</em> need the cluster
+(TNG snapshots, the XMM CCF, AtomDB, HEASoft/XSPEC). Everything downstream of
+the stored products runs on a workstation from a local data bundle:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>stage</p></th>
+<th class="head"><p>runs locally from the bundle</p></th>
+<th class="head"><p>needs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">obs</span></code> (<code class="docutils literal notranslate"><span class="pre">obs</span> <span class="pre">build-observations</span></code>)</p></td>
+<td><p>yes</p></td>
+<td><p>nothing (inputs are in the package)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">donors</span></code> (replica, gate P, folds, max targets)</p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tables/splits</span></code>; the halo tables are in <code class="docutils literal notranslate"><span class="pre">campaigns/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">photometry</span></code> on stored views (<code class="docutils literal notranslate"><span class="pre">measure_lx</span></code>, <code class="docutils literal notranslate"><span class="pre">photometry</span> <span class="pre">remeasure-lx</span></code>)</p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tables</span></code>, <code class="docutils literal notranslate"><span class="pre">legacy_v3</span></code> (ECF table), <code class="docutils literal notranslate"><span class="pre">views</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">massfit</span></code> renders (<code class="docutils literal notranslate"><span class="pre">render-fit-v4</span></code>)</p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">responses</span></code>, <code class="docutils literal notranslate"><span class="pre">rate_cache</span></code>, <code class="docutils literal notranslate"><span class="pre">fits</span></code>, <code class="docutils literal notranslate"><span class="pre">true_profiles</span></code>, <code class="docutils literal notranslate"><span class="pre">legacy_v3</span></code>, <code class="docutils literal notranslate"><span class="pre">legacy_v2</span></code>; patched mbproj2d</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bank</span></code></p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">views</span></code> and/or <code class="docutils literal notranslate"><span class="pre">mosaics</span></code>, <code class="docutils literal notranslate"><span class="pre">obs_mosaics</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">embed</span></code></p></td>
+<td><p>yes (CPU fp32; a GPU for the full bank)</p></td>
+<td><p>bank renders; the DINOv3 weights from Hugging Face after accepting their licence (not bundled)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">viz</span></code></p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">embeddings</span></code>, <code class="docutils literal notranslate"><span class="pre">tables</span></code> (the <code class="docutils literal notranslate"><span class="pre">ml</span></code> stage is not implemented)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sim</span></code>, <code class="docutils literal notranslate"><span class="pre">instrument</span></code>, campaign generation</p></td>
+<td><p>no</p></td>
+<td><p>TNG-Cluster / TNG300 snapshots, CCF, AtomDB, xmm_simulator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">massfit</span></code> fits</p></td>
+<td><p>no, unless HEASoft/XSPEC and AtomDB APEC 3.1.3 are installed locally</p></td>
+<td><p>XSPEC (a rate-cache miss calls it)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="install">
+<h2>1. Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.10<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venvs/tngxmm<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>.<span class="w"> </span>~/venvs/tngxmm/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[analysis]"</span><span class="w">                </span><span class="c1"># from a checkout (or: pip install &lt;wheel&gt;)</span>
+tngxmm<span class="w"> </span>--help<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tngxmm<span class="w"> </span>cite<span class="w"> </span>--lint
+</pre></div>
+</div>
+<p>A non-editable install also works: the catalogue tables, <code class="docutils literal notranslate"><span class="pre">citations/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">inputs/</span></code>, <code class="docutils literal notranslate"><span class="pre">LICENSES/</span></code> and the bundle manifest are shipped inside the package.
+For massfit renders install mbproj2d at <code class="docutils literal notranslate"><span class="pre">ff497101</span></code> and apply the two patches
+in <code class="docutils literal notranslate"><span class="pre">environment/patches/</span></code> (LGPL-3.0-or-later; <code class="docutils literal notranslate"><span class="pre">patch</span> <span class="pre">-p1</span> <span class="pre">&lt;</span> <span class="pre">&lt;patch&gt;</span></code> in the
+mbproj2d checkout); for the temet-exact checks <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">external/temet</span></code>. Pinned versions per stage: <code class="docutils literal notranslate"><span class="pre">environment/*.lock.txt</span></code>.</p>
+</section>
+<section id="make-the-bundle-on-the-cluster">
+<h2>2. Make the bundle (on the cluster)<a class="headerlink" href="#make-the-bundle-on-the-cluster" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tngxmm<span class="w"> </span>data<span class="w"> </span>bundle<span class="w"> </span>--list<span class="w">                               </span><span class="c1"># every item, its source and size</span>
+tngxmm<span class="w"> </span>data<span class="w"> </span>bundle<span class="w"> </span>--list<span class="w"> </span>--stage<span class="w"> </span>photometry<span class="w"> </span>--set<span class="w"> </span><span class="nv">campaign</span><span class="o">=</span><span class="nv">$TNGXMM_PROD</span>/campaign_v1
+tngxmm<span class="w"> </span>data<span class="w"> </span>bundle<span class="w"> </span>--make<span class="w"> </span>/ptmp/.../bundle<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--stage<span class="w"> </span>photometry<span class="w"> </span>--stage<span class="w"> </span>massfit-render<span class="w"> </span>--stage<span class="w"> </span>bank<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--set<span class="w"> </span><span class="nv">campaign</span><span class="o">=</span>&lt;campaign<span class="w"> </span>tree&gt;<span class="w"> </span>--set<span class="w"> </span><span class="nv">fits</span><span class="o">=</span>&lt;fit<span class="w"> </span>root&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-files<span class="w"> </span><span class="nv">views</span><span class="o">=</span><span class="m">2000</span><span class="w">                              </span><span class="c1"># a small bundle</span>
+</pre></div>
+</div>
+<p>Items (<code class="docutils literal notranslate"><span class="pre">src/tngxmm/core/bundle.yml</span></code>):</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>item</p></th>
+<th class="head"><p>content</p></th>
+<th class="head"><p>size (measured)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tables</span></code></p></td>
+<td><p>frozen tables of the data package (splits, donor offsets and thresholds, APEC tables, results CSVs)</p></td>
+<td><p>22 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">legacy_v3</span></code>, <code class="docutils literal notranslate"><span class="pre">legacy_v2</span></code></p></td>
+<td><p>byte-identical copies of the external input tables the package reads (ECF table, APEC tables, fit target lists, catalogue snapshot)</p></td>
+<td><p>12.9 MB + 0.8 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">views</span></code></p></td>
+<td><p>per view: merged image + coverage, point sources, metadata, per-camera images; no event lists, no tngref maps</p></td>
+<td><p>about 7 MB per view (22 GB for 3,119 views)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tngref_maps</span></code></p></td>
+<td><p>optional TNG reference maps</p></td>
+<td><p>about 32 MB per map uncompressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">obs_mosaics</span></code></p></td>
+<td><p>band 2+3 mosaics and PPS exposure maps of the 638 observations of the bank</p></td>
+<td><p>data asset <code class="docutils literal notranslate"><span class="pre">obs</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">responses</span></code></p></td>
+<td><p>RMF + on-axis ARF per camera and filter</p></td>
+<td><p>33 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rate_cache</span></code></p></td>
+<td><p>the mbproj2d rate cache of the fits to render (renders then need no XSPEC)</p></td>
+<td><p>a few MB (3.5 MB for the fits, 5.7 MB render cache)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fits</span></code></p></td>
+<td><p>per fit: <code class="docutils literal notranslate"><span class="pre">result.json</span></code>, <code class="docutils literal notranslate"><span class="pre">provenance.json</span></code>, chain, cropped images</p></td>
+<td><p>a few MB per fit</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">true_profiles</span></code></p></td>
+<td><p>truth profiles for the render overlays</p></td>
+<td><p>0.2 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mosaics</span></code>, <code class="docutils literal notranslate"><span class="pre">embeddings</span></code></p></td>
+<td><p>bank mosaics; DINOv3 embeddings</p></td>
+<td><p>data assets</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--make</span></code> copies, then writes <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> and <code class="docutils literal notranslate"><span class="pre">bundle.json</span></code> into the bundle;
+<code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">data</span> <span class="pre">verify</span></code> checks every <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> under <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DATA</span></code>.</p>
+</section>
+<section id="use-it">
+<h2>3. Use it<a class="headerlink" href="#use-it" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TNGXMM_DATA</span><span class="o">=</span>~/tngxmm-bundle<span class="w">                 </span><span class="c1"># the bundle IS the data root</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TNGXMM_SITE_FILE</span><span class="o">=</span>~/tngxmm-bundle/laptop.env<span class="w">  </span><span class="c1"># optional, from environment/sites/laptop.env.example</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MBPROJ_RESP</span><span class="o">=</span><span class="nv">$TNGXMM_DATA</span>/massfit/responses
+<span class="nb">export</span><span class="w"> </span><span class="nv">TNGXMM_MBPROJ_CACHE_DIR</span><span class="o">=</span><span class="nv">$TNGXMM_DATA</span>/massfit<span class="w">  </span><span class="c1"># directory CONTAINING mbproj2d_cache/</span>
+tngxmm<span class="w"> </span>data<span class="w"> </span>verify
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Photometry on stored views: <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">photometry</span> <span class="pre">...</span></code> / <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">photometry</span> <span class="pre">remeasure-lx</span> <span class="pre">$TNGXMM_DATA/campaign</span> <span class="pre">--preset</span> <span class="pre">v1</span> <span class="pre">--workers</span> <span class="pre">4</span></code> (the ECF is read from
+<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DATA/tables/ecf_table_v2.npz</span></code> or the frozen copy in <code class="docutils literal notranslate"><span class="pre">legacy_v3/</span></code>).</p></li>
+<li><p>Renders (<code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">massfit</span> <span class="pre">render-fit-v4</span></code>): <code class="docutils literal notranslate"><span class="pre">--fit-dir</span> <span class="pre">$TNGXMM_DATA/massfit/fits/&lt;fit&gt;</span> <span class="pre">--cache-dir</span> <span class="pre">$TNGXMM_DATA/massfit</span> <span class="pre">--resp</span> <span class="pre">$MBPROJ_RESP</span> <span class="pre">--true-profiles</span> <span class="pre">$TNGXMM_DATA/massfit/true_profiles</span> <span class="pre">--out</span> <span class="pre">&lt;dir&gt;</span></code>.</p></li>
+<li><p>Bank, embed: <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">bank</span> <span class="pre">...</span></code>, <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">embed</span> <span class="pre">extract</span> <span class="pre">--device</span> <span class="pre">cpu</span> <span class="pre">--precision</span> <span class="pre">fp32</span> <span class="pre">...</span></code>.</p></li>
+</ul>
+<p>No path of the cluster is needed: every machine path in the package is a site
+variable (<code class="docutils literal notranslate"><span class="pre">environment/sites/README.md</span></code>); without one the package raises an
+error naming the variable to set, or uses a placeholder <code class="docutils literal notranslate"><span class="pre">$NAME/...</span></code> that does
+not exist.</p>
+</section>
+<section id="what-still-cannot-run-locally-and-why">
+<h2>What still cannot run locally, and why<a class="headerlink" href="#what-still-cannot-run-locally-and-why" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The simulation and the instrument stage need TNG snapshots (TBs on
+<code class="docutils literal notranslate"><span class="pre">/virgotng</span></code>), the XMM CCF and AtomDB, and the sim environment (pyXSIM, SOXS,
+xmm_simulator, threeML).</p></li>
+<li><p>The hydrostatic fits need XSPEC (HEASoft) and AtomDB APEC 3.1.3 whenever the
+rate cache misses; on Vera XSPEC runs in an apptainer image whose bind mounts
+(<code class="docutils literal notranslate"><span class="pre">TNGXMM_SITE_CONTAINER_BINDS</span></code>) restrict where tables may live. A native
+local HEASoft works without that restriction (leave the variable unset).</p></li>
+<li><p>The e2e acceptance tests (<code class="docutils literal notranslate"><span class="pre">tests/e2e/</span></code>) need the fixtures
+(<code class="docutils literal notranslate"><span class="pre">TNGXMM_FIXTURES</span></code>) and the stage environments; they skip cleanly elsewhere.</p></li>
+<li><p>The extraction of the literature values: the paper sources are in a private
+references area outside git; the extracted values are public
+(<code class="docutils literal notranslate"><span class="pre">inputs/literature_values.csv</span></code>), so nothing downstream needs the papers.</p></li>
+</ul>
+</section>
+<section id="without-the-cluster">
+<h2>Without the cluster<a class="headerlink" href="#without-the-cluster" title="Link to this heading">¶</a></h2>
+<p>Sections 1 to 3 are for the analysis stages from a bundle made on the cluster. This section is for a machine that
+has no access to it: the code from the repository, everything else from the repository’s release files. A fit of a
+stored mock and the whole chain of a new mock view (gas from the FLAMINGO data service, view, SAS source list, fit
+target, fit) were run this way on 2026-11-25 from empty directories, with only the fetched directory visible to
+the containers; the view (75 per-camera files, merged images, source list), the SAS list and the chain of the fit
+were identical to the production ones (snapshot 48, halo 32749932).</p>
+<p>What the machine must have: Python 3.10, a C++ compiler (mbproj2d builds an extension), <code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">tar</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">apptainer</span></code> for XSPEC and SAS, which run in the HEASoft images. While the repository is private, a GitHub login
+(<code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">auth</span> <span class="pre">login</span></code>, or a token in <code class="docutils literal notranslate"><span class="pre">$GH_TOKEN</span></code>); it is read when a download starts and stored nowhere.</p>
+<section id="environments">
+<h3>Environments<a class="headerlink" href="#environments" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/omaxim/tng-xmm-clusters.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>tng-xmm-clusters
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>external/temet<span class="w">                       </span><span class="c1"># mock generation only</span>
+
+<span class="c1"># fits (mbproj2d + XSPEC): the lock, mbproj2d at its commit, the Kedro overlay, the package</span>
+python3.10<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venvs/tngxmm-massfit<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">V</span><span class="o">=</span>~/venvs/tngxmm-massfit/bin
+<span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s1">'^pip=='</span><span class="w"> </span>environment/massfit.lock.txt<span class="k">)</span><span class="s2">"</span>
+grep<span class="w"> </span>-v<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^\s*(#|$)|^MBProj2D @'</span><span class="w"> </span>environment/massfit.lock.txt<span class="w"> </span>&gt;<span class="w"> </span>/tmp/massfit.req
+<span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>-r<span class="w"> </span>/tmp/massfit.req
+<span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>--no-build-isolation<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">"MBProj2D @ git+https://github.com/jeremysanders/mbproj2d@ff497101bba96ebaed871858c0cee0e2f6387b99"</span>
+<span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>environment/kedro.lock.txt<span class="w"> </span><span class="s2">"kedro==0.19.14"</span><span class="w"> </span><span class="s2">"kedro-datasets[pandas-csvdataset,json-jsondataset]"</span>
+<span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>-y<span class="w"> </span>kedro-telemetry<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">$V</span>/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>The simulation environment is built the same way from <code class="docutils literal notranslate"><span class="pre">environment/sim.lock.txt</span></code> (without its <code class="docutils literal notranslate"><span class="pre">xmm_simulator</span> <span class="pre">&#64;</span></code>
+line), then xmm_simulator at <code class="docutils literal notranslate"><span class="pre">9fdedb4e</span></code> with <code class="docutils literal notranslate"><span class="pre">environment/patches/xmm_simulator-9fdedb4e-utils.patch</span></code> applied
+(<code class="docutils literal notranslate"><span class="pre">sha256sum</span> <span class="pre">-c</span> <span class="pre">environment/patches/xmm_simulator-installed.sha256</span></code> in the site-packages directory confirms the
+files), <code class="docutils literal notranslate"><span class="pre">environment/temet.lock.txt</span></code>, a <code class="docutils literal notranslate"><span class="pre">.pth</span></code> file naming <code class="docutils literal notranslate"><span class="pre">external/temet</span></code>, the Kedro overlay and <code class="docutils literal notranslate"><span class="pre">hdfstream</span></code>.
+<code class="docutils literal notranslate"><span class="pre">environment/bootstrap.sh</span></code> holds the same steps with the cluster’s interpreter and compiler paths. Measured: 0.8 GB
+for the fit environment (81 s to build), 1.3 GB for the simulation environment.</p>
+</section>
+<section id="data-and-software">
+<h3>Data and software<a class="headerlink" href="#data-and-software" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tngxmm<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>--list<span class="w">                                         </span><span class="c1"># every item: download and disk size</span>
+tngxmm<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>~/tngxmm-local<span class="w"> </span>--stage<span class="w"> </span>fit<span class="w"> </span>--name<span class="w"> </span>mock_48_32749932_v0
+tngxmm<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>~/tngxmm-local<span class="w"> </span>--stage<span class="w"> </span>mock
+<span class="nb">source</span><span class="w"> </span>~/tngxmm-local/activate.sh
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fetch</span></code> downloads the items of <code class="docutils literal notranslate"><span class="pre">src/tngxmm/core/fetch.yml</span></code>, checks them against the sha256 list of their release,
+unpacks them, re-points the cluster paths that the stored tables and the fit-image links carry, and writes
+<code class="docutils literal notranslate"><span class="pre">site.env</span></code> (the site file), <code class="docutils literal notranslate"><span class="pre">activate.sh</span></code> (the variables, and <code class="docutils literal notranslate"><span class="pre">environment/bin</span></code> on <code class="docutils literal notranslate"><span class="pre">PATH</span></code> for the <code class="docutils literal notranslate"><span class="pre">xspec</span></code> wrapper)
+and <code class="docutils literal notranslate"><span class="pre">bin/sasrun</span></code>. It can be repeated: what is unpacked is skipped. <code class="docutils literal notranslate"><span class="pre">--name</span></code> picks the chunks that hold a mock view
+or a fit through the release manifests; <code class="docutils literal notranslate"><span class="pre">--all-chunks</span></code> takes all of them. The same as a node:
+<code class="docutils literal notranslate"><span class="pre">kedro</span> <span class="pre">run</span> <span class="pre">--pipeline</span> <span class="pre">setup</span> <span class="pre">--params</span> <span class="pre">setup.root=&lt;dir&gt;,setup.stages=[fit]</span></code>.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>what</p></th>
+<th class="head"><p>download</p></th>
+<th class="head"><p>on disk (measured)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>a fit of stored mocks: package data, responses, AtomDB, CCF, HEASoft 6.35.1 image, fit support, one chunk of 75 views</p></td>
+<td><p>25.4 GB</p></td>
+<td><p>25 GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>each further chunk of 75 views</p></td>
+<td><p>1.8 GB</p></td>
+<td><p>1.8 GB</p></td>
+</tr>
+<tr class="row-even"><td><p>all 5,001 views of pass 1</p></td>
+<td><p>120 GB</p></td>
+<td><p>121 GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>mock generation: the above without views, plus the images of the real observations, SAS, HEASoft 6.33.2 image, CCF extras, halo tables</p></td>
+<td><p>44.3 GB</p></td>
+<td><p>42 GB</p></td>
+</tr>
+<tr class="row-even"><td><p>per generated halo: gas cube, view</p></td>
+<td><p></p></td>
+<td><p>0.07 GB + 0.02 GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>all finished fits</p></td>
+<td><p>12.4 GB</p></td>
+<td><p>12.4 GB</p></td>
+</tr>
+<tr class="row-even"><td><p>by name only: donor event lists 46 GB, fixtures 2.6 GB, reference library 1.3 GB, embeddings 0.9 GB, image bank 1.3 GB</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The fetched directory of the fit stage holds about 410,000 files, most of them the links of the fit-image tree of
+all 5,001 views; a file system with a limit on the number of files should have room for them.</p>
+</section>
+<section id="a-fit-of-a-stored-mock">
+<h3>A fit of a stored mock<a class="headerlink" href="#a-fit-of-a-stored-mock" title="Link to this heading">¶</a></h3>
+<p>The stage <code class="docutils literal notranslate"><span class="pre">fit</span></code> fetches the data package and the response set pass 1 was made with (<code class="docutils literal notranslate"><span class="pre">data_v1p1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">responses_obs_v1</span></code>): a mock records the response set of its donor and is fitted with that one. The stages <code class="docutils literal notranslate"><span class="pre">mock</span></code>
+and <code class="docutils literal notranslate"><span class="pre">realfit</span></code> fetch the tables and responses of the 808 observations (<code class="docutils literal notranslate"><span class="pre">data_v1p2</span></code>, <code class="docutils literal notranslate"><span class="pre">responses_obs_v2</span></code>); give them
+a root of their own.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">T</span><span class="o">=</span>~/tngxmm-local/prod_v1/pass1/plan/lane2/targets_pass1_lane2.csv
+<span class="o">(</span>head<span class="w"> </span>-1<span class="w"> </span><span class="nv">$T</span><span class="p">;</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^mock_48_32749932_v0,'</span><span class="w"> </span><span class="nv">$T</span><span class="o">)</span><span class="w"> </span>&gt;<span class="w"> </span>one.csv
+mkdir<span class="w"> </span>-p<span class="w"> </span>work<span class="w"> </span>cache<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>~/tngxmm-local/prod_v1/pass1/caches/seed/mbproj2d_cache<span class="w"> </span>cache/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cache
+<span class="nv">MBPROJ_IMG_ROOT</span><span class="o">=</span>~/tngxmm-local/prod_v1/pass1/v1_flamingo_l1m8_pass1/fitimg<span class="w"> </span><span class="nv">MBPROJ_WORK</span><span class="o">=</span>../work<span class="w"> </span><span class="se">\</span>
+tngxmm<span class="w"> </span>massfit<span class="w"> </span>fit-hydrostatic<span class="w"> </span>--targets<span class="w"> </span>../one.csv<span class="w"> </span>--tag<span class="w"> </span>pass1<span class="w"> </span>--workers<span class="w"> </span><span class="m">1</span><span class="w"> </span>--all<span class="w"> </span>--nprocesses<span class="w"> </span><span class="m">1</span><span class="w"> </span>--resume<span class="w"> </span>--quick<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cache-dir<span class="w"> </span><span class="nv">$PWD</span><span class="w"> </span>--preset<span class="w"> </span>v1_flamingo_l1m8_pass1<span class="w"> </span>--seed<span class="w"> </span><span class="m">20261008</span><span class="w"> </span>--crop-r500<span class="w"> </span><span class="m">3</span><span class="w"> </span>--fallback-bg-prior-dex<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resp<span class="w"> </span>~/tngxmm-local/prod_v1/responses_v1<span class="w"> </span>--order<span class="w"> </span>as-listed
+</pre></div>
+</div>
+<p>About 12 minutes for this z = 1.5 mock on one core; a z = 0.1 mock takes hours (<a class="reference internal" href="production.html"><span class="doc">A production run from the target list to the masses</span></a>).</p>
+</section>
+<section id="a-fit-of-a-real-observation">
+<h3>A fit of a real observation<a class="headerlink" href="#a-fit-of-a-real-observation" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tngxmm<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>~/tngxmm-real<span class="w"> </span>--stage<span class="w"> </span>realfit<span class="w">                  </span><span class="c1"># 99 GB: images, event lists, calibration, responses</span>
+<span class="nb">source</span><span class="w"> </span>~/tngxmm-real/activate.sh
+</pre></div>
+</div>
+<p>A real fit reads the per-camera images, the event lists and flare series of the observation, the extra calibration
+files and its source list; the targets and plans of the 623 and of the 170 added observations are under
+<code class="docutils literal notranslate"><span class="pre">prod_v1/real</span></code> and <code class="docutils literal notranslate"><span class="pre">prod_v1/real_extra</span></code>. The fitter’s arguments are those of the plan file.</p>
+</section>
+<section id="on-another-cluster">
+<h3>On another cluster<a class="headerlink" href="#on-another-cluster" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">slurm/viper_fits.sh</span></code> runs the streams of a plan on half a node of the MPCDF cluster Viper, and
+<code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">massfit</span> <span class="pre">fit-plan</span> <span class="pre">streams</span></code> cuts a target list into such plans:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tngxmm<span class="w"> </span>massfit<span class="w"> </span>fit-plan<span class="w"> </span>streams<span class="w"> </span>--targets<span class="w"> </span>&lt;targets.csv&gt;<span class="w"> </span>--run-dir<span class="w"> </span>&lt;run&gt;<span class="w"> </span>--jobs<span class="w"> </span><span class="m">4</span><span class="w"> </span>--streams<span class="w"> </span><span class="m">4</span><span class="w"> </span>--tag<span class="w"> </span>pass1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--img-root<span class="w"> </span>&lt;image<span class="w"> </span>root,<span class="w"> </span>or<span class="w"> </span>-<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>real<span class="w"> </span>observations&gt;<span class="w"> </span>--seed-cache<span class="w"> </span>&lt;dir&gt;/mbproj2d_cache<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-workers<span class="w"> </span><span class="m">16</span><span class="w"> </span>--fitter-args<span class="w"> </span><span class="s2">"--preset v1_flamingo_l1m8_pass1 ..."</span>
+sbatch<span class="w"> </span>--export<span class="o">=</span>ALL,TNGXMM_VIPER_ROOT<span class="o">=</span>&lt;root&gt;,PLAN<span class="o">=</span>&lt;run&gt;/PLAN_node00.txt,TREE<span class="o">=</span>&lt;code<span class="w"> </span>tree&gt;,DATA<span class="o">=</span>&lt;data<span class="w"> </span>package&gt;,OBSRESP<span class="o">=</span>&lt;response<span class="w"> </span>set&gt;<span class="w"> </span>slurm/viper_fits.sh
+</pre></div>
+</div>
+<p>A stream runs its list in pieces of two fits a worker (<code class="docutils literal notranslate"><span class="pre">CHUNK_PER_WORKER</span></code>), each piece with new processes, and then
+once more whole, which retries what failed and writes the results table. A fit worker grows by about 0.3 GB with
+every fit it has run; a job of 128 workers that ran whole lists reached its memory limit after about 450 fits.</p>
+<p><code class="docutils literal notranslate"><span class="pre">slurm/viper_views.sh</span></code> makes the views of a target list there: generation, source detection and fit targets, with
+the views that are finished kept. A halo-snapshot without an observation in its window (<code class="docutils literal notranslate"><span class="pre">paired</span></code> False) has no view
+and is left out. Measured on seven views at z = 0.08 to 0.93: generation 2.5 to 3.3 min and about 5 GB a process,
+detection 10 to 18 min and about 0.35 GB a process, 25 MB of products a view.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">8</span><span class="w"> </span>--mem<span class="o">=</span>32000M<span class="w"> </span>--time<span class="o">=</span><span class="m">01</span>:55:00<span class="w"> </span>--export<span class="o">=</span>ALL,TNGXMM_VIPER_ROOT<span class="o">=</span>&lt;root&gt;,TARGETS<span class="o">=</span>&lt;targets.csv&gt;,TREE<span class="o">=</span>&lt;code<span class="w"> </span>tree&gt;,OUT<span class="o">=</span>&lt;run<span class="w"> </span>dir&gt;,PRESET<span class="o">=</span>&lt;preset&gt;,GEN_PAR<span class="o">=</span><span class="m">3</span>,SAS_PAR<span class="o">=</span><span class="m">8</span><span class="w"> </span>slurm/viper_views.sh
+</pre></div>
+</div>
+<p>The targets are dealt in turn to the <code class="docutils literal notranslate"><span class="pre">jobs</span> <span class="pre">x</span> <span class="pre">streams</span></code> streams, longest first: in the order of a cost table
+(<code class="docutils literal notranslate"><span class="pre">--costs</span></code>, a CSV <code class="docutils literal notranslate"><span class="pre">name,</span> <span class="pre">core_h</span></code>) when there is one, else in the order of the list, which is then taken to be
+longest first (<code class="docutils literal notranslate"><span class="pre">fit-plan</span> <span class="pre">remaining</span></code> writes it by angular size). Every stream has its own target table
+(<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;/targets/</span></code>), work directory (<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;/work/&lt;stream&gt;</span></code>) and copy of the seed rate cache
+(<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;/caches/&lt;stream&gt;/mbproj2d_cache</span></code>), so the streams of all jobs can run at the same time. A stream gets one
+worker per target, at most <code class="docutils literal notranslate"><span class="pre">--max-workers</span></code>. The list for another cluster comes from the results of the run so far:
+<code class="docutils literal notranslate"><span class="pre">fit-plan</span> <span class="pre">remaining</span></code> (the targets without a finished fit), <code class="docutils literal notranslate"><span class="pre">fit-plan</span> <span class="pre">refit-sample</span></code> (a seeded sample of finished
+fits to repeat there as a control) and <code class="docutils literal notranslate"><span class="pre">fit-plan</span> <span class="pre">rank-sample</span></code> (<a class="reference internal" href="production.html"><span class="doc">A production run from the target list to the masses</span></a>, section 6). Measured on Viper on
+2026-11-26 with one fit per worker: 0.5 GB per mock fit and 1.2 GB per real fit while the optimiser runs. The compute nodes have no network, so the
+roots are fetched on a login node first; a copy between two clusters of the same centre is several times faster
+than the download.</p>
+</section>
+<section id="a-new-mock-view">
+<h3>A new mock view<a class="headerlink" href="#a-new-mock-view" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">T</span><span class="o">=</span>campaigns/v4_flamingo_l1m8_pass1/targets_v4_flamingo_l1m8_pass1.csv
+<span class="o">(</span>head<span class="w"> </span>-1<span class="w"> </span><span class="nv">$T</span><span class="p">;</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^v4_flamingo_l1m8_pass1-s048-h32749932-v0,'</span><span class="w"> </span><span class="nv">$T</span><span class="o">)</span><span class="w"> </span>&gt;<span class="w"> </span>one.csv
+<span class="c1"># the gas: the ingest node with ingest.stream_missing=true ({doc}`simulations`), about 25 s and 440 MB of transfer a halo</span>
+python<span class="w"> </span>-m<span class="w"> </span>tngxmm.core.runner<span class="w"> </span>campaign<span class="w"> </span>run<span class="w"> </span>--preset<span class="w"> </span>v1_flamingo_l1m8_pass1<span class="w"> </span>--snap<span class="w"> </span><span class="m">48</span><span class="w"> </span>--targets-csv<span class="w"> </span>one.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out-root<span class="w"> </span>tree<span class="w"> </span>--cube-root<span class="w"> </span>cubes<span class="w"> </span>--workers<span class="w"> </span><span class="m">1</span><span class="w">                 </span><span class="c1"># 3 minutes; --snap: only that snapshot's cubes are needed</span>
+tngxmm<span class="w"> </span>instrument<span class="w"> </span>sas-queue<span class="w"> </span>build-mock<span class="w"> </span>--targets<span class="w"> </span>one.csv<span class="w"> </span>--tree<span class="w"> </span>tree<span class="w"> </span>--queue<span class="w"> </span>tree/sas/queue.json
+python<span class="w"> </span>-m<span class="w"> </span>tngxmm<span class="w"> </span>instrument<span class="w"> </span>sas-queue<span class="w"> </span>run<span class="w"> </span>--queue<span class="w"> </span>tree/sas/queue.json<span class="w">            </span><span class="c1"># 7 minutes</span>
+tngxmm<span class="w"> </span>massfit<span class="w"> </span>fit-plan<span class="w"> </span>pieces<span class="w"> </span>--targets<span class="w"> </span>one.csv<span class="w"> </span>--root<span class="w"> </span>tree<span class="w"> </span>--preset<span class="w"> </span>v1_flamingo_l1m8_pass1<span class="w"> </span>--out-dir<span class="w"> </span>tree/fit<span class="w"> </span>--pieces<span class="w"> </span><span class="m">1</span>
+<span class="nv">TNGXMM_PY</span><span class="o">=</span><span class="k">$(</span>which<span class="w"> </span>python<span class="k">)</span><span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tngxmm.core.runner<span class="w"> </span>queue<span class="w"> </span>run<span class="w"> </span>--queue<span class="w"> </span>tree/fit/queue_fit_targets.json
+</pre></div>
+</div>
+<p>The fit then takes <code class="docutils literal notranslate"><span class="pre">tree/fit/pieces/targets_000.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">MBPROJ_IMG_ROOT=tree/fitimg</span></code>, with the fit environment.
+Not in the releases: the gas cubes of pass 1 (576 GB; any halo is fetched again from the data service).</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="pipelines/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Pipelines</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="data.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">The data package, bundles and fixtures</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Running tngxmm on a laptop</a><ul>
+<li><a class="reference internal" href="#install">1. Install</a></li>
+<li><a class="reference internal" href="#make-the-bundle-on-the-cluster">2. Make the bundle (on the cluster)</a></li>
+<li><a class="reference internal" href="#use-it">3. Use it</a></li>
+<li><a class="reference internal" href="#what-still-cannot-run-locally-and-why">What still cannot run locally, and why</a></li>
+<li><a class="reference internal" href="#without-the-cluster">Without the cluster</a><ul>
+<li><a class="reference internal" href="#environments">Environments</a></li>
+<li><a class="reference internal" href="#data-and-software">Data and software</a></li>
+<li><a class="reference internal" href="#a-fit-of-a-stored-mock">A fit of a stored mock</a></li>
+<li><a class="reference internal" href="#a-fit-of-a-real-observation">A fit of a real observation</a></li>
+<li><a class="reference internal" href="#on-another-cluster">On another cluster</a></li>
+<li><a class="reference internal" href="#a-new-mock-view">A new mock view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

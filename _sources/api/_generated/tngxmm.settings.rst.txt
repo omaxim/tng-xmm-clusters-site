@@ -1,0 +1,6 @@
+tngxmm.settings
+===============
+
+.. automodule:: tngxmm.settings
+
+   

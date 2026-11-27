@@ -1,0 +1,32 @@
+tngxmm.core.bundle
+==================
+
+.. automodule:: tngxmm.core.bundle
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FROZEN_LEGACY_FILES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      freeze_legacy
+      item_files
+      list_bundle
+      load_bundle
+      make_bundle
+      read_sums
+      resolve_source
+      verify_dir
+      write_sums
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BundleItem
+   

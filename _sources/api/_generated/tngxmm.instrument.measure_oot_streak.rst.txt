@@ -1,0 +1,31 @@
+tngxmm.instrument.measure\_oot\_streak
+======================================
+
+.. automodule:: tngxmm.instrument.measure_oot_streak
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PN_COLUMN_ARCMIN
+      R_INNER_ARCMIN
+      STRIP_HALF_WIDTH_ARCMIN
+      FIRST_ROW
+      ROW_ARCSEC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      expected_far_hardness
+      far_rows
+      measure_streak
+      readout_angle
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      StreakStats
+   

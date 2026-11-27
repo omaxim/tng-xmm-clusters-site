@@ -1,0 +1,18 @@
+tngxmm.ml.pipeline
+==================
+
+.. automodule:: tngxmm.ml.pipeline
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NODES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+   

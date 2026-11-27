@@ -1,0 +1,31 @@
+tngxmm.instrument.apply\_pattern\_loss
+======================================
+
+.. automodule:: tngxmm.instrument.apply_pattern_loss
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PN_MODE_ID
+      PATTERN_SELECTION
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_pattern_loss
+      describe
+      pattern_efficiency_table
+      pn_band1_qpb_scale
+      pn_qpb_single_table
+      pn_single_pixel_keep
+      pn_single_pixel_table
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PatternEfficiency
+   

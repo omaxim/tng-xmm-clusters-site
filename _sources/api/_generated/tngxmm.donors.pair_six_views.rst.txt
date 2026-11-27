@@ -1,0 +1,16 @@
+tngxmm.donors.pair\_six\_views
+==============================
+
+.. automodule:: tngxmm.donors.pair_six_views
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_targets
+      distinct_conditions
+      halo_table
+      pair
+      reference_table
+   

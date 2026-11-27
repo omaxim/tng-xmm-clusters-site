@@ -1,0 +1,20 @@
+tngxmm.sim.snapshots
+====================
+
+.. automodule:: tngxmm.sim.snapshots
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FULL_SNAPSHOTS
+      PIPELINE_FIELDS_ABSENT_ON_MINI
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      mini_absent_fields
+      snap_is_mini
+   

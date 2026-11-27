@@ -1,0 +1,41 @@
+tngxmm.massfit.band\_response
+=============================
+
+.. automodule:: tngxmm.massfit.band_response
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BAND_CHANNEL_RULES
+      VIGNETTING_MODELS
+      TOLERANCE_EMAX_KEV
+      TAIL_EMAX_KEV
+      TAIL_FACTOR
+      THETA_MAX_ARCMIN
+      UNVIG_BAND
+      UNVIG_E_KEV
+      HAT_MERGE_ERROR
+      FOLD_CHECK_RTOL
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      band_channels
+      hat_weights
+      node_rate_tables
+      node_vignetting
+      rmf_ebounds
+      subband_cluster
+      vignetting_map
+      vignetting_nodes
+      xspec_channel_runs
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      NodeRateCalc
+   

@@ -1,0 +1,15 @@
+tngxmm.instrument.reimage\_mock
+===============================
+
+.. automodule:: tngxmm.instrument.reimage_mock
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      partition_to_cameras
+      reimage_mock
+      reimage_wcs_header
+      vig_expmap
+   

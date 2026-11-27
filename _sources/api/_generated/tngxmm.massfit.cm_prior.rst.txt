@@ -1,0 +1,27 @@
+tngxmm.massfit.cm\_prior
+========================
+
+.. automodule:: tngxmm.massfit.cm_prior
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DM14
+      DM14_SCATTER_DEX
+      C200_RANGE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      c200c_dutton14
+      ln_prior
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConcentrationMassPrior
+   

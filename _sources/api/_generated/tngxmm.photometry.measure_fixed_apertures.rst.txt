@@ -1,0 +1,33 @@
+tngxmm.photometry.measure\_fixed\_apertures
+===========================================
+
+.. automodule:: tngxmm.photometry.measure_fixed_apertures
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PHOTOMETRY_VERSION
+      ML_REFERENCE_T_KEV
+      FORBIDDEN_ML_PATTERNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_ml_columns
+      effective_exposure_s
+      exposure_ecf_product
+      fixed_apertures
+      low_z_safe_apertures
+      measure_fixed_apertures
+      measure_image_photometry
+      photometry_provenance
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Aperture
+   

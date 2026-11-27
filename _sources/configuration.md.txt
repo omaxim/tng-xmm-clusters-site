@@ -1,0 +1,156 @@
+# Configuration
+
+The configuration has four layers, from the physics down to the machine.
+
+1. The campaign spec and its presets (`src/tngxmm/config.py`) are the physics of a run.  Every number is a field with
+   value, unit, reading module and citation.  The spec is hashed: a different value is a different campaign.
+2. The run options (`conf/base/parameters/pipeline.yml`) are workers, paths and sampler settings; they are the CLI
+   defaults, so `kedro run` and `tngxmm <stage>` agree.  They are not physics and are never hashed.
+3. The Kedro environments and globals (`conf/<env>/`) say where the data live and which options an acceptance run
+   changes.
+4. The site (`environment/sites/*.env` and the `TNGXMM_*` variables) says where this machine keeps things.
+
+## Presets
+
+A preset is a complete `CampaignSpec`.  The field defaults are the `v1` values, except the conditions rule
+`donors.observing_conditions`, which `v1` and every other preset set.  The TNG box presets change only the simulation;
+the presets of FLAMINGO, SIMBA and EAGLE also name a descriptor (`sim.source`), read the snapshots nearest the `v1`
+redshifts, drop the temet reference and read materialised cubes (`runtime.cube_store = 'canonical'`); `v1_common` is
+`v1` under the `common` emission at every TNG snapshot from z = 1.5 to 0; `v1_flamingo_l1m8_pass1`
+(`config.PASS1_PRESETS`) is `v1_flamingo_l1m8` with one projection, the conditions rule `donor` (each view under its
+donor as it is, no draw among neighbours and no jitter), its own stream key and no stored photon lists
+(`runtime.drop_events`); `v1_flamingo_l1m8_pass2` (`config.PASS2_PRESETS`) is the pass-1 preset with the six
+icosahedral projections (`sim.projection = 'icosahedral6'`, views 0 to 5) and its own stream key;
+`v1_flamingo_l1m8_pass2_extra` is that preset with `donors.reference_sample = 'bank638+extra'`,
+`massfit.psf_eval = 'window'` and `massfit.projection = 'matrix'` ({doc}`dev/PSF_WINDOW_VALIDATION`).  The spec hash
+(`CampaignSpec.spec_hash`)
+is the sha256 of the sorted JSON of every non-runtime field; the generation hash leaves the `massfit` section out as
+well.  The packaged observation table enters the hash by the columns the stages read (`config.OBSERVATION_COLUMNS`,
+38 of its 70; rows by obsid, numbers as their shortest round-trip text), so a rebuild that changes only the other
+columns moves no hash.  Under `donors.reference_sample = 'bank638'` (every preset but `v1_flamingo_l1m8_pass2_extra`)
+only the rows with `in_bank` True are hashed, so the 170 observations added on 2026-11-25 changed no existing hash;
+`'bank638+extra'` hashes all 808 rows.  `python -m tngxmm.config --show v1` prints the fields, `--hash v1` the
+hash; Kedro takes the preset as `params:preset` and resolves it with `config.get_preset`, so no node holds a copy of
+the physics.
+
+```{spec-presets}
+```
+
+`conf/base/parameters/<preset>.yml` is a generated, readable record of each preset that no node reads
+(`make params` rewrites it and the hash table of {doc}`dev/INTERFACES`).  The random streams of a view are keyed by
+`sim.rng_campaign` (`v4`, `v4_tng300`, ...), the name of the committed target-list family, not by the preset.
+
+## Spec fields
+
+Generated from the field metadata (`config.P`), with the values of `v1`.  "Hashed only when set" fields
+join the hash only when not `None`, so adding one leaves every older preset's hash unchanged.
+
+### Fields that change no product
+
+A few hashed fields are kept although no current result reads their value. Removing or retyping them would change
+every spec hash and orphan every product, so they stay, and the ledger says what each does:
+
+| field | v1 value | what it does |
+|---|---|---|
+| `seed_offset` | 1000000000 | a label recorded with every view; it enters no seed (`run.random_streams`) |
+| `photometry.pix_arcsec`, `photometry.center_search_arcmin`, `photometry.z_floor` | 4.0, 3.5, 0.01 | constants that no current result reads (`photometry.inactive_constants`) |
+| `runtime.fit_workers` | 0 | a run-time setting (not hashed) that the code does not read |
+
+### Top level
+
+```{spec-fields} top
+```
+
+### cosmology
+
+```{spec-fields} cosmology
+```
+
+### constants
+
+```{spec-fields} constants
+```
+
+### sim: simulation, gas selection, emission model, photon generation
+
+```{spec-fields} sim
+```
+
+### donors: which real observation each view borrows its conditions from
+
+```{spec-fields} donors
+```
+
+### instrument: the EPIC model
+
+```{spec-fields} instrument
+```
+
+### photometry
+
+```{spec-fields} photometry
+```
+
+### massfit: the hydrostatic fit
+
+The concentration prior is `massfit.cm_prior`. Its default, `dutton14`, is a log-normal prior on c200 about the
+c200(M200, z) relation of Dutton & Maccio (2014, eqs. 7, 10, 11), `massfit.cm_prior_scatter_dex` = 0.11 dex wide
+(their Sect. 4.1), evaluated at every step at the M200 of the sampled NFW halo, with c200 bounded at 0.5-20
+(`tngxmm.massfit.cm_prior`; ledger `fit.cm_prior`, which also says how this differs from the concentration of the
+reference analysis). `flat` is the prior flat in ln c200 over 1-10 of Sanders et al. (2018). The prior is the same
+for mocks and real observations and at every signal level.
+
+```{spec-fields} massfit
+```
+
+### runtime: workers, paths, timeouts (never hashed)
+
+```{spec-fields} runtime
+```
+
+## Run options and parameters in Kedro
+
+`params:preset` is the one preset of a run.  `params:<stage>.<key>` are the options of `pipeline.yml`;
+`tests/unit/test_kedro_pipelines.py` checks that no option restates a spec field with another value (deliberate
+deviations are listed there).  Parameters of an environment merge into base key by key (`merge_strategy: soft`): an
+environment states only what it changes, a scalar or list is replaced, a mapping is merged, `key: null` clears.
+
+## Environments (`kedro run --env <env>`)
+
+| env | use |
+|---|---|
+| `base` | production layout: committed tables in the repository, products under `$TNGXMM_DATA` |
+| `local` | your overrides (git-ignored except its README), applied on top of base |
+| `fixtures` | acceptance runs: frozen fixtures in, everything out under `$TNGXMM_DEV/kedro/fixtures_run` |
+| `realism` | the replay of the realism evaluation ({doc}`realism`) |
+| `smoke` | the certification chain at toy scale (`slurm/smoke.sh`) |
+| `showcase` | three views through every stage (`slurm/showcase.sh`) |
+
+## Globals and path resolvers
+
+`conf/<env>/globals.yml` holds the `paths:` used as `${globals:paths.<name>}` in catalogs and parameters, and the
+`campaign` family name that selects the committed directories `campaigns/<campaign>/` and `campaigns/<campaign>_max/`.
+Roots come from resolvers defined in `src/tngxmm/settings.py`:
+
+| resolver | value |
+|---|---|
+| `${tngxmm:repo}`, `${tngxmm:data}`, `${tngxmm:fixtures}`, `${tngxmm:dev}` | the repository, `$TNGXMM_DATA`, `$TNGXMM_FIXTURES`, `$TNGXMM_DEV/kedro` |
+| `${tngxmm:tables}`, `${tngxmm:obs}`, `${tngxmm:mosaics-1}`, `${tngxmm:embeddings}`, ... | a data-package asset directory |
+| `${site:NAME,...}` | the first configured site variable (environment, then the site file) |
+| `${legacy:v3,<rel>}` | an input table read from its frozen copy in the data package |
+| `${oc.env:NAME,default}` | any other environment variable |
+
+## Environment variables
+
+| variable | meaning |
+|---|---|
+| `TNGXMM_DATA` | the data package (default `<repo>/data`) |
+| `TNGXMM_FIXTURES` | frozen test fixtures |
+| `TNGXMM_DEV` | private scratch root; each workstream works under `$TNGXMM_DEV/<id>/` |
+| `TNGXMM_PROD` | production root; set only by the runner |
+| `TNGXMM_SITE`, `TNGXMM_SITE_FILE` | select the site file (`environment/sites/<name>.env`, or a path; `none` disables) |
+| `TNGXMM_SITE_*` | machine paths named in the site file (interpreters, CCF, AtomDB, container binds, ...) |
+| `TNGXMM_REALISM_ROOT` | where the realism evaluation keeps its files |
+| `TNGXMM_DISK_PROBE_MB`, `TNGXMM_DISK_MIN_FREE_GB`, `TNGXMM_DISK_CHECK_S` | the disk guard of the stage drivers: size of the probe write (8 MB; 0 = none), least free space of the file system (1 GB), least time between two checks (120 s); {doc}`when-a-run-stops` |
+
+See `tngxmm.core.paths`, `tngxmm.core.site` and `tngxmm.core.diskguard` in the {doc}`api/index`.

@@ -1,0 +1,46 @@
+# Development log
+
+The working records of the development, kept for traceability. They are not user documentation: they were written
+while the work happened, use the internal labels of that time (see the {doc}`../glossary`), and some numbers in them
+were superseded later. Where a user page and a record here disagree, the user page and the code are current.
+
+* {doc}`STATUS`: the open work after the integration of 2026-10-30, what decides each item, and what was closed.
+  The item list was written between 2026-11-04 and 2026-11-12; the state paragraph of 2026-11-26 and the dated
+  notes under the items say what has changed since.
+* {doc}`INTEGRATION_REPORT`: the integration of 2026-10-30 for the author: branches, removed factors, the L_X
+  verdict, the checks.
+* {doc}`PREREGISTRATION`: the rules of 2026-11-04 (DESIGN v4), written before the runs they judge: the closure
+  grid and its study arms, the QPB level, the sampler, the soft-proton bands, the matching mass, the bank filter,
+  the field-edge targets and the protection radii.
+* {doc}`PILOT`: the pilot run of 2026-11-10 before the freeze: the two lists, what is measured and how it is read,
+  with the amendments of 2026-11-11 and the changes made after it on 2026-11-12.
+* {doc}`DECISIONS`: the long record behind the one-line {doc}`decision log <../decisions>`: every decision with its
+  options, measurements and date, in the order it was taken.
+* {doc}`INTERFACES`: the contracts between stages (file layouts, column tables, roots, the spec-hash table).
+* {doc}`KEDRO`: the node-to-command map of every Kedro pipeline, the environments and the acceptance runs.
+* {doc}`LX_GAS_EXPLORATION`: the alternatives to the emission model tested against the soft-band luminosity
+  excess of TNG-Cluster (branch `lx-gas-explore`, none adopted).
+* {doc}`LX_CROSS_SIM`: the L_X-M500c relation of TNG-Cluster, TNG300, FLAMINGO, SIMBA and EAGLE with one emission code
+  and one definition (branch `lx-gas-explore`).
+* {doc}`REFERENCE_LEDGER`: the claims taken from the literature, with the state of their check by hand.
+* {doc}`PSF_WINDOW_VALIDATION`: what the fit-fix switches `psf_eval = window` and `projection = matrix` change in a
+  fit (rounding, direction, reproducibility) and how much time they save, measured on paired fits. The preset
+  `v1_flamingo_l1m8_pass2_extra` sets both.
+* {doc}`REVIEW_RESPONSE_v1.1.3`: the response to the review of the documentation of release 1.1.2, finding by finding.
+
+```{toctree}
+:hidden:
+
+STATUS
+INTEGRATION_REPORT
+PREREGISTRATION
+PILOT
+DECISIONS
+INTERFACES
+KEDRO
+LX_CROSS_SIM
+LX_GAS_EXPLORATION
+REFERENCE_LEDGER
+PSF_WINDOW_VALIDATION
+REVIEW_RESPONSE_v1.1.3
+```

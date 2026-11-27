@@ -1,0 +1,14 @@
+# bank
+
+```{eval-rst}
+.. automodule:: tngxmm.bank.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline bank`; catalog `conf/base/catalog/bank.yml`.
+
+## Nodes
+
+```{kedro-pipeline} bank
+```

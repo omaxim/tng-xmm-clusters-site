@@ -1,0 +1,16 @@
+tngxmm.bank.assign\_donor\_folds
+================================
+
+.. automodule:: tngxmm.bank.assign_donor_folds
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_donor_folds
+      attach_bank_halo_folds
+      attach_donor_folds
+      check_conditions_donor_folds
+      check_donor_fold_leakage
+   

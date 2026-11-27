@@ -1,0 +1,22 @@
+tngxmm.photometry.build\_obs\_centres\_guarded
+==============================================
+
+.. automodule:: tngxmm.photometry.build_obs_centres_guarded
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CHANGED_ARCSEC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_obs_centres_guarded
+      centre_one
+      check_centres_table
+      default_table_path
+      read_obs_centres_guarded
+   

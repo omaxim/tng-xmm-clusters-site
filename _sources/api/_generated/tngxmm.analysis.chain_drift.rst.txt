@@ -1,0 +1,30 @@
+tngxmm.analysis.chain\_drift
+============================
+
+.. automodule:: tngxmm.analysis.chain_drift
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MASS_KEY
+      NSIM_GAP
+      SHIFT_LEVELS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clumps
+      drift_metrics
+      drift_table
+      fit_row
+      half_width
+      join_report
+      lp_gap_gaussian
+      main
+      rank_corr
+      read_chain
+      summarise
+   

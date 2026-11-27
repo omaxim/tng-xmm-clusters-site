@@ -1,0 +1,17 @@
+tngxmm.sim.compute\_true\_profiles
+==================================
+
+.. automodule:: tngxmm.sim.compute_true_profiles
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_true_profiles
+      halo_frame
+      heated_free
+      load_mass_components
+      radius_kpc
+      temperature_K
+   

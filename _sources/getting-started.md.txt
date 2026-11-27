@@ -1,0 +1,100 @@
+# Getting started
+
+What runs where depends on what you have. The pipeline was developed on the Vera cluster of the Max Planck Computing
+and Data Facility, where the simulations, the XMM archive copies and the software stacks are; outside it, the
+code installs anywhere, and the stages after the simulation run from a copy of their inputs.
+
+| you have | you can |
+|---|---|
+| the repository only (any machine, Python 3.10) | install, inspect every configuration value and its citation, run the unit tests that need no data, build this documentation, build the Kedro-Viz graph, rebuild the committed observation and target tables |
+| plus the test fixtures (2.6 GB) | run the acceptance tests on the fixture halo, reproduce the golden products' checks and the figure of a mock beside a real observation |
+| plus a data bundle of stored products | photometry, fit renders, image bank and embeddings of stored views ({doc}`LOCAL`) |
+| plus the fetched release files (`tngxmm data fetch`, stages `fit`, `mock`, `realfit`, `analysis`), `apptainer` and a C++ compiler | fit a stored pass-1 mock, generate and fit a new mock view, fit a real observation, read the stored results ({doc}`LOCAL`, "Without the cluster") |
+| plus the simulation data (or network access for the streamed ones), HEASoft/XSPEC, the XMM calibration files and a compute node | generate mocks and fit them (the production route) |
+
+The data package, the fixtures and the stored products are release files of the repository, and `tngxmm data fetch`
+downloads them ({doc}`LOCAL`, "Without the cluster"); while the repository is private this needs a GitHub login.
+They are not public yet: two of the fixture files are cutouts of TNG-Cluster whose redistribution the TNG team has
+to confirm (`docs/CITATIONS_NOTES.md` in the repository).
+
+## 1. The repository only
+
+```bash
+python3.10 -m venv .venv && . .venv/bin/activate
+pip install -e ".[dev]"            # importing tngxmm needs only click; heavy imports are inside the functions
+tngxmm --help                      # one command group per stage
+python -m tngxmm.config --show v1  # the production configuration: every field with value, unit, reader, citation
+python -m tngxmm.config --hash v1  # its spec hash
+tngxmm cite --lint                 # every citation key used in the code has a bibliography entry
+tngxmm ledger check                # every hashed field is covered by the assumption ledger
+```
+
+Expected: the spec hash of `v1` is `c2e6b282f6aab356` on this branch (`0e1f9258c78fd676` with the flat concentration
+prior, `03b55819bfd0ff0d` while the observation table
+was hashed as a file and not by the columns the stages read, `ec99a22c20347f31` before the model averaged
+over the pixel, `e6b5e92f9706f49e` before the model shells and the
+off-axis PSF of the fit, STATUS B12 and B13, `66a72be359876779` before the per-observation
+responses were adopted, `0c5f1754d7c1220a` before the AtomDB files
+entered the data manifest, `9ee9e06acaf41d07` before the manifest entered the hash, `9937b33364b11ac4` before the packaged observation table did, `4f3e8995401e3c53` before the package calibration tables did, `fef1c34c6c0fe914` before the chain fixes of
+STATUS B11, `6678315105753621` before the soft-proton rule for donors without a measured rate, `2e0dca902e8f8c07` before the
+integration of 2026-10-30, `198b80e9d4563eec` in releases 1.1.1 to 1.1.3); the citation lint ends with `modules ok`;
+the ledger check prints the number of entries by kind and the open ones, and no `PROBLEM` line.
+
+`make check PY=<python> WS=<scratch id> DEV_ROOT=<scratch dir>` runs ruff, the unit tests, the hygiene scan, the
+citation lint and the schema tests; tests that need the data package, the fixtures or a stage stack skip when it
+is missing. `tngxmm ledger viz --build-dir <dir>` builds the static Kedro-Viz (needs `kedro-viz`).
+
+## 2. With the fixtures
+
+```bash
+export TNGXMM_FIXTURES=<directory of the fixtures>
+python tests/fixtures/check_fixtures.py                 # manifest, sha256 of every file, every file opens
+pytest -m e2e tests/e2e/test_kedro_fixtures.py         # in each stage environment (sim, massfit, embed)
+```
+
+The fixture halo is TNG-Cluster halo 19542651 at snapshot 67 (z = 0.503), three views observed as XMM observations
+0656201501 and 0827060401 under the release 1.1.1 configuration (`golden_v1.1.1/`). Expected values of its results
+table (`golden_v1.1.1/results_tng-cluster_snap_067.csv`) and quick fits (`golden_v1.1.1_fits/`):
+
+| view | z_obs | M_true [1e14 Msun] | M_HSE [1e14 Msun] | L_X(< R500c) [1e44 erg/s] | M_X, quick fit [1e14 Msun] |
+|---|---|---|---|---|---|
+| 0 | 0.496 | 1.524 | 1.259 | 0.909 | 1.368 |
+| 1 | 0.502 | 1.519 | 1.259 | 1.011 | 0.990 |
+| 2 | 0.506 | 1.516 | 1.259 | 0.891 | 1.080 |
+
+The quick fits use short chains (150 + 300 steps) and are a regression reference, not a measurement. The golden
+products are of the release 1.1.1 spec, so the campaign checks on them (`tests/unit/test_campaign_checks_fixtures.py`)
+skip until they are regenerated with `tools/make_v1_golden.sh`. The mock of
+view 0 beside the real observation 0656201501: `python -m tngxmm.viz.doc_figures --only mock_vs_real` (also needs the
+PPS mosaic of that observation, `$TNGXMM_SITE_OBS_IMAGES`).
+
+## 3. The production route
+
+* Environments: three pinned Python environments hold the heavy stacks: `sim` (simulation, instrument, photometry,
+  bank renders), `massfit` (mbproj2d fits, XSPEC in an apptainer image) and `embed` (DINOv3, UMAP). Kedro is an
+  overlay of one of them (`environment/thin_venv.sh <sim|massfit|embed> <checkout> <id> --with-kedro`); see
+  `environment/README.md`. The `env.<stack>` tag of each Kedro node names its environment.
+* Site: machine paths enter only through a site file (`environment/sites/<site>.env`; `vera.env` is selected
+  automatically on Vera, `laptop.env.example` shows the variables) or environment variables; no library module
+  hard-codes one (`tngxmm.core.site`). Scratch is `$TNGXMM_DEV`, never `/tmp`; the data package is `$TNGXMM_DATA`;
+  the fixtures `$TNGXMM_FIXTURES`.
+* Before a campaign: the smoke test (`slurm/smoke.sh`) runs the unit tests, the end-to-end tests on the fixtures, the
+  certification chain at toy scale and the ledger checks on one node.
+
+* Rules of a run: every job is submitted through the runner with `--go`, by hand; at most two nodes at once, each
+  fully used; 48 hours a job at most.
+
+How to run each stage, as a Kedro pipeline or through the command line and the SLURM jobs: {doc}`PIPELINE`. One
+run followed from its target list to its fitted masses: {doc}`production`. What to do when a job stops:
+{doc}`when-a-run-stops`.
+
+## Building this documentation
+
+```bash
+make docs SPHINX_PY=<python of the documentation environment>   # -W: a warning fails the build
+python -m tngxmm.viz.doc_figures --check                         # have the inputs of the figures changed?
+```
+
+The build imports `tngxmm` and the Kedro registry (it needs `kedro`, `numpy`, `pandas`, `scipy`, `astropy`,
+`h5py`, `pyyaml`, `matplotlib`) but none of the simulation or fitting stacks, which are mocked. The environment is
+recorded in `environment/sphinx.lock.txt` and created by `environment/sphinx_venv.sh`.

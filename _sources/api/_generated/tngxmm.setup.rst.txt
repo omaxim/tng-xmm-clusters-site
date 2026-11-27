@@ -1,0 +1,13 @@
+tngxmm.setup
+============
+
+.. automodule:: tngxmm.setup
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   pipeline

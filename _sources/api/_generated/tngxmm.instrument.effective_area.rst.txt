@@ -1,0 +1,23 @@
+tngxmm.instrument.effective\_area
+=================================
+
+.. automodule:: tngxmm.instrument.effective_area
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      XRT
+      BEYOND_RULES
+      ZERO_BEYOND_ARCMIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      effective_area_theta
+      rmf_energy_edges
+      vignetting
+      vignetting_table
+   

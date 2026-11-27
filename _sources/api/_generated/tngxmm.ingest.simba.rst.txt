@@ -1,0 +1,26 @@
+tngxmm.ingest.simba
+===================
+
+.. automodule:: tngxmm.ingest.simba
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NAME
+      STATUS
+      WIND_IDENTIFIABLE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      canonical_gas
+      descriptor
+      gas_fn
+      halo_table
+      ingest_run
+      ingest_snapshot
+      main
+   

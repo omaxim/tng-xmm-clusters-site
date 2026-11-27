@@ -1,0 +1,359 @@
+# Running the pipeline
+
+What each stage reads and writes, and how to run it, either as a Kedro pipeline
+(`kedro run`) or through the command line and the SLURM jobs of the production
+campaign.  Both routes call the same functions and write the same bytes.  The
+nodes of each pipeline are listed in {doc}`pipelines/index`; the node-to-command
+map is {doc}`dev/KEDRO`.  One production run followed from its target list to its
+fitted masses, command by command, is on {doc}`production`; what to do when a job
+stops is on {doc}`when-a-run-stops`.
+
+## Before you start
+
+* Install: `pip install -e ".[dev]"`; the scientific stacks are pinned in
+  `environment/` (sim + instrument, mass fitting, embeddings), and Kedro is an
+  overlay: `environment/thin_venv.sh <sim|massfit|embed> <checkout> <id> --with-kedro`.
+* Data: `$TNGXMM_DATA` is the data package (tables, observation mosaics, bank,
+  embeddings); `$TNGXMM_DEV` a private scratch area; `$TNGXMM_FIXTURES` the
+  frozen test fixtures.  The simulation data, HEASoft/XSPEC and the XMM
+  calibration (`$CCF_PATH`) are needed only for the stages that read them.
+* Presets: the physics of a run is a `CampaignSpec` preset in
+  `src/tngxmm/config.py` ({doc}`configuration`); `v1` (TNG-Cluster) is
+  `config.PRODUCTION_PRESET`.  `python -m tngxmm.config --show v1` prints its
+  fields and `--hash v1` its hash.  Kedro takes it as `params:preset`.
+* Cluster rules: every job goes through
+  `python -m tngxmm.core.runner slurm submit <job> ... [--go]` (without
+  `--go` only `sbatch --test-only`), one deliberate submission at a time.  At
+  most two nodes are occupied at once (the runner allows one job by default,
+  the second takes `--max-jobs 2`), each node is filled (a fit job holds more
+  fits than workers), and a job runs for at most 48 hours.  Scratch is never
+  in `/tmp`.
+* A full disk or quota stops the generation, the SAS queue and the fit batch
+  with exit code 28; the same command continues them ({doc}`when-a-run-stops`).
+
+## Stages
+
+Order = data flow.  "Kedro" is the command from the repository root; "CLI /
+job" is how the production campaign runs it.
+
+### 0. ingest: every simulation into the canonical datasets
+
+The only stage that reads a simulation's own files.  A descriptor (`src/tngxmm/ingest/descriptors/<name>.yml`)
+states the family, cosmology, snapshots and halo catalogue of a simulation, and the rules that turn its fields into
+canonical gas cells in physical units: temperature, electron abundance, star-forming, wind and net-heating flags,
+element fractions.  Its sha256 enters the spec hash of a preset that names it (`sim.source`).  The cube format is
+section 4.9 of {doc}`dev/INTERFACES`.
+
+| family | simulation (descriptor) | particles read from | generation reads |
+|---|---|---|---|
+| `tng` | TNG-Cluster, TNG300, TNG100, TNG50 | the snapshots on Vera | the cube index files of `campaign mock-cutout` (node `sim.cut_mock_gas`), converted to canonical cells in memory (`runtime.cube_store = 'index'`) |
+| `swift` | FLAMINGO L1_m10 (`flamingo`) | the SWIFT snapshots and SOAP catalogues on Vera | materialised cubes (`'canonical'`) |
+| `swift` | FLAMINGO L1_m8 (`flamingo_l1m8`) | the FLAMINGO data service, streamed with `hdfstream`; halos from SOAP-HBT | materialised cubes |
+| `gizmo` | SIMBA m100n1024 (`simba`) | the original snapshots, HTTP range requests to the SIMBA server | materialised cubes |
+| `eagle` | EAGLE Ref-L0100N1504 (`eagle`) | the original snapshots, streamed with `hdfstream` | materialised cubes |
+
+SIMBA and EAGLE take their halo centres, radii and masses from the Subfind catalogues of the TNG-format conversions
+on Vera (descriptors `simba_tngformat`, `eagle_tngformat`); nothing else is read from the conversions.  Materialised
+cubes have half-side 5.66 R500c by default (4 sqrt(2), which holds the 4 R500c cylinder of a tilted view such as
+the six of the pass-2 presets; the streamed readers enlarge a cube where 3 R200c needs it) and are written to `<cube_root>/<sim>/cubes_<snap:03d>.h5` with a
+sha256 per array.
+
+* Kedro: `kedro run --pipeline ingest --params ingest.cube_root=<dir>`: the TNG and L1_m10 cubes of the planned
+  runs; for the streamed sources it checks that every target halo has its cube, and with
+  `ingest.stream_missing=true` it first streams the halos of `flamingo_l1m8` that the cube file lacks.  With
+  `cube_root` null (the default) it does nothing.
+* CLI: `tngxmm ingest halos --descriptor <name> --out <csv>` (halo table from a Subfind catalogue);
+  `python -m tngxmm.core.runner campaign ingest --preset v1 --snap 67 --tree <tree> --targets-csv <csv>
+  --cube-root <dir>` (TNG, after `campaign mock-cutout`; used for the fixtures and the regression test);
+  `tngxmm ingest swift <root> <snap> <cube_root> [--halo ...]` (L1_m10, in an environment whose HDF5 reads the
+  lossy-compressed files: the embed stack on Vera).
+* Streamed sources, on the login node (compute nodes have no network), one request at a time:
+  `python -m tngxmm.ingest.swift_remote soap|cubes ...` (L1_m8),
+  `python -m tngxmm.ingest.simba_remote <snap> <cube_root> <index_dir> --halo <id> ...`,
+  `python -m tngxmm.ingest.eagle_remote <snap> <cube_root> <index_dir> --rows <json>`.
+* The generation reads materialised cubes with `campaign run ... --cube-root <dir>`.  For TNG both routes write the
+  same bytes, except one unit in the last place of `lx_intr_r500` of one fixture view.
+
+### 1. obs: the real observations
+
+* In: the copied donor tables `src/tngxmm/obs/catalogue/inputs/` and, for the 170 observations added on
+  2026-11-25, `inputs_extra/` (both committed), and
+  the committed `src/tngxmm/obs/catalogue/reference_masses.csv` (published
+  masses, one row per cluster, paper and quantity). The paper sources are not in
+  the repository: `tngxmm obs fetch-references` downloads them into the references area and
+  `tngxmm obs build-reference-masses --verify` rebuilds the table from them (`tngxmm.obs.references`);
+  every value is also in the public `inputs/literature_values.csv`
+  (`inputs/README.md`).
+* Out: `observations.csv` (808 observations: position, z,
+  per-camera live times, N_H, PN mode, filters, matching mass) with its
+  provenance JSON; the check report of the reference masses.  The 638 rows with `in_bank` True are the bank;
+  the 170 with `in_bank` False (`sample` and `mass_class` = `extra`) come from an archive search
+  (`obs/extra_observations.py`; sky columns from HEASARC nH and IRSA dust, `obs/sky_columns.py`).  The hash of a
+  preset with `donors.reference_sample = 'bank638'` covers the bank rows only; `'bank638+extra'` covers all rows.
+* Kedro: `kedro run --pipeline obs` (the check, then the table; works anywhere).
+* CLI: `tngxmm obs build-reference-masses --check`; `tngxmm obs build-observations`.
+* The inputs of the added observations are made by five commands, run once per archive search and in this order
+  (none is a Kedro node: two ask public services, and the grade is given by eye between the first and the second):
+
+  ```bash
+  # 1. measurements and flags of the candidates against the bank; sheets for the grade ({doc}`samples`)
+  tngxmm obs grade-candidates --candidates candidates.csv --pps-root <downloads>/pps --download --out-dir qc --sheets all
+  #    ... add the columns grade (pass / reject / hold) and eye_note to qc/graded_auto.csv by hand -> graded.csv
+  # 2. the image sets of the pass rows into the tree, extra/<cluster>/, their mosaics, their rows of the product list
+  tngxmm obs stage-extra-images --graded graded.csv --source <downloads>/pps --list
+  # 3. event lists and flare series into the PPS archive cache (for the donor tables)
+  tngxmm obs fetch-pps-archive --graded graded.csv
+  # 4. HI4PI N_H and SFD E(B-V) at the positions; two bank positions are asked first as a check of the services
+  tngxmm obs fetch-sky-columns --graded graded.csv
+  # 5. candidates_graded.csv, camera_headers.csv and the two catalogue extracts of inputs_extra/
+  tngxmm obs build-extra-inputs --graded graded.csv --psz2 <PSZ2 union catalogue> --dr6 <ACT DR6 catalogue>
+  tngxmm obs build-observations
+  ```
+
+  Step 1 reads `<pps-root>/<obsid>/` with the per-camera images and exposure maps of bands 1 to 5 of each
+  candidate; `--download` fetches them from `<obsid>/PPS/` of the archive first. After step 2 the added observations are in
+  `obs/catalogue/pps_products.csv` like those of the bank, so another machine gets their images with
+  `tngxmm obs fetch-pps-products` (or the release item `obs_images_extra`), checked against the same list.
+
+### 2. donors: which halo is observed as which observation
+
+* In: `observations.csv`; the TNG-Cluster halo table
+  `campaigns/v4/halos_v4_input.csv`; the frozen zoom-target split
+  (`$TNGXMM_DATA/tables/splits/`); for the maximal list the TNG300 halo table
+  `campaigns/v4_max/halos_tng300_input.csv` (`tngxmm sim box-halos`).
+* Out (committed): `campaigns/v4/` (`targets_v4.csv`: one row per view with
+  its donor package, z_obs, seeds, view id; folds, coverage, gate P; the replica
+  list fails gate P in mass and coverage, see {doc}`samples`) and
+  `campaigns/v4_max/` (`targets_v4_max.csv`, donor use, report, the matched
+  subset and its gate P); `$TNGXMM_DATA/tables/donor_core_offsets.csv`;
+  `$TNGXMM_DATA/tables/donor_active_ccds.csv` and `epic_ccd_maps.fits` (the
+  EPIC CCDs each donor had, from its PPS exposure maps, and the per-CCD label
+  maps of the detector grid; read by the instrument under
+  `instrument.active_ccds = 'donor'`).
+* Kedro: `kedro run --pipeline donors` (re-draws the committed tables in
+  place: `git diff` shows any change).
+* CLI: `tngxmm donors folds / halo-folds / replica / gate-p / max-targets / build-box-targets /
+  sim-targets / pass1-targets / pair-fit-mass / pair-projections / sample-matched / core-offsets / active-ccds`.
+* Pass 1 of the pairing on the fit mass (PREREGISTRATION section 6): `tngxmm donors pass1-targets <list> --preset P
+  --out-dir campaigns/<campaign>_pass1` takes view 0 of every halo-snapshot of any target list and puts it under one
+  reference observation (`donors.build_pass1_targets`; the obsid and its values in `pass1_reference.json`). The
+  list is generated and fitted under a preset of its own (`config.PASS1_PRESETS`: one projection, the donor's
+  conditions as they are, the cluster at the donor's core offset); the commands of every step are in
+  `campaigns/v4_flamingo_l1m8_pass1/README.md`.
+* A one-view trial of the pairing: `tngxmm donors pair-fit-mass --obs-fits <real fit table> --mock-fits <pass-1 fit table>
+  --targets <pass-1 list> --preset P --name <campaign> --out-dir <dir>` gives each observation the mock halo, at the
+  snapshot nearest in redshift, whose pass-1 fit mass is nearest in log to the observation's fit mass, no halo twice
+  (`donors.pair_fit_mass`), and writes the target list of those views under their observations. The pass-1 preset
+  generates that list unchanged.
+* Pass 2: `tngxmm donors pair-projections --obs-fits <real fit table> --mock-fits <pass-1 fit table> --targets
+  <pass-1 list> --preset P --assignment least-used --name <campaign> --out-dir <dir>` pairs every halo-snapshot
+  with an ok pass-1 fit with up to six observations of its window in redshift and fitted mass
+  (`donors.pair_projections`, `donors.pair_six_views`) and writes the list of its six icosahedral views, each under
+  a different observation. With `least-used` a halo-snapshot takes the observations of its window that serve the
+  fewest views so far; the default `nearest` takes its nearest. The list is generated under a pass-2 preset
+  (`config.PASS2_PRESETS`); `v1_flamingo_l1m8_pass2_extra` pairs with all 808 observations.
+
+### 3. sim (+ instrument + photometry): the campaign
+
+Each view: the mock gas is the cylinder of radius and line-of-sight half-depth 4 R500c, taken along the
+view's axis (`sim.mock_gas_region`, `sim.mock_cylinder_r500`), cut for the TNG presets from the cube of half-side 5.66 R500c about GroupPos
+that `campaign mock-cutout` stored (node `sim.cut_mock_gas`, `slurm/mock_cutout.sh` before the generation) from a
+full snapshot (99, 91, 84, 78, 72, 67, 59, 50, 40; periodic minimum image), and for the other simulations from
+their canonical cubes at the snapshots nearest these redshifts; APEC photons from 0.2 keV
+(rest frame) for the donor's longest camera time at z_obs, Galactic
+absorption, the XMM EPIC instrument with the donor's conditions (per-camera
+live times, filters, PN mode, out-of-time events, the cluster placed at the
+donor's core offset), aperture photometry, the intrinsic hydrostatic truth
+columns (computed from every particle in a sphere about the halo centre, `campaign
+truth-sphere`; headline estimator `barnes21_nosf_fit_mu`, defined in {doc}`definitions`) and
+a temet-exact reference surface-brightness map.  The products are SAS-ready: five
+PPS bands, SAS header keywords, no pn event within 12 rows of the readout node, so that
+ESA's `edetect_chain` runs on a mock as on real data.
+
+* In: a targets table (`campaigns/v4/targets_v4.csv`, or
+  `campaigns/v4_max/targets_v4_max.csv`), the snapshots, the data-package
+  tables (APEC tables, donor core offsets), `$CCF_PATH`.
+* Out: `<root>/<preset>/<sim>/<snap:03d>/<halo:07d>/view<v>/` (absorbed photon
+  list, `percam/` 3 cameras x 5 bands (the PPS bands 0.2-0.5 ... 4.5-12 keV) of IMAGE and EXPMAP, `image_merged.fits`,
+  `image_merged_cov.fits`, `pts_sources.fits`, `obs_meta.json`,
+  `tngref_sb_map.fits`), `truth_profile.h5` per halo-snapshot,
+  `results_<sim>_snap_<snap:03d>.csv`, and `checks/campaign_check.md` (C1-C17).
+* Kedro (sim stack): `kedro run --pipeline sim` (all snapshots of the preset;
+  `--params sim.snaps=[67]` for one, `sim.workers=N` for the pool), then
+  `kedro run --pipeline instrument` and `--pipeline photometry` for the
+  product tables and the ML apertures.  Box runs (TNG300/100/50: the same
+  gas cube, cut from the snapshot at the periodic minimum image):
+  `kedro run --pipeline sim --params preset=v1_tng300,sim.targets=max`.
+* Job: `python -m tngxmm.core.runner slurm submit slurm/campaign.sh --preset v1
+  --out-root <root>/campaign_v1 --set TARGETS_CSV=campaigns/v4/targets_v4.csv
+  --set TNGXMM_PY=<thin venv python> [--go]`; the combined production job
+  (TNG-Cluster and the three boxes concurrently on one node, one tree per
+  preset under the out-root): `slurm/campaign_all.sh --preset v1
+  --out-root <root>/campaign_all` (targets default to
+  `campaigns/v4_max/targets_v4_max.csv` and `campaigns/v4_box/targets_v4_box.csv`).  On a login node:
+  `bash slurm/mini_pilot_login.sh v1 <targets.csv> <out_root>` (at most 4 cores).
+* CLI, one snapshot: `python -m tngxmm.core.runner campaign run --preset v1
+  --snap 67 --out-root <root> --targets-csv campaigns/v4/targets_v4.csv
+  --workers 4`; checks: `... campaign check <root> --preset v1 --targets ...`.
+* Resume: a view is finished when its `obs_meta.json` exists (written last); the same command keeps the finished
+  views and makes the others.  A preset with `runtime.drop_events` (the pass-1 preset) does not keep the photon
+  lists of a view.
+* SAS source lists, which the fit masks (`massfit.source_list = 'sas'`): `tngxmm instrument sas-queue build-mock
+  --targets <list> --tree <tree> --queue <queue.json>` (or `--view-dir`, `--view-list`; `build-real` for real
+  observations) writes a queue, and `slurm/sas_detect.sh --set QUEUE=<queue.json>` runs it, one single-core
+  `edetect_chain` per core (`tngxmm instrument sas-queue run`).  The list of a view is
+  `<view>/sas_detect/sources.csv`; a detection is finished when its `provenance.json` exists.
+* Per-observation responses (`instrument.obs_responses`; the set at `$TNGXMM_OBS_RESP`): `tngxmm instrument
+  obs-responses plan --out-root <set root> --plan <plan.json>` lists the exposures of every observation of the
+  fit-centre table, `obs-responses run` (job `slurm/obs_responses.sh --set PLAN=<plan.json>`) builds their RMFs and
+  on-axis ARFs with SAS, one observation per core, and `obs-responses manifest --root <set root>` writes the set's
+  manifest and prints its digest.  `obs-responses adopt --plan <plan.json>` takes over the finished responses of an
+  earlier centre table for the observations whose region, exposures and settings equal the plan.  The set
+  `responses_obs_v2` holds the 808 observations; its files of the 638 are those of `responses_obs_v1`.
+
+#### Measured Lx of the campaign (photometry)
+
+`lx_r500`, `lx_1mpc` and `lx_1p5mpc` (rest 0.5-2 keV, apertures about the cluster position, background in the
+annulus at 1.1-1.6 aperture radii) are measured inside the campaign (`photometry.measure_lx.campaign_lx`;
+`photometry.lx_bkg = 'masked-clipped'`, `photometry.estimate_lx_background`):
+
+* Masked, in the aperture and in the background annulus, are the point sources the hydrostatic fit masks: on real
+  observations the PPS point sources (`EP_EXTENT = 0`, `EP_DET_ML > 10`), on mocks the AGN brighter than the flux at
+  which the mock source density equals the donor's PPS point-source density.  Mask radius from the on-axis pn King
+  PSF, from 30″ until the PSF wing falls below 10 per cent of the local level, at most 150″; sources inside the
+  protected core (one PSF half-energy width, 16.5″, where a source is not resolved from the peak) are kept, as in
+  the fit.
+* A masked aperture pixel takes the mean counts of the unmasked pixels in the same 8″ ring about the centre, which
+  is exact for an azimuthally symmetric cluster; `lx_<ap>_mask_frac` and `lx_<ap>_area_corr` record the correction,
+  and an aperture more than 50 per cent masked is flagged.
+* The background is the mean of the masked annulus after deviant azimuthal sectors are dropped.
+* L_X is NaN unless `lx_<ap>_flag == 'ok'`; the signed value is kept in `lx_<ap>_signed`.
+
+`tngxmm photometry remeasure-lx <tree> --preset v1` re-measures a tree from its stored products; real observations
+are measured in the same convention by `photometry.measure_obs_lx.measure_obs_lx_masked`.
+
+#### Lx seed of the hydrostatic fits
+
+The fit's first-guess M500 (crop, start, model extent, centre search) comes from the image itself through the
+published core-included 0.5-2 keV L_X-M500 relation of Bulbul et al. (2019), iterated as for the MCXC (Piffaretti et
+al. 2011): R500 from the mass, L_X measured inside it with the estimator above at the fit's centre, the mass from the
+inverted relation, until it changes by less than 0.1 per cent (`massfit.guess_mass.seed_lx_iterated`; an image with no
+measurable L_X starts at the relation's pivot mass, `seed_status = pivot`).  The starting c200 is the Dutton & Maccio
+(2014) median at that mass.  Mocks are seeded in `tngxmm massfit build-fit-targets`, real observations in `tngxmm
+photometry obs-seed-lx`, which writes `$TNGXMM_DATA/tables/obs_seed_lx_v4.csv` for `build-realfit-targets`, closure
+cells in the closure grid; neither the true nor the published mass enters (ledger `fit.seed_lx`).
+
+### 4. massfit: hydrostatic masses
+
+* In: per-camera products (mocks: `percam/`; real clusters: PPS products), a
+  fit-target list, responses, a PRIVATE mbproj2d rate cache; HEASoft/XSPEC.
+* Model: a Vikhlinin density and an NFW mass profile in hydrostatic equilibrium (MBProj2, Sanders et al. 2018),
+  fitted jointly to four bands of the three cameras.  The concentration has a log-normal prior about the c200(M200, z)
+  relation of Dutton & Maccio (2014), 0.11 dex wide, evaluated at the M200 of the sampled halo, with c200 bounded at
+  0.5-20 (`massfit.cm_prior = 'dutton14'`; the flat prior in log c200 over 1-10 is the option `flat`).  The metallicity
+  is free with a flat prior over 0-2 Z_sun.  Both priors are the same at every signal level.  The Galactic column is
+  the total one the mocks are absorbed by. The background
+  is that of XMM-ESAS and X-COP (`massfit.qpb_model = 'esas-fwc-corners'`): the particle background a fixed
+  template set by the observation's corners (a mock: the QPB the stage drew from its conditions donor's corners), the
+  sky and the residual soft protons (CCF flare maps) free with no prior, the pn out-of-time events a fixed template.
+  No level in the fit comes from a fit to mocks ({doc}`background`; ledger `fit.particle_background_esas`,
+  `fit.cm_prior`, `fit.priors_low_signal`, `fit.seed_lx`).
+* Out: one fit directory per target (`chain.hdf5`, `mass_profile_samples.npz`, `result.json` and, written last,
+  `provenance.json`), the `fit_results` table (M500 [1e14 Msun] with 16/50/84 percentiles).  With `--resume` a
+  fit that ran to its end (status `ok` or `unconstrained`) is kept when its redshift and images are those of the
+  job; every other target is fitted again.
+* Kedro (massfit stack): two fit nodes, both the batch driver of `tngxmm massfit fit-hydrostatic`
+  (`fit_hydrostatic.fit_targets`: `workers` targets at once, a private rate cache per worker with `worker_caches`,
+  `resume`): `kedro run --pipeline massfit --nodes massfit.link_percam,massfit.fit_hydrostatic` fits the mock
+  targets (`params:massfit.fit`), `kedro run --pipeline massfit --nodes massfit.fit_real` the real observations of
+  `massfit.real_fit_targets`, the list of `tngxmm massfit build-realfit-targets` (`params:massfit.real_fit`);
+  the fit physics come from `params:preset` (8 arcsec pixels, `massfit.target_pixsize_arcsec`). The
+  Kedro run options default to quick chains (`params:massfit.fit.quick: true`, 150 + 300 steps), which
+  serve the fixtures and the smoke run; the certification fits use long chains (500 + 1500 steps,
+  `params:certify.fits.quick: false`), and every number on {doc}`validation` comes from long chains
+  except the golden quick fits.
+* Job: `slurm/fits.sh --set FIT_PLAN=<plan>` (several fit streams on one node);
+  CLI: `tngxmm massfit fit-hydrostatic --targets ... --preset v1 ...`.
+* A list of thousands of views: `tngxmm massfit fit-plan pieces` cuts the target list into pieces and writes the
+  queue that `slurm/fit_targets.sh` runs (`build-fit-targets` once per piece, one piece per core), `fit-plan merge`
+  joins the pieces into one fit-target table, and `fit-plan jobs` splits it over fit jobs of a given length: one
+  target table and one plan per job, each job with many more fits than workers, the fits a job did not finish
+  listed first in the next, and a last plan with every target (`massfit.fit_plan`). No target is left out.
+  `fit-plan streams` writes the plans of jobs that run several fit streams side by side on a shared half node
+  (`slurm/viper_fits.sh`), each stream with its own target table, work directory and copy of the rate cache.
+* From the results of a run: `fit-plan remaining` lists the targets without a finished fit (status `ok` or
+  `unconstrained`), largest theta500 first; `fit-plan refit-sample` draws a seeded sample of finished fits, the
+  same number from every cell of run-time and fitted-mass quantile classes; `fit-plan rank-sample` takes per
+  redshift the fits at evenly spaced ranks of fitted mass (`massfit.fit_lists`; {doc}`production`, section 6).
+* Before a job: `tngxmm massfit predict-domain --targets <fit targets> --img-root <images> --kind real|mock
+  --preset P --out <csv>` gives each target the domain flags known before the fit (centre, background fallback,
+  field edge, no seed; `massfit.domain_predict`). With `--reference <obsid>` it predicts them for views not yet
+  generated, all under that observation. In pass 1 the prediction is carried as columns of the fit targets
+  (`fit-plan merge --domain`) and decides nothing: every view is fitted.
+
+### 5. viz: figures of finished fits
+
+* Kedro (massfit stack): `kedro run --pipeline viz --nodes viz.render_fits` (one figure per fit:
+  data, model, residuals, profiles, truth overlay).
+* CLI: `tngxmm massfit render-fit-v4 --fit-dir <dir> --targets <csv> --cache-dir <dir> --out <dir>`.
+* The figure of a mock against the simulation it was made from (sim stack, no XSPEC):
+  `kedro run --pipeline viz --nodes viz.plot_mock_truth`.  It is not part of a plain `kedro run`,
+  because its input `analysis.mock_fits` comes from the `analysis` pipeline; it reads `analysis.mock_fits`, the
+  view table, the truth profiles and the temet maps of the sim stage: the EPIC image beside the
+  intrinsic surface-brightness map, the cumulative mass profiles (X-ray fit, Barnes et al. 2021
+  hydrostatic truth, true mass) and the estimands at R500c; style in `params:viz.mock_truth`.
+  `slurm/showcase.sh` takes three replica views through every stage and ends with it
+  (`conf/showcase/README.md`).
+
+### 6. bank and embed: the image bank and its embeddings
+
+* Kedro: `kedro run --pipeline bank` (sim stack), `kedro run --pipeline embed`
+  (embed stack).
+* CLI: `tngxmm bank mosaic / render / folds / manifest / filter / ml-view`,
+  `tngxmm embed extract`; job `slurm/embed_gpu.sh`.
+
+### 7. validation: the closure grid
+
+Idealised clusters in exact hydrostatic equilibrium through the whole chain, fitted with the
+production fit.  The registered rule, M500_fit / M500_true = 1.00 +- 0.03 in every cell, is not met;
+the numbers are on {doc}`validation`.
+
+* Kedro: `kedro run --pipeline validation --nodes
+  validation.plan_closure_grid,validation.generate_closure_views` (sim stack),
+  then `kedro run --pipeline validation --from-nodes
+  validation.warm_closure_rate_caches` (massfit stack).  Not part of `kedro run`.
+* Job: `slurm/closure_grid.sh` (about 3 node-hours); CLI:
+  `tngxmm validation closure-grid plan|generate|warm|fit|analyse --out-root <dir>`.
+
+### 8. donor_tables and realism: the donor tables and the evaluation of the mocks
+
+`donor_tables` (not part of the default run) builds the per-donor tables of the data package that the
+instrument stage reads (`$TNGXMM_DATA/tables/`, sha256 in `SHA256SUMS`): total Galactic column, in-FOV
+background, anomalous MOS CCDs, the condition space of the conditions donor (with the flags `pool`, the pool of
+the rule `nn`, which is the bank only, and `lends`, the donors that can lend their conditions to a view paired with
+them), and from the PPS event lists
+(`donor_tables.fetch_pps_archive` fills the cache) the MOS corner QPB and IN/OUT soft-proton rates.  The
+measuring nodes are resumable and shardable; the build nodes assemble the table from the per-donor cache.
+`realism` (not part of the default run) evaluates the mocks against the real observations: the frozen donor
+split, the count-matching factors, the optional replay under conditions donors (`instrument.replay_views`,
+parameter `instrument.replay.conditions`), image statistics, DINOv3 embeddings and the grouped classifier
+two-sample test with a donor bootstrap and a permutation null.  Commands: `docs/dev/KEDRO.md`.
+
+## What runs where
+
+| stage | laptop with the data package | needs Vera |
+|---|---|---|
+| obs, donors (replica, gate P, max list, sampler, core offsets) | yes | |
+| ingest | no | the snapshots, or network access for the streamed sources |
+| sim / instrument | no | the snapshots or the canonical cubes |
+| photometry, bank | yes, from stored products | |
+| massfit, viz | renders from a shipped rate cache | XSPEC for new fits |
+| embed | yes (CPU; GPU for the full bank) | |
+
+## Checks
+
+`make check` (ruff, unit tests, hygiene scan, citation lint, schemas);
+`make viz-check` (the flowchart is current); acceptance on the fixtures:
+`pytest -m e2e tests/e2e/test_kedro_fixtures.py` in each stack: on the fixture halo (preset `v1`)
+every Kedro pipeline writes what the CLI writes.  The committed golden products of the fixture
+halo are made by `tools/make_v1_golden.sh` (`tests/fixtures/README.md`).

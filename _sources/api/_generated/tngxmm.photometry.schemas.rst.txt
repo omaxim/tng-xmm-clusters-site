@@ -1,0 +1,6 @@
+tngxmm.photometry.schemas
+=========================
+
+.. automodule:: tngxmm.photometry.schemas
+
+   

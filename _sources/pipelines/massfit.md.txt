@@ -1,0 +1,14 @@
+# massfit
+
+```{eval-rst}
+.. automodule:: tngxmm.massfit.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline massfit`; catalog `conf/base/catalog/massfit.yml`.
+
+## Nodes
+
+```{kedro-pipeline} massfit
+```

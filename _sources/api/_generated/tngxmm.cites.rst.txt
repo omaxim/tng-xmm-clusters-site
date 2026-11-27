@@ -1,0 +1,41 @@
+tngxmm.cites
+============
+
+.. automodule:: tngxmm.cites
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KEDRO_TAG_RE
+      GENERIC_SOFTWARE
+      REGISTRY
+      CREDITED_STATUSES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      adapts
+      all_keys
+      citation_entries
+      citations_root
+      cite_keys
+      cite_tags
+      cites
+      collect_cites
+      iter_modules
+      known_keys
+      lint_package
+      module_cites
+      render_credits
+      stage_node
+      stage_pipeline
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      CitationError
+   

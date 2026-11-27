@@ -1,0 +1,77 @@
+tngxmm.instrument.conditions\_donor
+===================================
+
+.. automodule:: tngxmm.instrument.conditions_donor
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CONDITION_RULES
+      JITTER_KINDS
+      CONTINUOUS
+      CATEGORICAL
+      ROLL_MAX_DEG
+      POINTING_SIGMA_ARCMIN
+      T_EFF_WEIGHTS_CM2
+      PN_OOT
+      TIMING_MODES
+      MEASURE_VERSION
+      DONOR_FOLDS_FILE
+      ANCHORS_KEY
+      REFUSED_STATUS
+      EXPOSURE_RTOL
+      STALE_STATUS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_condition_table
+      check_list_covers
+      check_stored_conditions_donor
+      choose_conditions
+      condition_columns
+      condition_distances
+      conditions_of
+      conditions_package
+      donor_folds_path
+      draw_conditions
+      draw_jitter
+      draw_projection_conditions
+      draw_view_conditions
+      effective_exposure_s
+      folds_sha256
+      longest_exposure_s
+      missing_dimensions
+      neighbours
+      nominal_pa_deg
+      placed_core_offset
+      pn_oot_fraction
+      posangle_for_pa
+      position_angle_deg
+      projection_anchors
+      projection_draws
+      read_condition_table
+      read_donor_folds
+      replica_index
+      resolve_table
+      retarget_keep_prob
+      robust_scale
+      scale_exposure
+      sibling_conditions_rng
+      stage_conditions
+      stage_events
+      stored_list_exposure_s
+      sun_radec
+      table_sha256
+      wrap180
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ConditionsRefused
+      StoredConditionsDiffer
+   

@@ -1,0 +1,21 @@
+tngxmm.realism.pipeline
+=======================
+
+.. automodule:: tngxmm.realism.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_split
+      c2st_report
+      create_pipeline
+      dino_c2st_report
+      embed_dino
+      extract_mock_features
+      extract_real_features
+      measure_count_matching
+      replay_directories
+      select_views
+   

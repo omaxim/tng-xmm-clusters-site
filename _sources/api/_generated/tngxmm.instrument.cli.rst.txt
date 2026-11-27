@@ -1,0 +1,6 @@
+tngxmm.instrument.cli
+=====================
+
+.. automodule:: tngxmm.instrument.cli
+
+   

@@ -1,0 +1,39 @@
+tngxmm.massfit.mask\_point\_sources
+===================================
+
+.. automodule:: tngxmm.massfit.mask_point_sources
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LEGACY_CACHE
+      V3_BOX_NPIX
+      V3_BOX_PIX_ARCMIN
+      PER_DONOR_RULES
+      SAS_AUTO
+      PSF_HEW_ARCSEC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      donor_of_view
+      flux_threshold_for_density
+      king_hew_arcsec
+      legacy_v3_mock_sources
+      mask_point_sources
+      mock_point_sources
+      mock_sources_for_view
+      mock_table_lognlogs
+      pps_point_sources
+      psf_mask_radii_as
+      read_pps_source_list
+      read_sas_source_list
+      resolve_sas_list
+      sas_list_candidates
+      source_mask
+      sources_for_target
+      view_source_table
+   

@@ -1,0 +1,26 @@
+tngxmm.core.site
+================
+
+.. automodule:: tngxmm.core.site
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get
+      parse_site_file
+      path
+      path_or_placeholder
+      prefixes
+      require
+      site_file
+      site_values
+      sites_dir
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SiteNotConfigured
+   

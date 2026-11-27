@@ -1,0 +1,12 @@
+tngxmm.bank.schemas
+===================
+
+.. automodule:: tngxmm.bank.schemas
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MANIFEST_EXTRA
+   

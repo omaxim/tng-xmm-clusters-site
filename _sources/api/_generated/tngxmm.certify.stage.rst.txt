@@ -1,0 +1,16 @@
+tngxmm.certify.stage
+====================
+
+.. automodule:: tngxmm.certify.stage
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_targets
+      stage_stored
+      stage_variant
+      view_dir
+      write_results
+   

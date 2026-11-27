@@ -1,0 +1,40 @@
+tngxmm.validation.realism
+=========================
+
+.. automodule:: tngxmm.validation.realism
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PIX_ARCSEC
+      MATCH_ANNULUS_R500
+      FEATURES
+      FEATURE_GROUPS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      auc_score
+      background_rate
+      background_region
+      binomial_thin
+      c2st_auc
+      centroid_shift
+      compact_source_mask
+      compact_sources
+      count_matching_factor
+      fov_mask
+      image_features
+      net_counts
+      optical_axis
+      power_ratios
+      r500_pixels
+      radius_map
+      recentre
+      sb_log_slope
+      thin_source_component
+      thin_total_bias
+   

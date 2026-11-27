@@ -1,0 +1,24 @@
+tngxmm.obs.sky\_columns
+=======================
+
+.. automodule:: tngxmm.obs.sky_columns
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NH_RADIUS_DEG
+      BANK_CHECK
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_services
+      fetch_sky_columns
+      hi4pi_nh
+      parse_dust
+      parse_nh
+      sfd_ebv
+   

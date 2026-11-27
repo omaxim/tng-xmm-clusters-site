@@ -1,0 +1,15 @@
+tngxmm.analysis.pipeline
+========================
+
+.. automodule:: tngxmm.analysis.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      closure_fit_table
+      create_pipeline
+      mock_fit_table
+      real_fit_table
+   

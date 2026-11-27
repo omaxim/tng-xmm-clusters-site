@@ -1,0 +1,16 @@
+tngxmm.ledger.proofs
+====================
+
+.. automodule:: tngxmm.ledger.proofs
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_dir
+      counts
+      evidence_blocks
+      load_index
+      refs_root
+   

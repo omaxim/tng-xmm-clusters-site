@@ -1,0 +1,32 @@
+tngxmm.ingest.swift\_remote
+===========================
+
+.. automodule:: tngxmm.ingest.swift_remote
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SNAPSHOTS_Z
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ingest_remote
+      ingest_run
+      main
+      morton_order
+      open_run
+      read_cube_remote
+      soap_hbt_table
+      stream_missing
+      write_soap_tables
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RemoteCells
+   

@@ -1,0 +1,21 @@
+tngxmm.obs.read\_observation\_meta
+==================================
+
+.. automodule:: tngxmm.obs.read_observation_meta
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PPS_CAMERA
+      ARF_BAND_MEAN_CM2
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      field_nh
+      read_observation_meta
+      teff_from_obsid
+   

@@ -1,0 +1,14 @@
+# API reference
+
+Every module of the `tngxmm` package, generated from the docstrings.  The style is the repository's own: a module
+docstring states the role of the module in the pipeline, its inputs and outputs, and the works it cites;
+function docstrings state what the function does, the units of its arguments and results, what it refuses, and
+assumptions that matter.  The modules are listed in alphabetical order.
+
+```{eval-rst}
+.. autosummary::
+   :toctree: _generated
+   :recursive:
+
+   tngxmm
+```

@@ -1,0 +1,40 @@
+tngxmm.sim.project\_tngref\_map
+===============================
+
+.. automodule:: tngxmm.sim.project_tngref_map
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MAP_FILENAME
+      FOV_R200C
+      HSML_FACTOR
+      CLIP_R200C
+      OFFICIAL_AXES
+      LUM_SCALE
+      GAS_SELECTION_COMMENTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_map_file
+      map_clip_kpc
+      map_header
+      parse_band
+      prepare_map_cells
+      project_view
+      read_tngref_map
+      view_axes
+      warm_sph_map
+      write_tngref_map
+      write_view_map
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MapCells
+   

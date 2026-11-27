@@ -1,0 +1,19 @@
+tngxmm.embed.extract\_embeddings
+================================
+
+.. automodule:: tngxmm.embed.extract_embeddings
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      extract_embeddings
+      read_bank_manifest
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BankEntry
+   

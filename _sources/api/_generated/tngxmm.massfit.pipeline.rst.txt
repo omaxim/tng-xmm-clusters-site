@@ -1,0 +1,15 @@
+tngxmm.massfit.pipeline
+=======================
+
+.. automodule:: tngxmm.massfit.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+      fit_hydrostatic_node
+      fit_real_node
+      link_percam_node
+   

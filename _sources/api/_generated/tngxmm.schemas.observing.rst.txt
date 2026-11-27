@@ -1,0 +1,12 @@
+tngxmm.schemas.observing
+========================
+
+.. automodule:: tngxmm.schemas.observing
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ObservingConditions
+   

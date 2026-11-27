@@ -1,0 +1,30 @@
+tngxmm.photometry.build\_obs\_seed\_lx
+======================================
+
+.. automodule:: tngxmm.photometry.build_obs_seed_lx
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      META_COLUMNS
+      SEED_SECTIONS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_obs_seed_lx
+      check_same_seed_procedure
+      check_seed_table
+      default_table_path
+      find_mosaic
+      library_versions
+      measure_one
+      read_obs_seed_lx
+      read_observations
+      recorded_seed_hash
+      seed_hash
+      table_columns
+   

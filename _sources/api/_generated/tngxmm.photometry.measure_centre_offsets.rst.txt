@@ -1,0 +1,14 @@
+tngxmm.photometry.measure\_centre\_offsets
+==========================================
+
+.. automodule:: tngxmm.photometry.measure_centre_offsets
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      measure_centre_offsets
+      measure_mislock_rate
+      summarise_offsets
+   

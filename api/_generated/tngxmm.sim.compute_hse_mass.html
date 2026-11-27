@@ -1,0 +1,1391 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="tngxmm.sim.compute_hse_stream" href="tngxmm.sim.compute_hse_stream.html"><link rel="prev" title="tngxmm.sim.compute_apec_spectra" href="tngxmm.sim.compute_apec_spectra.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>tngxmm.sim.compute_hse_mass - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" checked="" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-tngxmm.sim.compute_hse_mass">
+<span id="tngxmm-sim-compute-hse-mass"></span><h1>tngxmm.sim.compute_hse_mass<a class="headerlink" href="#module-tngxmm.sim.compute_hse_mass" title="Link to this heading">¶</a></h1>
+<p>Intrinsic hydrostatic masses of a halo from its gas cells, and the particle M500 at any z.</p>
+<p>The hydrostatic mass the simulated gas itself implies, from the TRUE 3-D
+profiles with no instrument and no fit, so that the bias of the mock fits
+splits into a physical part (M_HSE / M500c: non-thermal support, multiphase gas
+seen by X-rays) and a method part (M_fit / M_HSE).</p>
+<p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a> reads the snapshot through a HaloSource, so the
+fixture cutouts work too.  Per halo, 48 log shells from 0.05 to 3 R500c
+about GroupPos (periodic):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code>      M_true(&lt;r): gas + DM + stars + BH of the original zoom;</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">th_vw</span></code>     thermal HSE, -r^2/(G rho_gas) dP_th/dr, P_th = (gamma-1) rho u,</dt><dd><p>volume-weighted shell mean over all non-star-forming gas (no mu,
+no T needed);</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">th_med</span></code>    the same with the shell MEDIAN of P and rho (clump-robust);</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">th+kin</span></code>    P_th + rho sigma_r^2 plus the Jeans anisotropy term -(r/G) 2</dt><dd><p>beta sigma_r^2, velocities about the shell’s mean radial flow
+and the halo bulk velocity, Hubble flow added (closure test);</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">X_Tsl_nemed</span></code>, <code class="docutils literal notranslate"><span class="pre">X_Tmw_nemed</span></code>, <code class="docutils literal notranslate"><span class="pre">X_Tsl_nevw</span></code>, <code class="docutils literal notranslate"><span class="pre">X_Tsl_nemed_mu0.641</span></code></dt><dd><p>“X-ray-like” -(kT r/(G mu m_p)) (dln n_e/dln r + dln T/dln r)
+of the hot gas (T &gt; 5.5 MK, non-SF): n_e shell median or
+volume-weighted mean, T spectroscopic-like (n^2 T^-0.75 V,
+Mazzotta et al. 2004) or mass-weighted, mu = 0.59 or
+mbproj2d’s 0.6409;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">X_Tsl_nemed_mock</span></code>, <code class="docutils literal notranslate"><span class="pre">X_Tmw_nemed_mock</span></code> (the</dt><dd><p>truth with the mock’s own gas selection and floor) the same
+estimator on the cells the mock emits from: the mock’s loader
+selection, T &gt; t_min_k, non-SF, net cooling, inside the clip
+sphere, with the mock’s per-cell X_H.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The literature definitions, each its own column
+(<code class="xref py py-func docutils literal notranslate"><span class="pre">_literature_estimators()</span></code>; mu = 0.59; log-slopes by finite differences
+over the shell centres):</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">barnes21</span></code>  Barnes et al. (2021, MNRAS 506, 2533; secs. 2.1.5,</dt><dd><p>2.4): 3-D mass-weighted T and gas density in 50 LINEAR shells
+over 0-1.5 r500, thermal pressure only, NO gas cut (Barnes’s
+cuts belong to its synthetic images);</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">barnes21_nosf</span></code> (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">NOSF_FD_ESTIMATOR</span></code></a>)  the same without star-forming cells</dt><dd><p>(their temperature is the effective EOS value, not a physical one);
+finite-difference slopes, mu = 0.59.  NOT EMITTED (too easily
+mistaken for the headline <code class="docutils literal notranslate"><span class="pre">barnes21_nosf_fit_mu</span></code>): no
+results column, no truth-profile dataset, not a selectable headline; computed
+only on request (<code class="docutils literal notranslate"><span class="pre">nosf_fd=True</span></code> of <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a>) for the unit
+tests that compare it with the fitted headline;</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barnes21_nosf_fit_mu</span></code>  THE fitted Barnes truth and the headline:
+Barnes et al. (2021) sec. 2.4 – 50 linear shells over 0-1.5 r500c, the
+shell mass-weighted quantities and the shell gas density fitted with the Vikhlinin
+(2006) forms and differentiated analytically (see <code class="xref py py-func docutils literal notranslate"><span class="pre">_m_fit()</span></code>), gas without
+star-forming cells (their temperature is the effective equation-of-state value of the
+TNG star-formation model) – but with the thermal pressure of each cell as simulated:
+the shell mass-weighted <code class="docutils literal notranslate"><span class="pre">&lt;T/mu&gt;</span></code> with each cell’s own mu
+(<code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">/</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">3</span> <span class="pre">X_H</span> <span class="pre">+</span> <span class="pre">4</span> <span class="pre">X_H</span> <span class="pre">x_e)</span></code>, X_H of the cell from <code class="docutils literal notranslate"><span class="pre">GFM_Metals</span></code> where present)
+replaces the temperature and the fixed mu = 0.59:
+<code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">=</span> <span class="pre">-(k</span> <span class="pre">r</span> <span class="pre">/</span> <span class="pre">(G</span> <span class="pre">m_p))</span> <span class="pre">&lt;T/mu&gt;</span> <span class="pre">(dln</span> <span class="pre">rho/dln</span> <span class="pre">r</span> <span class="pre">+</span> <span class="pre">dln</span> <span class="pre">&lt;T/mu&gt;/dln</span> <span class="pre">r)</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;T/mu&gt;</span></code> fitted
+with the Vikhlinin T form.  Since T = (gamma-1) u mu m_p / k, <code class="docutils literal notranslate"><span class="pre">T/mu</span></code> is the internal
+energy per unit mass in temperature units: the estimator is the pressure-based thermal
+HSE mass with fitted slopes (<code class="docutils literal notranslate"><span class="pre">mu_hse_barnes21_nosf_fit_mu</span></code> is NaN: no single value).
+<code class="docutils literal notranslate"><span class="pre">hse_fit_ok_barnes21_nosf_fit_mu</span></code> flags a converged pair of fits.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barnes21_nosf_fit</span></code> (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a>)  the same fit with T and the assumed
+mu = 0.59.  NOT EMITTED (no results column, no truth-profile dataset, not a
+selectable headline): it is computed only on request (<code class="docutils literal notranslate"><span class="pre">mu059_fit=True</span></code> of
+<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a>), kept for the unit test that shows it differs from the
+headline only through the cells’ departure of mu from 0.59.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barnes21_fit_mu</span></code>, <code class="docutils literal notranslate"><span class="pre">barnes21_fit</span></code> (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.S8_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.S8_ESTIMATORS"><code class="xref py py-data docutils literal notranslate"><span class="pre">S8_ESTIMATORS</span></code></a>)  the headline’s fit over every cell (star-forming
+cells kept), with the own mu and with mu = 0.59 (the latter is Barnes’s estimator as published).  NOT EMITTED:
+computed only on request (<code class="docutils literal notranslate"><span class="pre">s8_variants=True</span></code>) for ledger test S8, which sizes the two deviations of the headline
+from Barnes et al. one at a time.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">barnes21_mock</span></code>  the same on the mock’s own cells, with the mock’s own</dt><dd><p>selection (<code class="docutils literal notranslate"><span class="pre">load_halo_gas.emission_masks</span></code>: drop T &lt; t_min_k,
+SFR &gt; 0 and heated cells, GFM_CoolingRate &gt;= 0; loader cells
+inside the clip sphere);</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">barnes21_xcut</span></code>  with Barnes’s X-ray-image cuts (sec. 2.2.3: drop T &lt; 1e6 K,</dt><dd><p>SFR &gt; 0, and cells whose net cooling rate is positive, i.e.
+heated): the same <code class="docutils literal notranslate"><span class="pre">emission_masks</span></code> rule with a 1e6 K floor.
+GFM_CoolingRate is negative for net cooling and positive for
+net heating; heated cells (&gt;= 0) are dropped, net-cooling
+cells (&lt; 0) kept;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">barnes21_tsl</span></code>  the xcut cells with the spectroscopic-like T (Mazzotta et</dt><dd><p>al. 2004, w = n^2 T^-0.75 V; valid above ~2-3 keV: the halo’s
+T_sl inside R500c and <code class="docutils literal notranslate"><span class="pre">t_sl_valid</span></code> are recorded);</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">pearce20_th</span></code>, <code class="docutils literal notranslate"><span class="pre">pearce20_thkin</span></code>, <code class="docutils literal notranslate"><span class="pre">pearce20_thkin_sig3d</span></code>  Pearce et</dt><dd><p>al. (2020, MNRAS 491, 1622; sec. 3.6): 50 log shells over
+0.05-2 r500 without T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 cells;
+thermal only, + rho sigma_1D^2 (sigma_3D^2 / 3 of the peculiar
+velocities about the shell’s mean velocity), + rho sigma_3D^2.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>For each estimator: the ratio to M500c at R500c (<code class="docutils literal notranslate"><span class="pre">*_atR500c</span></code>), the
+self-consistent M500 at 500 rho_c(z_snap) beyond 0.4 R500c (<code class="docutils literal notranslate"><span class="pre">*_M500self</span></code>,
+<code class="docutils literal notranslate"><span class="pre">*_R500self</span></code>: the INNERMOST downward crossing of 500 rho_c by M_HSE(&lt;r)/(4/3 pi
+r^3), log-interpolated between the two shells; <code class="docutils literal notranslate"><span class="pre">*_ncross</span></code> counts the downward
+crossings, NaN M500self when there is none) and the median ratio to M_true over
+0.8-1.2 R500c.  The headline’s count becomes the <code class="docutils literal notranslate"><span class="pre">hse_crossing</span></code> column
+(<code class="docutils literal notranslate"><span class="pre">none</span></code> / <code class="docutils literal notranslate"><span class="pre">single</span></code> / <code class="docutils literal notranslate"><span class="pre">multiple</span></code>).</p>
+<p>Shell density (<code class="docutils literal notranslate"><span class="pre">sim.hse_shell_density</span></code>, <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">shell_gas_density()</span></code></a>): every estimator
+that pairs a shell gas density with a cell-averaged T or P uses either the selected
+gas mass over the geometric shell volume (<code class="docutils literal notranslate"><span class="pre">geometric</span></code>, the definitions as written,
+which assume the selected cells fill the shell) or over the selected cells’ summed
+volume (<code class="docutils literal notranslate"><span class="pre">filling</span></code>).  With a FoF-member selection the outer shells of high-z groups
+are only partly filled by FoF members (the campaign computes its truth from all particles in
+a sphere, <code class="docutils literal notranslate"><span class="pre">sim.truth_selection_hse</span> <span class="pre">=</span> <span class="pre">'sphere'</span></code>, which fills them, and keeps the filling
+rule); the geometric density then falls while the cell-averaged P and T do not, and the HSE
+mass comes out high.  <code class="docutils literal notranslate"><span class="pre">filling</span></code> gives the
+density of the gas present; shells filled below <code class="docutils literal notranslate"><span class="pre">sim.hse_min_filling</span></code> (0.1 in the campaign)
+are omitted from the profiles.  The cumulative particle masses are unaffected.</p>
+<p>The headline intrinsic mass <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> is the estimator the preset’s
+method fields select (<code class="docutils literal notranslate"><span class="pre">sim.hse_pressure</span></code>, <code class="docutils literal notranslate"><span class="pre">hse_gas_phase_cut</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hse_shell_binning</span></code>, <code class="docutils literal notranslate"><span class="pre">t_weighting</span></code>; <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.variant_for" title="tngxmm.sim.compute_hse_mass.variant_for"><code class="xref py py-func docutils literal notranslate"><span class="pre">variant_for()</span></code></a>).  The campaign’s
+choice (one methodological line) is <code class="docutils literal notranslate"><span class="pre">barnes21_nosf_fit_mu</span></code>: Barnes et al.
+(2021) secs. 2.1.5 and 2.4 (Vikhlinin fits, analytic slopes, 50 linear shells to 1.5 R500c),
+with one deviation of ours: Barnes states no gas cut for the 3-D profiles, we drop the
+star-forming cells, whose temperature is the effective
+equation-of-state value of the TNG star-formation model, not a physical one (TNG
+data specifications; the same exclusion as the mock’s gas selection,
+Chatzigiannakis et al. 2025), with each cell’s own thermal pressure (its own mu).
+Every other estimator stays its own column, classified headline or diagnostic in the
+truth-column table of docs/dev/INTERFACES.md (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.truth_columns" title="tngxmm.sim.compute_hse_mass.truth_columns"><code class="xref py py-func docutils literal notranslate"><span class="pre">truth_columns()</span></code></a>).</p>
+<p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.m500_at_z" title="tngxmm.sim.compute_hse_mass.m500_at_z"><code class="xref py py-func docutils literal notranslate"><span class="pre">m500_at_z()</span></code></a> gives M500 at 500 rho_c(z) (any z, e.g. the view’s z_obs,
+the fitter’s convention) from the halo’s particle mass profile; at z_snap it
+reproduces the catalogue Group_M_Crit500.</p>
+<p class="rubric">References</p>
+<p>Hydrostatic equilibrium mass (Sarazin 1988); hydrostatic bias in simulated
+clusters (Rasia et al. 2006); spectroscopic-like temperature (Mazzotta et al.
+2004); IllustrisTNG / TNG-Cluster particle data.</p>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.ESTIMATORS" title="tngxmm.sim.compute_hse_mass.ESTIMATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ESTIMATORS</span></code></a></p></td>
+<td><p>estimator keys (the npz/json keys <code class="docutils literal notranslate"><span class="pre">M_&lt;key&gt;</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.LIT_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.LIT_ESTIMATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIT_ESTIMATORS</span></code></a></p></td>
+<td><p>Barnes et al. 2021 and Pearce et al. 2020.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.FIT_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.FIT_ESTIMATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FIT_ESTIMATORS</span></code></a></p></td>
+<td><p>the same shell profiles fitted with the Vikhlinin (2006) forms and differentiated analytically (<code class="xref py py-func docutils literal notranslate"><span class="pre">_m_fit()</span></code>); extra columns <code class="docutils literal notranslate"><span class="pre">hse_fit_ok_&lt;key&gt;</span></code> flag a converged pair of fits</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a></p></td>
+<td><p>computed only on request, never emitted (see the module docstring); the unit test of the composition-aware headline needs it</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NOSF_FD_ESTIMATOR</span></code></a></p></td>
+<td><p>computed only on request (<code class="docutils literal notranslate"><span class="pre">nosf_fd=True</span></code>), never emitted (see the module docstring)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.S8_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.S8_ESTIMATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S8_ESTIMATORS</span></code></a></p></td>
+<td><p>the two deviations of the headline from Barnes et al. (2021) one at a time (ledger test S8; computed only on request, <code class="docutils literal notranslate"><span class="pre">s8_variants=True</span></code>, never emitted): the headline's fit with the star-forming cells kept (<code class="docutils literal notranslate"><span class="pre">barnes21_fit_mu</span></code>, own mu) and Barnes's estimator as published (<code class="docutils literal notranslate"><span class="pre">barnes21_fit</span></code>: every cell, mu = 0.59, the same fits); with <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a> (no star-forming cells, mu = 0.59) they separate the star-forming cut from the own mean molecular weight.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_NBINS" title="tngxmm.sim.compute_hse_mass.BARNES_NBINS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BARNES_NBINS</span></code></a></p></td>
+<td><p>50 linear bins over 0-1.5 r500, mu = 0.59</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_RMAX_R500" title="tngxmm.sim.compute_hse_mass.BARNES_RMAX_R500"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BARNES_RMAX_R500</span></code></a></p></td>
+<td><p>50 linear bins over 0-1.5 r500, mu = 0.59</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_XCUT_T_K" title="tngxmm.sim.compute_hse_mass.BARNES_XCUT_T_K"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BARNES_XCUT_T_K</span></code></a></p></td>
+<td><p>Barnes et al. (2021, sec.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_NBINS" title="tngxmm.sim.compute_hse_mass.PEARCE_NBINS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEARCE_NBINS</span></code></a></p></td>
+<td><p>50 bins over 0.05-2 r500 (log-spaced here), cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMIN_R500" title="tngxmm.sim.compute_hse_mass.PEARCE_RMIN_R500"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEARCE_RMIN_R500</span></code></a></p></td>
+<td><p>50 bins over 0.05-2 r500 (log-spaced here), cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMAX_R500" title="tngxmm.sim.compute_hse_mass.PEARCE_RMAX_R500"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEARCE_RMAX_R500</span></code></a></p></td>
+<td><p>50 bins over 0.05-2 r500 (log-spaced here), cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.T_SL_VALID_KEV" title="tngxmm.sim.compute_hse_mass.T_SL_VALID_KEV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_SL_VALID_KEV</span></code></a></p></td>
+<td><p>below this T_sl the spectroscopic-like weighting is outside its validity (Mazzotta et al. 2004: kT &gt;~ 2-3 keV); recorded as a flag, not applied.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.SHELL_DENSITIES" title="tngxmm.sim.compute_hse_mass.SHELL_DENSITIES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SHELL_DENSITIES</span></code></a></p></td>
+<td><p>shell gas density of every estimator that pairs a shell density with cell-averaged T or P (<code class="docutils literal notranslate"><span class="pre">sim.hse_shell_density</span></code>): <code class="docutils literal notranslate"><span class="pre">geometric</span></code> = selected gas mass / geometric shell volume (Barnes's definition; correct only when the selected cells fill the shell), <code class="docutils literal notranslate"><span class="pre">filling</span></code> = selected gas mass / summed volume of the selected cells (V_cell = m / rho: the density of the gas present, the same cells as the T/P average)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MIN_FILLING" title="tngxmm.sim.compute_hse_mass.MIN_FILLING"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MIN_FILLING</span></code></a></p></td>
+<td><p>campaign threshold of the shell filling factor sum V_cell / V_shell below which a shell is omitted from the HSE profiles (<code class="docutils literal notranslate"><span class="pre">sim.hse_min_filling</span></code>; see <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">shell_gas_density()</span></code></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.SLUGS" title="tngxmm.sim.compute_hse_mass.SLUGS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SLUGS</span></code></a></p></td>
+<td><p>column slug of each estimator</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU_OF" title="tngxmm.sim.compute_hse_mass.MU_OF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MU_OF</span></code></a></p></td>
+<td><p>none needed, the pressure comes from the internal energy directly)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.HSE_VARIANTS" title="tngxmm.sim.compute_hse_mass.HSE_VARIANTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HSE_VARIANTS</span></code></a></p></td>
+<td><p>(hse_pressure, hse_gas_phase_cut, hse_shell_binning, t_weighting) -&gt; estimator; <code class="docutils literal notranslate"><span class="pre">None</span></code> as t_weighting = the field does not apply to that estimator</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COLUMN_ESTIMATORS</span></code></a></p></td>
+<td><p>every estimator that becomes a column, in column order</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.TRUTH_COLUMNS" title="tngxmm.sim.compute_hse_mass.TRUTH_COLUMNS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TRUTH_COLUMNS</span></code></a></p></td>
+<td><p>view-table columns written by <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.truth_columns" title="tngxmm.sim.compute_hse_mass.truth_columns"><code class="xref py py-func docutils literal notranslate"><span class="pre">truth_columns()</span></code></a> plus the per-view <code class="docutils literal notranslate"><span class="pre">m500c_zobs_msun</span></code> / <code class="docutils literal notranslate"><span class="pre">r500c_zobs_kpc</span></code> (<code class="docutils literal notranslate"><span class="pre">generate_view.view_truth_columns</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.GAS_FIELDS_COMPOSITION" title="tngxmm.sim.compute_hse_mass.GAS_FIELDS_COMPOSITION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAS_FIELDS_COMPOSITION</span></code></a></p></td>
+<td><p>the cell's own X_H (mu of the composition-aware estimator) and the metallicities of the emission-weighted profiles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.FIT_MIN_SHELLS" title="tngxmm.sim.compute_hse_mass.FIT_MIN_SHELLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FIT_MIN_SHELLS</span></code></a></p></td>
+<td><p>the fits run on r / R500c; at least this many finite shells are required (&gt; parameters)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.VIK_GAMMA" title="tngxmm.sim.compute_hse_mass.VIK_GAMMA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VIK_GAMMA</span></code></a></p></td>
+<td><p>gamma of Vikhlinin's density break, fixed as in Barnes (eq.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.barnes_edges" title="tngxmm.sim.compute_hse_mass.barnes_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">barnes_edges</span></code></a>(r500_kpc)</p></td>
+<td><p>Barnes et al. (2021) shells: 50 linear bins over 0-1.5 r500 (arithmetic centres).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_hse_truth</span></code></a>(source, *[, selection, ...])</p></td>
+<td><p>Intrinsic hydrostatic masses of the halo held by <code class="docutils literal notranslate"><span class="pre">source</span></code> .</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.crossing_flag" title="tngxmm.sim.compute_hse_mass.crossing_flag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossing_flag</span></code></a>(ncross)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hse_crossing</span></code> of a crossing count: <code class="docutils literal notranslate"><span class="pre">'none'</span></code> (M_HSE(&lt;r) never falls through 500 rho_c(z) beyond 0.4 R500c: <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> is NaN, a valid outcome, e.g. a halo whose HSE mass profile stays above the threshold out to the end of its grid), <code class="docutils literal notranslate"><span class="pre">'single'</span></code> or <code class="docutils literal notranslate"><span class="pre">'multiple'</span></code> (the headline is then the INNERMOST downward crossing beyond 0.4 R500c, <code class="xref py py-func docutils literal notranslate"><span class="pre">_summaries()</span></code>; a flag, not a cut).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.m500_at_z" title="tngxmm.sim.compute_hse_mass.m500_at_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">m500_at_z</span></code></a>(mass_profile, z, h[, om0, delta])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(M,</span> <span class="pre">R)</span></code> [Msun, kpc] where the mean enclosed density of the particle profile falls to <code class="docutils literal notranslate"><span class="pre">delta</span></code> rho_c(z): the outermost crossing, log-interpolated between grid radii (NaN if the profile never crosses on its grid).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.metal_columns" title="tngxmm.sim.compute_hse_mass.metal_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metal_columns</span></code></a>(gfm_metals)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(X_H,</span> <span class="pre">X_Fe)</span></code> mass-fraction columns of a <code class="docutils literal notranslate"><span class="pre">GFM_Metals</span></code> array: the TNG array (H He C N O Ne Mg Si Fe: H is column 0, Fe column 8), or the two-column <code class="docutils literal notranslate"><span class="pre">(H,</span> <span class="pre">Fe)</span></code> array the spherical truth reader returns (<a class="reference internal" href="tngxmm.sim.truth_sphere.html#module-tngxmm.sim.truth_sphere" title="tngxmm.sim.truth_sphere"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tngxmm.sim.truth_sphere</span></code></a>); <code class="docutils literal notranslate"><span class="pre">X_Fe</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when the array has no iron column.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.metallicity_summary" title="tngxmm.sim.compute_hse_mass.metallicity_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metallicity_summary</span></code></a>(w, zsol, zfe, mask)</p></td>
+<td><p>Emission-weighted mean metallicity of the cells in <code class="docutils literal notranslate"><span class="pre">mask</span></code> (weights <code class="docutils literal notranslate"><span class="pre">w</span></code> = n_e n_H V): <code class="docutils literal notranslate"><span class="pre">{'z_ew':</span> <span class="pre">sum</span> <span class="pre">w</span> <span class="pre">Z</span> <span class="pre">/</span> <span class="pre">sum</span> <span class="pre">w,</span> <span class="pre">'z_fe_ew':</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">for</span> <span class="pre">iron}</span></code> in solar units of the abundance table (<code class="docutils literal notranslate"><span class="pre">zsol</span></code> = GFM_Metallicity / Z_sun, <code class="docutils literal notranslate"><span class="pre">zfe</span></code> = X_Fe / X_Fe,sun); NaN where the field is absent or no cell has weight.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.pearce_edges" title="tngxmm.sim.compute_hse_mass.pearce_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pearce_edges</span></code></a>(r500_kpc)</p></td>
+<td><p>Pearce et al. (2020) shells: 50 bins over 0.05-2 r500 (log-spaced, geometric centres).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.rho_crit_msun_kpc3" title="tngxmm.sim.compute_hse_mass.rho_crit_msun_kpc3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rho_crit_msun_kpc3</span></code></a>(z, h[, om0])</p></td>
+<td><p>rho_c(z) in Msun / kpc^3 (flat LCDM, H0 = 100 h).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shell_gas_density</span></code></a>(msum, vsum, vol[, ...])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(rho,</span> <span class="pre">fill,</span> <span class="pre">omit)</span></code> of a set of shells from the selected cells' summed mass <code class="docutils literal notranslate"><span class="pre">msum</span></code> [Msun], summed cell volume <code class="docutils literal notranslate"><span class="pre">vsum</span></code> and geometric volume <code class="docutils literal notranslate"><span class="pre">vol</span></code> [kpc^3].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.solar_units_of_table" title="tngxmm.sim.compute_hse_mass.solar_units_of_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solar_units_of_table</span></code></a>([abund_table])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Z_sun,</span> <span class="pre">X_Fe,sun)</span></code>: the solar total metal mass fraction (elements Z &gt;= 3) and the solar iron mass fraction of the abundance table (<code class="docutils literal notranslate"><span class="pre">sim.apec_abund_table</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">lodd</span></code>), the units of the emission-weighted metallicity profiles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.truth_columns" title="tngxmm.sim.compute_hse_mass.truth_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">truth_columns</span></code></a>(hse[, variant])</p></td>
+<td><p>Per-halo view-table columns of a <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a> result.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.variant_for" title="tngxmm.sim.compute_hse_mass.variant_for"><code class="xref py py-obj docutils literal notranslate"><span class="pre">variant_for</span></code></a>(pressure, gas_phase_cut, ...)</p></td>
+<td><p>The estimator that fills <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> for the preset's method fields; <code class="docutils literal notranslate"><span class="pre">None</span></code> while any field it needs is unset (<code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.write_hse_truth" title="tngxmm.sim.compute_hse_mass.write_hse_truth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_hse_truth</span></code></a>(hse, out_dir)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hse_&lt;snap:03d&gt;_&lt;halo&gt;.{npz,json}</span></code> (the npz holds <code class="docutils literal notranslate"><span class="pre">hse['profiles']</span></code> plus the mass-profile grid <code class="docutils literal notranslate"><span class="pre">mprof_r_kpc</span></code> / <code class="docutils literal notranslate"><span class="pre">mprof_m_msun</span></code>; the json holds <code class="docutils literal notranslate"><span class="pre">hse['summary']</span></code>); returns the json path.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.ESTIMATORS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">ESTIMATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('true',</span> <span class="pre">'th_vw',</span> <span class="pre">'th_med',</span> <span class="pre">'th+kin',</span> <span class="pre">'X_Tsl_nemed',</span> <span class="pre">'X_Tmw_nemed',</span> <span class="pre">'X_Tsl_nevw',</span> <span class="pre">'X_Tsl_nemed_mu0.641')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.ESTIMATORS" title="Link to this definition">¶</a></dt>
+<dd><p>estimator keys (the npz/json keys <code class="docutils literal notranslate"><span class="pre">M_&lt;key&gt;</span></code>)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.LIT_ESTIMATORS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">LIT_ESTIMATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('barnes21',</span> <span class="pre">'barnes21_xcut',</span> <span class="pre">'barnes21_tsl',</span> <span class="pre">'pearce20_th',</span> <span class="pre">'pearce20_thkin',</span> <span class="pre">'pearce20_thkin_sig3d',</span> <span class="pre">'barnes21_nosf_fit_mu')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.LIT_ESTIMATORS" title="Link to this definition">¶</a></dt>
+<dd><p>Barnes et al. 2021 and Pearce et al. 2020</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the literature definitions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.FIT_ESTIMATORS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">FIT_ESTIMATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('barnes21_nosf_fit_mu',)</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.FIT_ESTIMATORS" title="Link to this definition">¶</a></dt>
+<dd><p>the same shell profiles fitted with the Vikhlinin
+(2006) forms and differentiated analytically (<code class="xref py py-func docutils literal notranslate"><span class="pre">_m_fit()</span></code>); extra columns
+<code class="docutils literal notranslate"><span class="pre">hse_fit_ok_&lt;key&gt;</span></code> flag a converged pair of fits</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the Barnes-faithful estimators</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">MU059_FIT_ESTIMATOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'barnes21_nosf_fit'</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="Link to this definition">¶</a></dt>
+<dd><p>computed only on request, never emitted
+(see the module docstring); the unit test of the composition-aware headline needs it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the mu = 0.59 fit of the same profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">NOSF_FD_ESTIMATOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'barnes21_nosf'</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR" title="Link to this definition">¶</a></dt>
+<dd><p>computed only on
+request (<code class="docutils literal notranslate"><span class="pre">nosf_fd=True</span></code>), never emitted (see the module docstring)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the finite-difference, mu = 0.59 estimator without star-forming gas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.S8_ESTIMATORS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">S8_ESTIMATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('barnes21_fit_mu',</span> <span class="pre">'barnes21_fit')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.S8_ESTIMATORS" title="Link to this definition">¶</a></dt>
+<dd><p>the two deviations of the headline from Barnes et al. (2021) one at a time (ledger test S8; computed only on
+request, <code class="docutils literal notranslate"><span class="pre">s8_variants=True</span></code>, never emitted): the headline’s fit with the star-forming cells kept
+(<code class="docutils literal notranslate"><span class="pre">barnes21_fit_mu</span></code>, own mu) and Barnes’s estimator as published (<code class="docutils literal notranslate"><span class="pre">barnes21_fit</span></code>: every cell, mu = 0.59, the
+same fits); with <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a> (no star-forming cells, mu = 0.59) they separate the star-forming cut
+from the own mean molecular weight</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.BARNES_NBINS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">BARNES_NBINS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.BARNES_NBINS" title="Link to this definition">¶</a></dt>
+<dd><p>50 linear bins over 0-1.5 r500, mu = 0.59</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Barnes et al. (2021) true profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.BARNES_RMAX_R500">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">BARNES_RMAX_R500</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.BARNES_RMAX_R500" title="Link to this definition">¶</a></dt>
+<dd><p>50 linear bins over 0-1.5 r500, mu = 0.59</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Barnes et al. (2021) true profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.BARNES_XCUT_T_K">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">BARNES_XCUT_T_K</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.BARNES_XCUT_T_K" title="Link to this definition">¶</a></dt>
+<dd><p>Barnes et al. (2021, sec. 2.2.3) X-ray image cuts, used for variants xcut / tsl</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.PEARCE_NBINS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">PEARCE_NBINS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.PEARCE_NBINS" title="Link to this definition">¶</a></dt>
+<dd><p>50 bins over 0.05-2 r500 (log-spaced here),
+cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pearce et al. (2020) true profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.PEARCE_RMIN_R500">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">PEARCE_RMIN_R500</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMIN_R500" title="Link to this definition">¶</a></dt>
+<dd><p>50 bins over 0.05-2 r500 (log-spaced here),
+cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pearce et al. (2020) true profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.PEARCE_RMAX_R500">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">PEARCE_RMAX_R500</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMAX_R500" title="Link to this definition">¶</a></dt>
+<dd><p>50 bins over 0.05-2 r500 (log-spaced here),
+cells with T &lt; 1e5 K or n_H &gt;= 0.1 cm^-3 dropped</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pearce et al. (2020) true profiles</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.T_SL_VALID_KEV">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">T_SL_VALID_KEV</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.T_SL_VALID_KEV" title="Link to this definition">¶</a></dt>
+<dd><p>below this T_sl the spectroscopic-like weighting is outside its validity
+(Mazzotta et al. 2004: kT &gt;~ 2-3 keV); recorded as a flag, not applied</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.SHELL_DENSITIES">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">SHELL_DENSITIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('geometric',</span> <span class="pre">'filling')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.SHELL_DENSITIES" title="Link to this definition">¶</a></dt>
+<dd><p>shell gas density of every estimator that pairs a shell density with cell-averaged
+T or P (<code class="docutils literal notranslate"><span class="pre">sim.hse_shell_density</span></code>): <code class="docutils literal notranslate"><span class="pre">geometric</span></code> = selected gas mass / geometric shell
+volume (Barnes’s definition; correct only when the selected cells fill
+the shell), <code class="docutils literal notranslate"><span class="pre">filling</span></code> = selected gas mass / summed volume of the selected cells
+(V_cell = m / rho: the density of the gas present, the same cells as the T/P average)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.MIN_FILLING">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">MIN_FILLING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.MIN_FILLING" title="Link to this definition">¶</a></dt>
+<dd><p>campaign threshold of the shell filling factor sum V_cell / V_shell below which a shell
+is omitted from the HSE profiles (<code class="docutils literal notranslate"><span class="pre">sim.hse_min_filling</span></code>; see <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">shell_gas_density()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.shell_gas_density">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">shell_gas_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vsum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_filling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#shell_gas_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(rho,</span> <span class="pre">fill,</span> <span class="pre">omit)</span></code> of a set of shells from the selected cells’ summed mass
+<code class="docutils literal notranslate"><span class="pre">msum</span></code> [Msun], summed cell volume <code class="docutils literal notranslate"><span class="pre">vsum</span></code> and geometric volume <code class="docutils literal notranslate"><span class="pre">vol</span></code> [kpc^3].</p>
+<p><code class="docutils literal notranslate"><span class="pre">fill</span> <span class="pre">=</span> <span class="pre">vsum</span> <span class="pre">/</span> <span class="pre">vol</span></code> is the shell filling factor of the selected cells;
+<code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">msum</span> <span class="pre">/</span> <span class="pre">vol</span></code> (<code class="docutils literal notranslate"><span class="pre">geometric</span></code>) or <code class="docutils literal notranslate"><span class="pre">msum</span> <span class="pre">/</span> <span class="pre">vsum</span></code> (<code class="docutils literal notranslate"><span class="pre">filling</span></code>, the density
+of the gas present, consistent with a T or P averaged over the same cells);
+<code class="docutils literal notranslate"><span class="pre">omit</span></code> marks the shells with <code class="docutils literal notranslate"><span class="pre">fill</span> <span class="pre">&lt;</span> <span class="pre">min_filling</span></code> (none when <code class="docutils literal notranslate"><span class="pre">None</span></code>): a
+FoF group at high z holds a few filaments or clumps in its outer shells, whose
+gradient says nothing about the hydrostatic state of the shell.  The campaign
+threshold 0.1 (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MIN_FILLING" title="tngxmm.sim.compute_hse_mass.MIN_FILLING"><code class="xref py py-data docutils literal notranslate"><span class="pre">MIN_FILLING</span></code></a>) keeps every shell of the zoom gas (fill ~ 1 for the
+non-star-forming gas) and every FoF shell inside R500c.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.SLUGS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">SLUGS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'X_Tmw_nemed':</span> <span class="pre">'x_tmw_nemed',</span> <span class="pre">'X_Tmw_nemed_mock':</span> <span class="pre">'x_tmw_nemed_mock',</span> <span class="pre">'X_Tsl_nemed':</span> <span class="pre">'x_tsl_nemed',</span> <span class="pre">'X_Tsl_nemed_mock':</span> <span class="pre">'x_tsl_nemed_mock',</span> <span class="pre">'X_Tsl_nemed_mu0.641':</span> <span class="pre">'x_tsl_nemed_mu0641',</span> <span class="pre">'X_Tsl_nevw':</span> <span class="pre">'x_tsl_nevol',</span> <span class="pre">'barnes21':</span> <span class="pre">'barnes21',</span> <span class="pre">'barnes21_mock':</span> <span class="pre">'barnes21_mock',</span> <span class="pre">'barnes21_nosf_fit_mu':</span> <span class="pre">'barnes21_nosf_fit_mu',</span> <span class="pre">'barnes21_tsl':</span> <span class="pre">'barnes21_tsl',</span> <span class="pre">'barnes21_xcut':</span> <span class="pre">'barnes21_xcut',</span> <span class="pre">'pearce20_th':</span> <span class="pre">'pearce20_th',</span> <span class="pre">'pearce20_thkin':</span> <span class="pre">'pearce20_thkin',</span> <span class="pre">'pearce20_thkin_sig3d':</span> <span class="pre">'pearce20_thkin_sig3d',</span> <span class="pre">'th+kin':</span> <span class="pre">'thkin_vol',</span> <span class="pre">'th_med':</span> <span class="pre">'th_med',</span> <span class="pre">'th_vw':</span> <span class="pre">'th_vol',</span> <span class="pre">'true':</span> <span class="pre">'true'}</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.SLUGS" title="Link to this definition">¶</a></dt>
+<dd><p>column slug of each estimator</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.MU_OF">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">MU_OF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'X_Tmw_nemed':</span> <span class="pre">0.59,</span> <span class="pre">'X_Tmw_nemed_mock':</span> <span class="pre">0.59,</span> <span class="pre">'X_Tsl_nemed':</span> <span class="pre">0.59,</span> <span class="pre">'X_Tsl_nemed_mock':</span> <span class="pre">0.59,</span> <span class="pre">'X_Tsl_nemed_mu0.641':</span> <span class="pre">0.6409,</span> <span class="pre">'X_Tsl_nevw':</span> <span class="pre">0.59,</span> <span class="pre">'barnes21':</span> <span class="pre">0.59,</span> <span class="pre">'barnes21_mock':</span> <span class="pre">0.59,</span> <span class="pre">'barnes21_nosf_fit_mu':</span> <span class="pre">nan,</span> <span class="pre">'barnes21_tsl':</span> <span class="pre">0.59,</span> <span class="pre">'barnes21_xcut':</span> <span class="pre">0.59,</span> <span class="pre">'pearce20_th':</span> <span class="pre">0.59,</span> <span class="pre">'pearce20_thkin':</span> <span class="pre">0.59,</span> <span class="pre">'pearce20_thkin_sig3d':</span> <span class="pre">0.59,</span> <span class="pre">'th+kin':</span> <span class="pre">nan,</span> <span class="pre">'th_med':</span> <span class="pre">nan,</span> <span class="pre">'th_vw':</span> <span class="pre">nan}</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.MU_OF" title="Link to this definition">¶</a></dt>
+<dd><p>none needed, the pressure
+comes from the internal energy directly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mean molecular weight each estimator uses (NaN</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.HSE_VARIANTS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">HSE_VARIANTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{('thermal',</span> <span class="pre">'mock',</span> <span class="pre">'linear:50:0:1.5',</span> <span class="pre">'mass'):</span> <span class="pre">'barnes21_mock',</span> <span class="pre">('thermal',</span> <span class="pre">'none',</span> <span class="pre">'linear:50:0:1.5',</span> <span class="pre">'mass'):</span> <span class="pre">'barnes21',</span> <span class="pre">('thermal',</span> <span class="pre">'nonsf',</span> <span class="pre">'median',</span> <span class="pre">None):</span> <span class="pre">'th_med',</span> <span class="pre">('thermal',</span> <span class="pre">'nonsf',</span> <span class="pre">'volume',</span> <span class="pre">None):</span> <span class="pre">'th_vw',</span> <span class="pre">('thermal',</span> <span class="pre">'pearce20',</span> <span class="pre">'log:50:0.05:2',</span> <span class="pre">'mass'):</span> <span class="pre">'pearce20_th',</span> <span class="pre">('thermal',</span> <span class="pre">'xray-image',</span> <span class="pre">'linear:50:0:1.5',</span> <span class="pre">'mass'):</span> <span class="pre">'barnes21_xcut',</span> <span class="pre">('thermal',</span> <span class="pre">'xray-image',</span> <span class="pre">'linear:50:0:1.5',</span> <span class="pre">'spectroscopic'):</span> <span class="pre">'barnes21_tsl',</span> <span class="pre">('thermal+kinetic',</span> <span class="pre">'nonsf',</span> <span class="pre">'volume',</span> <span class="pre">None):</span> <span class="pre">'th+kin',</span> <span class="pre">('thermal+kinetic',</span> <span class="pre">'pearce20',</span> <span class="pre">'log:50:0.05:2',</span> <span class="pre">'mass'):</span> <span class="pre">'pearce20_thkin',</span> <span class="pre">('thermal-fit-mu',</span> <span class="pre">'nonsf',</span> <span class="pre">'linear:50:0:1.5',</span> <span class="pre">'mass'):</span> <span class="pre">'barnes21_nosf_fit_mu',</span> <span class="pre">('xray-like',</span> <span class="pre">'hot',</span> <span class="pre">'median',</span> <span class="pre">'mass'):</span> <span class="pre">'X_Tmw_nemed',</span> <span class="pre">('xray-like',</span> <span class="pre">'hot',</span> <span class="pre">'median',</span> <span class="pre">'spectroscopic'):</span> <span class="pre">'X_Tsl_nemed',</span> <span class="pre">('xray-like',</span> <span class="pre">'hot',</span> <span class="pre">'volume',</span> <span class="pre">'spectroscopic'):</span> <span class="pre">'X_Tsl_nevw',</span> <span class="pre">('xray-like',</span> <span class="pre">'mock',</span> <span class="pre">'median',</span> <span class="pre">'mass'):</span> <span class="pre">'X_Tmw_nemed_mock',</span> <span class="pre">('xray-like',</span> <span class="pre">'mock',</span> <span class="pre">'median',</span> <span class="pre">'spectroscopic'):</span> <span class="pre">'X_Tsl_nemed_mock'}</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.HSE_VARIANTS" title="Link to this definition">¶</a></dt>
+<dd><p>(hse_pressure, hse_gas_phase_cut, hse_shell_binning, t_weighting) -&gt; estimator;
+<code class="docutils literal notranslate"><span class="pre">None</span></code> as t_weighting = the field does not apply to that estimator</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">COLUMN_ESTIMATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('barnes21',</span> <span class="pre">'barnes21_xcut',</span> <span class="pre">'barnes21_tsl',</span> <span class="pre">'pearce20_th',</span> <span class="pre">'pearce20_thkin',</span> <span class="pre">'pearce20_thkin_sig3d',</span> <span class="pre">'barnes21_nosf_fit_mu',</span> <span class="pre">'barnes21_mock',</span> <span class="pre">'th_vw',</span> <span class="pre">'th_med',</span> <span class="pre">'th+kin',</span> <span class="pre">'X_Tsl_nemed',</span> <span class="pre">'X_Tmw_nemed',</span> <span class="pre">'X_Tsl_nevw',</span> <span class="pre">'X_Tsl_nemed_mu0.641',</span> <span class="pre">'X_Tsl_nemed_mock',</span> <span class="pre">'X_Tmw_nemed_mock')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS" title="Link to this definition">¶</a></dt>
+<dd><p>every estimator that becomes a column, in column order</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.TRUTH_COLUMNS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">TRUTH_COLUMNS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('m500_hse_barnes21_msun',</span> <span class="pre">'mhse_barnes21_r500c_over_m500c',</span> <span class="pre">'mu_hse_barnes21',</span> <span class="pre">'m500_hse_barnes21_xcut_msun',</span> <span class="pre">'mhse_barnes21_xcut_r500c_over_m500c',</span> <span class="pre">'mu_hse_barnes21_xcut',</span> <span class="pre">'m500_hse_barnes21_tsl_msun',</span> <span class="pre">'mhse_barnes21_tsl_r500c_over_m500c',</span> <span class="pre">'mu_hse_barnes21_tsl',</span> <span class="pre">'m500_hse_pearce20_th_msun',</span> <span class="pre">'mhse_pearce20_th_r500c_over_m500c',</span> <span class="pre">'mu_hse_pearce20_th',</span> <span class="pre">'m500_hse_pearce20_thkin_msun',</span> <span class="pre">'mhse_pearce20_thkin_r500c_over_m500c',</span> <span class="pre">'mu_hse_pearce20_thkin',</span> <span class="pre">'m500_hse_pearce20_thkin_sig3d_msun',</span> <span class="pre">'mhse_pearce20_thkin_sig3d_r500c_over_m500c',</span> <span class="pre">'mu_hse_pearce20_thkin_sig3d',</span> <span class="pre">'m500_hse_barnes21_nosf_fit_mu_msun',</span> <span class="pre">'mhse_barnes21_nosf_fit_mu_r500c_over_m500c',</span> <span class="pre">'mu_hse_barnes21_nosf_fit_mu',</span> <span class="pre">'m500_hse_barnes21_mock_msun',</span> <span class="pre">'mhse_barnes21_mock_r500c_over_m500c',</span> <span class="pre">'mu_hse_barnes21_mock',</span> <span class="pre">'m500_hse_th_vol_msun',</span> <span class="pre">'mhse_th_vol_r500c_over_m500c',</span> <span class="pre">'mu_hse_th_vol',</span> <span class="pre">'m500_hse_th_med_msun',</span> <span class="pre">'mhse_th_med_r500c_over_m500c',</span> <span class="pre">'mu_hse_th_med',</span> <span class="pre">'m500_hse_thkin_vol_msun',</span> <span class="pre">'mhse_thkin_vol_r500c_over_m500c',</span> <span class="pre">'mu_hse_thkin_vol',</span> <span class="pre">'m500_hse_x_tsl_nemed_msun',</span> <span class="pre">'mhse_x_tsl_nemed_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tsl_nemed',</span> <span class="pre">'m500_hse_x_tmw_nemed_msun',</span> <span class="pre">'mhse_x_tmw_nemed_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tmw_nemed',</span> <span class="pre">'m500_hse_x_tsl_nevol_msun',</span> <span class="pre">'mhse_x_tsl_nevol_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tsl_nevol',</span> <span class="pre">'m500_hse_x_tsl_nemed_mu0641_msun',</span> <span class="pre">'mhse_x_tsl_nemed_mu0641_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tsl_nemed_mu0641',</span> <span class="pre">'m500_hse_x_tsl_nemed_mock_msun',</span> <span class="pre">'mhse_x_tsl_nemed_mock_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tsl_nemed_mock',</span> <span class="pre">'m500_hse_x_tmw_nemed_mock_msun',</span> <span class="pre">'mhse_x_tmw_nemed_mock_r500c_over_m500c',</span> <span class="pre">'mu_hse_x_tmw_nemed_mock',</span> <span class="pre">'hse_fit_ok_barnes21_nosf_fit_mu',</span> <span class="pre">'m500c_hse_msun',</span> <span class="pre">'hse_headline',</span> <span class="pre">'hse_crossing',</span> <span class="pre">'m500c_particles_msun',</span> <span class="pre">'t_ew_kev',</span> <span class="pre">'t_sl_r500c_kev',</span> <span class="pre">'t_mw_r500c_kev',</span> <span class="pre">'t_mw_r500c_all_gas_kev',</span> <span class="pre">'t_sl_r500c_xcut_kev',</span> <span class="pre">'t_sl_valid',</span> <span class="pre">'mu_hot_r500c',</span> <span class="pre">'beta_r500c',</span> <span class="pre">'sigma_r_r500c_km_s',</span> <span class="pre">'m500c_zobs_msun',</span> <span class="pre">'r500c_zobs_kpc')</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.TRUTH_COLUMNS" title="Link to this definition">¶</a></dt>
+<dd><p>view-table columns written by <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.truth_columns" title="tngxmm.sim.compute_hse_mass.truth_columns"><code class="xref py py-func docutils literal notranslate"><span class="pre">truth_columns()</span></code></a> plus the per-view
+<code class="docutils literal notranslate"><span class="pre">m500c_zobs_msun</span></code> / <code class="docutils literal notranslate"><span class="pre">r500c_zobs_kpc</span></code> (<code class="docutils literal notranslate"><span class="pre">generate_view.view_truth_columns</span></code>)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.GAS_FIELDS_COMPOSITION">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">GAS_FIELDS_COMPOSITION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Coordinates',</span> <span class="pre">'Masses',</span> <span class="pre">'Density',</span> <span class="pre">'InternalEnergy',</span> <span class="pre">'ElectronAbundance',</span> <span class="pre">'StarFormationRate',</span> <span class="pre">'Velocities',</span> <span class="pre">'GFM_CoolingRate',</span> <span class="pre">'GFM_Metals',</span> <span class="pre">'GFM_Metallicity']</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.GAS_FIELDS_COMPOSITION" title="Link to this definition">¶</a></dt>
+<dd><p>the cell’s own X_H (mu of the
+composition-aware estimator) and the metallicities of the emission-weighted profiles.
+<code class="docutils literal notranslate"><span class="pre">GFM_Metals</span></code> is absent on mini snapshots (X_H = 0.76 then); a source without
+<code class="docutils literal notranslate"><span class="pre">GFM_Metallicity</span></code> (old fixtures) is read without it (NaN metallicity profiles)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>added to the truth’s gas read</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.variant_for">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">variant_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_phase_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shell_binning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_weighting</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#variant_for"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.variant_for" title="Link to this definition">¶</a></dt>
+<dd><p>The estimator that fills <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> for the preset’s method fields;
+<code class="docutils literal notranslate"><span class="pre">None</span></code> while any field it needs is unset (<code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.rho_crit_msun_kpc3">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">rho_crit_msun_kpc3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">om0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3089</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#rho_crit_msun_kpc3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.rho_crit_msun_kpc3" title="Link to this definition">¶</a></dt>
+<dd><p>rho_c(z) in Msun / kpc^3 (flat LCDM, H0 = 100 h).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.FIT_MIN_SHELLS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">FIT_MIN_SHELLS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.FIT_MIN_SHELLS" title="Link to this definition">¶</a></dt>
+<dd><p>the fits run on r / R500c; at least this many finite shells are required (&gt; parameters)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.VIK_GAMMA">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">VIK_GAMMA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3.0</span></em><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.VIK_GAMMA" title="Link to this definition">¶</a></dt>
+<dd><p>gamma of Vikhlinin’s density break, fixed as in Barnes (eq. 8)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.metal_columns">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">metal_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gfm_metals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#metal_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.metal_columns" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(X_H,</span> <span class="pre">X_Fe)</span></code> mass-fraction columns of a <code class="docutils literal notranslate"><span class="pre">GFM_Metals</span></code> array: the TNG array
+(H He C N O Ne Mg Si Fe: H is column 0, Fe column 8), or the two-column <code class="docutils literal notranslate"><span class="pre">(H,</span> <span class="pre">Fe)</span></code>
+array the spherical truth reader returns (<a class="reference internal" href="tngxmm.sim.truth_sphere.html#module-tngxmm.sim.truth_sphere" title="tngxmm.sim.truth_sphere"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tngxmm.sim.truth_sphere</span></code></a>); <code class="docutils literal notranslate"><span class="pre">X_Fe</span></code>
+is <code class="docutils literal notranslate"><span class="pre">None</span></code> when the array has no iron column.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.solar_units_of_table">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">solar_units_of_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abund_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'angr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#solar_units_of_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.solar_units_of_table" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(Z_sun,</span> <span class="pre">X_Fe,sun)</span></code>: the solar total metal mass fraction (elements Z &gt;= 3) and the
+solar iron mass fraction of the abundance table (<code class="docutils literal notranslate"><span class="pre">sim.apec_abund_table</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">lodd</span></code>),
+the units of the emission-weighted metallicity profiles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.metallicity_summary">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">metallicity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zfe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#metallicity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.metallicity_summary" title="Link to this definition">¶</a></dt>
+<dd><p>Emission-weighted mean metallicity of the cells in <code class="docutils literal notranslate"><span class="pre">mask</span></code> (weights <code class="docutils literal notranslate"><span class="pre">w</span></code> = n_e n_H V):
+<code class="docutils literal notranslate"><span class="pre">{'z_ew':</span> <span class="pre">sum</span> <span class="pre">w</span> <span class="pre">Z</span> <span class="pre">/</span> <span class="pre">sum</span> <span class="pre">w,</span> <span class="pre">'z_fe_ew':</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">for</span> <span class="pre">iron}</span></code> in solar units of the
+abundance table (<code class="docutils literal notranslate"><span class="pre">zsol</span></code> = GFM_Metallicity / Z_sun, <code class="docutils literal notranslate"><span class="pre">zfe</span></code> = X_Fe / X_Fe,sun); NaN
+where the field is absent or no cell has weight.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.barnes_edges">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">barnes_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r500_kpc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#barnes_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.barnes_edges" title="Link to this definition">¶</a></dt>
+<dd><p>Barnes et al. (2021) shells: 50 linear bins over 0-1.5 r500 (arithmetic centres).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.pearce_edges">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">pearce_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r500_kpc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#pearce_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.pearce_edges" title="Link to this definition">¶</a></dt>
+<dd><p>Pearce et al. (2020) shells: 50 bins over 0.05-2 r500 (log-spaced, geometric centres).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.compute_hse_truth">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">compute_hse_truth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zoom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_radius_ckpc_h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_clip_radius_kpc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_t_min_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">om0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3089</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shell_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_filling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abund_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'angr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu059_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nosf_fd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s8_variants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#compute_hse_truth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="Link to this definition">¶</a></dt>
+<dd><p>Intrinsic hydrostatic masses of the halo held by <code class="docutils literal notranslate"><span class="pre">source</span></code> .</p>
+<p><code class="docutils literal notranslate"><span class="pre">selection</span></code> names the particles of every truth estimator (gas, DM, stars,
+BH): <code class="docutils literal notranslate"><span class="pre">'zoom'</span></code> (the halo’s ORIGINAL ZOOM, a fixture
+cutout or the snapshot through <code class="docutils literal notranslate"><span class="pre">loadOriginalZoom</span></code>) or <code class="docutils literal notranslate"><span class="pre">'fof'</span></code> (the halo’s
+FoF members, <code class="docutils literal notranslate"><span class="pre">loadHalo</span></code>; <code class="docutils literal notranslate"><span class="pre">sim.truth_selection</span></code>, every simulation; the
+profiles beyond ~R200c then hold FoF members only, the catalogue M500c is
+unchanged) or <code class="docutils literal notranslate"><span class="pre">'sphere'</span></code> (every particle within a sphere about GroupPos, all FoF
+groups and fuzz: the source of the spherical truth stage,
+<a class="reference internal" href="tngxmm.sim.truth_sphere.html#tngxmm.sim.truth_sphere.SphereSource" title="tngxmm.sim.truth_sphere.SphereSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">tngxmm.sim.truth_sphere.SphereSource</span></code></a>, <code class="docutils literal notranslate"><span class="pre">sim.truth_selection_hse</span></code>).
+Distances are minimum-image about GroupPos either way.  With
+<code class="docutils literal notranslate"><span class="pre">mock_selection</span></code> (the mock’s loader, e.g. <code class="docutils literal notranslate"><span class="pre">'fof'</span></code>) the two <code class="docutils literal notranslate"><span class="pre">*_mock</span></code>
+estimators and the R500c temperatures of the mock’s gas are added
+(<code class="docutils literal notranslate"><span class="pre">mock_clip_radius_kpc</span></code> default 2 R200c, as the mock).</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">{'summary':</span> <span class="pre">&lt;the</span> <span class="pre">json</span> <span class="pre">fields</span> <span class="pre">+</span> <span class="pre">mock</span> <span class="pre">ones&gt;,</span> <span class="pre">'profiles':</span>
+<span class="pre">&lt;the</span> <span class="pre">npz</span> <span class="pre">arrays&gt;,</span> <span class="pre">'mass_profile':</span> <span class="pre">(r_kpc,</span> <span class="pre">M(&lt;r)</span> <span class="pre">Msun)</span> <span class="pre">on</span> <span class="pre">an</span>
+<span class="pre">``n_grid</span></code>-point log grid 0.05-5 R500c}``.</p>
+<p><code class="docutils literal notranslate"><span class="pre">profile=True</span></code> (<code class="docutils literal notranslate"><span class="pre">sim.truth_profiles</span> <span class="pre">=</span> <span class="pre">'on'</span></code>) adds <code class="docutils literal notranslate"><span class="pre">'truth_profile'</span></code>: the
+arrays of the per-halo truth-profile file (<a class="reference internal" href="tngxmm.sim.truth_profile.html#module-tngxmm.sim.truth_profile" title="tngxmm.sim.truth_profile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tngxmm.sim.truth_profile</span></code></a>),
+binned from the cells and particles loaded here (no extra read); every other
+number is unchanged (additions only).</p>
+<p><code class="docutils literal notranslate"><span class="pre">shell_density</span></code> / <code class="docutils literal notranslate"><span class="pre">min_filling</span></code> (<code class="docutils literal notranslate"><span class="pre">sim.hse_shell_density</span></code> /
+<code class="docutils literal notranslate"><span class="pre">sim.hse_min_filling</span></code>): the shell gas density of every estimator that pairs it
+with a cell-averaged T or P (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density" title="tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">shell_gas_density()</span></code></a>): <code class="docutils literal notranslate"><span class="pre">'geometric'</span></code> (the
+definition as written, default) or <code class="docutils literal notranslate"><span class="pre">'filling'</span></code> (the selected gas mass over the
+selected cells’ volume, so a FoF group that does not fill its outer shells gives
+the density of the gas present, consistent with its pressure); shells whose
+filling factor is below <code class="docutils literal notranslate"><span class="pre">min_filling</span></code> are omitted (NaN) from the estimators.
+The cumulative masses (<code class="docutils literal notranslate"><span class="pre">true</span></code>, M_gas(&lt;r)) are the actual particle sums either way.</p>
+<p><code class="docutils literal notranslate"><span class="pre">abund_table</span></code> (the campaign: <code class="docutils literal notranslate"><span class="pre">sim.apec_abund_table</span></code> = <code class="docutils literal notranslate"><span class="pre">lodd</span></code>, the fit’s table): the solar
+units of the emission-weighted metallicities <code class="docutils literal notranslate"><span class="pre">z_ew_r500c_{nonsf,mock}</span></code> (total
+metallicity, GFM_Metallicity / Z_sun of the table) and <code class="docutils literal notranslate"><span class="pre">z_fe_ew_r500c_{nonsf,mock}</span></code>
+(iron, X_Fe / X_Fe,sun) of the summary, and of the <code class="docutils literal notranslate"><span class="pre">metallicity/</span></code> profiles of the truth
+profile.  <code class="docutils literal notranslate"><span class="pre">barnes21_nosf_fit_mu</span></code> (<code class="xref py py-func docutils literal notranslate"><span class="pre">_literature_estimators()</span></code>) uses each cell’s own
+X_H from <code class="docutils literal notranslate"><span class="pre">GFM_Metals</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mu059_fit</span></code>: also fit the mu = 0.59 variant (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a>) into the summary
+and the profile arrays; never into the truth-profile <code class="docutils literal notranslate"><span class="pre">native/</span></code> datasets or the columns.
+<code class="docutils literal notranslate"><span class="pre">nosf_fd</span></code>: the same for the finite-difference non-SF estimator (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR" title="tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">NOSF_FD_ESTIMATOR</span></code></a>).
+<code class="docutils literal notranslate"><span class="pre">s8_variants</span></code>: the same for <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.S8_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.S8_ESTIMATORS"><code class="xref py py-data docutils literal notranslate"><span class="pre">S8_ESTIMATORS</span></code></a> (ledger test S8).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.m500_at_z">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">m500_at_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass_profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">om0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3089</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#m500_at_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.m500_at_z" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(M,</span> <span class="pre">R)</span></code> [Msun, kpc] where the mean enclosed density of the particle profile
+falls to <code class="docutils literal notranslate"><span class="pre">delta</span></code> rho_c(z): the outermost crossing, log-interpolated
+between grid radii (NaN if the profile never crosses on its grid).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.crossing_flag">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">crossing_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ncross</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#crossing_flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.crossing_flag" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">hse_crossing</span></code> of a crossing count: <code class="docutils literal notranslate"><span class="pre">'none'</span></code> (M_HSE(&lt;r) never falls through
+500 rho_c(z) beyond 0.4 R500c: <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> is NaN, a valid outcome, e.g. a
+halo whose HSE mass profile stays above the threshold out to the end of its grid),
+<code class="docutils literal notranslate"><span class="pre">'single'</span></code> or <code class="docutils literal notranslate"><span class="pre">'multiple'</span></code> (the headline is then the INNERMOST downward crossing
+beyond 0.4 R500c, <code class="xref py py-func docutils literal notranslate"><span class="pre">_summaries()</span></code>; a flag, not a cut).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.truth_columns">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">truth_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#truth_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.truth_columns" title="Link to this definition">¶</a></dt>
+<dd><p>Per-halo view-table columns of a <a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth" title="tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a> result.</p>
+<p>For every estimator (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS" title="tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS"><code class="xref py py-data docutils literal notranslate"><span class="pre">COLUMN_ESTIMATORS</span></code></a>): <code class="docutils literal notranslate"><span class="pre">m500_hse_&lt;slug&gt;_msun</span></code>
+(self-consistent M500 at 500 rho_c(z_snap)), <code class="docutils literal notranslate"><span class="pre">mhse_&lt;slug&gt;_r500c_over_m500c</span></code>
+(M_HSE(&lt;R500c) / M500c) and <code class="docutils literal notranslate"><span class="pre">mu_hse_&lt;slug&gt;</span></code> (the mean molecular weight it
+used; NaN where none enters).  Plus <code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> (the <code class="docutils literal notranslate"><span class="pre">variant</span></code> chosen
+by the preset, the headline; NaN while undecided) and <code class="docutils literal notranslate"><span class="pre">hse_headline</span></code> (its
+key), <code class="docutils literal notranslate"><span class="pre">hse_crossing</span></code> (<a class="reference internal" href="#tngxmm.sim.compute_hse_mass.crossing_flag" title="tngxmm.sim.compute_hse_mass.crossing_flag"><code class="xref py py-func docutils literal notranslate"><span class="pre">crossing_flag()</span></code></a> of the headline: <code class="docutils literal notranslate"><span class="pre">none</span></code> /
+<code class="docutils literal notranslate"><span class="pre">single</span></code> / <code class="docutils literal notranslate"><span class="pre">multiple</span></code>, or <code class="docutils literal notranslate"><span class="pre">fit-failed</span></code> when the headline fit failed, or empty without a variant;
+<code class="docutils literal notranslate"><span class="pre">m500c_hse_msun</span></code> is NaN for <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">fit-failed</span></code>),
+<code class="docutils literal notranslate"><span class="pre">m500c_particles_msun</span></code>, <code class="docutils literal notranslate"><span class="pre">hse_fit_ok_&lt;key&gt;</span></code> (both Vikhlinin fits of a
+<code class="docutils literal notranslate"><span class="pre">*_fit</span></code> estimator converged), the temperatures inside R500c (<code class="docutils literal notranslate"><span class="pre">t_ew_kev</span></code>,
+<code class="docutils literal notranslate"><span class="pre">t_sl_r500c_kev</span></code>, <code class="docutils literal notranslate"><span class="pre">t_mw_r500c_kev</span></code>: the mock’s cells; <code class="docutils literal notranslate"><span class="pre">t_mw_r500c_all_gas_kev</span></code>;
+<code class="docutils literal notranslate"><span class="pre">t_sl_r500c_xcut_kev</span></code> and <code class="docutils literal notranslate"><span class="pre">t_sl_valid</span></code> = T_sl &gt;= 2 keV, the validity of the
+spectroscopic-like weighting) and the diagnostics at R500c.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.sim.compute_hse_mass.write_hse_truth">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.sim.compute_hse_mass.</span></span><span class="sig-name descname"><span class="pre">write_hse_truth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/sim/compute_hse_mass.html#write_hse_truth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.sim.compute_hse_mass.write_hse_truth" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">hse_&lt;snap:03d&gt;_&lt;halo&gt;.{npz,json}</span></code> (the npz holds <code class="docutils literal notranslate"><span class="pre">hse['profiles']</span></code> plus the
+mass-profile grid <code class="docutils literal notranslate"><span class="pre">mprof_r_kpc</span></code> / <code class="docutils literal notranslate"><span class="pre">mprof_m_msun</span></code>; the json holds <code class="docutils literal notranslate"><span class="pre">hse['summary']</span></code>); returns the json path.</p>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="tngxmm.sim.compute_hse_stream.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">tngxmm.sim.compute_hse_stream</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="tngxmm.sim.compute_apec_spectra.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">tngxmm.sim.compute_apec_spectra</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">tngxmm.sim.compute_hse_mass</a><ul>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.ESTIMATORS"><code class="docutils literal notranslate"><span class="pre">ESTIMATORS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.LIT_ESTIMATORS"><code class="docutils literal notranslate"><span class="pre">LIT_ESTIMATORS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.FIT_ESTIMATORS"><code class="docutils literal notranslate"><span class="pre">FIT_ESTIMATORS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU059_FIT_ESTIMATOR"><code class="docutils literal notranslate"><span class="pre">MU059_FIT_ESTIMATOR</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.NOSF_FD_ESTIMATOR"><code class="docutils literal notranslate"><span class="pre">NOSF_FD_ESTIMATOR</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.S8_ESTIMATORS"><code class="docutils literal notranslate"><span class="pre">S8_ESTIMATORS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_NBINS"><code class="docutils literal notranslate"><span class="pre">BARNES_NBINS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_RMAX_R500"><code class="docutils literal notranslate"><span class="pre">BARNES_RMAX_R500</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.BARNES_XCUT_T_K"><code class="docutils literal notranslate"><span class="pre">BARNES_XCUT_T_K</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_NBINS"><code class="docutils literal notranslate"><span class="pre">PEARCE_NBINS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMIN_R500"><code class="docutils literal notranslate"><span class="pre">PEARCE_RMIN_R500</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.PEARCE_RMAX_R500"><code class="docutils literal notranslate"><span class="pre">PEARCE_RMAX_R500</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.T_SL_VALID_KEV"><code class="docutils literal notranslate"><span class="pre">T_SL_VALID_KEV</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.SHELL_DENSITIES"><code class="docutils literal notranslate"><span class="pre">SHELL_DENSITIES</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MIN_FILLING"><code class="docutils literal notranslate"><span class="pre">MIN_FILLING</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.shell_gas_density"><code class="docutils literal notranslate"><span class="pre">shell_gas_density()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.SLUGS"><code class="docutils literal notranslate"><span class="pre">SLUGS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.MU_OF"><code class="docutils literal notranslate"><span class="pre">MU_OF</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.HSE_VARIANTS"><code class="docutils literal notranslate"><span class="pre">HSE_VARIANTS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.COLUMN_ESTIMATORS"><code class="docutils literal notranslate"><span class="pre">COLUMN_ESTIMATORS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.TRUTH_COLUMNS"><code class="docutils literal notranslate"><span class="pre">TRUTH_COLUMNS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.GAS_FIELDS_COMPOSITION"><code class="docutils literal notranslate"><span class="pre">GAS_FIELDS_COMPOSITION</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.variant_for"><code class="docutils literal notranslate"><span class="pre">variant_for()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.rho_crit_msun_kpc3"><code class="docutils literal notranslate"><span class="pre">rho_crit_msun_kpc3()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.FIT_MIN_SHELLS"><code class="docutils literal notranslate"><span class="pre">FIT_MIN_SHELLS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.VIK_GAMMA"><code class="docutils literal notranslate"><span class="pre">VIK_GAMMA</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.metal_columns"><code class="docutils literal notranslate"><span class="pre">metal_columns()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.solar_units_of_table"><code class="docutils literal notranslate"><span class="pre">solar_units_of_table()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.metallicity_summary"><code class="docutils literal notranslate"><span class="pre">metallicity_summary()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.barnes_edges"><code class="docutils literal notranslate"><span class="pre">barnes_edges()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.pearce_edges"><code class="docutils literal notranslate"><span class="pre">pearce_edges()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.compute_hse_truth"><code class="docutils literal notranslate"><span class="pre">compute_hse_truth()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.m500_at_z"><code class="docutils literal notranslate"><span class="pre">m500_at_z()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.crossing_flag"><code class="docutils literal notranslate"><span class="pre">crossing_flag()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.truth_columns"><code class="docutils literal notranslate"><span class="pre">truth_columns()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.sim.compute_hse_mass.write_hse_truth"><code class="docutils literal notranslate"><span class="pre">write_hse_truth()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

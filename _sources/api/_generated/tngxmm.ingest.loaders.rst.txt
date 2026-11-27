@@ -1,0 +1,24 @@
+tngxmm.ingest.loaders
+=====================
+
+.. automodule:: tngxmm.ingest.loaders
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LOADERS
+      FAMILY_LOADERS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      all_loaders
+      gas_fn
+      ingest_run
+      loader_for
+      loader_name
+      mini_fields_fn
+   

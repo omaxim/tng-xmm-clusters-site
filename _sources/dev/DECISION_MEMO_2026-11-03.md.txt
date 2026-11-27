@@ -1,0 +1,308 @@
+---
+orphan: true
+---
+
+# Decisions before the next node runs (2026-11-03)
+
+> Since 2026-11-04: the decisions asked for here were taken on 2026-11-04. They are recorded in
+> {doc}`PREREGISTRATION` (the closure rule, the study arms, the QPB level, the sampler, the matching mass, the bank
+> filter, the field-edge targets, the protection radii) and in {doc}`DECISIONS`, "Independent review, round 5" to
+> "Independent review, round 7". The bank filter is the rule `seed_unmeasured`; `lx_zero` is kept for the fixture
+> bank only (`src/tngxmm/bank/filter_rows.py`). The citations `STATUS:nn`, `DEC:nnnn`, `LEDGER:nnnn` and the like
+> are line numbers at commit 184be38 and no longer point at those lines.
+
+For the author: what must be decided before the closure grid B1, the regeneration of every mock and the real refits.
+Each item gives the options with their effect on results, cost and a referee's reading, and a recommendation. The
+choices are the author's.
+
+State: `multisim` at 184be38; real seed and centre tables rebuilt from it on a clean tree (seed hash
+28e59685a303d297; 616 converged, 21 field-edge, 1 without a source list). Nothing has been measured under the
+2026-11-03 configuration (STATUS:18), so rules written at this point are registered before their results.
+
+Sources (file:line; repository lines as at commit 184be38): STATUS, DEC, INTEG = `docs/dev/STATUS.md`,
+`DECISIONS.md`, `INTEGRATION_REPORT.md`; LEDGER, OPEN, SENS = `docs/assumptions/assumptions.yml`, `OPEN_ITEMS.md`,
+`SENSITIVITY_TESTS.md`; CERT = `conf/base/parameters/certify.yml`; CG = `src/tngxmm/validation/closure_grid.py`;
+R3, R4 = `$TNGXMM_DEV/REVIEW_FACTORS/REVIEW3.md`, `REVIEW4.md`; DV2, DV3 = `$TNGXMM_DEV/CHECKS/DESIGN.md`,
+`DESIGN_v3.md`. TAB = computed for this memo from `$TNGXMM_DATA/tables/obs_seed_lx_v4.csv`,
+`obs_centres_guarded_v4.csv` and `catalogue_positions_v4.csv`; "derived" = arithmetic on the quoted inputs.
+
+## Summary
+
+| # | Decision | Recommendation | Blocks |
+|---|---|---|---|
+| 1 | Matching mass | Pass 1 fits one view of every candidate halo-snapshot; design-note convergence rule | pass 1, realism |
+| 2 | Gate thresholds | DESIGN v4 now: R3p 0.07 with about 156 fresh views; real-cell median gated (1 ± 0.08) for the HSE-bias claim; B1 on pooled medians | B1, confirmation |
+| 3 | Arm tolerances | Three-way rule at 0.03 in ln M; re-seed arms as power check | B1 |
+| 4 | QPB level | Free on both sides if `v1_qpbfree` shows no bias, else fixed with a two-sided `qpb_scale` term | B1, production |
+| 5 | Bank filter | Seed photometry instead of truth-side Lx | bank build |
+| 6 | Protection radius | Keep max(r90, HEW); add a mock-real check | target build |
+| 7 | Field-edge targets | Out of headline statistics on both sides by one rule | comparison |
+| 8 | SZ centre | Iterate from the y-map maximum; thresholds fixed now | regeneration |
+| 9 | Realism start | The mock's own first pass | realism |
+| 10 | Others | Q7 as B1 arms; Q8 before pass 2; Q14 closed or re-measured | B1, pass 2 |
+
+## 1. Matching mass
+
+**Question.** Your plan: pass 1 paired on PSZ2 MSZ/0.78 (ACT and lensing masses as published), fit, re-pair on the
+fitted hydrostatic mass of both sides, rerun. What must pass 1 cover, how is convergence judged, what stays
+conditional?
+
+**Facts.**
+- Only a halo with a fitted mass can be re-paired. A proxy (3-D hydrostatic mass times a ratio measured on mocks) is
+  the kind of mock-calibrated factor the no-factor rule excludes; the forecast used one and kept it out of the
+  matching (DEC:2837-2839).
+- The replica's mass window is at most 0.20 dex (`src/tngxmm/donors/build_replica_targets.py:116`). Partners can lie
+  further off: the ledger's (1-b) values span 0.58-0.99 (LEDGER:697), i.e. -0.10 to +0.13 dex about 0.78, and the
+  per-view fit scatter is 0.13 dex (sd 0.3 in ln, DV3:111), so about -0.36 to +0.39 dex at two sigma (derived).
+- FLAMINGO L1_m8 halos were streamed only with log M500c(true) within log M_cat -0.15 to +0.25 (DEC:3901-3903):
+  about -0.26 to +0.14 dex about a PSZ2 target's 0.78 mass (derived).
+
+**Options.**
+- (a) The 0.78 replica as it stands. Cheapest; but partners beyond 0.20 dex have no fit, so 0.78 leaks into the final
+  pairing, and a referee will see it.
+- (b) Centred on 0.78, widened to about -0.35/+0.4 dex, with an edge test (e.g. under 5 % of converged partners in the
+  window's outer tenth; the tenth is a judgement call). Cost not counted, probably near (c).
+- (c) The design note's pass 1: one view of every candidate halo-snapshot, 3,258 views and fits, 44 node-hours
+  (DEC:2763-2768, 2818), under the single reference observation, or under each halo's nearest 0.78-matched donor so
+  that the views can be reused in pass 2. No window to defend.
+
+**Convergence.** The design note's rule: stop when under 5 % of the paired halo-snapshots change a donor between two
+iterations, or after three; report the history and any non-convergence (DEC:2774-2776). Redo gate P on M_fit
+(STATUS:110-114). FLAMINGO needs the edge test in any case. The 638 real refits come first (6-8 node-hours,
+DEC:2817).
+
+**Conditional.** Until convergence, every realism verdict, gate P, the matched-draw figures and any L_X-M comparison
+are conditional on 0.78 (LEDGER:657-661), and the frozen realism run waits (STATUS:124-127). After it, the results
+rest on the fitter (a common method term cancels in the pairing, not in M_fit/M_true); catalogue masses are
+cross-checks (DEC:2728-2730); unpaired halo-snapshots stay out of mock-real statistics (DEC:2799-2800). The closure
+grid, the real refits and the sky checks never depended on the pairing (DEC:2735-2739).
+
+**Recommendation.** (c): about the cost of a properly widened (b), and it removes the window and the 0.78 dependence
+at once.
+
+## 2. Gate thresholds
+
+**Question.** R3p (95 % half-width 0.10) and the real-cell median as a report were set after the v2 results
+(CERT:76, 107-113). Keep, restore, or register new values now?
+
+**Facts.**
+- R3' was 0.07 (DV3:66); v3.1 made it 0.10 because 108 fresh views give about 77 science fits and sd 0.3 gives
+  about 0.09. You chose to loosen rather than enlarge the sample (DV3:104-111).
+- v2 gated the real cells at |median - 1| ≤ 0.08, every z median in [0.85, 1.15], before any v2 fit (DV2:3,
+  150-153). v3 calls the move to a report the change most open to "moving goalposts" (DV3:90-94). It was justified as
+  a calibration (DEC:1864-1867), which the no-factor rule voids (STATUS:307). Last real cells, before the ESAS
+  background: 0.747 / 0.863 / 0.893 at z = 0.06 / 0.2 / 0.5 (DEC:2900).
+- B1's own rule, every cell within 1 ± 0.03 (CG:5-7, 216), is out of reach: at a per-fit scatter of 0.07-0.1
+  (DEC:2878, 2921) and three seeds, an unbiased cell passes 40-55 % of the time and all 18 clean cells with
+  probability below 1e-4 (derived). `n_pivot` is not in the verdict (CG:1095).
+
+**Options.**
+- (a) Keep v3.1, stated as post hoc. Free, but the weakest point for a referee, and the deficit stays in the HSE
+  bias.
+- (b) Restore v3 and v2 unchanged. R3p at 108 views is out of reach: 80 science fits come up with probability about
+  0.27, and even then the half-width is near 0.09 (DV3:109-111). v2's real-cell rule would have failed the last
+  candidate: every z median is at most 0.893, so the pooled median is below 0.92, and z = 0.06 is outside
+  [0.85, 1.15].
+- (c) DESIGN v4, committed before B1:
+  - R3p 0.07 with about 156 fresh views (111 science fits at sd 0.3 and 29 % QC loss; `per_cell` 9 to 13, CERT:11;
+    derived): 48 more fits, about 40 core-hours at the D1 queue's mean of 3,112 s per fit (SENS:21-23). Adding views
+    in blocks until the width is met is safe: the stop looks at the width, not the median.
+  - Real cells gated at v2's window; clean cells as R4_clean (CERT:87-97) with z medians in [0.90, 1.10]
+    (DV2:155-156); the tail as R4_real_tail (CERT:98-106). B1 judged by these; its per-cell rule kept as a report.
+  - Cells with `n_pivot` > 0 or a failed seed INCOMPLETE; the gate INCOMPLETE above 10 % of them (the 10 % of
+    `max_fail_frac`, CERT:97).
+  - The science QC exclusion (`QC_EXCLUDING`, `src/tngxmm/massfit/fit_qc.py:41`) applied to closure fits too, so
+    that B1's field-filling z = 0.06 cells (DEC:2906-2910) do not decide a regime item 7 removes.
+
+**Recommendation.** (c), with the real-cell gate tied to the HSE-bias claim only: in the matched mock-real comparison
+one fitter serves both sides, so a common method term cancels to first order. That keeps a real-cell failure from
+stopping everything. Also record that the fixed-radius estimand (DV3:87) was a post-v2 change.
+
+## 3. Tolerances of the paired study arms
+
+**Question.** Above what paired shift in ln M do `v1_nhhi`, `v1_spflat`, `v1_psfon`, `v1_qpbfree` and the planned
+`qpb_scale` arm count as systematics? None is set (R3:286-288; R4:275-276), and `FIT_ARMS` has no `qpb_scale` arm
+(CG:165-202).
+
+**Facts.** SENS calls a change immaterial below 0.015, the measured spread of the median over three re-seeds
+(SENS:16-20, 379; OPEN:153-154). DV2 calls a setting MATERIAL if |median| > 0.03 and the 95 % interval excludes 0
+(DV2:137); the per-cell closure tolerance is 0.03 (CG:216). The B1 real-cell median (54 fits, scatter 0.1, DEC:2921)
+has a 95 % half-width near 0.033, and a shift of 0.03 moves the forecast L_X-M_fit offset by about 0.011 dex against
+its ± 0.08 (DEC:2852-2854; derived). The ledger has no published per-term budget for XMM hydrostatic masses.
+
+**Options.**
+- (a) No threshold, every shift in the budget. Nothing arbitrary, but every arm's noise goes in too.
+- (b) Noise floor only (the SENS principle): two re-seeds of `v1sas` in the same job, about 0.8 node-hours each
+  (DEC:2812-2813). Measured, but it says what is detectable, not what matters.
+- (c) δ = 0.03: predates the data (DV2), equals the per-cell tolerance and about the gate's own half-width. Arbitrary
+  only in putting the line at one half-width.
+
+**Recommendation.** (c), with the re-seeds of (b) as a power check. Per arm, on the real-background cells (clean
+reported), the paired median with a bootstrap 95 % interval:
+- NEGLIGIBLE: inside ± 0.03; reported, not in the budget.
+- SYSTEMATIC: reaches beyond ± 0.03 and excludes 0; enters at |median|, two-sided for a one-direction arm. It is
+  MATERIAL if |median| > 0.03 as well (DV2:137), which reopens that production choice.
+- INCONCLUSIVE: reaches beyond ± 0.03 and includes 0; enters at the far end, or more seeds before the paper.
+- A re-seed arm that is not NEGLIGIBLE means too few cells: add seeds, do not move δ.
+
+Per arm: `v1_nhhi` drops the whole molecular column one way (CG:190), a sensitivity rather than an error. No source
+gives a per-field error of the total column (DEC:4317-4319), so any size is arbitrary: carry the full shift two-sided
+as a stated bound, or report d ln M per unit column and call the term unbounded. `v1_spflat`: ± |median|, "tested
+against one alternative" (R4:168-172). `v1_psfon`: last +0.001 (-0.021 to +0.019) (STATUS:313). `v1_qpbfree`: decides
+item 4. `qpb_scale`: arms at 1 ± d (R4:52-55); the term is the shift per unit level error times the measured spread
+of the level error.
+
+## 4. QPB level in production
+
+**Question.** Keep the QPB level fixed by the corners, or free it on both sides?
+
+**Facts.** ESAS (Snowden et al. 2008, Sect. 3.1.1) and the X-COP imaging (Ghirardini et al. 2019, p. 3) fix it; the
+X-COP spectral fits leave it free within 10 % (Ghirardini et al. 2019, Sect. 2.4) (LEDGER:3517-3522, 3583-3592). In
+mocks the corner-to-field prediction is exact; a real template carries its error and pn-corner soft protons
+(LEDGER:3497-3501; R3:96-110), and neither has a published size (LEDGER:2688-2692, 3500). The background split is the
+leading closure term (LEDGER:3510-3513).
+
+**Options.**
+- (a) Fixed, plus a two-sided `qpb_scale` term. Best precision, published practice. d from (i) FWC exposures split
+  into corners and field (login, R3:118-121; misses pn-corner protons), (ii) the real targets fitted once with the
+  level free (about 6-8 node-hours, DEC:2817; sees both), or (iii) the X-COP 10 % (a prior range, not an accuracy).
+- (b) Free on both sides. Symmetric by construction, no d needed. Costs precision, and may reopen the flat-background
+  degeneracy behind the deficit.
+- (c) Free within ± 10 %, as in the X-COP spectra. Symmetric, limits the degeneracy; needs a bounded prior in
+  `src/tngxmm/massfit/esas_background.py`.
+
+**Recommendation.** Fix the rule now and let B1 answer it: free in production if `v1_qpbfree` is NEGLIGIBLE under
+item 3 (precision cost reported, bought back with more R3p views if needed); otherwise fixed with the `qpb_scale`
+term, d from the FWC split and checked by the real free-level fits. A level that is free on both sides is symmetric by construction, while the bound on a fixed level has no
+published size; the free level is preferred unless it brings the deficit back. If it stays fixed, decide before regenerating
+whether mocks get pn-corner protons.
+
+## 5. Training-row filter of the ML bank
+
+**Question.** `lx_zero` drops mock rows whose generation `lx_r500_erg_s` is 0 or NaN
+(`src/tngxmm/bank/filter_rows.py:47-51`). Keep or change?
+
+**Facts.** That luminosity is measured in the true R500 at the true centre, masked with the simulated sources: a
+truth-side quantity (DEC:4398-4401; R3:208-211). Observations are never filtered (`filter_rows.py:12-13`). The
+ledger's source treats non-detections as censored data, and dropping the row loses the information that the
+luminosity is low (Kelly 2007; LEDGER:3312-3328). The real seed photometry measures `lx_r500` for 637 of 638 targets
+(seed-table provenance). There is no ML stage yet (STATUS:205-207), so this blocks only the bank build.
+
+**Options.** (a) Keep: no work, but rows are chosen on a quantity no real observation has. (b) The mock fit targets'
+seed photometry (`lx_r500`, `seed_status`), and the same rule on real rows at prediction, flagged out of domain: one
+observable on both sides, a few lines of code. (c) All rows kept, non-detections as censored values (Kelly 2007):
+nothing lost, but the estimator must handle censoring.
+
+**Recommendation.** (b) now, (c) if the estimator allows it: one rule then defines the training set and the domain.
+
+## 6. Protection radius in the centre search
+
+**Question.** SAS point sources within max(r90, PSF HEW) of the nominal position stay unmasked in the peak search, up
+to 7.9' for PSZ2 (OPEN:499; R3:196-199). Keep, or one radius for all?
+
+**Facts** (TAB). Median protection 146" for PSZ2 (r90 up to 7.87'), 23" for ACT. For 22 of 427 PSZ2 targets r90
+exceeds the first-pass theta500, so nothing is masked in their search. The rule exists because a cool core can be
+detected as point-like (Pacaud et al. 2016; R3:61-62). Mock AGN are a field population (DEC:4260-4271); real member
+AGN near cores have no mock counterpart.
+
+**Options.**
+- (a) Keep: symmetric, a published error used as the region the cluster may occupy (a stated design choice); the PSZ2
+  and ACT circles differ by a factor of about six.
+- (b) HEW only (16.5"): masks a point-like core whenever the catalogue position is more than 16.5" off, as it is for
+  most PSZ2 targets (median move 64", TAB).
+- (c) Protect inside the cluster's own SAS extended detection: data-driven and symmetric, but new and untested.
+
+**Recommendation.** (a), plus a check fixed now: per catalogue, the share of final centres within one HEW of a
+protected source, mock against the real 95 % interval as in item 8. If real exceeds mock, member AGN are capturing
+real peaks; carry a refit with those sources masked as a systematic rather than pick a radius on that result.
+
+## 7. The 21 field-edge real targets
+
+**Question.** 21 targets have a first guess limited by the field (the largest measurable mass, not the relation's
+root). Keep, flag or exclude?
+
+**Facts** (TAB). 17 PSZ2, 4 ACT; 19 at z ≤ 0.077, i.e. 19 of the 65 targets below z = 0.08; two at z = 0.33 and 0.72
+need a look. At z = 0.06 the closure fit puts the background about 20 % low and gives the light to the cluster
+(DEC:2906-2910). The QC flag `bg_fallback` already drops fits without a background annulus, on both sides
+(`src/tngxmm/massfit/fit_qc.py:26-29, 41`). The mock fraction comes with the mock targets.
+
+**Options.** (a) Keep: the largest low-z sample, but crop, pixel and first guess are set by the field. (b) Flag and
+show everything both ways: nothing lost, two numbers everywhere. (c) Exclude from the headline statistics on both
+sides by one rule (`seed_status = field-edge`, with `bg_fallback`), keeping them in secondary tables and in training.
+
+**Recommendation.** (c), with the mock and real field-edge fractions side by side, a realism number in itself. Use the
+same rule for the target without a source list (0720700101, `no_seed`, excluded nowhere; R4:190-192).
+
+## 8. The mock SZ centre and its check
+
+**Question.** Mocks start from the Compton-y centroid within 2.4' (the ACT DR6 reference filter) or R500 (PSZ2) plus
+the drawn error, and record SZ offset, drawn error and move (LEDGER:2216-2231;
+`src/tngxmm/photometry/catalogue_positions.py:111-129`; `src/tngxmm/massfit/build_fit_targets.py:94, 128-130`). How
+faithful must this be, and what agreement counts?
+
+**Facts.**
+- Still open: the iteration starts at the halo centre (`src/tngxmm/sim/generate_photons.py:397`), so a major merger
+  settles on the mode nearest the potential minimum (R4:100-103); there is no beam or matched filter
+  (LEDGER:2228-2229); the three MACS mocks start at their SZ centre with no error, their real positions being X-ray
+  ones (LEDGER:2226-2228).
+- Real moves in units of r90 (TAB): ACT 75 of 207 beyond r90 (36 %, 95 % interval 30-43 %), median 0.82
+  (0.70-0.90); PSZ2 34 of 427 (8.0 %, 5.8-10.9 %), median 0.45 (0.42-0.49). Noise alone gives 10 % and 0.55
+  (R3:41-42).
+- PSZ2's POS_ERR is conservative (R3:50): the drawn error alone puts about 10 % of PSZ2 mocks beyond r90, the top of
+  the real interval. For ACT the simulated offsets must supply all of the excess.
+
+**Options.** Model: (a) as now; (b) iterate from the maximum of the y map smoothed at the catalogue's scale (code
+only, in before the regeneration that is due anyway); (c) a matched filter with the catalogue beam (ACT 1.4',
+R4:92-93; most faithful, most code). Check: (i) per catalogue, the mock share beyond r90 and the mock median move/r90
+inside the real 95 % intervals, each physics donor weighted once; (ii) two-sample tests at 5 %, weaker, since with 207
+ACT targets not rejecting is not agreement.
+
+**Recommendation.** (b) before regenerating; MACS mocks started at their own X-ray peak, or left out of the centring
+statistics. Check (i), two-sided for ACT and one-sided for PSZ2 (fail only below the real lower bound, the direction
+of the round-3 concern). Fix now what a failure means: centring enters the budget through an arm that redraws mock
+positions with ACT's 0.5 Mpc cross-matching allowance in quadrature
+(`$TNGXMM_DEV/REVIEW_FACTORS/actsrc/ACTDR6Clusters.tex:782-799`; R3:80-81), and (c) is built before the paper. Never
+answer a failure by rescaling the drawn error to the real moves: that is a factor fitted on real data.
+
+## 9. Realism start
+
+**Question.** A mock row searches within the donor's `search_arcsec`, measured on the donor's image at the donor's z
+(`src/tngxmm/realism/features.py:119-121`; R4:119-138). Keep, or give each row its own first pass?
+
+**Facts.** The apertures are the donor's catalogue R500 for both rows, scaled to each row's z (`features.py:67-71,
+137, 162`). The mock fit targets already run the real targets' two-pass search. TNG's L_X excess makes mock first
+guesses heavier (OPEN:502-504), so a mock's own search is wider. Only realism features change (R4:132-134); no frozen
+run exists, and its registration is redone anyway (DEC:4294-4295).
+
+**Options.** (a) As now: a number from one image used on another, at the wrong physical scale when z_obs differs.
+(b) The donor's radius in kpc at the view's z, like the aperture: consistent for a donor-conditioned design. (c) The
+mock's own centre and radius, from its fit target: the real row's procedure at no cost, and the L_X excess shows in
+the start as it would for a real cluster.
+
+**Recommendation.** (c), keeping the donor apertures as a declared design; both written into the realism
+registration.
+
+## 10. Other decisions that block the next runs
+
+- **Q7** (STATUS:211-213; INTEG:80-91): tie the sky and soft-proton levels across bands as X-COP does (24 free
+  background parameters down to about six, aimed at the deficit's degeneracy), and start the walkers inside the prior
+  bounds. Recommendation: both as hashed switches tested as B1 arms (about 0.8 node-hours each); the first bears on
+  items 2 and 4.
+- **Q8**, when the six projections start (STATUS:214-215; about 63 node-hours, STATUS:131-135): not needed for B1 or
+  pass 1; pass 2 costs 128 node-hours with six views and 44 with one (DEC:2819-2824). Recommendation: decide before
+  pass 2.
+- **Mock-side changes** belong before the regeneration, or it runs twice: the SZ and MACS starts (item 8), pn-corner
+  protons if the QPB level stays fixed (item 4).
+- **Clean cells fitted with the background frozen at the true zero** inside the gate (CG:643; R4:198-199).
+  Recommendation: keep, labelled as a test of the cluster model alone.
+- **Q14 is out of date**: it names the 90" core protection that round 1 replaced by the 16.487" HEW (STATUS:232-234,
+  261; LEDGER:1779-1791). Its sensitivities belong to the old baseline, and DEC:4288-4289 still lists 90" as kept.
+  Close it, or rerun the sensitivity at the HEW in the B1 job.
+- **Q13**, the donor cap factor (STATUS:229-231): affects the matched draw only; decide before pass 2.
+
+## Order of work if these are taken
+
+Login first: one dated commit with the rules of items 2, 3, 4, 7 and 8, the new arms in `FIT_ARMS`, and the FWC
+corner/field split for d. Then, each on its own go and one node at a time: B1 (about 3 node-hours plus 0.8 per added
+arm, STATUS:71-72); the real refits with the fitter B1 settles, plus the free-level fits if item 4 needs them (6-8
+node-hours each, DEC:2817); the item-8 changes, the regeneration and pass 1 (44 node-hours, DEC:2818); the re-match.

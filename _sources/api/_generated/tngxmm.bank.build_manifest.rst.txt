@@ -1,0 +1,20 @@
+tngxmm.bank.build\_manifest
+===========================
+
+.. automodule:: tngxmm.bank.build_manifest
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      META_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_manifest
+      read_manifest
+      write_manifests
+   

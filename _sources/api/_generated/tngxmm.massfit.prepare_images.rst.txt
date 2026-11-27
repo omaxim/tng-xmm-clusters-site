@@ -1,0 +1,29 @@
+tngxmm.massfit.prepare\_images
+==============================
+
+.. automodule:: tngxmm.massfit.prepare_images
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_CCF_DIR
+      OPTICAL_AXIS_MODES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_images
+      ccf_dir
+      cluster_pixel
+      optical_axis_pixel
+      prepare_images
+      preprocess_one
+      rebin_mean
+      rebin_origin
+      rebin_sum
+      vig_curve
+      vig_map
+   

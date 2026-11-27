@@ -1,0 +1,34 @@
+tngxmm.ledger.report
+====================
+
+.. automodule:: tngxmm.ledger.report
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SECTION_NODES
+      VIZ_PLACEHOLDER_ROOTS
+      VIZ_REPO_PLACEHOLDER
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign
+      build
+      card
+      esc
+      nodes_of
+      reference
+      spec_section
+      summary
+      viz_build
+      viz_index
+      viz_machine_paths
+      viz_neutral_env
+      viz_scrub
+      viz_url
+      viz_verify
+   

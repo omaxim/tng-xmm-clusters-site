@@ -1,0 +1,24 @@
+tngxmm.donor\_tables.qpb\_corners
+=================================
+
+.. automodule:: tngxmm.donor_tables.qpb_corners
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      UNITS
+      MEASURE_VERSION
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assemble_table
+      camera_files
+      measure_all
+      measure_camera
+      measure_donor
+      table_columns
+   

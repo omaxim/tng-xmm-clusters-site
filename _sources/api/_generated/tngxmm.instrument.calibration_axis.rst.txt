@@ -1,0 +1,23 @@
+tngxmm.instrument.calibration\_axis
+===================================
+
+.. automodule:: tngxmm.instrument.calibration_axis
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CCF_INSTRUMENT
+      CCF_TELESCOPE
+      PN_AXIS_CCD
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ccf_has_azimuthal_vignetting
+      latest_ccf
+      optical_axis_focal_mm
+      telescope_axis_arcmin
+   

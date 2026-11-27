@@ -1,0 +1,21 @@
+tngxmm.validation.products
+==========================
+
+.. automodule:: tngxmm.validation.products
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BANDS
+      CAMERAS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      background_region_of
+      load_percam
+      real_prefix
+   

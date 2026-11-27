@@ -1,0 +1,37 @@
+tngxmm.core.paths
+=================
+
+.. automodule:: tngxmm.core.paths
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SITE_DEFAULTED
+      DATA_ASSETS
+      FROZEN_LEGACY
+      BUNDLED_REPO_DIR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      data_asset
+      data_root
+      dev_root
+      fixtures_root
+      frozen_legacy
+      inside_legacy
+      legacy_roots
+      prod_root
+      rate_cache_dir
+      repo_file
+      repo_root
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      RootNotConfigured
+   

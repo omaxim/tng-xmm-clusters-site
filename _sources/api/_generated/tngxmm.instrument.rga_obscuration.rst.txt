@@ -1,0 +1,24 @@
+tngxmm.instrument.rga\_obscuration
+==================================
+
+.. automodule:: tngxmm.instrument.rga_obscuration
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MOS_RGA_RULES
+      RGA_UNIT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      camera_dipole
+      ccf_file
+      dipole_amplitude
+      dispersion_angle_deg
+      factor
+      rga_parameters
+   

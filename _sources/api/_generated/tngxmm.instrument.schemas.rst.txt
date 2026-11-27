@@ -1,0 +1,6 @@
+tngxmm.instrument.schemas
+=========================
+
+.. automodule:: tngxmm.instrument.schemas
+
+   

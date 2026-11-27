@@ -1,0 +1,27 @@
+tngxmm.ingest
+=============
+
+.. automodule:: tngxmm.ingest
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   canonical_source
+   cli
+   cube_io
+   descriptor
+   eagle
+   eagle_remote
+   loaders
+   pipeline
+   schema
+   simba
+   simba_remote
+   swift
+   swift_remote
+   tng
+   truth

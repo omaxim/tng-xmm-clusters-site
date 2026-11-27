@@ -1,0 +1,40 @@
+tngxmm.embed.extract\_dinov3
+============================
+
+.. automodule:: tngxmm.embed.extract_dinov3
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DINOV3_MODEL_ID
+      DINOV3_REVISION
+      IMAGENET_MEAN
+      EMBEDDING_KINDS
+      DIHEDRAL_NAMES
+      PRECISIONS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_revision
+      configure_numerics
+      dihedral_views
+      embed_batch
+      extract_dinov3
+      load_dinov3
+      load_image_tensor
+      model_facts
+      normalise_kinds
+      preprocessing_json
+      preprocessing_sha256
+      preprocessing_spec
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ExtractionError
+   

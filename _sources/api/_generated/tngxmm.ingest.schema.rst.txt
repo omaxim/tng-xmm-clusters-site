@@ -1,0 +1,20 @@
+tngxmm.ingest.schema
+====================
+
+.. automodule:: tngxmm.ingest.schema
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FLAG_STAR_FORMING
+      KIND_FIELDS
+      HALO_COLUMNS
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Field
+   

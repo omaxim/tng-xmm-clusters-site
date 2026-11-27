@@ -1,0 +1,32 @@
+tngxmm.donors
+=============
+
+.. automodule:: tngxmm.donors
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   assign_donor_folds
+   box_report
+   build_active_ccds
+   build_box_targets
+   build_core_offsets
+   build_max_targets
+   build_pass1_targets
+   build_replica_targets
+   build_sim_targets
+   cli
+   draw_donor
+   halo_groups
+   max_report
+   pair_fit_mass
+   pair_projections
+   pair_six_views
+   pipeline
+   sample_matched
+   schemas
+   validate_population

@@ -1,0 +1,27 @@
+tngxmm.realism.dino
+===================
+
+.. automodule:: tngxmm.realism.dino
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DINOV3_VITL16
+      CROP_PX
+      IMAGENET_MEAN
+      PCA_COMPONENTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      embed_counts
+      embedding_c2st
+      embedding_columns
+      embedding_table
+      load_model
+      render_tensor
+      soft_counts
+   

@@ -1,0 +1,61 @@
+tngxmm.instrument.obs\_responses
+================================
+
+.. automodule:: tngxmm.instrument.obs_responses
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      RESPONSE_SET_VERSION
+      ROOT_KEY
+      CAMERA_CODES
+      INSTRUME
+      SELECTION
+      BINNING
+      REGION_MAX_ARCSEC
+      SKY_PIXEL_ARCSEC
+      RESPONSE_CCF_TYPES
+      EVLI_PATTERN
+      GENERATOR_RESPONSES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      adopt_entries
+      apply_observation_responses
+      arf_bin_average
+      check_set
+      cif_constituents
+      count_donors
+      entry_command
+      exposure_commands
+      finished
+      header_obsid
+      image_exposures
+      manifest_digest
+      missing_responses
+      onaxis_ratio
+      plan_entries
+      read_arf
+      response_name
+      response_pair
+      response_root
+      run_entry
+      run_queue
+      sas_version
+      set_digest
+      sky_xy
+      unplanned_observations
+      with_observation_response
+      write_manifest
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ResponseSettings
+      RmfMatrix
+   

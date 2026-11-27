@@ -1,0 +1,24 @@
+tngxmm.donors.build\_box\_targets
+=================================
+
+.. automodule:: tngxmm.donors.build_box_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BOX_SIM_CAMPAIGN
+      BOX_SIM_PRESET
+      BOX_EXTRA_COLUMNS
+      BOX_DONOR_USE_CAP
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      box_halo_table
+      box_max_spec
+      box_provenance
+      build_box_targets
+   

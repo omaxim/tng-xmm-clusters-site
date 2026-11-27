@@ -1,0 +1,45 @@
+tngxmm.core.membudget
+=====================
+
+.. automodule:: tngxmm.core.membudget
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ENV_PROBE
+      LEVELS
+      P_FALLBACK
+      SAFETY
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      between_views
+      budget_from_env
+      claim
+      estimate_halo
+      group_counts
+      hwm_bytes
+      malloc_trim
+      meta_fields
+      photon_proxy
+      probing
+      reset_hwm
+      rss_bytes
+      shrink_to_views
+      task_memory
+      task_photon_proxies
+      uss_bytes
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Grant
+      HaloEstimate
+      MemoryBudget
+      TaskMemory
+   

@@ -1,0 +1,37 @@
+tngxmm.instrument.donor\_inout\_sp
+==================================
+
+.. automodule:: tngxmm.instrument.donor_inout_sp
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SOFT_PROTONS
+      SP_RATE_UNMEASURED
+      CAMERA_SUFFIX
+      CXB_NORM
+      CXB_INDEX
+      INOUT_BAND_KEV
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_to_background
+      apply_to_cameras
+      cxb_band_rates
+      cxb_rate
+      donor_soft_protons
+      inout_excess
+      measured_rate
+      nearest_measured_in_fold
+      sp_rate_from_excess
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      UnmeasuredSoftProtons
+   

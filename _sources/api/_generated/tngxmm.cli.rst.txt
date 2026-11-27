@@ -1,0 +1,12 @@
+tngxmm.cli
+==========
+
+.. automodule:: tngxmm.cli
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+   

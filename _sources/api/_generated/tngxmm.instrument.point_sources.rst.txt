@@ -1,0 +1,44 @@
+tngxmm.instrument.point\_sources
+================================
+
+.. automodule:: tngxmm.instrument.point_sources
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MORETTI03
+      AGN_LOGNLOGS
+      AGN_PSF
+      AGN_GALACTIC_NH
+      AGN_NORM
+      AGN_FLUX_RANGE
+      SOFT_NH_MAX
+      ELLBETA_RMAX_ARCSEC
+      MORETTI03_SOFT_TOTAL
+      CXB_INDEX
+      UEDA14
+      AGN_POPULATIONS
+      UEDA14_NH_BINS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      band_energy_flux
+      cxb_total_norm
+      ellbeta_grid
+      ellbeta_offsets
+      ellbeta_params
+      ellbeta_table
+      moretti03_draw
+      moretti03_expected_number
+      moretti03_n_above
+      resolved_intensity
+      ueda14_draw
+      ueda14_nh_function
+      ueda14_population
+      ueda14_xlf
+      unresolved_cxb_norm
+   

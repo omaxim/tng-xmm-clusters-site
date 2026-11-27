@@ -1,0 +1,12 @@
+tngxmm.massfit.cache\_io
+========================
+
+.. automodule:: tngxmm.massfit.cache_io
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      harden_rate_cache
+   

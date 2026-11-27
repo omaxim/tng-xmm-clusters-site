@@ -1,0 +1,38 @@
+tngxmm.massfit.fit\_plan
+========================
+
+.. automodule:: tngxmm.massfit.fit_plan
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DOMAIN_PREFIX
+      SAME_IN_PIECES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_domain_columns
+      assign_jobs
+      cut_pieces
+      main
+      merge_pieces
+      piece_paths
+      pieces_queue
+      plan_line
+      stream_name
+      view_rows
+      write_jobs
+      write_lanes
+      write_pieces
+      write_streams
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      FitPlanError
+   

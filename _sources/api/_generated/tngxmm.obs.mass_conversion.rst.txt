@@ -1,0 +1,35 @@
+tngxmm.obs.mass\_conversion
+===========================
+
+.. automodule:: tngxmm.obs.mass_conversion
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      COSMO_H70
+      COSMO_OURS
+      DEFAULT_Z_SOURCE
+      WTG_C200C
+      WTG_APERTURE_KPC
+      SZ_RELATIONS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      c200c_dutton_maccio_2014
+      convert_nfw_cosmology
+      d_a_kpc
+      m500c_to_cosmology
+      mass_scale_at_fixed_angle
+      nfw_from_aperture
+      nfw_from_m500c_dm14
+      nfw_from_mdelta
+      nfw_mass_kpc
+      nfw_mdelta
+      rho_crit_msun_kpc3
+      sz_m500_to_cosmology
+      wtg_aperture_to_m500c
+   

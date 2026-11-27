@@ -1,0 +1,27 @@
+tngxmm.obs.hydrostatic\_bias
+============================
+
+.. automodule:: tngxmm.obs.hydrostatic_bias
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LITERATURE_ONE_MINUS_B
+      PSZ2_ALTERNATIVES
+      MODE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      literature_one_minus_b
+      literature_one_minus_b_sources
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      OneMinusB
+   

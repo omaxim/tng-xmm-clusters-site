@@ -1,0 +1,12 @@
+tngxmm.photometry.measure\_apertures
+====================================
+
+.. automodule:: tngxmm.photometry.measure_apertures
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      measure_apertures
+   

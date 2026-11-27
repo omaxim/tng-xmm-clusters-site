@@ -1,0 +1,169 @@
+# Response to the review of the documentation (release 1.1.2)
+
+The documentation site of commit 82064df and its static Kedro-Viz graph were read independently of the code and the
+development records. The read gave 53 findings: 12 major, 27 minor and 14 on the Kedro-Viz graph. Each finding was
+checked against the code, the data products and the development records before anything was changed.
+
+Since 2026-10-26 (state of 2026-11-26): this page is a record of release 1.1.3, the version of the package now. Four
+of its statements were overtaken. The cluster PSF of the mocks is the CCF King interpolated in energy and off-axis
+angle (`instrument.psf_model = 'king-energy-angle'`) and the fit uses the King at each pixel's off-axis angle
+(`massfit.psf = 'king-angle'`), so M4 and recommendation 6 are closed. The six icosahedral projections are in the
+pass-2 presets (`sim.projection = 'icosahedral6'`). No realism replay of the frozen evaluation is thinned
+(DECISIONS, "No tuned factors: the last replacements"). S8 was run on 2026-11-04 (SENSITIVITY_TESTS, S8).
+
+Verdicts:
+
+* **a**: true, fixed in the documentation;
+* **b**: true, needed a code change (made, with tests);
+* **c**: true, needs new science or node time; stated plainly on the user pages, with what it would take;
+* **d**: false, or already addressed; the evidence is given.
+
+A row may carry two verdicts (the documentation part fixed, the science part open). Commits are labelled K, F, D and R
+and listed at the end.
+
+## Major issues
+
+| finding | verdict | what was done | commit |
+|---|---|---|---|
+| M1. The mass fit fails its closure test with a realistic background (0.845) and PIPELINE.md section 7 says it passes; the gate was moved after the results | a, c | Confirmed: closure table 2026-10-17, medians clean 0.970, real 0.845, background only 0.921, AGN only 0.779 (120 fits). PIPELINE section 7 now says the registered rule is not met and the gate was amended after the results. New page Validation status: per data mode, the gate as registered and as amended, the statement that the deficit is not subtracted from any result, the configuration it was measured on. Figure "closure". The dependence on z, mass and S/N is not measured well enough (24 fits per mode) and the grid predates release 1.1: rerun needed (memo 1). | D, F |
+| M2. The realism claim ("the evidence that the mocks are realistic") is not supported: C2ST 0.88-0.97, DINOv3 0.91, frozen evaluation not run, realism page without results | a, c | Index, README and realism page rewritten: the site is "the framework to test" whether mocks are realistic; the current AUCs with their samples and configurations; the frozen evaluation as pending. The drivers are reported (background 0.72/0.80, gas statistics alone 0.66/0.68, cluster-only and field-only DINOv3, single statistics) with the reading that part of the gap is TNG physics (L_X excess, mocks hotter than their donors). Figure "realism". The frozen evaluation needs one node. | D, F |
+| M3. The replica list fails gate P; the docs do not say which list feeds which result; TNG-Cluster is selected on z = 0 mass (progenitor bias); the real sample's selection is not modelled | a, c | Confirmed (`campaigns/v4/gate_p.md`: mass D 0.241 against 0.061, coverage 0.929). New page Samples and selection: the TNG-Cluster selection (Nelson et al. 2024, Sect. 2.2, quoted), the progenitor consequence at z > 0, the non-cosmological mass function, TNG300 as the volume-limited comparison, the real sample and what donor matching does and does not remove, a table of which list feeds which result, gate P and the options. The progenitor effect is not quantified (memo 2 for gate P). | D |
+| M4. The cluster PSF of the mocks is the on-axis King at every position; real clusters at the same offset see the off-axis PSF; PSF effect on masses is large | a, c | Confirmed in the code (`simulate_instrument.king_offsets`, KING_PARAMS row 0; the fit uses the same). New open ledger entry `instrument.cluster_psf_onaxis` with the numbers that exist (core offsets median 1.7 arcmin, p90 2.9, cap 6; the PSF within 5 per cent of on-axis inside 5 arcmin; ellipticity 0.16 at 6 arcmin) and the measurement that is missing. Implementing an off-axis cluster PSF changes production products and needs a node to measure; not done here (memo 3). | D |
+| M5. The sky background model is undocumented | a, c | Confirmed: the sky is the fixed xmm_simulator model (LHB APEC 0.11 keV, Galactic halo APEC 0.221 keV, unresolved CXB power law 1.46; normalisations of the upstream defaults, the same for every donor; only N_H follows the donor; no SWCX, no dependence on sky position). New open ledger entry `instrument.sky_background` with the values, the code and what is measured (only the total field background: -0.030 to -0.046 dex). A per-donor soft-band check is the next step (memo 4). | D |
+| M6. The matching assumes (1-b) = 0.78; S7 not run; whether the fitted mocks are count-matched is contradictory | a, b | S7 run on the login node (new script `internal/ledger_tests/matching_bias_s7.py`; the production arm reproduces the committed list exactly): gate P fails at 0.78, 0.84 and 0.90 (D 0.241, 0.229, 0.207); median halo mass moves by -0.008 / -0.018 dex; almost every individual pairing changes. Samples page states what depends on the assumed bias (pairings, mock-to-real comparisons) and what does not (the estimands of a mock). Count matching checked in the code: production generation keeps the TNG luminosity (`thin` = 1.0 in the golden conditions record); only realism replays are thinned. The ledger entry `instrument.conditions_donor` said otherwise and is corrected; the S/N consequence (about twice the counts) is on the definitions and validation pages. A count-matched fit arm needs node time (memo 6). | D |
+| M7. Snapshot redshift against observed redshift not stated or quantified | a, c | New ledger entry `method.snapshot_to_zobs` with the numbers measured now on the existing tables: replica list |dz| median 0.033, p90 0.088; on 9,774 views the change of M500c from 500 rho_c(z_snap) to 500 rho_c(z_obs) of the same particles has median +0.001 in ln M, 5-95 per cent -0.062 / +0.073; the reason the estimands are defined at z_obs. Figure "samples" (right panel). The change of the gas state between z_snap and z_obs is not quantified. | D, F |
+| M8. The sensitivity analysis is of an older configuration; re-seeds show a 7 per cent method bias that no page reports | a, c | Status table added to SENSITIVITY_TESTS (each test, configuration, whether its subject changed since). The re-seed medians (-0.072, -0.064, -0.089) are now reported on the validation page as a method bias, together with the 43-view numbers with and without QC exclusion. Re-running the fit-level tests on the current configuration needs node time. | D |
+| M9. Stale and contradictory physics statements (FoF gas in preset descriptions and ledger, AGN band, vignetting, abundance key, removed presets, removed nodes, TODO) | a, b | All verified against the code and corrected: preset descriptions in `config.py` (not hashed; hashes checked unchanged) and the generated parameter files; ledger `sim.gas_selection`, `sim.simulation`, `sim.table_metal_unit`, `sim.plasma_model`, `instrument.pattern_loss`, `sim.rng_pairing`, `fit.mock_agn`, `sim.gas_cutout` (TODO replaced by the convergence result), `instrument.conditions_donor`; OPEN_ITEMS A (RGA = pps-measured), B (AGN band resolved), C (Lodders key), D (removed nodes), F; the citation key of `sim.apec_abund_table` is `lodders2003` (citation keys are not hashed). The abundance question is answered in `sim.plasma_model` and on the definitions page: Lodders for the spectra, the per-element fractions and the absorption; AG89 only as the unit of the reference table's total-metallicity axis that sets the band luminosity of a cell. New test `tests/unit/test_ledger_values.py`: every `field = value` of a value line equals the v1 spec, and no entry names a removed preset. | D |
+| M10. Estimands, bias definitions, colours, claims A-C, DESIGN v3 are never defined | a | New pages Science definitions (redshifts, radii, the three masses with their columns, the three bias ratios in fixed-radius and SO form, L_X and temperatures, what a mock contains, units) and Glossary (sample terms, colours, claims A-D, gates, test labels, versions, internal document names). User pages use M_X, M_HSE, M_true; the colour names survive only in column names (`ln_br` etc.), which the glossary maps. | D |
+| M11. Internal development material in the public navigation; token advice; private paths; long changelog; private references area | a, d | Development records moved to a "Development log" section with a header saying what they are; the GitHub token and push section removed from the decision record; every absolute machine path in the Markdown of the repository replaced by its root variable; the 1.1.1 changelog entry shortened to the user-visible changes; the reference ledger states how many rows are unchecked. Not changed: the page proofs need the cited PDFs, which cannot be redistributed (copyright); the proof tool is public and works for anyone with the PDFs (d). | D |
+| M12. A newcomer cannot get started or see a result; no data release; cINN shown as a stage | a, c | Getting started now opens with what runs with the repository only, with the fixtures, with a bundle and on the cluster, and a worked example on the fixture halo with expected values; the overview shows the pipeline diagram and a mock beside its real observation; the `ml` stage is marked as not implemented and no longer registered as an empty pipeline. The public data release needs the author's decision and the TNG team's permission for the fixture cutouts (c). | D, K, F |
+
+## Minor issues
+
+| finding | verdict | what was done | commit |
+|---|---|---|---|
+| Navigation: readme and decisions before getting started | a | New order: Start here (overview, getting started, glossary, definitions), Science status, Using the pipeline, Reference, Development log. | D |
+| Two pages with near-identical titles (decision log and long record) | a | The long record is "Decision record" in the Development log; the log links it. | D |
+| "Test fixtures" appears as a navigation entry | a | The fixtures README is included without its top heading. | D |
+| pipelines/index says ten stages make up `__default__` | a, b | Text corrected (nine stages with nodes, `viz.plot_mock_truth` left out, `instrument.replay_views` is a no-op without a views table). | K, D |
+| `myst.xref_missing` suppressed; README links dead | a | No warning is suppressed; the build is clean with `-W`. The README mentions files as code spans, which are not links; they point at the repository, not the site. | D |
+| Five version namespaces | a, d | A versions table in the glossary. Renaming the internal `v4` labels is not done: `sim.rng_campaign = 'v4'` keys the random streams, and renaming it would change every product (d). | D |
+| Donor terms undefined | a | Glossary. | D |
+| Radii used interchangeably | a | Definitions page (R500c(z_obs), catalogue R500c, theta500, R500 of a fit, R500 of a real cluster). | D |
+| Units: `fit_results` in 1e14 Msun; exposure terms | a | Definitions page, "Units". | D |
+| "Hashed only when set" duplicated | b | The generated note is added only when the field's description does not already say it. | D |
+| Inert hashed fields (z_floor, center_search_arcmin, pix_arcsec, seed_offset, pattern_loss_factor, fit_workers) | a, d | Grouped in a table "Fields that change no product" on the configuration page. Removing or retyping them would change every spec hash (d). | D |
+| Fixtures README: golden_v1 vs golden_v1.1.1; 5 R500c cutouts vs the 6.93 R500c cube | a | Corrected; the 5 R500c cutouts serve the spherical truth, the cube needs the 7.2 R500c cutout. | D |
+| R/S test labels collide with rule labels R3, R4 | a | Glossary note; the certification rules are in a different file. | D |
+| "Net cooling" cut: which sign, how much emission | a, c | Ledger `sim.gas_cut`: GFM_CoolingRate < 0 emits, net-heating cells do not; the emission they would add is not measured (c). | D |
+| apec or vapec, CIE, line broadening | a | `sim.plasma_model` and the definitions page: per-element spectra for the seven tracked metals, the others with Fe; CIE; no broadening. | D |
+| Three axis-aligned projections; structure beyond +-4 R500c | a | Definitions page. Release 1.2 plans six projections per halo along the axes through opposite vertices of the icosahedron (corrected from ten on 2026-10-27), from cubes of half-side 5.66 R500c; the emitting gas stays the 4 R500c cylinder. | D |
+| Emission share of the coarse gas | c | Recorded per view in `obs_meta.json` of the cube trees; no production tree of the current configuration exists yet. Listed under "Figures that need data". | D |
+| Quick chains (150 + 300) for every mock | d, c | The quick chains are the default of the Kedro `massfit` parameters, the fixtures and the smoke run; the certification fits use long chains (500 + 1500, `params:certify.fits.quick: false`). Convergence of the tails of the long chains is not checked (c). | |
+| QC exclusion removes about 30 per cent; selection on the outcome | a | Measured now: the method-bias median at R500c is 0.847 with every fit and 0.931 without the 12 flagged fits (43 views). Reported both ways on the validation page and in the figure. | D, F |
+| 20,000-count prior threshold untested between 19k and 140k counts; mocks brighter | a, c | Stated on the validation page with the count-matching factor; needs fits (c). | D |
+| Metallicity mismatch (TNG Fe 0.13-0.23 against about 0.48) | c | Not measured; open item of the fit (`fit.metallicity`). | |
+| Donor jitter is an ML concern in the physics configuration; effect on the mass fits | c | Not measured. The jitter changes exposure, roll and pointing within the archive's range; its effect on M_X needs fits of jittered and unjittered replays. | |
+| Band-ratio offset 0.46 ln(T_mock / T_donor): a physics result | a | On the validation page next to the L_X excess. | D |
+| Getting started gives an absolute interpreter path | a | Removed. | D |
+| Kedro-Viz exposes machine paths | b | Public build (see Kedro-Viz 8). | K |
+| Reference ledger keeps 44 rows open in public | a, c | A status line says what "open" means; checking the rows is the author's work (c). | D |
+| OPEN_ITEMS section F title | a | Retitled "Decisions taken on the recommended options (2026-10-17)"; the stale AGN item marked as superseded. | D |
+
+## Recommended changes
+
+| recommendation | verdict | status |
+|---|---|---|
+| 1. Fix PIPELINE section 7, add Validation status | a | Done (M1, M2, M3). |
+| 2. Rewrite the claims of index and README; cINN out or marked | a | Done (M2, M12). |
+| 3. Science definitions page; remove colours and undefined labels | a | Done (M10); colours remain only in column names, mapped in the glossary. |
+| 4. Samples and selection page | a | Done (M3, M7). |
+| 5. Document the sky background; validate its soft-band level | a, c | Documented; validation open (memo 4). |
+| 6. Off-axis cluster PSF or the measured asymmetry | c | Open ledger entry; memo 3. |
+| 7. Run S7, S8, S9; rerun the R/S tests on 1.1.2; state whether the fitted mocks are count-matched | a, c | S7 run (login node); count matching stated; S8, S9 and the fit-level reruns need a node. |
+| 8. Purge stale descriptions; test that ledger values equal the spec | a, b | Done (M9). |
+| 9. Restructure the navigation; remove the token section and private paths | a | Done (M11). |
+| 10. Glossary; one worked example on the fixtures with expected numbers and a figure | a | Done (glossary; getting started, section 2; figure "mock_vs_real" from the fixtures). |
+| 11. Shorten the changelog | a | The 1.1.1 entry is shortened; the other entries were already one line per change. |
+| 12. Re-enable `myst.xref_missing`; build with `-W` without suppressions | a | Done. |
+
+## Kedro-Viz
+
+| finding | verdict | what was done | commit |
+|---|---|---|---|
+| 1. The physics is one box (`sim.generate_views`), and its citation tags miss pyXSIM, SOXS, APEC, xmm_simulator, Moretti, Barnes, temet | b, c | The node now carries the citations of every module it runs per view (`sim.pipeline.PER_VIEW_MODULES`); a test checks the ones the review named. The README now says that the graph shows the order of the stages, not the physics inside that node. Splitting the node is not done (memo 5). | K, D |
+| 2. Hidden inputs (snapshots, APEC tables, CCF, donor tables, responses); `donor_tables` outputs look terminal | a, c | The pipelines index lists the inputs read outside the catalog, including the donor tables that the generation reads. Declaring them as Kedro inputs changes node signatures and needs the end-to-end acceptance on a node (memo 5). | D |
+| 3a. `viz.plot_mock_truth` in `__default__` consumes `analysis.mock_fits` | b | Left out of `__default__` (`NOT_IN_DEFAULT`); test that no default node reads an output of an extra pipeline. | K |
+| 3b. `massfit.fit_targets_input` has no producer: the real-data branch is not in the graph | a, c | Documented (the fit-target builders are CLI commands). Adding them as nodes is part of memo 5. | D |
+| 3c. `donor_tables` free inputs come from CLI commands | a | Documented with the same list. | D |
+| 3d. `realism.touched_donors` from nowhere | d | It is a committed input table (`campaigns/v4/realism_touched_donors.csv`), like any other external dataset of the catalog. | |
+| 4. `analysis` not connected; paths through parameters; `instrument.replay_views` takes only parameters | a, c | Documented; connecting `analysis` to `massfit.fit_results` is part of memo 5. `replay_views` is a no-op without a views table (documented). | D |
+| 5a. Two nodes named `assign_donor_folds` | b | The bank node is `bank.assign_linked_donor_folds`; a test refuses duplicate short names. | K |
+| 5b. `donors.*` nodes consume `params:bank.folds.*` | d | No donors node reads a bank parameter (`donors.assign_donor_folds` reads `params:preset` and `params:donors.replica`); the bank parameters appeared only in the `used_by` list of the ledger entry `method.random_seeds`. | |
+| 5c. `massfit.link_percam` silently filters the target list | d | Its docstring and page say it keeps the targets whose views exist (optionally only `names`) and that a mismatch of obsids raises. | |
+| 5d. Roles of `photometry.mock_lx_angbkg` and `photometry.lx_remeasure` | a | Their catalog entries describe them (the angular-background L_X at 0.35 Mpc, R500 and 1 Mpc with the 16 arcsec peak of each view; the report of the in-place re-measurement of existing trees), but Kedro-Viz does not show catalog comments. Recorded here; no change to the graph. | |
+| 6. Uneven granularity; empty `ml` | b, c | `ml` no longer registered. The granularity of `sim.generate_views` is memo 5. | K |
+| 7. Tags are a bibliography of software | b | General-purpose libraries are no longer tags (`cites.GENERIC_SOFTWARE`; still in the bibliography and on the node pages); each node has one `env.<stack>` tag. | K |
+| 8. Machine paths in node parameters | b | `tngxmm ledger viz` builds with no site file and placeholder roots, replaces the checkout by `<repo>`, and refuses a build that still holds a host path. Rebuilt for 1.1.3. | K |
+
+## Counts
+
+Each finding counted once, by its main verdict (a finding marked "a, c" counts as c, because its science part is
+open; "a, b" counts as b). The twelve recommended changes repeat the major and minor findings and are not counted
+again.
+
+| section | a | b | c | d | findings |
+|---|---|---|---|---|---|
+| major issues | 2 | 2 | 8 | 0 | 12 |
+| minor issues | 17 | 3 | 6 | 1 | 27 |
+| Kedro-Viz | 2 | 6 | 3 | 3 | 14 |
+| total | 21 | 11 | 17 | 4 | 53 |
+
+## Decisions left to the author
+
+The memos are in `DECISIONS.md`, "Release 1.1.3 (unreleased): the review of the documentation": (1) the closure deficit,
+(2) gate P of the replica list, (3) the off-axis cluster PSF, (4) the sky background, (5) the Kedro graph, (6) a
+count-matched fit arm.
+
+## Re-review
+
+The rebuilt site and Kedro-Viz of release 1.1.3 (the documentation of commit 05ad75c, built with `-W`) were read a
+second time, again without the development log and without a list of the changes. The write-up was found clearer.
+The scientific case was found no more convincing than before: the pages now state the failed and pending tests
+plainly, and the case was judged on them. The major issues of the second read, and what was done:
+
+1. The closure deficit is not diagnosed; AGN only (0.779) is worse than AGN plus background; three estimates of the
+   method bias (0.845, 0.847, 0.931) without a statement of which applies. Done after the re-review: the validation
+   page explains that the three are different quantities and that none is adopted as a correction, and gives the
+   per-fit scatter of the clean cells (0.057). Open: the diagnosis needs the closure rerun (memo 1).
+2. No page lists what the mocks represent of the physics that sets the hydrostatic bias (thermal against total
+   pressure, clumping, the Willingale against HI4PI columns). Partly answered by the definitions page; a dedicated
+   "scope of the bias measurement" section is still to write.
+3. The replica list fails gate P; the sample of the bias statement and its weighting are not stated; the samples page
+   said S7 was not run while OPEN_ITEMS gave its result; the (1-b) values were unsourced. Done after the re-review:
+   the S7 result and the sources are on the samples page. Open: the sample of the bias statement (memo 2).
+4. All realism AUCs are from development rounds on tuned donors and different samples; no real-against-real null;
+   no AUC for the unthinned production mocks. Open: the frozen evaluation; a real-against-real null is a new test.
+5. Claims A and B are inconclusive or wide; claim C's estimand was chosen after the results; `LOCAL` still listed
+   `ml`. Done after the re-review: `ml` removed from LOCAL. The rest is open science.
+6. The Kedro defaults of the fit (quick chains) beside "Kedro and production write the same bytes". Done after the
+   re-review: PIPELINE section 4 states the quick default, the long chains of the certification fits and the pixel
+   size.
+7. Reproducibility: the data package and fixtures are not public; the validation inputs sit in the development area.
+   Open (author: data release and the TNG permission).
+
+Kedro-Viz points of the re-review: the real-data branch and the truth comparison are not in the graph; the per-view
+physics is one node; the donor tables are not edges (all memo 5); 13 of the 32 default nodes have no citation tag
+(they are plumbing and table nodes that cite nothing; d); the photometry aperture tables are sinks (they are the
+fixed-aperture inputs of the planned `ml` stage, not of the fit; d).
+
+The report of the second read is kept with the development material of the release, outside the repository.
+
+## Commits
+
+| label | commit | content |
+|---|---|---|
+| K | 028b51a | Kedro graph: unique names, `plot_mock_truth` out of the default run, no empty `ml`, citation and environment tags, citations of the per-view physics, public Kedro-Viz build |
+| F | 31479a4 | `tngxmm.viz.doc_figures` and the nine figures with their input manifest |
+| D | a1555e3, e30baaf, 05ad75c | the documentation pages, ledger, open items, sensitivity tests (S7), version 1.1.3; the answers to the re-review |
+| R | the commit that adds this response | this document, the figure manifest of the final code |

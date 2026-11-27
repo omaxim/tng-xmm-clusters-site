@@ -1,0 +1,32 @@
+tngxmm.ingest.swift
+===================
+
+.. automodule:: tngxmm.ingest.swift
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      M_P
+      SWIFT_MSUN_G
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      canonical_gas_arrays
+      ingest_halo
+      ingest_run
+      ingest_snapshot
+      main
+      read_cube
+      snapshot_files
+      soap_halos
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SnapshotCells
+   

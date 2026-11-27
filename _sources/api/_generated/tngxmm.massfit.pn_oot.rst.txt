@@ -1,0 +1,30 @@
+tngxmm.massfit.pn\_oot
+======================
+
+.. automodule:: tngxmm.massfit.pn_oot
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PN_COLUMN_ARCSEC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      band_slopes
+      band_transfer
+      oot_fraction
+      oot_template
+      oot_templates
+      readout_geometry
+      row_boundary
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FixedTemplateBackModel
+   

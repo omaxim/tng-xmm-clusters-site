@@ -1,0 +1,25 @@
+tngxmm.instrument.galactic\_column
+==================================
+
+.. automodule:: tngxmm.instrument.galactic_column
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      GALACTIC_NH
+      W13_NH2_MAX
+      COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_table
+      column_ratio
+      donor_ratio
+      extra_absorption_keep
+      molecular_column
+      total_column
+   

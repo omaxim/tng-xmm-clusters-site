@@ -1,0 +1,14 @@
+# certify
+
+```{eval-rst}
+.. automodule:: tngxmm.certify.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline certify`; catalog `conf/base/catalog/certify.yml`.
+
+## Nodes
+
+```{kedro-pipeline} certify
+```

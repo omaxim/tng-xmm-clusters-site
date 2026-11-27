@@ -1,0 +1,1049 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>Decisions before the next node runs (2026-11-03) - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/_generated/tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="decisions-before-the-next-node-runs-2026-11-03">
+<h1>Decisions before the next node runs (2026-11-03)<a class="headerlink" href="#decisions-before-the-next-node-runs-2026-11-03" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><p>Since 2026-11-04: the decisions asked for here were taken on 2026-11-04. They are recorded in
+<a class="reference internal" href="PREREGISTRATION.html"><span class="doc">Pre-registered rules of 2026-11-04 (DESIGN v4)</span></a> (the closure rule, the study arms, the QPB level, the sampler, the matching mass, the bank
+filter, the field-edge targets, the protection radii) and in <a class="reference internal" href="DECISIONS.html"><span class="doc">Decision record</span></a>, “Independent review, round 5” to
+“Independent review, round 7”. The bank filter is the rule <code class="docutils literal notranslate"><span class="pre">seed_unmeasured</span></code>; <code class="docutils literal notranslate"><span class="pre">lx_zero</span></code> is kept for the fixture
+bank only (<code class="docutils literal notranslate"><span class="pre">src/tngxmm/bank/filter_rows.py</span></code>). The citations <code class="docutils literal notranslate"><span class="pre">STATUS:nn</span></code>, <code class="docutils literal notranslate"><span class="pre">DEC:nnnn</span></code>, <code class="docutils literal notranslate"><span class="pre">LEDGER:nnnn</span></code> and the like
+are line numbers at commit 184be38 and no longer point at those lines.</p>
+</div></blockquote>
+<p>For the author: what must be decided before the closure grid B1, the regeneration of every mock and the real refits.
+Each item gives the options with their effect on results, cost and a referee’s reading, and a recommendation. The
+choices are the author’s.</p>
+<p>State: <code class="docutils literal notranslate"><span class="pre">multisim</span></code> at 184be38; real seed and centre tables rebuilt from it on a clean tree (seed hash
+28e59685a303d297; 616 converged, 21 field-edge, 1 without a source list). Nothing has been measured under the
+2026-11-03 configuration (STATUS:18), so rules written at this point are registered before their results.</p>
+<p>Sources (file:line; repository lines as at commit 184be38): STATUS, DEC, INTEG = <code class="docutils literal notranslate"><span class="pre">docs/dev/STATUS.md</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DECISIONS.md</span></code>, <code class="docutils literal notranslate"><span class="pre">INTEGRATION_REPORT.md</span></code>; LEDGER, OPEN, SENS = <code class="docutils literal notranslate"><span class="pre">docs/assumptions/assumptions.yml</span></code>, <code class="docutils literal notranslate"><span class="pre">OPEN_ITEMS.md</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SENSITIVITY_TESTS.md</span></code>; CERT = <code class="docutils literal notranslate"><span class="pre">conf/base/parameters/certify.yml</span></code>; CG = <code class="docutils literal notranslate"><span class="pre">src/tngxmm/validation/closure_grid.py</span></code>;
+R3, R4 = <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DEV/REVIEW_FACTORS/REVIEW3.md</span></code>, <code class="docutils literal notranslate"><span class="pre">REVIEW4.md</span></code>; DV2, DV3 = <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DEV/CHECKS/DESIGN.md</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DESIGN_v3.md</span></code>. TAB = computed for this memo from <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DATA/tables/obs_seed_lx_v4.csv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">obs_centres_guarded_v4.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">catalogue_positions_v4.csv</span></code>; “derived” = arithmetic on the quoted inputs.</p>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Decision</p></th>
+<th class="head"><p>Recommendation</p></th>
+<th class="head"><p>Blocks</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Matching mass</p></td>
+<td><p>Pass 1 fits one view of every candidate halo-snapshot; design-note convergence rule</p></td>
+<td><p>pass 1, realism</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Gate thresholds</p></td>
+<td><p>DESIGN v4 now: R3p 0.07 with about 156 fresh views; real-cell median gated (1 ± 0.08) for the HSE-bias claim; B1 on pooled medians</p></td>
+<td><p>B1, confirmation</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Arm tolerances</p></td>
+<td><p>Three-way rule at 0.03 in ln M; re-seed arms as power check</p></td>
+<td><p>B1</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>QPB level</p></td>
+<td><p>Free on both sides if <code class="docutils literal notranslate"><span class="pre">v1_qpbfree</span></code> shows no bias, else fixed with a two-sided <code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code> term</p></td>
+<td><p>B1, production</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Bank filter</p></td>
+<td><p>Seed photometry instead of truth-side Lx</p></td>
+<td><p>bank build</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Protection radius</p></td>
+<td><p>Keep max(r90, HEW); add a mock-real check</p></td>
+<td><p>target build</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Field-edge targets</p></td>
+<td><p>Out of headline statistics on both sides by one rule</p></td>
+<td><p>comparison</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>SZ centre</p></td>
+<td><p>Iterate from the y-map maximum; thresholds fixed now</p></td>
+<td><p>regeneration</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Realism start</p></td>
+<td><p>The mock’s own first pass</p></td>
+<td><p>realism</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Others</p></td>
+<td><p>Q7 as B1 arms; Q8 before pass 2; Q14 closed or re-measured</p></td>
+<td><p>B1, pass 2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="matching-mass">
+<h2>1. Matching mass<a class="headerlink" href="#matching-mass" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> Your plan: pass 1 paired on PSZ2 MSZ/0.78 (ACT and lensing masses as published), fit, re-pair on the
+fitted hydrostatic mass of both sides, rerun. What must pass 1 cover, how is convergence judged, what stays
+conditional?</p>
+<p><strong>Facts.</strong></p>
+<ul class="simple">
+<li><p>Only a halo with a fitted mass can be re-paired. A proxy (3-D hydrostatic mass times a ratio measured on mocks) is
+the kind of mock-calibrated factor the no-factor rule excludes; the forecast used one and kept it out of the
+matching (DEC:2837-2839).</p></li>
+<li><p>The replica’s mass window is at most 0.20 dex (<code class="docutils literal notranslate"><span class="pre">src/tngxmm/donors/build_replica_targets.py:116</span></code>). Partners can lie
+further off: the ledger’s (1-b) values span 0.58-0.99 (LEDGER:697), i.e. -0.10 to +0.13 dex about 0.78, and the
+per-view fit scatter is 0.13 dex (sd 0.3 in ln, DV3:111), so about -0.36 to +0.39 dex at two sigma (derived).</p></li>
+<li><p>FLAMINGO L1_m8 halos were streamed only with log M500c(true) within log M_cat -0.15 to +0.25 (DEC:3901-3903):
+about -0.26 to +0.14 dex about a PSZ2 target’s 0.78 mass (derived).</p></li>
+</ul>
+<p><strong>Options.</strong></p>
+<ul class="simple">
+<li><p>(a) The 0.78 replica as it stands. Cheapest; but partners beyond 0.20 dex have no fit, so 0.78 leaks into the final
+pairing, and a referee will see it.</p></li>
+<li><p>(b) Centred on 0.78, widened to about -0.35/+0.4 dex, with an edge test (e.g. under 5 % of converged partners in the
+window’s outer tenth; the tenth is a judgement call). Cost not counted, probably near (c).</p></li>
+<li><p>(c) The design note’s pass 1: one view of every candidate halo-snapshot, 3,258 views and fits, 44 node-hours
+(DEC:2763-2768, 2818), under the single reference observation, or under each halo’s nearest 0.78-matched donor so
+that the views can be reused in pass 2. No window to defend.</p></li>
+</ul>
+<p><strong>Convergence.</strong> The design note’s rule: stop when under 5 % of the paired halo-snapshots change a donor between two
+iterations, or after three; report the history and any non-convergence (DEC:2774-2776). Redo gate P on M_fit
+(STATUS:110-114). FLAMINGO needs the edge test in any case. The 638 real refits come first (6-8 node-hours,
+DEC:2817).</p>
+<p><strong>Conditional.</strong> Until convergence, every realism verdict, gate P, the matched-draw figures and any L_X-M comparison
+are conditional on 0.78 (LEDGER:657-661), and the frozen realism run waits (STATUS:124-127). After it, the results
+rest on the fitter (a common method term cancels in the pairing, not in M_fit/M_true); catalogue masses are
+cross-checks (DEC:2728-2730); unpaired halo-snapshots stay out of mock-real statistics (DEC:2799-2800). The closure
+grid, the real refits and the sky checks never depended on the pairing (DEC:2735-2739).</p>
+<p><strong>Recommendation.</strong> (c): about the cost of a properly widened (b), and it removes the window and the 0.78 dependence
+at once.</p>
+</section>
+<section id="gate-thresholds">
+<h2>2. Gate thresholds<a class="headerlink" href="#gate-thresholds" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> R3p (95 % half-width 0.10) and the real-cell median as a report were set after the v2 results
+(CERT:76, 107-113). Keep, restore, or register new values now?</p>
+<p><strong>Facts.</strong></p>
+<ul class="simple">
+<li><p>R3’ was 0.07 (DV3:66); v3.1 made it 0.10 because 108 fresh views give about 77 science fits and sd 0.3 gives
+about 0.09. You chose to loosen rather than enlarge the sample (DV3:104-111).</p></li>
+<li><p>v2 gated the real cells at |median - 1| ≤ 0.08, every z median in [0.85, 1.15], before any v2 fit (DV2:3,
+150-153). v3 calls the move to a report the change most open to “moving goalposts” (DV3:90-94). It was justified as
+a calibration (DEC:1864-1867), which the no-factor rule voids (STATUS:307). Last real cells, before the ESAS
+background: 0.747 / 0.863 / 0.893 at z = 0.06 / 0.2 / 0.5 (DEC:2900).</p></li>
+<li><p>B1’s own rule, every cell within 1 ± 0.03 (CG:5-7, 216), is out of reach: at a per-fit scatter of 0.07-0.1
+(DEC:2878, 2921) and three seeds, an unbiased cell passes 40-55 % of the time and all 18 clean cells with
+probability below 1e-4 (derived). <code class="docutils literal notranslate"><span class="pre">n_pivot</span></code> is not in the verdict (CG:1095).</p></li>
+</ul>
+<p><strong>Options.</strong></p>
+<ul class="simple">
+<li><p>(a) Keep v3.1, stated as post hoc. Free, but the weakest point for a referee, and the deficit stays in the HSE
+bias.</p></li>
+<li><p>(b) Restore v3 and v2 unchanged. R3p at 108 views is out of reach: 80 science fits come up with probability about
+0.27, and even then the half-width is near 0.09 (DV3:109-111). v2’s real-cell rule would have failed the last
+candidate: every z median is at most 0.893, so the pooled median is below 0.92, and z = 0.06 is outside
+[0.85, 1.15].</p></li>
+<li><p>(c) DESIGN v4, committed before B1:</p>
+<ul>
+<li><p>R3p 0.07 with about 156 fresh views (111 science fits at sd 0.3 and 29 % QC loss; <code class="docutils literal notranslate"><span class="pre">per_cell</span></code> 9 to 13, CERT:11;
+derived): 48 more fits, about 40 core-hours at the D1 queue’s mean of 3,112 s per fit (SENS:21-23). Adding views
+in blocks until the width is met is safe: the stop looks at the width, not the median.</p></li>
+<li><p>Real cells gated at v2’s window; clean cells as R4_clean (CERT:87-97) with z medians in [0.90, 1.10]
+(DV2:155-156); the tail as R4_real_tail (CERT:98-106). B1 judged by these; its per-cell rule kept as a report.</p></li>
+<li><p>Cells with <code class="docutils literal notranslate"><span class="pre">n_pivot</span></code> &gt; 0 or a failed seed INCOMPLETE; the gate INCOMPLETE above 10 % of them (the 10 % of
+<code class="docutils literal notranslate"><span class="pre">max_fail_frac</span></code>, CERT:97).</p></li>
+<li><p>The science QC exclusion (<code class="docutils literal notranslate"><span class="pre">QC_EXCLUDING</span></code>, <code class="docutils literal notranslate"><span class="pre">src/tngxmm/massfit/fit_qc.py:41</span></code>) applied to closure fits too, so
+that B1’s field-filling z = 0.06 cells (DEC:2906-2910) do not decide a regime item 7 removes.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Recommendation.</strong> (c), with the real-cell gate tied to the HSE-bias claim only: in the matched mock-real comparison
+one fitter serves both sides, so a common method term cancels to first order. That keeps a real-cell failure from
+stopping everything. Also record that the fixed-radius estimand (DV3:87) was a post-v2 change.</p>
+</section>
+<section id="tolerances-of-the-paired-study-arms">
+<h2>3. Tolerances of the paired study arms<a class="headerlink" href="#tolerances-of-the-paired-study-arms" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> Above what paired shift in ln M do <code class="docutils literal notranslate"><span class="pre">v1_nhhi</span></code>, <code class="docutils literal notranslate"><span class="pre">v1_spflat</span></code>, <code class="docutils literal notranslate"><span class="pre">v1_psfon</span></code>, <code class="docutils literal notranslate"><span class="pre">v1_qpbfree</span></code> and the planned
+<code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code> arm count as systematics? None is set (R3:286-288; R4:275-276), and <code class="docutils literal notranslate"><span class="pre">FIT_ARMS</span></code> has no <code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code> arm
+(CG:165-202).</p>
+<p><strong>Facts.</strong> SENS calls a change immaterial below 0.015, the measured spread of the median over three re-seeds
+(SENS:16-20, 379; OPEN:153-154). DV2 calls a setting MATERIAL if |median| &gt; 0.03 and the 95 % interval excludes 0
+(DV2:137); the per-cell closure tolerance is 0.03 (CG:216). The B1 real-cell median (54 fits, scatter 0.1, DEC:2921)
+has a 95 % half-width near 0.033, and a shift of 0.03 moves the forecast L_X-M_fit offset by about 0.011 dex against
+its ± 0.08 (DEC:2852-2854; derived). The ledger has no published per-term budget for XMM hydrostatic masses.</p>
+<p><strong>Options.</strong></p>
+<ul class="simple">
+<li><p>(a) No threshold, every shift in the budget. Nothing arbitrary, but every arm’s noise goes in too.</p></li>
+<li><p>(b) Noise floor only (the SENS principle): two re-seeds of <code class="docutils literal notranslate"><span class="pre">v1sas</span></code> in the same job, about 0.8 node-hours each
+(DEC:2812-2813). Measured, but it says what is detectable, not what matters.</p></li>
+<li><p>(c) δ = 0.03: predates the data (DV2), equals the per-cell tolerance and about the gate’s own half-width. Arbitrary
+only in putting the line at one half-width.</p></li>
+</ul>
+<p><strong>Recommendation.</strong> (c), with the re-seeds of (b) as a power check. Per arm, on the real-background cells (clean
+reported), the paired median with a bootstrap 95 % interval:</p>
+<ul class="simple">
+<li><p>NEGLIGIBLE: inside ± 0.03; reported, not in the budget.</p></li>
+<li><p>SYSTEMATIC: reaches beyond ± 0.03 and excludes 0; enters at |median|, two-sided for a one-direction arm. It is
+MATERIAL if |median| &gt; 0.03 as well (DV2:137), which reopens that production choice.</p></li>
+<li><p>INCONCLUSIVE: reaches beyond ± 0.03 and includes 0; enters at the far end, or more seeds before the paper.</p></li>
+<li><p>A re-seed arm that is not NEGLIGIBLE means too few cells: add seeds, do not move δ.</p></li>
+</ul>
+<p>Per arm: <code class="docutils literal notranslate"><span class="pre">v1_nhhi</span></code> drops the whole molecular column one way (CG:190), a sensitivity rather than an error. No source
+gives a per-field error of the total column (DEC:4317-4319), so any size is arbitrary: carry the full shift two-sided
+as a stated bound, or report d ln M per unit column and call the term unbounded. <code class="docutils literal notranslate"><span class="pre">v1_spflat</span></code>: ± |median|, “tested
+against one alternative” (R4:168-172). <code class="docutils literal notranslate"><span class="pre">v1_psfon</span></code>: last +0.001 (-0.021 to +0.019) (STATUS:313). <code class="docutils literal notranslate"><span class="pre">v1_qpbfree</span></code>: decides
+item 4. <code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code>: arms at 1 ± d (R4:52-55); the term is the shift per unit level error times the measured spread
+of the level error.</p>
+</section>
+<section id="qpb-level-in-production">
+<h2>4. QPB level in production<a class="headerlink" href="#qpb-level-in-production" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> Keep the QPB level fixed by the corners, or free it on both sides?</p>
+<p><strong>Facts.</strong> ESAS (Snowden et al. 2008, Sect. 3.1.1) and the X-COP imaging (Ghirardini et al. 2019, p. 3) fix it; the
+X-COP spectral fits leave it free within 10 % (Ghirardini et al. 2019, Sect. 2.4) (LEDGER:3517-3522, 3583-3592). In
+mocks the corner-to-field prediction is exact; a real template carries its error and pn-corner soft protons
+(LEDGER:3497-3501; R3:96-110), and neither has a published size (LEDGER:2688-2692, 3500). The background split is the
+leading closure term (LEDGER:3510-3513).</p>
+<p><strong>Options.</strong></p>
+<ul class="simple">
+<li><p>(a) Fixed, plus a two-sided <code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code> term. Best precision, published practice. d from (i) FWC exposures split
+into corners and field (login, R3:118-121; misses pn-corner protons), (ii) the real targets fitted once with the
+level free (about 6-8 node-hours, DEC:2817; sees both), or (iii) the X-COP 10 % (a prior range, not an accuracy).</p></li>
+<li><p>(b) Free on both sides. Symmetric by construction, no d needed. Costs precision, and may reopen the flat-background
+degeneracy behind the deficit.</p></li>
+<li><p>(c) Free within ± 10 %, as in the X-COP spectra. Symmetric, limits the degeneracy; needs a bounded prior in
+<code class="docutils literal notranslate"><span class="pre">src/tngxmm/massfit/esas_background.py</span></code>.</p></li>
+</ul>
+<p><strong>Recommendation.</strong> Fix the rule now and let B1 answer it: free in production if <code class="docutils literal notranslate"><span class="pre">v1_qpbfree</span></code> is NEGLIGIBLE under
+item 3 (precision cost reported, bought back with more R3p views if needed); otherwise fixed with the <code class="docutils literal notranslate"><span class="pre">qpb_scale</span></code>
+term, d from the FWC split and checked by the real free-level fits. A level that is free on both sides is symmetric by construction, while the bound on a fixed level has no
+published size; the free level is preferred unless it brings the deficit back. If it stays fixed, decide before regenerating
+whether mocks get pn-corner protons.</p>
+</section>
+<section id="training-row-filter-of-the-ml-bank">
+<h2>5. Training-row filter of the ML bank<a class="headerlink" href="#training-row-filter-of-the-ml-bank" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> <code class="docutils literal notranslate"><span class="pre">lx_zero</span></code> drops mock rows whose generation <code class="docutils literal notranslate"><span class="pre">lx_r500_erg_s</span></code> is 0 or NaN
+(<code class="docutils literal notranslate"><span class="pre">src/tngxmm/bank/filter_rows.py:47-51</span></code>). Keep or change?</p>
+<p><strong>Facts.</strong> That luminosity is measured in the true R500 at the true centre, masked with the simulated sources: a
+truth-side quantity (DEC:4398-4401; R3:208-211). Observations are never filtered (<code class="docutils literal notranslate"><span class="pre">filter_rows.py:12-13</span></code>). The
+ledger’s source treats non-detections as censored data, and dropping the row loses the information that the
+luminosity is low (Kelly 2007; LEDGER:3312-3328). The real seed photometry measures <code class="docutils literal notranslate"><span class="pre">lx_r500</span></code> for 637 of 638 targets
+(seed-table provenance). There is no ML stage yet (STATUS:205-207), so this blocks only the bank build.</p>
+<p><strong>Options.</strong> (a) Keep: no work, but rows are chosen on a quantity no real observation has. (b) The mock fit targets’
+seed photometry (<code class="docutils literal notranslate"><span class="pre">lx_r500</span></code>, <code class="docutils literal notranslate"><span class="pre">seed_status</span></code>), and the same rule on real rows at prediction, flagged out of domain: one
+observable on both sides, a few lines of code. (c) All rows kept, non-detections as censored values (Kelly 2007):
+nothing lost, but the estimator must handle censoring.</p>
+<p><strong>Recommendation.</strong> (b) now, (c) if the estimator allows it: one rule then defines the training set and the domain.</p>
+</section>
+<section id="protection-radius-in-the-centre-search">
+<h2>6. Protection radius in the centre search<a class="headerlink" href="#protection-radius-in-the-centre-search" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> SAS point sources within max(r90, PSF HEW) of the nominal position stay unmasked in the peak search, up
+to 7.9’ for PSZ2 (OPEN:499; R3:196-199). Keep, or one radius for all?</p>
+<p><strong>Facts</strong> (TAB). Median protection 146” for PSZ2 (r90 up to 7.87’), 23” for ACT. For 22 of 427 PSZ2 targets r90
+exceeds the first-pass theta500, so nothing is masked in their search. The rule exists because a cool core can be
+detected as point-like (Pacaud et al. 2016; R3:61-62). Mock AGN are a field population (DEC:4260-4271); real member
+AGN near cores have no mock counterpart.</p>
+<p><strong>Options.</strong></p>
+<ul class="simple">
+<li><p>(a) Keep: symmetric, a published error used as the region the cluster may occupy (a stated design choice); the PSZ2
+and ACT circles differ by a factor of about six.</p></li>
+<li><p>(b) HEW only (16.5”): masks a point-like core whenever the catalogue position is more than 16.5” off, as it is for
+most PSZ2 targets (median move 64”, TAB).</p></li>
+<li><p>(c) Protect inside the cluster’s own SAS extended detection: data-driven and symmetric, but new and untested.</p></li>
+</ul>
+<p><strong>Recommendation.</strong> (a), plus a check fixed now: per catalogue, the share of final centres within one HEW of a
+protected source, mock against the real 95 % interval as in item 8. If real exceeds mock, member AGN are capturing
+real peaks; carry a refit with those sources masked as a systematic rather than pick a radius on that result.</p>
+</section>
+<section id="the-21-field-edge-real-targets">
+<h2>7. The 21 field-edge real targets<a class="headerlink" href="#the-21-field-edge-real-targets" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> 21 targets have a first guess limited by the field (the largest measurable mass, not the relation’s
+root). Keep, flag or exclude?</p>
+<p><strong>Facts</strong> (TAB). 17 PSZ2, 4 ACT; 19 at z ≤ 0.077, i.e. 19 of the 65 targets below z = 0.08; two at z = 0.33 and 0.72
+need a look. At z = 0.06 the closure fit puts the background about 20 % low and gives the light to the cluster
+(DEC:2906-2910). The QC flag <code class="docutils literal notranslate"><span class="pre">bg_fallback</span></code> already drops fits without a background annulus, on both sides
+(<code class="docutils literal notranslate"><span class="pre">src/tngxmm/massfit/fit_qc.py:26-29,</span> <span class="pre">41</span></code>). The mock fraction comes with the mock targets.</p>
+<p><strong>Options.</strong> (a) Keep: the largest low-z sample, but crop, pixel and first guess are set by the field. (b) Flag and
+show everything both ways: nothing lost, two numbers everywhere. (c) Exclude from the headline statistics on both
+sides by one rule (<code class="docutils literal notranslate"><span class="pre">seed_status</span> <span class="pre">=</span> <span class="pre">field-edge</span></code>, with <code class="docutils literal notranslate"><span class="pre">bg_fallback</span></code>), keeping them in secondary tables and in training.</p>
+<p><strong>Recommendation.</strong> (c), with the mock and real field-edge fractions side by side, a realism number in itself. Use the
+same rule for the target without a source list (0720700101, <code class="docutils literal notranslate"><span class="pre">no_seed</span></code>, excluded nowhere; R4:190-192).</p>
+</section>
+<section id="the-mock-sz-centre-and-its-check">
+<h2>8. The mock SZ centre and its check<a class="headerlink" href="#the-mock-sz-centre-and-its-check" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> Mocks start from the Compton-y centroid within 2.4’ (the ACT DR6 reference filter) or R500 (PSZ2) plus
+the drawn error, and record SZ offset, drawn error and move (LEDGER:2216-2231;
+<code class="docutils literal notranslate"><span class="pre">src/tngxmm/photometry/catalogue_positions.py:111-129</span></code>; <code class="docutils literal notranslate"><span class="pre">src/tngxmm/massfit/build_fit_targets.py:94,</span> <span class="pre">128-130</span></code>). How
+faithful must this be, and what agreement counts?</p>
+<p><strong>Facts.</strong></p>
+<ul class="simple">
+<li><p>Still open: the iteration starts at the halo centre (<code class="docutils literal notranslate"><span class="pre">src/tngxmm/sim/generate_photons.py:397</span></code>), so a major merger
+settles on the mode nearest the potential minimum (R4:100-103); there is no beam or matched filter
+(LEDGER:2228-2229); the three MACS mocks start at their SZ centre with no error, their real positions being X-ray
+ones (LEDGER:2226-2228).</p></li>
+<li><p>Real moves in units of r90 (TAB): ACT 75 of 207 beyond r90 (36 %, 95 % interval 30-43 %), median 0.82
+(0.70-0.90); PSZ2 34 of 427 (8.0 %, 5.8-10.9 %), median 0.45 (0.42-0.49). Noise alone gives 10 % and 0.55
+(R3:41-42).</p></li>
+<li><p>PSZ2’s POS_ERR is conservative (R3:50): the drawn error alone puts about 10 % of PSZ2 mocks beyond r90, the top of
+the real interval. For ACT the simulated offsets must supply all of the excess.</p></li>
+</ul>
+<p><strong>Options.</strong> Model: (a) as now; (b) iterate from the maximum of the y map smoothed at the catalogue’s scale (code
+only, in before the regeneration that is due anyway); (c) a matched filter with the catalogue beam (ACT 1.4’,
+R4:92-93; most faithful, most code). Check: (i) per catalogue, the mock share beyond r90 and the mock median move/r90
+inside the real 95 % intervals, each physics donor weighted once; (ii) two-sample tests at 5 %, weaker, since with 207
+ACT targets not rejecting is not agreement.</p>
+<p><strong>Recommendation.</strong> (b) before regenerating; MACS mocks started at their own X-ray peak, or left out of the centring
+statistics. Check (i), two-sided for ACT and one-sided for PSZ2 (fail only below the real lower bound, the direction
+of the round-3 concern). Fix now what a failure means: centring enters the budget through an arm that redraws mock
+positions with ACT’s 0.5 Mpc cross-matching allowance in quadrature
+(<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DEV/REVIEW_FACTORS/actsrc/ACTDR6Clusters.tex:782-799</span></code>; R3:80-81), and (c) is built before the paper. Never
+answer a failure by rescaling the drawn error to the real moves: that is a factor fitted on real data.</p>
+</section>
+<section id="realism-start">
+<h2>9. Realism start<a class="headerlink" href="#realism-start" title="Link to this heading">¶</a></h2>
+<p><strong>Question.</strong> A mock row searches within the donor’s <code class="docutils literal notranslate"><span class="pre">search_arcsec</span></code>, measured on the donor’s image at the donor’s z
+(<code class="docutils literal notranslate"><span class="pre">src/tngxmm/realism/features.py:119-121</span></code>; R4:119-138). Keep, or give each row its own first pass?</p>
+<p><strong>Facts.</strong> The apertures are the donor’s catalogue R500 for both rows, scaled to each row’s z (<code class="docutils literal notranslate"><span class="pre">features.py:67-71,</span> <span class="pre">137,</span> <span class="pre">162</span></code>). The mock fit targets already run the real targets’ two-pass search. TNG’s L_X excess makes mock first
+guesses heavier (OPEN:502-504), so a mock’s own search is wider. Only realism features change (R4:132-134); no frozen
+run exists, and its registration is redone anyway (DEC:4294-4295).</p>
+<p><strong>Options.</strong> (a) As now: a number from one image used on another, at the wrong physical scale when z_obs differs.
+(b) The donor’s radius in kpc at the view’s z, like the aperture: consistent for a donor-conditioned design. (c) The
+mock’s own centre and radius, from its fit target: the real row’s procedure at no cost, and the L_X excess shows in
+the start as it would for a real cluster.</p>
+<p><strong>Recommendation.</strong> (c), keeping the donor apertures as a declared design; both written into the realism
+registration.</p>
+</section>
+<section id="other-decisions-that-block-the-next-runs">
+<h2>10. Other decisions that block the next runs<a class="headerlink" href="#other-decisions-that-block-the-next-runs" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Q7</strong> (STATUS:211-213; INTEG:80-91): tie the sky and soft-proton levels across bands as X-COP does (24 free
+background parameters down to about six, aimed at the deficit’s degeneracy), and start the walkers inside the prior
+bounds. Recommendation: both as hashed switches tested as B1 arms (about 0.8 node-hours each); the first bears on
+items 2 and 4.</p></li>
+<li><p><strong>Q8</strong>, when the six projections start (STATUS:214-215; about 63 node-hours, STATUS:131-135): not needed for B1 or
+pass 1; pass 2 costs 128 node-hours with six views and 44 with one (DEC:2819-2824). Recommendation: decide before
+pass 2.</p></li>
+<li><p><strong>Mock-side changes</strong> belong before the regeneration, or it runs twice: the SZ and MACS starts (item 8), pn-corner
+protons if the QPB level stays fixed (item 4).</p></li>
+<li><p><strong>Clean cells fitted with the background frozen at the true zero</strong> inside the gate (CG:643; R4:198-199).
+Recommendation: keep, labelled as a test of the cluster model alone.</p></li>
+<li><p><strong>Q14 is out of date</strong>: it names the 90” core protection that round 1 replaced by the 16.487” HEW (STATUS:232-234,
+261; LEDGER:1779-1791). Its sensitivities belong to the old baseline, and DEC:4288-4289 still lists 90” as kept.
+Close it, or rerun the sensitivity at the HEW in the B1 job.</p></li>
+<li><p><strong>Q13</strong>, the donor cap factor (STATUS:229-231): affects the matched draw only; decide before pass 2.</p></li>
+</ul>
+</section>
+<section id="order-of-work-if-these-are-taken">
+<h2>Order of work if these are taken<a class="headerlink" href="#order-of-work-if-these-are-taken" title="Link to this heading">¶</a></h2>
+<p>Login first: one dated commit with the rules of items 2, 3, 4, 7 and 8, the new arms in <code class="docutils literal notranslate"><span class="pre">FIT_ARMS</span></code>, and the FWC
+corner/field split for d. Then, each on its own go and one node at a time: B1 (about 3 node-hours plus 0.8 per added
+arm, STATUS:71-72); the real refits with the fitter B1 settles, plus the free-level fits if item 4 needs them (6-8
+node-hours each, DEC:2817); the item-8 changes, the regeneration and pass 1 (44 node-hours, DEC:2818); the re-match.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Decisions before the next node runs (2026-11-03)</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#matching-mass">1. Matching mass</a></li>
+<li><a class="reference internal" href="#gate-thresholds">2. Gate thresholds</a></li>
+<li><a class="reference internal" href="#tolerances-of-the-paired-study-arms">3. Tolerances of the paired study arms</a></li>
+<li><a class="reference internal" href="#qpb-level-in-production">4. QPB level in production</a></li>
+<li><a class="reference internal" href="#training-row-filter-of-the-ml-bank">5. Training-row filter of the ML bank</a></li>
+<li><a class="reference internal" href="#protection-radius-in-the-centre-search">6. Protection radius in the centre search</a></li>
+<li><a class="reference internal" href="#the-21-field-edge-real-targets">7. The 21 field-edge real targets</a></li>
+<li><a class="reference internal" href="#the-mock-sz-centre-and-its-check">8. The mock SZ centre and its check</a></li>
+<li><a class="reference internal" href="#realism-start">9. Realism start</a></li>
+<li><a class="reference internal" href="#other-decisions-that-block-the-next-runs">10. Other decisions that block the next runs</a></li>
+<li><a class="reference internal" href="#order-of-work-if-these-are-taken">Order of work if these are taken</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

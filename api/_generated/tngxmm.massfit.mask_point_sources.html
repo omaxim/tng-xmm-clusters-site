@@ -1,0 +1,1065 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="tngxmm.massfit.model_shells" href="tngxmm.massfit.model_shells.html"><link rel="prev" title="tngxmm.massfit.like_cache" href="tngxmm.massfit.like_cache.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>tngxmm.massfit.mask_point_sources - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-tngxmm.massfit.mask_point_sources">
+<span id="tngxmm-massfit-mask-point-sources"></span><h1>tngxmm.massfit.mask_point_sources<a class="headerlink" href="#module-tngxmm.massfit.mask_point_sources" title="Link to this heading">¶</a></h1>
+<p>Point-source masks for the hydrostatic fit, the same on mocks and real data.</p>
+<p>The readers make the masking usable on both sides (<code class="docutils literal notranslate"><span class="pre">CampaignSpec.massfit.source_masking</span></code>).</p>
+<p>The mask zeroes the exposure map within <code class="docutils literal notranslate"><span class="pre">mask_rad_as</span></code> of each point source,
+so the masked pixels drop out of the image, the background and the coverage at
+once; sources within <code class="docutils literal notranslate"><span class="pre">protect_core_as</span></code> of the cluster centre are never
+masked, and no pixel within that radius is masked (the BCG / cool core
+survives).  <code class="docutils literal notranslate"><span class="pre">prepare_images.preprocess_one</span></code> applies it per image on the
+native grid.</p>
+<p>Source lists:</p>
+<ul class="simple">
+<li><p>real observations: the XMM PPS source list <code class="docutils literal notranslate"><span class="pre">P&lt;obsid&gt;EPX000OBSMLI0000.FTZ</span></code>
+(emldetect), point-like sources only (<code class="docutils literal notranslate"><span class="pre">EP_EXTENT</span> <span class="pre">==</span> <span class="pre">0</span></code>, the cluster itself
+is extended) above a detection likelihood <code class="docutils literal notranslate"><span class="pre">EP_DET_ML</span> <span class="pre">&gt;</span> <span class="pre">det_ml_min</span></code>;</p></li>
+<li><p>mocks: a source table with sky positions (<code class="docutils literal notranslate"><span class="pre">RA</span></code>/<code class="docutils literal notranslate"><span class="pre">DEC</span></code> columns, FITS or a
+whitespace table with a <code class="docutils literal notranslate"><span class="pre">#</span></code> header).  A box-frame table carries RA = Dec = 0
+(positions only in the simulator box frame), so <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_point_sources" title="tngxmm.massfit.mask_point_sources.mock_point_sources"><code class="xref py py-func docutils literal notranslate"><span class="pre">mock_point_sources()</span></code></a>
+refuses it; <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources" title="tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources"><code class="xref py py-func docutils literal notranslate"><span class="pre">legacy_v3_mock_sources()</span></code></a> projects its box positions onto the
+per-camera grid with the instrument stage’s own transform, and
+<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_sources_for_view" title="tngxmm.massfit.mask_point_sources.mock_sources_for_view"><code class="xref py py-func docutils literal notranslate"><span class="pre">mock_sources_for_view()</span></code></a> picks the right reader.  The instrument stage writes sky
+positions.  With <code class="docutils literal notranslate"><span class="pre">massfit.mock_source_min_flux_cgs</span>
+<span class="pre">=</span> <span class="pre">&quot;per-donor-density&quot;</span></code> a mock masks its sources above the flux at which
+the mock logN-logS has the PPS point-source density of the view’s DONOR
+observation, one threshold per donor in the data-package table of
+<a class="reference internal" href="tngxmm.massfit.build_source_thresholds.html#module-tngxmm.massfit.build_source_thresholds" title="tngxmm.massfit.build_source_thresholds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tngxmm.massfit.build_source_thresholds</span></code></a>.</p></li>
+</ul>
+<p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sources_for_target" title="tngxmm.massfit.mask_point_sources.sources_for_target"><code class="xref py py-func docutils literal notranslate"><span class="pre">sources_for_target()</span></code></a> applies these rules to one fit target and returns
+what it did (recorded by the fit in result.json, provenance.json and the
+<code class="docutils literal notranslate"><span class="pre">fit_results</span></code> table).</p>
+<p class="rubric">References</p>
+<p>xmm_ccf_sas (PPS source lists, emldetect), xmm_mission (XSA/HEASARC archive).</p>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.LEGACY_CACHE" title="tngxmm.massfit.mask_point_sources.LEGACY_CACHE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LEGACY_CACHE</span></code></a></p></td>
+<td><p>read it, write only with an explicit cache_dir)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.V3_BOX_NPIX" title="tngxmm.massfit.mask_point_sources.V3_BOX_NPIX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">V3_BOX_NPIX</span></code></a></p></td>
+<td><p>512 px of 30'/512, centre 256 (xmm_simulator)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.V3_BOX_PIX_ARCMIN" title="tngxmm.massfit.mask_point_sources.V3_BOX_PIX_ARCMIN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">V3_BOX_PIX_ARCMIN</span></code></a></p></td>
+<td><p>512 px of 30'/512, centre 256 (xmm_simulator)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.PER_DONOR_RULES" title="tngxmm.massfit.mask_point_sources.PER_DONOR_RULES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PER_DONOR_RULES</span></code></a></p></td>
+<td><p>mock flux-threshold rules resolved per donor (<code class="docutils literal notranslate"><span class="pre">build_source_thresholds</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.SAS_AUTO" title="tngxmm.massfit.mask_point_sources.SAS_AUTO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAS_AUTO</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sas_sources</span></code> value that asks for the standard location of the target's SAS list (<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="xref py py-func docutils literal notranslate"><span class="pre">sas_list_candidates()</span></code></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.PSF_HEW_ARCSEC" title="tngxmm.massfit.mask_point_sources.PSF_HEW_ARCSEC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSF_HEW_ARCSEC</span></code></a></p></td>
+<td><p>half-energy width [arcsec] of the on-axis pn King PSF of the masks (r0 = 5.495&quot;, alpha = 1.588, CCF XRT3_XPSF row 0 of KING_PARAMS; <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.king_hew_arcsec" title="tngxmm.massfit.mask_point_sources.king_hew_arcsec"><code class="xref py py-func docutils literal notranslate"><span class="pre">king_hew_arcsec()</span></code></a>): the core-protection radius of the fit and the photometry</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.donor_of_view" title="tngxmm.massfit.mask_point_sources.donor_of_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">donor_of_view</span></code></a>(table_path)</p></td>
+<td><p>Obsid of the donor a mock view was observed under, from <code class="docutils literal notranslate"><span class="pre">obs_meta.json</span></code> next to its source table, or None: the conditions donor under the rule <code class="docutils literal notranslate"><span class="pre">nn</span></code> (<code class="docutils literal notranslate"><span class="pre">conditions_obsid</span></code>; its AGN normalisation made the view's sources and its flux limit is the one to mask with), else the physics donor of the package.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.flux_threshold_for_density" title="tngxmm.massfit.mask_point_sources.flux_threshold_for_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_threshold_for_density</span></code></a>(fluxes, ...)</p></td>
+<td><p>Flux above which a mock source list has <code class="docutils literal notranslate"><span class="pre">density_per_deg2</span></code> sources per deg^2 (matches the mock mask to the source density of a real PPS list).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.king_hew_arcsec" title="tngxmm.massfit.mask_point_sources.king_hew_arcsec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">king_hew_arcsec</span></code></a>(r0_arcsec, alpha)</p></td>
+<td><p>Half-energy width (twice the radius enclosing half the counts) of a King profile (1 + (r/r0)^2)^-alpha, whose encircled fraction is 1 - (1 + (r/r0)^2)^(1 - alpha).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources" title="tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">legacy_v3_mock_sources</span></code></a>(path, image_header, ...)</p></td>
+<td><p>[(ra, dec, flux)] of a <code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> box-frame text table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mask_point_sources" title="tngxmm.massfit.mask_point_sources.mask_point_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mask_point_sources</span></code></a>(shape, header, ...)</p></td>
+<td><p>Stage entry point: <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask" title="tngxmm.massfit.mask_point_sources.source_mask"><code class="xref py py-func docutils literal notranslate"><span class="pre">source_mask()</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_point_sources" title="tngxmm.massfit.mask_point_sources.mock_point_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mock_point_sources</span></code></a>(path[, min_flux_cgs, ...])</p></td>
+<td><p>[(ra, dec, weight)] from a mock source table with sky positions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_sources_for_view" title="tngxmm.massfit.mask_point_sources.mock_sources_for_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mock_sources_for_view</span></code></a>(path[, image_header, ...])</p></td>
+<td><p>Mock point sources of one view: a table with sky positions, else the box-frame table projected with <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources" title="tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources"><code class="xref py py-func docutils literal notranslate"><span class="pre">legacy_v3_mock_sources()</span></code></a> (position angle from <code class="docutils literal notranslate"><span class="pre">obs_meta.json</span></code> next to the table unless given; needs the per-camera image header for the WCS).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_table_lognlogs" title="tngxmm.massfit.mask_point_sources.mock_table_lognlogs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mock_table_lognlogs</span></code></a>(table_path)</p></td>
+<td><p>The AGN number counts a mock source table was drawn with: header <code class="docutils literal notranslate"><span class="pre">AGNLNLS</span></code> of its SRCLIST extension (written by the instrument stage when <code class="docutils literal notranslate"><span class="pre">agn_lognlogs</span></code> is not the default), else <code class="docutils literal notranslate"><span class="pre">'moretti03-hard'</span></code> (also for text tables).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.pps_point_sources" title="tngxmm.massfit.mask_point_sources.pps_point_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pps_point_sources</span></code></a>(obsid[, det_ml_min, ...])</p></td>
+<td><p>Point-like PPS sources of <code class="docutils literal notranslate"><span class="pre">obsid</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.psf_mask_radii_as" title="tngxmm.massfit.mask_point_sources.psf_mask_radii_as"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psf_mask_radii_as</span></code></a>(img, exp, wcs_or_hdr, ...)</p></td>
+<td><p>Mask radius [arcsec] of every source on one native-grid count image <code class="docutils literal notranslate"><span class="pre">img</span></code> (exposure <code class="docutils literal notranslate"><span class="pre">exp</span></code>): the PSF-derived rule of the campaign Lx photometry (<a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html#tngxmm.photometry.estimate_lx_background.source_radii_px" title="tngxmm.photometry.estimate_lx_background.source_radii_px"><code class="xref py py-func docutils literal notranslate"><span class="pre">tngxmm.photometry.estimate_lx_background.source_radii_px()</span></code></a>): at least 30&quot; (King EEF 0.87), extended until the PSF wing of the source's counts falls below 0.1 of the local level (sector-clipped ring 2-3 r_min), at most 150&quot;.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.read_pps_source_list" title="tngxmm.massfit.mask_point_sources.read_pps_source_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pps_source_list</span></code></a>(path[, det_ml_min])</p></td>
+<td><p>[(ra, dec, det_ml)] of point-like (EP_EXTENT == 0) PPS sources with EP_DET_ML &gt; det_ml_min.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.read_sas_source_list" title="tngxmm.massfit.mask_point_sources.read_sas_source_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sas_source_list</span></code></a>(path[, det_ml_min])</p></td>
+<td><p>[(ra, dec, det_ml)] of point-like SAS <code class="docutils literal notranslate"><span class="pre">edetect_chain</span></code> sources with DET_ML &gt; <code class="docutils literal notranslate"><span class="pre">det_ml_min</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.resolve_sas_list" title="tngxmm.massfit.mask_point_sources.resolve_sas_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_sas_list</span></code></a>(kind, obsid, *[, ...])</p></td>
+<td><p>The SAS source list of a fit target (<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="xref py py-func docutils literal notranslate"><span class="pre">sas_list_candidates()</span></code></a>); FileNotFoundError naming every place tried and the command that writes it when there is none (never a silent fallback to another mask).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sas_list_candidates</span></code></a>(kind, obsid, *[, ...])</p></td>
+<td><p>Where the SAS <code class="docutils literal notranslate"><span class="pre">edetect_chain</span></code> source list of one fit target lives (first existing wins).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask" title="tngxmm.massfit.mask_point_sources.source_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source_mask</span></code></a>(shape, wcs_or_hdr, pixsize_as, ...)</p></td>
+<td><p>Boolean mask (True = KEEP) for a native-grid image, zeroing pixels within <code class="docutils literal notranslate"><span class="pre">mask_rad_as</span></code> of each point source (or <code class="docutils literal notranslate"><span class="pre">radii_as[i]</span></code> of source i: the PSF-derived radii of <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.psf_mask_radii_as" title="tngxmm.massfit.mask_point_sources.psf_mask_radii_as"><code class="xref py py-func docutils literal notranslate"><span class="pre">psf_mask_radii_as()</span></code></a>), but never within <code class="docutils literal notranslate"><span class="pre">protect_core_as</span></code> of the cluster centre (so the BCG / cool core survives).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sources_for_target" title="tngxmm.massfit.mask_point_sources.sources_for_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sources_for_target</span></code></a>(kind, obsid, *[, ...])</p></td>
+<td><p>(sources, info) of one fit target; ONE rule set for both sides.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.view_source_table" title="tngxmm.massfit.mask_point_sources.view_source_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">view_source_table</span></code></a>(image_path)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> of the view an image belongs to (the fit tree links <code class="docutils literal notranslate"><span class="pre">percam/</span></code> products: the table sits one level above the resolved image), or None.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.LEGACY_CACHE">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">LEGACY_CACHE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'$TNGXMM_SITE_MBPROJ/pps_srclist'</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.LEGACY_CACHE" title="Link to this definition">¶</a></dt>
+<dd><p>read it, write only with an explicit cache_dir)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>download cache of the PPS source lists (production area</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.read_pps_source_list">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">read_pps_source_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">det_ml_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#read_pps_source_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.read_pps_source_list" title="Link to this definition">¶</a></dt>
+<dd><p>[(ra, dec, det_ml)] of point-like (EP_EXTENT == 0) PPS sources with EP_DET_ML &gt; det_ml_min.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.read_sas_source_list">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">read_sas_source_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">det_ml_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#read_sas_source_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.read_sas_source_list" title="Link to this definition">¶</a></dt>
+<dd><p>[(ra, dec, det_ml)] of point-like SAS <code class="docutils literal notranslate"><span class="pre">edetect_chain</span></code> sources with DET_ML &gt; <code class="docutils literal notranslate"><span class="pre">det_ml_min</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">path</span></code>: the <code class="docutils literal notranslate"><span class="pre">sources.csv</span></code> of <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">instrument</span> <span class="pre">sas-detect</span></code> (summary rows, columns RA, DEC,
+DET_ML, EXT) or its <code class="docutils literal notranslate"><span class="pre">emllist.fits</span></code> (extension SRCLIST, summary rows ID_INST == 0 and ID_BAND == 0).
+Extended detections (EXT &gt; 0: the cluster itself and extended structure) are not point sources and
+are not returned; the core-protection rule of <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask" title="tngxmm.massfit.mask_point_sources.source_mask"><code class="xref py py-func docutils literal notranslate"><span class="pre">source_mask()</span></code></a> then applies as to any list.
+The same reader serves mocks and real observations.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.pps_point_sources">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">pps_point_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obsid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">det_ml_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'$TNGXMM_SITE_MBPROJ/pps_srclist'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#pps_point_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.pps_point_sources" title="Link to this definition">¶</a></dt>
+<dd><p>Point-like PPS sources of <code class="docutils literal notranslate"><span class="pre">obsid</span></code>.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">&lt;cache_dir&gt;/P&lt;obsid&gt;_OBSMLI.FTZ</span></code>; if absent and <code class="docutils literal notranslate"><span class="pre">download</span></code>, fetches
+it from the HEASARC mirror of the XSA into <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code> (so give a <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code> of your own with it: the default is
+the production cache, which is only read).  Returns [] when unavailable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.mock_point_sources">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">mock_point_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flux_cgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Fx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#mock_point_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.mock_point_sources" title="Link to this definition">¶</a></dt>
+<dd><p>[(ra, dec, weight)] from a mock source table with sky positions.</p>
+<p>Accepts a FITS table or a whitespace table (<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">srcnum</span> <span class="pre">X</span> <span class="pre">Y</span> <span class="pre">Fx</span> <span class="pre">Gamma</span> <span class="pre">NH</span> <span class="pre">z</span> <span class="pre">RA</span> <span class="pre">Dec</span></code>).
+<code class="docutils literal notranslate"><span class="pre">min_flux_cgs</span></code> keeps sources with <code class="docutils literal notranslate"><span class="pre">weight_column</span> <span class="pre">&gt;=</span> <span class="pre">min_flux_cgs</span></code>.  Raises
+ValueError when every RA/Dec is 0 (box-frame tables: positions only in the simulator frame).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.V3_BOX_NPIX">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">V3_BOX_NPIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">512</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.V3_BOX_NPIX" title="Link to this definition">¶</a></dt>
+<dd><p>512 px of 30’/512, centre 256 (xmm_simulator)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>simulation box of a box-frame AGN table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.V3_BOX_PIX_ARCMIN">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">V3_BOX_PIX_ARCMIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05859375</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.V3_BOX_PIX_ARCMIN" title="Link to this definition">¶</a></dt>
+<dd><p>512 px of 30’/512, centre 256 (xmm_simulator)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>simulation box of a box-frame AGN table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">legacy_v3_mock_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_header</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posangle_deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flux_cgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">648</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pix_arcsec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#legacy_v3_mock_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources" title="Link to this definition">¶</a></dt>
+<dd><p>[(ra, dec, flux)] of a <code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> box-frame text table.</p>
+<p>The table carries RA = Dec = 0; the box position (X, Y) maps to the
+per-camera image grid exactly as the instrument stage projects the AGN
+(detector frame, rotated by the position angle, not dithered):
+offset = (X - 256, Y - 256) x 30’/512, rotated, then 0-indexed pixel
+323.5 + offset / 4”.  The sky position uses the per-camera image WCS
+(<code class="docutils literal notranslate"><span class="pre">image_header</span></code>), so <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask" title="tngxmm.massfit.mask_point_sources.source_mask"><code class="xref py py-func docutils literal notranslate"><span class="pre">source_mask()</span></code></a> maps it back to the same pixel.
+On the fixture view the 60 brightest sources stack to 100 counts per
+5x5 px against 10 at random offsets (<code class="docutils literal notranslate"><span class="pre">tests/unit/test_massfit_switches.py</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.mock_sources_for_view">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">mock_sources_for_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posangle_deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flux_cgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#mock_sources_for_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.mock_sources_for_view" title="Link to this definition">¶</a></dt>
+<dd><p>Mock point sources of one view: a table with sky positions, else the
+box-frame table projected with <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources" title="tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources"><code class="xref py py-func docutils literal notranslate"><span class="pre">legacy_v3_mock_sources()</span></code></a> (position angle
+from <code class="docutils literal notranslate"><span class="pre">obs_meta.json</span></code> next to the table unless given; needs the per-camera
+image header for the WCS).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.PER_DONOR_RULES">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">PER_DONOR_RULES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('per-donor-density',</span> <span class="pre">'per-donor-detection-limit')</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.PER_DONOR_RULES" title="Link to this definition">¶</a></dt>
+<dd><p>mock flux-threshold rules resolved per donor (<code class="docutils literal notranslate"><span class="pre">build_source_thresholds</span></code>)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.view_source_table">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">view_source_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#view_source_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.view_source_table" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> of the view an image belongs to (the fit tree links
+<code class="docutils literal notranslate"><span class="pre">percam/</span></code> products: the table sits one level above the resolved image), or None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.mock_table_lognlogs">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">mock_table_lognlogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#mock_table_lognlogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.mock_table_lognlogs" title="Link to this definition">¶</a></dt>
+<dd><p>The AGN number counts a mock source table was drawn with: header <code class="docutils literal notranslate"><span class="pre">AGNLNLS</span></code> of its
+SRCLIST extension (written by the instrument stage when <code class="docutils literal notranslate"><span class="pre">agn_lognlogs</span></code> is not the
+default), else <code class="docutils literal notranslate"><span class="pre">'moretti03-hard'</span></code> (also for text tables).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.donor_of_view">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">donor_of_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#donor_of_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.donor_of_view" title="Link to this definition">¶</a></dt>
+<dd><p>Obsid of the donor a mock view was observed under, from <code class="docutils literal notranslate"><span class="pre">obs_meta.json</span></code> next to its source table, or
+None: the conditions donor under the rule <code class="docutils literal notranslate"><span class="pre">nn</span></code> (<code class="docutils literal notranslate"><span class="pre">conditions_obsid</span></code>; its AGN normalisation made the
+view’s sources and its flux limit is the one to mask with), else the physics donor of the package.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.SAS_AUTO">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">SAS_AUTO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'auto'</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.SAS_AUTO" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">sas_sources</span></code> value that asks for the standard location of the target’s SAS list (<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="xref py py-func docutils literal notranslate"><span class="pre">sas_list_candidates()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.PSF_HEW_ARCSEC">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">PSF_HEW_ARCSEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16.487</span></em><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.PSF_HEW_ARCSEC" title="Link to this definition">¶</a></dt>
+<dd><p>half-energy width [arcsec] of the on-axis pn King PSF of the masks (r0 = 5.495”, alpha = 1.588, CCF XRT3_XPSF row 0
+of KING_PARAMS; <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.king_hew_arcsec" title="tngxmm.massfit.mask_point_sources.king_hew_arcsec"><code class="xref py py-func docutils literal notranslate"><span class="pre">king_hew_arcsec()</span></code></a>): the core-protection radius of the fit and the photometry</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.king_hew_arcsec">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">king_hew_arcsec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r0_arcsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#king_hew_arcsec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.king_hew_arcsec" title="Link to this definition">¶</a></dt>
+<dd><p>Half-energy width (twice the radius enclosing half the counts) of a King profile (1 + (r/r0)^2)^-alpha, whose
+encircled fraction is 1 - (1 + (r/r0)^2)^(1 - alpha).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.sas_list_candidates">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">sas_list_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obsid</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#sas_list_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="Link to this definition">¶</a></dt>
+<dd><p>Where the SAS <code class="docutils literal notranslate"><span class="pre">edetect_chain</span></code> source list of one fit target lives (first existing wins).</p>
+<ul class="simple">
+<li><p>mock: <code class="docutils literal notranslate"><span class="pre">&lt;view&gt;/sas_detect/sources.csv</span></code>, written next to the view’s products by
+<code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">instrument</span> <span class="pre">sas-detect</span> <span class="pre">--view-dir</span> <span class="pre">&lt;view&gt;</span></code>; <code class="docutils literal notranslate"><span class="pre">&lt;view&gt;</span></code> is the directory of the view’s
+<code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> / <code class="docutils literal notranslate"><span class="pre">image_merged.fits</span></code> (found from the fit image <code class="docutils literal notranslate"><span class="pre">image_path</span></code>);</p></li>
+<li><p>real: <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DATA/sas_detect/&lt;obsid&gt;/sources.csv</span></code> (data package; <code class="docutils literal notranslate"><span class="pre">data_root</span></code> overrides
+<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DATA</span></code>), a copy of the <code class="docutils literal notranslate"><span class="pre">sources.csv</span></code> of <code class="docutils literal notranslate"><span class="pre">tngxmm</span> <span class="pre">instrument</span> <span class="pre">sas-detect</span> <span class="pre">--real-dir</span></code>;
+the CLI’s own layout <code class="docutils literal notranslate"><span class="pre">&lt;out-dir&gt;/&lt;obsid&gt;/sas_detect/sources.csv</span></code> is accepted too when the list
+was written straight into the data package (<code class="docutils literal notranslate"><span class="pre">--out-dir</span> <span class="pre">$TNGXMM_DATA/sas_detect</span></code>).</p></li>
+</ul>
+<p>Returns the candidate paths in the order tried.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.resolve_sas_list">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">resolve_sas_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obsid</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#resolve_sas_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.resolve_sas_list" title="Link to this definition">¶</a></dt>
+<dd><p>The SAS source list of a fit target (<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates" title="tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="xref py py-func docutils literal notranslate"><span class="pre">sas_list_candidates()</span></code></a>); FileNotFoundError naming
+every place tried and the command that writes it when there is none (never a silent fallback to
+another mask).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.sources_for_target">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">sources_for_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obsid</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">det_ml_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pps_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_min_flux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">donor_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sas_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#sources_for_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.sources_for_target" title="Link to this definition">¶</a></dt>
+<dd><p>(sources, info) of one fit target; ONE rule set for both sides.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sas_sources</span></code> (a path, or <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>: the standard location, <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.resolve_sas_list" title="tngxmm.massfit.mask_point_sources.resolve_sas_list"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_sas_list()</span></code></a>): the SAS
+<code class="docutils literal notranslate"><span class="pre">edetect_chain</span></code> list of the target, point-like (EXT = 0) above DET_ML <code class="docutils literal notranslate"><span class="pre">det_ml_min</span></code>
+(<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.read_sas_source_list" title="tngxmm.massfit.mask_point_sources.read_sas_source_list"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_sas_source_list()</span></code></a>), for mocks AND real data alike; the PPS list and the mock source
+table are not read; a missing list raises.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kind='obs'</span></code>: the PPS list <code class="docutils literal notranslate"><span class="pre">&lt;pps_cache&gt;/P&lt;obsid&gt;_OBSMLI.FTZ</span></code> (default
+<code class="docutils literal notranslate"><span class="pre">$TNGXMM_PPS_CACHE</span></code>, else the default cache), EP_EXTENT = 0 and
+EP_DET_ML &gt; <code class="docutils literal notranslate"><span class="pre">det_ml_min</span></code>; a missing list raises (masking was asked for).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kind='mock'</span></code>: the view’s source table (<code class="docutils literal notranslate"><span class="pre">mock_sources</span></code> or the
+<code class="docutils literal notranslate"><span class="pre">pts_sources.fits</span></code> of the view <code class="docutils literal notranslate"><span class="pre">image_path</span></code> belongs to) above
+<code class="docutils literal notranslate"><span class="pre">mock_min_flux</span></code>: a number [erg/s/cm^2], None (every source), or a
+per-donor rule (<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.PER_DONOR_RULES" title="tngxmm.massfit.mask_point_sources.PER_DONOR_RULES"><code class="xref py py-data docutils literal notranslate"><span class="pre">PER_DONOR_RULES</span></code></a>), whose threshold is read from the
+table of <code class="docutils literal notranslate"><span class="pre">build_source_thresholds</span></code> for the donor (<code class="docutils literal notranslate"><span class="pre">donor_id</span></code>, else the
+view’s <code class="docutils literal notranslate"><span class="pre">obs_meta.json</span></code>).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">info</span></code> is what the fit records (result.json, provenance, fit_results).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.flux_threshold_for_density">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">flux_threshold_for_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fluxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">area_deg2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_per_deg2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#flux_threshold_for_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.flux_threshold_for_density" title="Link to this definition">¶</a></dt>
+<dd><p>Flux above which a mock source list has <code class="docutils literal notranslate"><span class="pre">density_per_deg2</span></code> sources per deg^2
+(matches the mock mask to the source density of a real PPS list).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.psf_mask_radii_as">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">psf_mask_radii_as</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs_or_hdr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixsize_as</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#psf_mask_radii_as"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.psf_mask_radii_as" title="Link to this definition">¶</a></dt>
+<dd><p>Mask radius [arcsec] of every source on one native-grid count image <code class="docutils literal notranslate"><span class="pre">img</span></code> (exposure <code class="docutils literal notranslate"><span class="pre">exp</span></code>): the
+PSF-derived rule of the campaign Lx photometry
+(<a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html#tngxmm.photometry.estimate_lx_background.source_radii_px" title="tngxmm.photometry.estimate_lx_background.source_radii_px"><code class="xref py py-func docutils literal notranslate"><span class="pre">tngxmm.photometry.estimate_lx_background.source_radii_px()</span></code></a>): at least 30” (King EEF 0.87), extended
+until the PSF wing of the source’s counts falls below 0.1 of the local level (sector-clipped ring
+2-3 r_min), at most 150”.  <code class="docutils literal notranslate"><span class="pre">opts</span></code>: LxBackgroundOptions (default: the photometry values).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.source_mask">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">source_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs_or_hdr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixsize_as</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_rad_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protect_core_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16.487</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#source_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.source_mask" title="Link to this definition">¶</a></dt>
+<dd><p>Boolean mask (True = KEEP) for a native-grid image, zeroing pixels within
+<code class="docutils literal notranslate"><span class="pre">mask_rad_as</span></code> of each point source (or <code class="docutils literal notranslate"><span class="pre">radii_as[i]</span></code> of source i: the PSF-derived radii of
+<a class="reference internal" href="#tngxmm.massfit.mask_point_sources.psf_mask_radii_as" title="tngxmm.massfit.mask_point_sources.psf_mask_radii_as"><code class="xref py py-func docutils literal notranslate"><span class="pre">psf_mask_radii_as()</span></code></a>), but never within <code class="docutils literal notranslate"><span class="pre">protect_core_as</span></code> of
+the cluster centre (so the BCG / cool core survives).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.massfit.mask_point_sources.mask_point_sources">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.massfit.mask_point_sources.</span></span><span class="sig-name descname"><span class="pre">mask_point_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixsize_as</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec_c</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/massfit/mask_point_sources.html#mask_point_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.massfit.mask_point_sources.mask_point_sources" title="Link to this definition">¶</a></dt>
+<dd><p>Stage entry point: <a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask" title="tngxmm.massfit.mask_point_sources.source_mask"><code class="xref py py-func docutils literal notranslate"><span class="pre">source_mask()</span></code></a>.</p>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="tngxmm.massfit.model_shells.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">tngxmm.massfit.model_shells</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="tngxmm.massfit.like_cache.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">tngxmm.massfit.like_cache</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">tngxmm.massfit.mask_point_sources</a><ul>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.LEGACY_CACHE"><code class="docutils literal notranslate"><span class="pre">LEGACY_CACHE</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.read_pps_source_list"><code class="docutils literal notranslate"><span class="pre">read_pps_source_list()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.read_sas_source_list"><code class="docutils literal notranslate"><span class="pre">read_sas_source_list()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.pps_point_sources"><code class="docutils literal notranslate"><span class="pre">pps_point_sources()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_point_sources"><code class="docutils literal notranslate"><span class="pre">mock_point_sources()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.V3_BOX_NPIX"><code class="docutils literal notranslate"><span class="pre">V3_BOX_NPIX</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.V3_BOX_PIX_ARCMIN"><code class="docutils literal notranslate"><span class="pre">V3_BOX_PIX_ARCMIN</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.legacy_v3_mock_sources"><code class="docutils literal notranslate"><span class="pre">legacy_v3_mock_sources()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_sources_for_view"><code class="docutils literal notranslate"><span class="pre">mock_sources_for_view()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.PER_DONOR_RULES"><code class="docutils literal notranslate"><span class="pre">PER_DONOR_RULES</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.view_source_table"><code class="docutils literal notranslate"><span class="pre">view_source_table()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mock_table_lognlogs"><code class="docutils literal notranslate"><span class="pre">mock_table_lognlogs()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.donor_of_view"><code class="docutils literal notranslate"><span class="pre">donor_of_view()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.SAS_AUTO"><code class="docutils literal notranslate"><span class="pre">SAS_AUTO</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.PSF_HEW_ARCSEC"><code class="docutils literal notranslate"><span class="pre">PSF_HEW_ARCSEC</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.king_hew_arcsec"><code class="docutils literal notranslate"><span class="pre">king_hew_arcsec()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sas_list_candidates"><code class="docutils literal notranslate"><span class="pre">sas_list_candidates()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.resolve_sas_list"><code class="docutils literal notranslate"><span class="pre">resolve_sas_list()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.sources_for_target"><code class="docutils literal notranslate"><span class="pre">sources_for_target()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.flux_threshold_for_density"><code class="docutils literal notranslate"><span class="pre">flux_threshold_for_density()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.psf_mask_radii_as"><code class="docutils literal notranslate"><span class="pre">psf_mask_radii_as()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.source_mask"><code class="docutils literal notranslate"><span class="pre">source_mask()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.massfit.mask_point_sources.mask_point_sources"><code class="docutils literal notranslate"><span class="pre">mask_point_sources()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

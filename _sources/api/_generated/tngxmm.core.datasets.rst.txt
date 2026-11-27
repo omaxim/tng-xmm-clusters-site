@@ -1,0 +1,30 @@
+tngxmm.core.datasets
+====================
+
+.. automodule:: tngxmm.core.datasets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FILEPATH_ATTR
+      PROVENANCE_ATTR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      table_path
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FrozenReportDataset
+      ManifestDataset
+      PackageTableDataset
+      ReportDataset
+      TableDataset
+      TextDataset
+   

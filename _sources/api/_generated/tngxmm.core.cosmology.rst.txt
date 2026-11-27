@@ -1,0 +1,27 @@
+tngxmm.core.cosmology
+=====================
+
+.. automodule:: tngxmm.core.cosmology
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      H0_KM_S_MPC
+      OM0
+      OL0
+      OB0
+      C_KM_S
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      flat_lcdm
+      get_cosmology
+      kpc_per_arcsec
+      mass_code_to_msun
+      r_delta_kpc
+      theta_arcmin
+   

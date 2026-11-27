@@ -1,0 +1,18 @@
+tngxmm.photometry.measure\_mock\_lx
+===================================
+
+.. automodule:: tngxmm.photometry.measure_mock_lx
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_APERTURES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      measure_mock_lx
+   

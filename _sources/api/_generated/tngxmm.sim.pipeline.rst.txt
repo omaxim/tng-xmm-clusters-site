@@ -1,0 +1,24 @@
+tngxmm.sim.pipeline
+===================
+
+.. automodule:: tngxmm.sim.pipeline
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PER_VIEW_MODULES
+      TARGET_TABLES
+      ID_DTYPES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_campaign
+      create_pipeline
+      cut_mock_gas
+      generate_views
+      plan_campaign
+   

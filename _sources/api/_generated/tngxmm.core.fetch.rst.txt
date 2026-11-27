@@ -1,0 +1,38 @@
+tngxmm.core.fetch
+=================
+
+.. automodule:: tngxmm.core.fetch
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CLUSTER_ROOTS
+      SAS_PREFIX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      disk_usage
+      download
+      fetch
+      item_assets
+      load_catalogue
+      manifest_chunks
+      plan
+      release_assets
+      relocate
+      select
+      sha256
+      token
+      unpack
+      write_site
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      AccessError
+   

@@ -1,0 +1,29 @@
+tngxmm.donors.build\_active\_ccds
+=================================
+
+.. automodule:: tngxmm.donors.build_active_ccds
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ACTIVE_FRACTION
+      MIN_WINDOW_PIXELS
+      MIN_STACK
+      STACK_FRACTION
+      MIN_SEGMENT_PIXELS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ac_col
+      build_active_ccds
+      build_ccd_maps
+      classify_donor
+      expmap_in_mask_frame
+      find_expmap
+      mos1_epoch
+      write_ccd_maps
+   

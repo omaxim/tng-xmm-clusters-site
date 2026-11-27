@@ -1,0 +1,31 @@
+tngxmm.sim.read\_halo\_source
+=============================
+
+.. automodule:: tngxmm.sim.read_halo_source
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ILLUSTRIS_PYTHON_SITE
+      PTYPE_NAMES
+      SELECTIONS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cosmo_units
+      import_illustris_python
+      minimum_image
+      read_halo_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CampaignHaloSource
+      CutoutHaloSource
+      SnapshotHaloSource
+   

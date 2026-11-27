@@ -1,0 +1,41 @@
+tngxmm.ingest.simba\_remote
+===========================
+
+.. automodule:: tngxmm.ingest.simba_remote
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      URL
+      BLOCK
+      SCAN_ROWS
+      GAP_ROWS
+      MAX_REQUEST
+      UNIT_LENGTH_CM
+      M_P
+      METALLICITY_COLUMNS
+      ELEMENTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_block_index
+      canonical_gas_arrays
+      halo_rows
+      ingest_run
+      ingest_snapshot
+      layout
+      main
+      read_rows
+      read_slice
+      select_cubes
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      HttpFile
+   

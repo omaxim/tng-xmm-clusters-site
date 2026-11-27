@@ -1,0 +1,15 @@
+tngxmm.certify.rules
+====================
+
+.. automodule:: tngxmm.certify.rules
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      boot_median
+      evaluate
+      gate
+      report_markdown
+   

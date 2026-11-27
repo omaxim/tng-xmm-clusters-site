@@ -1,0 +1,45 @@
+tngxmm.instrument.donor\_tables
+===============================
+
+.. automodule:: tngxmm.instrument.donor_tables
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TABLE_FILES
+      STAGE_FILES
+      CENTRE_TABLES
+      BUILT_TABLES
+      CHECKED_TABLES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_donor_tables
+      check_inputs
+      check_table
+      core_offset_gaps
+      current_inputs
+      donor_rows
+      is_package_copy
+      measurement_record
+      missing_donors
+      observations_csv
+      pps_cache
+      pps_cache_mismatch
+      qpb_unit_gaps
+      read_table
+      required_tables
+      soft_proton_gaps
+      table_path
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      DonorTablesError
+      StaleTableError
+   

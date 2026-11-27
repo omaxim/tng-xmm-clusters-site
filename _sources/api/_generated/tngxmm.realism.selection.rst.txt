@@ -1,0 +1,18 @@
+tngxmm.realism.selection
+========================
+
+.. automodule:: tngxmm.realism.selection
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      select_views
+   

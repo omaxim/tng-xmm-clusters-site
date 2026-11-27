@@ -1,0 +1,1198 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="tngxmm.donors.pair_six_views" href="tngxmm.donors.pair_six_views.html"><link rel="prev" title="tngxmm.donors.pair_fit_mass" href="tngxmm.donors.pair_fit_mass.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>tngxmm.donors.pair_projections - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-tngxmm.donors.pair_projections">
+<span id="tngxmm-donors-pair-projections"></span><h1>tngxmm.donors.pair_projections<a class="headerlink" href="#module-tngxmm.donors.pair_projections" title="Link to this heading">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Release 1.2 pairing: the projections of a halo-snapshot and their physics donors.
+
+Release 1.2 observes every halo-snapshot along ``n_projections`` lines of sight (the six icosahedral axes of
+``sim.projection = 'icosahedral6'``) and pairs the HALO-SNAPSHOT with real observations, not each view on its own: a
+one-to-many assignment of up to ``n_projections`` distinct physics donors (DECISIONS, "Release 1.2 (planned,
+2026-10-26)" and "Release 1.2: six projections per halo, each under a different donor" of the design note of
+2026-10-27).
+
+Window (fixed, never widened).  An observation is a candidate of a halo-snapshot when |z_snap - z_ref| &lt;= ``dz_max``
+and |log M_halo - log M_ref| &lt;= ``mass_window_dex``.  ``dz_max`` = 0.25 is the redshift window of the matched draw
+(``params:donors.matched.dz_max``, ledger ``method.matched_draw``).  The mass window is a caliper (decision of
+2026-11-04, ledger ``method.pairing_caliper``): by default (``mass_window_dex`` None) 0.25 standard deviations of the
+log10 matching mass of the reference observations with a finite mass and redshift (:data:`CALIPER_SD`,
+:func:`caliper_dex`), the caliper Rosenbaum &amp; Rubin (1985) suggest for nearest-neighbour matching (as summarised by
+Stuart 2010, Sect. 2.2); it is computed from the reference table alone, before any halo is paired, recorded in the
+report (``mass_window_dex``, ``mass_window_rule``) and never widened.  A number in ``mass_window_dex`` fixes the window
+instead (a sensitivity arm).  The masses are columns the
+caller names (``halo_mass_col``, ``ref_mass_col``, log10 Msun, no default): the plan of 2026-10-27 pairs the
+hydrostatic fit mass M_fit on both sides, with no catalogue mass and no bias factor.  The candidates are ranked by the
+combined distance of the matched draw, d^2 = (dlog M / ``sigma_logm_dex``)^2 + (dz / ``sigma_z``)^2 with both widths
+0.05 (``params:donors.matched.sigma_logm_dex`` and ``sigma_z``, ledger ``method.matched_kernel_widths``), ties by
+obsid.
+
+Assignment.  With k candidates the halo-snapshot has k_eff = min(k, ``n_projections``) distinct physics donors, its
+k_eff nearest; projection p (0-based) takes the (p mod k_eff)-th nearest, so a shortfall is filled by repeating the
+nearest matches in turn, never by widening the window.  The rank of a view's physics donor is therefore tied to its
+projection index: view 0 has the nearest, and a subset of views chosen by index (the two fitted views of pass 2,
+say) is not a random subset of the pairs.  The number of distinct physics donors is recorded per halo-snapshot
+(``n_physics_donors``, ``shortfall``) and reported by mass and redshift (:func:`shortfall_by_mass_z`).
+
+Assignment ``least_used`` (``PairingSpec.assignment``; the default ``nearest`` is the rule above).  With more
+candidates than projections the nearest ``n_projections`` are not the only choice, and taking them for every
+halo-snapshot leaves the observations that are never among anyone's nearest without a mock, and loads a few
+observations with hundreds of views.  Under ``least_used`` the window and the distance are the same, and a
+halo-snapshot takes, among its candidates, the ``n_projections`` that serve the fewest views so far (ties to the
+nearer, then to the lower obsid); its projections take them in order of distance, so view 0 still has the nearest of
+the chosen.  The halo-snapshots are assigned in order of their number of candidates, fewest first (ties by ``sim``,
+``snap``, ``halo_id``), so that those with little choice do not find their few candidates already loaded.  A
+halo-snapshot with at most ``n_projections`` candidates gets the same donors as under ``nearest``.  ``donor_rank`` is
+then the rank of the donor among the candidates, which is no longer the projection index.
+
+Unpaired halo-snapshots.  A halo-snapshot with no observation in the window is UNPAIRED (``paired`` False,
+``donor_id`` empty).  The design keeps such halo-snapshots for training, observed under conditions donors only, and
+leaves them out of every mock-against-real statistic (:func:`drop_unpaired`).  Generating their views is not supported
+yet (release 1.2, E1): :func:`tngxmm.core.pool.replica_package` refuses a row with ``paired`` False.  The pairing
+records ``conditions_anchor_id`` for them, the nearest observation by the same distance without the window; it would
+place the views in the condition space (:func:`tngxmm.instrument.conditions_donor.draw_projection_conditions`) and
+lends no mass, redshift or count target.  For a paired projection the anchor is its physics donor.
+
+Every row also carries ``conditions_anchors``, the anchors of all projections of its halo-snapshot
+(``"0:&lt;obsid&gt;;1:&lt;obsid&gt;;..."``, :func:`format_anchor_map`): the per-projection conditions draw reads them from any one
+row, so a target list cut to some views, or a donor excluded at run time, leaves the draw of every other view as it is.
+
+Donor folds.  With ``folds`` (obsid -&gt; donor fold) the report counts the paired halo-snapshots whose physics donors lie
+in more than one fold.  A ``donor_fold`` column in the halo table restricts the candidates and the anchor of each
+halo-snapshot to the observations of that fold, so all its projections stay in one fold.
+
+No random number enters: the pairing is a deterministic function of the two tables and the settings.
+
+.. rubric:: References
+
+stuart2010 (the caliper of nearest-neighbour matching); the redshift window and the distance are those of
+:mod:`tngxmm.donors.sample_matched` with the parameters of ``params:donors.matched``.
+</pre></div>
+</div>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.PAIRED_COLUMN" title="tngxmm.donors.pair_projections.PAIRED_COLUMN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PAIRED_COLUMN</span></code></a></p></td>
+<td><p>the column of a view table that says whether the view's halo-snapshot has a physics donor (release 1.2); a table without it pairs every row with its <code class="docutils literal notranslate"><span class="pre">donor_id</span></code> (the target lists of releases 1.0 to 1.1)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.ANCHOR_COLUMN" title="tngxmm.donors.pair_projections.ANCHOR_COLUMN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ANCHOR_COLUMN</span></code></a></p></td>
+<td><p>the column of a view table that names the observation whose condition-space neighbours are the conditions candidates of the view (its physics donor, or the nearest observation of an unpaired halo-snapshot)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.ANCHORS_COLUMN" title="tngxmm.donors.pair_projections.ANCHORS_COLUMN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ANCHORS_COLUMN</span></code></a></p></td>
+<td><p>the column with the anchors of every projection of the row's halo-snapshot (<a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map" title="tngxmm.donors.pair_projections.format_anchor_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">format_anchor_map()</span></code></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.SHORTFALL_MASS_EDGES_MSUN" title="tngxmm.donors.pair_projections.SHORTFALL_MASS_EDGES_MSUN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SHORTFALL_MASS_EDGES_MSUN</span></code></a></p></td>
+<td><p>the bins in which the design note lists the real fit masses (1-2, 2-4, 4-6, 6-8, 8-10, 10-15 and above 15 x 1e14 Msun), with a bin below 1e14</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.HALO_KEY" title="tngxmm.donors.pair_projections.HALO_KEY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_KEY</span></code></a></p></td>
+<td><p>identity columns of a halo-snapshot</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.CALIPER_SD" title="tngxmm.donors.pair_projections.CALIPER_SD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CALIPER_SD</span></code></a></p></td>
+<td><p>the caliper of 0.25 standard deviations that Rosenbaum &amp; Rubin (1985) suggest (Stuart 2010, Sect.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.ASSIGNMENTS" title="tngxmm.donors.pair_projections.ASSIGNMENTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ASSIGNMENTS</span></code></a></p></td>
+<td><p>the values of <code class="docutils literal notranslate"><span class="pre">PairingSpec.assignment</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC" title="tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_CHANGED_FRAC</span></code></a></p></td>
+<td><p>the rules of the pairing on the fitted hydrostatic mass (C1), written before pass 1 (design note of 2026-10-27, steps 2 and 5; docs/dev/PREREGISTRATION.md, section 6): stop when fewer than this share of the paired halo-snapshots change any physics donor between two iterations of pass 2, or after this many iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.EDGE_TENTH" title="tngxmm.donors.pair_projections.EDGE_TENTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EDGE_TENTH</span></code></a></p></td>
+<td><p>log M500c(true) within log M_cat - 0.15 to + 0.25): at most this share of its paired halo-snapshots may lie in either outer tenth of the window, else the pairing of that simulation is incomplete at that end (design parameters, OPEN_ITEMS section P)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.caliper_dex" title="tngxmm.donors.pair_projections.caliper_dex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">caliper_dex</span></code></a>(ref_log_mass[, k])</p></td>
+<td><p>The mass window of the pairing [dex]: <code class="docutils literal notranslate"><span class="pre">k</span></code> times the sample standard deviation (ddof 1) of the finite values of <code class="docutils literal notranslate"><span class="pre">ref_log_mass</span></code> (log10 matching mass of the reference observations).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.convergence_state" title="tngxmm.donors.pair_projections.convergence_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convergence_state</span></code></a>(frac_changed_history)</p></td>
+<td><p>The convergence rule of the fit-mass pairing on the shares of changed halo-snapshots, one per iteration of pass 2 (the first compares its pairing with pass 1's): CONVERGED when the last is below <a class="reference internal" href="#tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC" title="tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC"><code class="xref py py-data docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_CHANGED_FRAC</span></code></a>; NOT_CONVERGED when <code class="xref py py-data docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_ITERATIONS</span></code> iterations ran without it (reported as such, never extended); else CONTINUE.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.drop_unpaired" title="tngxmm.donors.pair_projections.drop_unpaired"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drop_unpaired</span></code></a>(table)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(rows</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">physics</span> <span class="pre">donor,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">unpaired</span> <span class="pre">rows</span> <span class="pre">left</span> <span class="pre">out)</span></code>: what every mock-against-real statistic compares (gate P, the matched draw, the replica's mass-match check, the realism split and selection).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map" title="tngxmm.donors.pair_projections.format_anchor_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_anchor_map</span></code></a>(anchors)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;0:&lt;obsid&gt;;1:&lt;obsid&gt;;...&quot;</span></code>: the anchors of a halo-snapshot's projections as one CSV-safe string, in view order (obsids as 10 digits).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.pair_projections" title="tngxmm.donors.pair_projections.pair_projections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pair_projections</span></code></a>(halos, reference, spec, *)</p></td>
+<td><p>Pair every halo-snapshot of <code class="docutils literal notranslate"><span class="pre">halos</span></code> with real observations of <code class="docutils literal notranslate"><span class="pre">reference</span></code> (module docstring).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.paired_mask" title="tngxmm.donors.pair_projections.paired_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_mask</span></code></a>(table)</p></td>
+<td><p>Boolean array: True for the rows of <code class="docutils literal notranslate"><span class="pre">table</span></code> that have a physics donor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.paired_value" title="tngxmm.donors.pair_projections.paired_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_value</span></code></a>(v)</p></td>
+<td><p>One <code class="docutils literal notranslate"><span class="pre">paired</span></code> flag: True or False as a bool (numpy's too), the strings 'true' / 'false' of a CSV in any case, or 1 / 0; anything else (an empty cell, NaN, another string) raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.pairing_changes" title="tngxmm.donors.pair_projections.pairing_changes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairing_changes</span></code></a>(previous, current)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.pairing_summary" title="tngxmm.donors.pair_projections.pairing_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairing_summary</span></code></a>(pairs[, n_projections, folds])</p></td>
+<td><p>Counts of a pairing table (one row per halo-snapshot and projection): halo-snapshots, views, <code class="docutils literal notranslate"><span class="pre">paired</span></code>, <code class="docutils literal notranslate"><span class="pre">unpaired</span></code>, <code class="docutils literal notranslate"><span class="pre">full</span></code> (as many distinct physics donors as projections), <code class="docutils literal notranslate"><span class="pre">short</span></code> (paired with fewer), <code class="docutils literal notranslate"><span class="pre">physics_donors_histogram</span></code> (halo-snapshots by their number of distinct physics donors), views that repeat a donor, observations used and the most views one observation serves; with <code class="docutils literal notranslate"><span class="pre">folds</span></code>, the paired halo-snapshots whose physics donors lie in more than one donor fold (<code class="docutils literal notranslate"><span class="pre">halo_snaps_spanning_folds</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.parse_anchor_map" title="tngxmm.donors.pair_projections.parse_anchor_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_anchor_map</span></code></a>(text)</p></td>
+<td><p>The inverse of <a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map" title="tngxmm.donors.pair_projections.format_anchor_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">format_anchor_map()</span></code></a>: <code class="docutils literal notranslate"><span class="pre">{view:</span> <span class="pre">obsid}</span></code>; <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> on an empty or malformed string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.pass1_reference" title="tngxmm.donors.pair_projections.pass1_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pass1_reference</span></code></a>(observations, columns[, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.shortfall_by_mass_z" title="tngxmm.donors.pair_projections.shortfall_by_mass_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shortfall_by_mass_z</span></code></a>(pairs[, ...])</p></td>
+<td><p>The distribution of the number of distinct physics donors by halo mass and redshift: one row per (<code class="docutils literal notranslate"><span class="pre">sim</span></code>, mass bin of <code class="docutils literal notranslate"><span class="pre">log_m_match</span></code> with edges <code class="docutils literal notranslate"><span class="pre">mass_edges_msun</span></code>, redshift <code class="docutils literal notranslate"><span class="pre">z</span></code> = <code class="docutils literal notranslate"><span class="pre">z_match</span></code> of the pairing, a snapshot redshift) with <code class="docutils literal notranslate"><span class="pre">halo_snaps</span></code>, <code class="docutils literal notranslate"><span class="pre">unpaired</span></code>, <code class="docutils literal notranslate"><span class="pre">short</span></code> (paired, fewer distinct donors than projections), <code class="docutils literal notranslate"><span class="pre">full</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_physics_donors</span></code> (over the paired halo-snapshots of the cell; NaN without one) and <code class="docutils literal notranslate"><span class="pre">n_donors_&lt;k&gt;</span></code> (halo-snapshots with k distinct physics donors, k = 0 .</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.window_edge_share" title="tngxmm.donors.pair_projections.window_edge_share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">window_edge_share</span></code></a>(values, lo, hi[, tenth])</p></td>
+<td><p>The edge test: for each paired halo-snapshot its position u = (value - lo) / (hi - lo) in its own streaming window; the shares with u &lt; <code class="docutils literal notranslate"><span class="pre">tenth</span></code> (<code class="docutils literal notranslate"><span class="pre">low</span></code>) and u &gt; 1 - <code class="docutils literal notranslate"><span class="pre">tenth</span></code> (<code class="docutils literal notranslate"><span class="pre">high</span></code>), and whether each is at most <code class="xref py py-data docutils literal notranslate"><span class="pre">EDGE_MAX_SHARE</span></code> (<code class="docutils literal notranslate"><span class="pre">low_ok</span></code>, <code class="docutils literal notranslate"><span class="pre">high_ok</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec" title="tngxmm.donors.pair_projections.PairingSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PairingSpec</span></code></a>(halo_mass_col, ref_mass_col[, ...])</p></td>
+<td><p>Settings of the release 1.2 pairing.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PAIRED_COLUMN">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">PAIRED_COLUMN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'paired'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PAIRED_COLUMN" title="Link to this definition">¶</a></dt>
+<dd><p>the column of a view table that says whether the view’s halo-snapshot has a physics donor (release 1.2); a table
+without it pairs every row with its <code class="docutils literal notranslate"><span class="pre">donor_id</span></code> (the target lists of releases 1.0 to 1.1)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.ANCHOR_COLUMN">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">ANCHOR_COLUMN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'conditions_anchor_id'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.ANCHOR_COLUMN" title="Link to this definition">¶</a></dt>
+<dd><p>the column of a view table that names the observation whose condition-space neighbours are the conditions candidates
+of the view (its physics donor, or the nearest observation of an unpaired halo-snapshot)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.ANCHORS_COLUMN">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">ANCHORS_COLUMN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'conditions_anchors'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.ANCHORS_COLUMN" title="Link to this definition">¶</a></dt>
+<dd><p>the column with the anchors of every projection of the row’s halo-snapshot (<a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map" title="tngxmm.donors.pair_projections.format_anchor_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">format_anchor_map()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.SHORTFALL_MASS_EDGES_MSUN">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">SHORTFALL_MASS_EDGES_MSUN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(100000000000000.0,</span> <span class="pre">200000000000000.0,</span> <span class="pre">400000000000000.0,</span> <span class="pre">600000000000000.0,</span> <span class="pre">800000000000000.0,</span> <span class="pre">1000000000000000.0,</span> <span class="pre">1500000000000000.0)</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.SHORTFALL_MASS_EDGES_MSUN" title="Link to this definition">¶</a></dt>
+<dd><p>the bins in which the design note lists the real fit masses
+(1-2, 2-4, 4-6, 6-8, 8-10, 10-15 and above 15 x 1e14 Msun), with a bin below 1e14</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>halo-mass edges [Msun] of the shortfall report</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.HALO_KEY">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">HALO_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('sim',</span> <span class="pre">'snap',</span> <span class="pre">'halo_id')</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.HALO_KEY" title="Link to this definition">¶</a></dt>
+<dd><p>identity columns of a halo-snapshot</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.CALIPER_SD">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">CALIPER_SD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.25</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.CALIPER_SD" title="Link to this definition">¶</a></dt>
+<dd><p>the caliper of
+0.25 standard deviations that Rosenbaum &amp; Rubin (1985) suggest (Stuart 2010, Sect. 2.2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the default mass window in standard deviations of the reference observations’ log10 matching mass</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.ASSIGNMENTS">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">ASSIGNMENTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('nearest',</span> <span class="pre">'least_used')</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.ASSIGNMENTS" title="Link to this definition">¶</a></dt>
+<dd><p>the values of <code class="docutils literal notranslate"><span class="pre">PairingSpec.assignment</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.caliper_dex">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">caliper_dex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_log_mass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#caliper_dex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.caliper_dex" title="Link to this definition">¶</a></dt>
+<dd><p>The mass window of the pairing [dex]: <code class="docutils literal notranslate"><span class="pre">k</span></code> times the sample standard deviation (ddof 1) of the finite values of
+<code class="docutils literal notranslate"><span class="pre">ref_log_mass</span></code> (log10 matching mass of the reference observations).  Needs two finite values.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">PairingSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">halo_mass_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_mass_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_projections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_window_dex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_logm_dex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halo_z_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z_snap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_z_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#PairingSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Settings of the release 1.2 pairing.  <code class="docutils literal notranslate"><span class="pre">halo_mass_col</span></code> and <code class="docutils literal notranslate"><span class="pre">ref_mass_col</span></code> have no default: the caller says
+which matching mass is paired (the fit mass on both sides in the release).  The other numbers are design parameters
+(docs/assumptions/OPEN_ITEMS.md, section P): the redshift window and the distance widths of the matched draw
+(<code class="docutils literal notranslate"><span class="pre">params:donors.matched</span></code>).  <code class="docutils literal notranslate"><span class="pre">mass_window_dex</span></code> None (the default) is the caliper rule (<a class="reference internal" href="#tngxmm.donors.pair_projections.caliper_dex" title="tngxmm.donors.pair_projections.caliper_dex"><code class="xref py py-func docutils literal notranslate"><span class="pre">caliper_dex()</span></code></a> of
+the reference table); a number fixes the window.  Neither is widened.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.halo_mass_col">
+<span class="sig-name descname"><span class="pre">halo_mass_col</span></span><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.halo_mass_col" title="Link to this definition">¶</a></dt>
+<dd><p>log10 matching mass [Msun] of a halo-snapshot (a column of the halo table)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.ref_mass_col">
+<span class="sig-name descname"><span class="pre">ref_mass_col</span></span><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.ref_mass_col" title="Link to this definition">¶</a></dt>
+<dd><p>log10 matching mass [Msun] of an observation (a column of the reference table)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.n_projections">
+<span class="sig-name descname"><span class="pre">n_projections</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.n_projections" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.dz_max">
+<span class="sig-name descname"><span class="pre">dz_max</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.25</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.dz_max" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.mass_window_dex">
+<span class="sig-name descname"><span class="pre">mass_window_dex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.mass_window_dex" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.sigma_logm_dex">
+<span class="sig-name descname"><span class="pre">sigma_logm_dex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.sigma_logm_dex" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.sigma_z">
+<span class="sig-name descname"><span class="pre">sigma_z</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.sigma_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.halo_z_col">
+<span class="sig-name descname"><span class="pre">halo_z_col</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'z_snap'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.halo_z_col" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.ref_z_col">
+<span class="sig-name descname"><span class="pre">ref_z_col</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'z'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.ref_z_col" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.assignment">
+<span class="sig-name descname"><span class="pre">assignment</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'nearest'</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.assignment" title="Link to this definition">¶</a></dt>
+<dd><p>‘nearest’ or ‘least_used’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>which candidates a halo-snapshot with more than <code class="docutils literal notranslate"><span class="pre">n_projections</span></code> of them takes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#PairingSpec.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>The settings as a plain dict (<code class="docutils literal notranslate"><span class="pre">assignment</span></code> only when it is not ‘nearest’, so the hash of a pairing made
+before the setting existed is unchanged).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.spec_hash">
+<span class="sig-name descname"><span class="pre">spec_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#PairingSpec.spec_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.spec_hash" title="Link to this definition">¶</a></dt>
+<dd><p>First <code class="docutils literal notranslate"><span class="pre">length</span></code> hex digits of the sha256 of the settings’ sorted JSON.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.PairingSpec.from_campaign">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_campaign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halo_mass_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_mass_col</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#PairingSpec.from_campaign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.PairingSpec.from_campaign" title="Link to this definition">¶</a></dt>
+<dd><p>The pairing of a CampaignSpec: one projection per view of its projection scheme (<code class="docutils literal notranslate"><span class="pre">sim.projection</span></code>: three
+for the simulation axes, six for ‘icosahedral6’), on the named mass columns; <code class="docutils literal notranslate"><span class="pre">overrides</span></code> replace any other
+field.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.format_anchor_map">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">format_anchor_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#format_anchor_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.format_anchor_map" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">&quot;0:&lt;obsid&gt;;1:&lt;obsid&gt;;...&quot;</span></code>: the anchors of a halo-snapshot’s projections as one CSV-safe string, in view
+order (obsids as 10 digits).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.parse_anchor_map">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">parse_anchor_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#parse_anchor_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.parse_anchor_map" title="Link to this definition">¶</a></dt>
+<dd><p>The inverse of <a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map" title="tngxmm.donors.pair_projections.format_anchor_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">format_anchor_map()</span></code></a>: <code class="docutils literal notranslate"><span class="pre">{view:</span> <span class="pre">obsid}</span></code>; <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> on an empty or malformed string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.pair_projections">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">pair_projections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">halos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#pair_projections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.pair_projections" title="Link to this definition">¶</a></dt>
+<dd><p>Pair every halo-snapshot of <code class="docutils literal notranslate"><span class="pre">halos</span></code> with real observations of <code class="docutils literal notranslate"><span class="pre">reference</span></code> (module docstring).</p>
+<p><code class="docutils literal notranslate"><span class="pre">halos</span></code>: one row per halo-snapshot (<code class="docutils literal notranslate"><span class="pre">sim</span></code>, <code class="docutils literal notranslate"><span class="pre">snap</span></code>, <code class="docutils literal notranslate"><span class="pre">halo_id</span></code>, <code class="docutils literal notranslate"><span class="pre">spec.halo_z_col</span></code>, <code class="docutils literal notranslate"><span class="pre">spec.halo_mass_col</span></code>;
+every other column is carried to the output; an optional <code class="docutils literal notranslate"><span class="pre">donor_fold</span></code> restricts the halo-snapshot to the
+observations of that fold and needs <code class="docutils literal notranslate"><span class="pre">folds</span></code>).  <code class="docutils literal notranslate"><span class="pre">reference</span></code>: one row per real observation (<code class="docutils literal notranslate"><span class="pre">obsid</span></code>,
+<code class="docutils literal notranslate"><span class="pre">spec.ref_z_col</span></code>, <code class="docutils literal notranslate"><span class="pre">spec.ref_mass_col</span></code>); rows without a finite mass or redshift are left out and counted.
+<code class="docutils literal notranslate"><span class="pre">spec</span></code>: the settings, with the two mass columns named.  <code class="docutils literal notranslate"><span class="pre">folds</span></code>: obsid -&gt; donor fold.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">(pairs,</span> <span class="pre">report)</span></code>: <code class="docutils literal notranslate"><span class="pre">pairs</span></code> one row per (halo-snapshot, projection <code class="docutils literal notranslate"><span class="pre">view</span></code> = 0 .. n_projections - 1)
+with the halo columns and <code class="docutils literal notranslate"><span class="pre">log_m_match</span></code>, <code class="docutils literal notranslate"><span class="pre">z_match</span></code> (the halo’s matching mass and redshift), <code class="docutils literal notranslate"><span class="pre">paired</span></code>,
+<code class="docutils literal notranslate"><span class="pre">donor_id</span></code> (the physics donor, empty when unpaired), <code class="docutils literal notranslate"><span class="pre">conditions_anchor_id</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions_anchors</span></code> (the anchors
+of all projections of the halo-snapshot), <code class="docutils literal notranslate"><span class="pre">donor_rank</span></code> (rank of the donor among the halo-snapshot’s candidates,
+from 0), <code class="docutils literal notranslate"><span class="pre">donor_repeat</span></code> (the donor already serves an earlier projection), <code class="docutils literal notranslate"><span class="pre">donor_dz</span></code> (z_snap - z_ref),
+<code class="docutils literal notranslate"><span class="pre">donor_dlogm_dex</span></code> (log M_halo - log M_ref), <code class="docutils literal notranslate"><span class="pre">donor_distance</span></code> (d of the donor, or of the anchor when unpaired),
+<code class="docutils literal notranslate"><span class="pre">n_candidates</span></code>, <code class="docutils literal notranslate"><span class="pre">n_physics_donors</span></code>, <code class="docutils literal notranslate"><span class="pre">shortfall</span></code> (n_projections - n_physics_donors), <code class="docutils literal notranslate"><span class="pre">donor_fold</span></code> (the
+anchor’s fold, with <code class="docutils literal notranslate"><span class="pre">folds</span></code>) and <code class="docutils literal notranslate"><span class="pre">pairing_spec_hash</span></code> (of the settings with the mass window as applied);
+<code class="docutils literal notranslate"><span class="pre">report</span></code> the counts (<a class="reference internal" href="#tngxmm.donors.pair_projections.pairing_summary" title="tngxmm.donors.pair_projections.pairing_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairing_summary()</span></code></a>), the window applied (<code class="docutils literal notranslate"><span class="pre">mass_window_dex</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mass_window_rule</span></code>) and <code class="docutils literal notranslate"><span class="pre">variance_ratio_logm</span></code> (<code class="xref py py-func docutils literal notranslate"><span class="pre">_variance_ratio()</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.pairing_summary">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">pairing_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_projections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#pairing_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.pairing_summary" title="Link to this definition">¶</a></dt>
+<dd><p>Counts of a pairing table (one row per halo-snapshot and projection): halo-snapshots, views, <code class="docutils literal notranslate"><span class="pre">paired</span></code>,
+<code class="docutils literal notranslate"><span class="pre">unpaired</span></code>, <code class="docutils literal notranslate"><span class="pre">full</span></code> (as many distinct physics donors as projections), <code class="docutils literal notranslate"><span class="pre">short</span></code> (paired with fewer),
+<code class="docutils literal notranslate"><span class="pre">physics_donors_histogram</span></code> (halo-snapshots by their number of distinct physics donors), views that repeat a
+donor, observations used and the most views one observation serves; with <code class="docutils literal notranslate"><span class="pre">folds</span></code>, the paired halo-snapshots whose
+physics donors lie in more than one donor fold (<code class="docutils literal notranslate"><span class="pre">halo_snaps_spanning_folds</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.shortfall_by_mass_z">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">shortfall_by_mass_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_edges_msun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(100000000000000.0,</span> <span class="pre">200000000000000.0,</span> <span class="pre">400000000000000.0,</span> <span class="pre">600000000000000.0,</span> <span class="pre">800000000000000.0,</span> <span class="pre">1000000000000000.0,</span> <span class="pre">1500000000000000.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_projections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#shortfall_by_mass_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.shortfall_by_mass_z" title="Link to this definition">¶</a></dt>
+<dd><p>The distribution of the number of distinct physics donors by halo mass and redshift: one row per (<code class="docutils literal notranslate"><span class="pre">sim</span></code>,
+mass bin of <code class="docutils literal notranslate"><span class="pre">log_m_match</span></code> with edges <code class="docutils literal notranslate"><span class="pre">mass_edges_msun</span></code>, redshift <code class="docutils literal notranslate"><span class="pre">z</span></code> = <code class="docutils literal notranslate"><span class="pre">z_match</span></code> of the pairing, a snapshot
+redshift) with <code class="docutils literal notranslate"><span class="pre">halo_snaps</span></code>, <code class="docutils literal notranslate"><span class="pre">unpaired</span></code>,
+<code class="docutils literal notranslate"><span class="pre">short</span></code> (paired, fewer distinct donors than projections), <code class="docutils literal notranslate"><span class="pre">full</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_physics_donors</span></code> (over the paired
+halo-snapshots of the cell; NaN without one) and <code class="docutils literal notranslate"><span class="pre">n_donors_&lt;k&gt;</span></code> (halo-snapshots with k distinct physics donors,
+k = 0 .. n_projections).  <code class="docutils literal notranslate"><span class="pre">m_lo_msun</span></code> / <code class="docutils literal notranslate"><span class="pre">m_hi_msun</span></code> bound the bin (0 and inf at the ends).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.paired_value">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">paired_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#paired_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.paired_value" title="Link to this definition">¶</a></dt>
+<dd><p>One <code class="docutils literal notranslate"><span class="pre">paired</span></code> flag: True or False as a bool (numpy’s too), the strings ‘true’ / ‘false’ of a CSV in any case,
+or 1 / 0; anything else (an empty cell, NaN, another string) raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.  The one rule of the view
+tables (<a class="reference internal" href="#tngxmm.donors.pair_projections.paired_mask" title="tngxmm.donors.pair_projections.paired_mask"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_mask()</span></code></a>), the donor packages (<a class="reference internal" href="tngxmm.core.pool.html#tngxmm.core.pool.replica_package" title="tngxmm.core.pool.replica_package"><code class="xref py py-func docutils literal notranslate"><span class="pre">tngxmm.core.pool.replica_package()</span></code></a>) and the conditions draw
+(<a class="reference internal" href="tngxmm.instrument.conditions_donor.html#tngxmm.instrument.conditions_donor.draw_projection_conditions" title="tngxmm.instrument.conditions_donor.draw_projection_conditions"><code class="xref py py-func docutils literal notranslate"><span class="pre">tngxmm.instrument.conditions_donor.draw_projection_conditions()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.paired_mask">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">paired_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#paired_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.paired_mask" title="Link to this definition">¶</a></dt>
+<dd><p>Boolean array: True for the rows of <code class="docutils literal notranslate"><span class="pre">table</span></code> that have a physics donor.  The <code class="docutils literal notranslate"><span class="pre">paired</span></code> column of a release 1.2
+view table, read by <a class="reference internal" href="#tngxmm.donors.pair_projections.paired_value" title="tngxmm.donors.pair_projections.paired_value"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_value()</span></code></a>; every row when the table has no such column (the lists of releases 1.0 to
+1.1 pair every view).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.drop_unpaired">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">drop_unpaired</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#drop_unpaired"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.drop_unpaired" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(rows</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">physics</span> <span class="pre">donor,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">unpaired</span> <span class="pre">rows</span> <span class="pre">left</span> <span class="pre">out)</span></code>: what every mock-against-real statistic
+compares (gate P, the matched draw, the replica’s mass-match check, the realism split and selection).  A table
+without the <code class="docutils literal notranslate"><span class="pre">paired</span></code> column is returned as it is, with 0.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">CONVERGENCE_MAX_CHANGED_FRAC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC" title="Link to this definition">¶</a></dt>
+<dd><p>the rules of the pairing on the fitted hydrostatic mass (C1), written before pass 1 (design note of 2026-10-27,
+steps 2 and 5; docs/dev/PREREGISTRATION.md, section 6): stop when fewer than this share of the paired
+halo-snapshots change any physics donor between two iterations of pass 2, or after this many iterations</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.EDGE_TENTH">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">EDGE_TENTH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#tngxmm.donors.pair_projections.EDGE_TENTH" title="Link to this definition">¶</a></dt>
+<dd><p>log M500c(true) within
+log M_cat - 0.15 to + 0.25): at most this share of its paired halo-snapshots may lie in either outer tenth of the
+window, else the pairing of that simulation is incomplete at that end (design parameters, OPEN_ITEMS section P)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the edge test of a simulation streamed in a mass window about each target (FLAMINGO L1_m8</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.pairing_changes">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">pairing_changes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">previous</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#pairing_changes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.pairing_changes" title="Link to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>How a pairing moved between two iterations (tables of :func:`pair_projections`): the halo-snapshots paired in
+either, those whose physics donors (by projection, empty when unpaired) differ, their share
+(``frac_changed``) and the median |change| of the halo-snapshot's matching mass ``log_m_match`` [dex].
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.convergence_state">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">convergence_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frac_changed_history</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#convergence_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.convergence_state" title="Link to this definition">¶</a></dt>
+<dd><p>The convergence rule of the fit-mass pairing on the shares of changed halo-snapshots, one per iteration of pass
+2 (the first compares its pairing with pass 1’s): CONVERGED when the last is below
+<a class="reference internal" href="#tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC" title="tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC"><code class="xref py py-data docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_CHANGED_FRAC</span></code></a>; NOT_CONVERGED when <code class="xref py py-data docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_ITERATIONS</span></code> iterations ran without
+it (reported as such, never extended); else CONTINUE.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.window_edge_share">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">window_edge_share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tenth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#window_edge_share"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.window_edge_share" title="Link to this definition">¶</a></dt>
+<dd><p>The edge test: for each paired halo-snapshot its position u = (value - lo) / (hi - lo) in its own streaming
+window; the shares with u &lt; <code class="docutils literal notranslate"><span class="pre">tenth</span></code> (<code class="docutils literal notranslate"><span class="pre">low</span></code>) and u &gt; 1 - <code class="docutils literal notranslate"><span class="pre">tenth</span></code> (<code class="docutils literal notranslate"><span class="pre">high</span></code>), and whether each is at most
+<code class="xref py py-data docutils literal notranslate"><span class="pre">EDGE_MAX_SHARE</span></code> (<code class="docutils literal notranslate"><span class="pre">low_ok</span></code>, <code class="docutils literal notranslate"><span class="pre">high_ok</span></code>).  <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">lo</span></code>, <code class="docutils literal notranslate"><span class="pre">hi</span></code>: arrays of log10 M.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.donors.pair_projections.pass1_reference">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.donors.pair_projections.</span></span><span class="sig-name descname"><span class="pre">pass1_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eligible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/donors/pair_projections.html#pass1_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.donors.pair_projections.pass1_reference" title="Link to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The one reference observation of pass 1 (design note of 2026-10-27, step 2): among the ``eligible`` rows
+(boolean, the observations with all three cameras in full-frame modes; every row when None), the one with the
+smallest sum over ``columns`` (effective exposure per camera, HI4PI column, N_H,tot / N_HI, flare-filtered
+particle background) of |p - 0.5|, p the row's percentile rank in the donor pool (all rows of ``observations``,
+ranks of ties averaged); ties by obsid.  Returns (obsid, the eligible rows with their ``rank_distance``, sorted).
+No number is fitted: the rule only orders the pool.
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="tngxmm.donors.pair_six_views.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">tngxmm.donors.pair_six_views</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="tngxmm.donors.pair_fit_mass.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">tngxmm.donors.pair_fit_mass</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">tngxmm.donors.pair_projections</a><ul>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PAIRED_COLUMN"><code class="docutils literal notranslate"><span class="pre">PAIRED_COLUMN</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.ANCHOR_COLUMN"><code class="docutils literal notranslate"><span class="pre">ANCHOR_COLUMN</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.ANCHORS_COLUMN"><code class="docutils literal notranslate"><span class="pre">ANCHORS_COLUMN</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.SHORTFALL_MASS_EDGES_MSUN"><code class="docutils literal notranslate"><span class="pre">SHORTFALL_MASS_EDGES_MSUN</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.HALO_KEY"><code class="docutils literal notranslate"><span class="pre">HALO_KEY</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.CALIPER_SD"><code class="docutils literal notranslate"><span class="pre">CALIPER_SD</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.ASSIGNMENTS"><code class="docutils literal notranslate"><span class="pre">ASSIGNMENTS</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.caliper_dex"><code class="docutils literal notranslate"><span class="pre">caliper_dex()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec"><code class="docutils literal notranslate"><span class="pre">PairingSpec</span></code></a><ul>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.halo_mass_col"><code class="docutils literal notranslate"><span class="pre">PairingSpec.halo_mass_col</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.ref_mass_col"><code class="docutils literal notranslate"><span class="pre">PairingSpec.ref_mass_col</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.n_projections"><code class="docutils literal notranslate"><span class="pre">PairingSpec.n_projections</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.dz_max"><code class="docutils literal notranslate"><span class="pre">PairingSpec.dz_max</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.mass_window_dex"><code class="docutils literal notranslate"><span class="pre">PairingSpec.mass_window_dex</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.sigma_logm_dex"><code class="docutils literal notranslate"><span class="pre">PairingSpec.sigma_logm_dex</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.sigma_z"><code class="docutils literal notranslate"><span class="pre">PairingSpec.sigma_z</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.halo_z_col"><code class="docutils literal notranslate"><span class="pre">PairingSpec.halo_z_col</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.ref_z_col"><code class="docutils literal notranslate"><span class="pre">PairingSpec.ref_z_col</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.assignment"><code class="docutils literal notranslate"><span class="pre">PairingSpec.assignment</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.to_dict"><code class="docutils literal notranslate"><span class="pre">PairingSpec.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.spec_hash"><code class="docutils literal notranslate"><span class="pre">PairingSpec.spec_hash()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.PairingSpec.from_campaign"><code class="docutils literal notranslate"><span class="pre">PairingSpec.from_campaign()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.format_anchor_map"><code class="docutils literal notranslate"><span class="pre">format_anchor_map()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.parse_anchor_map"><code class="docutils literal notranslate"><span class="pre">parse_anchor_map()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.pair_projections"><code class="docutils literal notranslate"><span class="pre">pair_projections()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.pairing_summary"><code class="docutils literal notranslate"><span class="pre">pairing_summary()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.shortfall_by_mass_z"><code class="docutils literal notranslate"><span class="pre">shortfall_by_mass_z()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.paired_value"><code class="docutils literal notranslate"><span class="pre">paired_value()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.paired_mask"><code class="docutils literal notranslate"><span class="pre">paired_mask()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.drop_unpaired"><code class="docutils literal notranslate"><span class="pre">drop_unpaired()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.CONVERGENCE_MAX_CHANGED_FRAC"><code class="docutils literal notranslate"><span class="pre">CONVERGENCE_MAX_CHANGED_FRAC</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.EDGE_TENTH"><code class="docutils literal notranslate"><span class="pre">EDGE_TENTH</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.pairing_changes"><code class="docutils literal notranslate"><span class="pre">pairing_changes()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.convergence_state"><code class="docutils literal notranslate"><span class="pre">convergence_state()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.window_edge_share"><code class="docutils literal notranslate"><span class="pre">window_edge_share()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.donors.pair_projections.pass1_reference"><code class="docutils literal notranslate"><span class="pre">pass1_reference()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

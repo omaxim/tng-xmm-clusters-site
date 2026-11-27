@@ -1,0 +1,118 @@
+tngxmm.massfit.fit\_hydrostatic
+===============================
+
+.. automodule:: tngxmm.massfit.fit_hydrostatic
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_OBS_IMG_ROOT
+      DEFAULT_CATALOGUE_CSV
+      MASS_PROFILE_SAMPLES
+      C200_PRIOR_RANGE
+      FILTER_KEY
+      METALLICITY_START
+      FITFIX_DEFAULTS
+      FITFIX_LATE_DEFAULTS
+      OPTIMISER_START_GRID
+      QPB_SCALE_BANDS
+      PN_BAND_GAP_KEV
+      FIT_FILES
+      QPB_CACHE_DEFAULT
+      REF_M500C_QUANTITIES
+      REF_UNSPECIFIED
+      PRESET
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      anomalous_ccds
+      apply_fit_switches
+      apply_mock_centre
+      apply_pn_band_gap
+      attach_background_truth
+      batch_argv
+      build_esas_background
+      build_fit_images
+      build_fit_model
+      build_fit_setup
+      build_model
+      build_parser
+      c200_prior_range
+      chain_burn_steps
+      check_catalogue_redshift
+      check_mock_response
+      clear_fit_dir
+      cm_prior_offset_sd
+      crop_r500_guess
+      effective_pixsize
+      esas_provider
+      esas_specs
+      filter_key
+      find_images
+      fit_column
+      fit_files_complete
+      fit_hydrostatic
+      fit_provenance
+      fit_ran_to_its_end
+      fit_switches_from_spec
+      fit_targets
+      fitfix_from_spec
+      fits_root
+      guess_kt_keV
+      image_root
+      image_tree_digest
+      import_mbproj2d
+      job_cost
+      job_from_row
+      load_fallback_tables
+      load_reference_by_obsid
+      main
+      mock_peak_centre
+      net_counts_r500
+      outdir_name
+      parse_fitfix
+      parse_metallicity
+      parse_mock_min_flux
+      qpb_scale_of
+      reference_from_row
+      resolve_fitfix
+      resolve_metallicity
+      resolve_preset_switches
+      resp_dir
+      response_for
+      response_options
+      response_record
+      resume_matches
+      run_fit
+      run_one
+      save_mass_profile_samples
+      seed_lx_photometry
+      set_rate_cache
+      set_xspec_scratch
+      setup_kwargs_from_fit
+      source_exposure
+      stage1_frozen_keys
+      switches_with_overrides
+      target_kind
+      target_sources
+      to_fit_results
+      without_late_defaults
+      xspec_scratch_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GapRateCalc
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      FitTimeout
+      MockResponseMismatch
+   

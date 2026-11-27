@@ -1,0 +1,80 @@
+# When a run stops
+
+A job of a production run can end before its work is done for four reasons. In each case the work that was finished
+is kept, and the same command continues the run. The steps of a run are on {doc}`production`.
+
+## What counts as finished
+
+Every item is finished only through a marker that is written last, after the item's files have reached the disk,
+and removed first when the item is made again. A file with its final name is complete: products are written under a
+temporary name in their own directory and renamed.
+
+| item | done-marker | checked on resume |
+|---|---|---|
+| a view | `<view>/obs_meta.json` | the merged image reads to the end and the listed products have their recorded sizes |
+| a SAS detection | `<view>/sas_detect/provenance.json` | `emllist.fits` has the recorded sha256, `sources.csv` is whole and has the recorded number of rows |
+| a fit | `<fit>/provenance.json` | `result.json` has status `ok` or `unconstrained`, the chain and the mass-profile samples read to the end, the redshift and the images are those of the job |
+
+An item without its marker, or with a product that fails its check, is made again from the start.
+
+## The four cases
+
+| what happened | exit code | what the log says | what to do |
+|---|---|---|---|
+| the time limit | none of the job's own: SLURM ends it | the job log ends with SLURM's line `CANCELLED ... DUE TO TIME LIMIT` and lacks the script's closing line (`=== ALL DONE ...` in a fit job) | submit the same command again; for fits, the next plan (`job NN+1`) repeats what job NN left |
+| the disk or the quota is full | 28 | one line starting with `DISK FULL:` from the driver, and `=== DISK FULL: ... ===` as the last line of the job log | free space, then submit the same command again |
+| a fit failed | 0: a failed fit does not fail the job | the stream log has the traceback and the line `[i/n] <name>: error: <exception>`; `results_all.csv` has the row with that status | read the error; the next plan that lists the target fits it again |
+| a fit ran into the per-fit timeout | as a failed fit | `error: FitTimeout: per-fit timeout after N s` | as a failed fit; a longer `PER_FIT_TIMEOUT_S` if the fit only needed more time |
+
+Other exit codes are refusals before any work: 6 (the guard found another job of the user), 7 (the commit or the
+spec hash moved since submission), 2 to 4 from a job script that found its plan, its cache or its images not as it
+needs them. The line starting with `ABORT:` in the job log names the reason. A SAS queue ends with 1 when an entry
+failed twice; a campaign job with 4 when a step failed and 5 when only an acceptance check did.
+
+## A full disk
+
+A full file system and an exhausted quota look the same to a write: it fails. The free space the file system
+reports says nothing about a quota, so the guard writes and removes a few MB in the output root. It does so at
+submission, at the start of a job, and every two minutes while a driver runs, also when no item ends for hours.
+
+When a write fails for that reason:
+
+* the item being written gets the status `interrupted: disk`. It is recorded in no results table and is not counted
+  as failed;
+* no new item is started, and the running ones end;
+* the driver prints one line starting with `DISK FULL:` and exits with code 28 (`campaign run`, `sas-queue run`,
+  `massfit fit-hydrostatic`); `campaign.sh`, `sas_detect.sh` and `fits.sh` pass the code on. A campaign job skips
+  its acceptance checks, which would only fail on their own reports.
+
+After space has been freed, the same submission continues: the interrupted items have no marker and are made again.
+`tngxmm slurm diskcheck <dir> ...` runs the probe by hand and exits with 28 when a directory cannot take the write.
+
+Three settings, read from the environment; the defaults need no change:
+
+| variable | default | meaning |
+|---|---|---|
+| `TNGXMM_DISK_PROBE_MB` | 8 | size of the probe write; 0 switches it off |
+| `TNGXMM_DISK_MIN_FREE_GB` | 1 | least free space of the file system |
+| `TNGXMM_DISK_CHECK_S` | 120 | least time between two checks of a running driver |
+
+The guard does not know how much room is left under a quota: it finds out when the limit is reached.
+External tools do not always pass the error on; SAS and cfitsio do not. A failure there counts as the disk's when the
+tool's message names the quota or when a probe write fails right after it. The rate cache of mbproj2d and the
+cache of the particle-background templates are written atomically, and an entry that cannot be read is built again.
+The step that builds the fit targets (`slurm/fit_targets.sh`) has no disk stop of its own: a piece that fails is
+built again by the next submission. The end-to-end test of a disk stop on the fixture halo has not been run yet;
+the stops are tested per stage with the physics replaced by stand-ins.
+
+## A fit that fails
+
+A failed fit has a row in `results_all.csv` with its status. With `--resume` a fit that ran to its end is kept:
+status `ok`, and also `unconstrained`, which a second run of the same seeded fit would give again. A fit of status
+`error` is run again by the next job that lists the target. The job plans
+list each target twice, in its own job and in the next, and the sweep plan lists all of them ({doc}`production`,
+section 6). Two failures of the pilot show what to look for: a fit whose sampler could not start because no walker
+had a finite likelihood, and a fit that spent its whole per-fit time in the optimiser. Whether such a fit ends
+differently when it is run again has not been tried, so the cause is looked at before another sweep is submitted.
+
+A process killed while it held a lock of the rate cache leaves the lock behind, and a later fit that needs that
+table waits for it. The fit jobs remove locks older than 30 minutes before the first fit
+(`tngxmm slurm preflight <cache dir>`).

@@ -1,0 +1,35 @@
+tngxmm.ledger.assumptions
+=========================
+
+.. automodule:: tngxmm.ledger.assumptions
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LEDGER_PRESETS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      all_spec_fields
+      check
+      classify_token
+      decision_titles
+      flatten_params
+      hashed_fields
+      ledger_path
+      load
+      pipeline_params
+      registered_nodes
+      uncovered
+      validate
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      LedgerError
+   

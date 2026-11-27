@@ -1,0 +1,14 @@
+tngxmm.obs.references
+=====================
+
+.. automodule:: tngxmm.obs.references
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   parsers
+   sources

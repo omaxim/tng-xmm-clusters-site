@@ -1,0 +1,25 @@
+tngxmm.donor\_tables.soft\_ccd
+==============================
+
+.. automodule:: tngxmm.donor_tables.soft_ccd
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      WORK_NAME
+      MEASURE_VERSION
+      CAMERA_CODE
+      FOV_FRACTION
+      T_REF_ARCMIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_soft_ccd
+      donor_key
+      measure_donor
+      soft_ccd_table
+   

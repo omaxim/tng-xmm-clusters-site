@@ -1,0 +1,93 @@
+# tngxmm documentation
+
+`tngxmm` builds mock XMM-Newton EPIC observations of simulated galaxy clusters from IllustrisTNG (TNG-Cluster, and the
+TNG300, TNG100 and TNG50 boxes) and FLAMINGO, with SIMBA and EAGLE as internal validation runs
+({doc}`simulations`), each one observed under the conditions of a real archival XMM observation, and
+measures hydrostatic masses from the mocks and from the real observations with the same code. Its purpose is to
+measure how the hydrostatic mass of an X-ray analysis departs from the true mass on simulated clusters, and to test
+whether those mocks are close enough to real data for the comparison to transfer. The test has not been carried
+out yet; the status of every validation, including the ones that fail, is on {doc}`validation`.
+
+What it does now:
+
+* generates the mocks reproducibly: one hashed configuration, deterministic random streams per view, every product
+  stamped with the configuration it was made with ({doc}`overview`, {doc}`configuration`);
+* traces every number of the configuration to a citation, a measurement or an instrument document, and lists the
+  ones that have neither ({doc}`assumptions`);
+* runs the same photometry, source detection rules and hydrostatic fit on mocks and on real observations
+  ({doc}`definitions`);
+* takes every background level from calibration data or from the observation's own measurement, with no factor
+  measured on replays or fitted on donors ({doc}`background`).
+
+What is not established yet ({doc}`validation`): the mass fit recovers idealised clusters to 3 per cent on clean data
+but is about 15 per cent low with a realistic background; the replica sample is lighter than the real one; a
+classifier still separates mocks from real observations (AUC 0.88-0.97 on image statistics); the pre-registered realism
+evaluation on held-out donors has not been run; in the pilot of November 2026 the mock fits lie above the simulation's
+own hydrostatic mass, and the cause is not established.
+
+Where to start:
+
+* new here: {doc}`overview` (what the pipeline does and produces, with figures), then {doc}`getting-started`
+  (what runs without the TNG data and the cluster);
+* the words and labels: {doc}`glossary`; the masses, radii and bias ratios: {doc}`definitions`;
+* what the pipeline has shown and what it has not: {doc}`validation`, {doc}`samples`, {doc}`figures`;
+* the simulations, the ingest stage and the TNG-Cluster L_X excess: {doc}`simulations`;
+* the instrument background and the factors removed from it: {doc}`background`;
+* running a stage: {doc}`PIPELINE` and {doc}`pipelines/index`;
+* a production run from the target list to the fitted masses, and what to do when a job stops: {doc}`production`,
+  {doc}`when-a-run-stops`;
+* the reasoning behind a choice: {doc}`decisions` (one line each) and {doc}`assumptions`.
+
+```{toctree}
+:maxdepth: 2
+:caption: Start here
+
+overview
+getting-started
+glossary
+definitions
+simulations
+background
+xmm_simulator_changes
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Science status
+
+validation
+samples
+figures
+realism
+assumptions
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Using the pipeline
+
+PIPELINE
+production
+when-a-run-stops
+configuration
+data
+LOCAL
+pipelines/index
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Reference
+
+api/index
+decisions
+changelog
+readme
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Development log
+
+dev/index
+```

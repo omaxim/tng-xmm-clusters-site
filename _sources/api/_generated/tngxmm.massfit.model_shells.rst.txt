@@ -1,0 +1,24 @@
+tngxmm.massfit.model\_shells
+============================
+
+.. automodule:: tngxmm.massfit.model_shells
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      USES_SHELL_RBIN
+      PIXEL_AVERAGE_HALF_WIDTH
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_with_rbin
+      paint_matrix
+      paint_profile
+      pixel_average
+      refine_shells
+      shells_per_pixel
+   

@@ -1,0 +1,6 @@
+tngxmm.obs.cli
+==============
+
+.. automodule:: tngxmm.obs.cli
+
+   

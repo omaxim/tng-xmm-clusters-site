@@ -1,0 +1,37 @@
+tngxmm.donors.pair\_fit\_mass
+=============================
+
+.. automodule:: tngxmm.donors.pair_fit_mass
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MOCK_NAME
+      STATUS_OK
+      DONOR_RULE
+      Z_OBS_SOURCE
+      MASS
+      MASS_LO
+      MASS_HI
+      PAIR_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_pass2_targets
+      eligible_observations
+      mock_fit_table
+      nearest_snapshot
+      pair_on_fit_mass
+      snapshot_redshifts
+      spread_over_mass
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PairingError
+   

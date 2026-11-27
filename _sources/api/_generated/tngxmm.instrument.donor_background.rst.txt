@@ -1,0 +1,64 @@
+tngxmm.instrument.donor\_background
+===================================
+
+.. automodule:: tngxmm.instrument.donor_background
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PPS_BANDS
+      QPB_BAND
+      LIVE_BAND
+      SP_INDEX_LO
+      SP_INDEX_HI
+      SP_BREAK_KEV
+      VIG_BIN_ARCMIN
+      VIG_FLOOR
+      CAMERAS
+      FWC_CCF
+      DET_TO_MASK
+      DET_IDENTITY
+      FWC_SMOOTH_ARCMIN
+      FLARE_BANDS_KEV
+      FLARE_FILTERS
+      FLARE_NORM_RADIUS_ARCMIN
+      FWC_HALVES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      decompose_background
+      donor_background_parameters
+      donor_background_record
+      donor_live_times
+      fit_two_poisson
+      flare_band_events
+      flare_band_of
+      flare_band_shares
+      flare_band_weights
+      flare_broadband_shape
+      flare_maps_stage
+      fwc_density_maps
+      fwc_qpb_maps
+      measure_observation_background
+      nominal_qpb_band_rate
+      nominal_qpb_rates
+      qpb_channel_scale
+      qpb_pixel_draw
+      radial_vignetting
+      scale_maps_by_ccd
+      smooth_detmap
+      soft_proton_events
+      sp_counts_spectrum
+      spdetmap_stage
+      working_ccds
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FlareMaps
+   

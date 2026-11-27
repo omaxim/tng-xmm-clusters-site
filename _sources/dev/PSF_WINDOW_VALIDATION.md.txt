@@ -1,0 +1,278 @@
+# The PSF on the mask window and the projection in one product: what changes, by how much, how fast
+
+Written on 2026-11-24 on the branch `fastfit` (`2ef14e5`, merged since). Two fit-fix switches, both off by default:
+
+| switch | values | what it does |
+|---|---|---|
+| `psf_eval` | `image` (default), `window` | the off-axis King PSF computed on the bounding box of each image's mask instead of the whole padded grid (`massfit/psf_window.py`) |
+| `projection` | `groups` (default), `matrix` | all node groups of an evaluation projected in one triangular matrix product instead of one matrix-vector product each (`massfit/band_response.py`) |
+
+Neither changes the model. `projection = matrix` returned the same log posterior at every point tested in 85 of 86
+fits. `psf_eval = window` changes the model image by the rounding of a single-precision FFT of another length, and
+this page measures what that does to a fit. The fits of pass 1 finished by 2026-11-24 were made with both off.
+
+Adopted since. The preset `v1_flamingo_l1m8_pass2_extra` sets `massfit.psf_eval = 'window'` and
+`massfit.projection = 'matrix'` (2026-11-25), so the pass-2 views of the list with the added observations are
+fitted with both. The last 978 fits of pass 1 were made with both on 2026-11-26, on a second cluster, after a
+control sample: 75 finished z = 0.1 mocks refitted with the two switches gave ln M500 (switched minus production)
+mean +0.001 +- 0.006, median +0.0005, 38 up and 37 down; two of the 75 moved by more than 0.25. The other fits of
+pass 1 (about 4,000, on the home cluster) and the 623 fits of the real observations used the evaluation on the
+whole grid.
+
+## Summary
+
+| quantity | measured | section |
+|---|---|---|
+| log posterior at a fixed point | changes by sd 1e-4 (mocks) and 5e-4 (real) about a constant offset, largest 0.038; one single-precision step of an image term is 0.004 to 0.125 | 2 |
+| mass at that change | the reweighted mean of ln M500 moves by at most 6e-5, which is 2.4e-3 of the posterior width | 2 |
+| window against the exact convolution | nearer than the image grid in 29 of 40 fits (double-precision reference) | 3 |
+| end point of a fit | moves, as it does for any change in the last digit: a start moved by 1e-6 in ln M500 moves the end point as far as the window does (rms 0.013 in ln M500 both) | 4 |
+| direction of the move | none found. Window minus image grid from the same start: 22 up, 17 down, mean -0.0012 +- 0.0021. Full fits, new minus cache arm: 25 up, 20 down, mean +0.005 +- 0.004 | 4 |
+| posterior widths | unchanged, median ratio 1.00 | 4 |
+| reproducibility of a windowed fit | 6 of 6 repeated fits bit-identical; with the image-grid PSF 1 of 5 (FFTW plans chosen by timing) | 5 |
+| speed of a fit | windowed fits 3.1 times the unchanged code on the same kind of node (2.3 times the cache alone); others 1.8 times (1.4); weighted by pass-1 run time 2.5 times | 6 |
+
+Everything was measured on fits of pass 1 (FLAMINGO mocks) and of the real sample, with the image cache on. Nothing
+here says whether a fit has found its maximum or sampled its posterior; the reruns of unchanged code in section 4
+differ by 2 to 4 per cent in M500, and that scatter is larger than any effect of the two switches.
+
+## 1. What is computed
+
+`KingAnglePSF` (`massfit/fit_psf.py`) convolves the cluster image S of every evaluation as
+
+    model = sum_j  C_j (x) [w_j S]   +   sum_j  T_j (*) B[w_j S]
+
+with w_j the hat weight of off-axis node j, C_j the node's core kernel (reach h pixels, cyclic on the padded grid),
+B the b x b block sums and T_j the tail transfer on the coarse grid. The transforms run on the whole padded grid:
+234 x 234 pixels for a z = 0.1 fit at 12 arcsec, of which a quarter is inside the mask.
+
+The likelihood reads the model inside the mask only (`mbproj2d.fast.calcPoissonLogLikelihoodMasked`). With O the
+bounding box of the mask, `WindowedAnglePSF` computes the same sums on O:
+
+- **Core.** An output pixel takes source pixels within h of it, so the output on O needs the source on O grown by h.
+  The weight of a node is non-zero on an annulus about the optical axis. Consecutive nodes are grouped, and a group
+  is transformed on a buffer that holds the rows and columns where its weights are non-zero, cut to O grown by h.
+  For input rows a..b and output rows u1..u2 the offsets output minus input span u1 - b .. u2 - a; a cyclic length
+  N >= max(u2 - a, b - u1) + h + 1 keeps every offset larger than h away from the kernel, so the cyclic convolution
+  on N equals the linear one at every output row. The same holds for the columns.
+- **Tail.** The block sums A..B of a group's input are convolved with the transfer at the offsets Y1 - B .. Y2 - A
+  for the output blocks Y1..Y2 of O; N >= (B - A + 1) + (Y2 - Y1 + 1) - 1 keeps them apart.
+- **Lengths.** The smallest even 2^a 3^b 5^c at or above these minima. For the 234 px grid the four groups run on
+  60, 100, 144 and 180 px (core) and 64, 80, 90 and 128 blocks (tail), two nodes each.
+- **Unchanged.** The kernel values (`KingPSF.resample`), the tail transfer (`tail_transfer`), the weights, the
+  single-precision products w_j S and the order of the block sums. The spectra of a group are summed and inverted
+  once, as `_fourier_sum` does for all nodes.
+
+Two things follow from the construction. No part of the kernel is dropped, so there is no truncation error: the
+only difference is rounding. And the model outside O is not computed (it is set to the floor value), so the window
+may be used only where the mask is the only reader; the fit switches back to the image-grid PSF after the sampler.
+
+An image whose mask box grown by h reaches the edge of the grid keeps `KingAnglePSF`: there the cyclic wrap of the
+grid is part of the model. In the 86 fits of section 2 this is every image of the fits at z >= 0.25 and of most
+fits at z = 0.2; all images are windowed in 34 of 36 fits at z <= 0.15 (25 of 25 mocks, 9 of 11 real).
+
+The grouping is chosen by counted work (n^2 log2 n per transform, n^2 per element-wise pass) and the plans are made
+with `FFTW_ESTIMATE`, so nothing depends on timing (section 5).
+
+`projection = matrix`: `Radii.project` of mbproj2d multiplies the 1056 x 1056 projection matrix by one emissivity
+vector at a time, 61 times an evaluation for a 12-image fit. The matrix is upper triangular, so the emissivities
+are stacked as columns and multiplied once with BLAS `dtrmm`, in double precision, then cast to single as before.
+
+## 2. The log posterior at fixed points
+
+86 finished fits (57 mocks, 29 real), 100 points of each fit's stored chain. At each point the log posterior was
+computed four ways: as fitted, with the window, with the matrix projection, with both. The per-image terms are
+single precision in mbproj2d; they were summed in double precision here, so that the comparison is not limited by
+the last addition. A second sum takes the model images and forms the Poisson term in double precision.
+
+**Projection.** Identical at all 100 points in 85 of 86 fits. One real fit differs by at most 1.9e-5. The product
+is the same sum in another order, so identity is observed and not guaranteed.
+
+**Window**, the 40 fits in which every image is windowed (26 mocks, 14 real):
+
+| | mocks | real |
+|---|---|---|
+| sd of the difference over the chain points, median over fits | 1.1e-4 | 4.6e-4 |
+| the same, largest fit | 1.0e-3 | 1.1e-2 |
+| largest difference at any point | 0.038 | 0.038 |
+| in single-precision steps of an image term | up to 1.16 | |
+| change of the model flux | 1e-9, largest 3.5e-8 | |
+| mean difference positive / negative (fits) | 16 / 10 (p = 0.33) | 8 / 6 (p = 0.79) |
+| shift of the mean of ln M500 when the chain is reweighted | at most 1.5e-5 | at most 5.9e-5 |
+| the same in units of the posterior sd | at most 2.4e-3 | |
+| correlation of the difference with ln M500, median | 0.02 to 0.04 | |
+
+The largest sd belongs to PSZ2 G065.32-64.84 with 1.17 million counts: the term of an image is a number near 1e6
+held in single precision, and its last digit is 0.06 to 0.125.
+
+A constant offset of the log posterior changes nothing. What could move a mass is a difference that varies with the
+parameters, and the reweighting measures exactly that: weights exp(difference) on the chain points move the mean of
+ln M500 by less than a hundredth of a per cent of M500.
+
+In the fits where no image is windowed (z >= 0.25 and most of z = 0.2) `psf_eval = window` changes nothing: the
+difference is zero at every point.
+
+## 3. Which of the two is nearer to the exact convolution
+
+The PSF of the fit was recomputed in double precision with numpy's FFT, from the same kernels, weights and
+single-precision products (40 fully windowed fits, 40 chain points each).
+
+| | image grid | window |
+|---|---|---|
+| rms distance of the log posterior from the reference, median over fits | 1.75e-4 | 1.60e-4 |
+| largest distance | 7.7e-3 | 6.6e-3 |
+| mean offset positive / negative (fits) | 16 / 24 | 20 / 20 |
+| shift of the mean of ln M500 against the reference, largest | 7.5e-6 | 5.4e-6 |
+| flux against the reference, largest | 4.2e-8 | 3.5e-8 |
+
+The window is nearer to the reference in 29 of 40 fits (Wilcoxon p = 0.001; 20 of 26 mocks, 9 of 14 real). The
+transforms are shorter, so fewer rounding errors add up. Neither is biased against the reference at a level that
+could be measured.
+
+## 4. Fits
+
+### 4.1 Same start, three optimiser runs
+
+For 39 fully windowed fits (26 mocks, 13 real) stage 2 of the optimiser was run three times from the best sample
+of the stored chain: as fitted, with the two switches, and as fitted with the start moved by 1e-6 in ln M500. The
+third run has no meaning other than to show what a difference in the sixth digit of one start value does to the
+path of a derivative-free optimiser. All end points were then evaluated the same way (image-grid PSF,
+double-precision sum).
+
+| end point minus the end point as fitted | window + matrix | start moved by 1e-6 |
+|---|---|---|
+| ln M500: mean | -0.0012 +- 0.0021 | -0.0015 +- 0.0020 |
+| ln M500: rms | 0.0132 | 0.0125 |
+| ln M500: median absolute | 0.0056 | 0.0069 |
+| ln M500: largest | 0.050 | 0.041 |
+| ln M500: up / down | 22 / 17 (p = 0.52) | 18 / 21 (p = 0.75) |
+| log posterior: median absolute | 0.10 | 0.12 |
+| log posterior: largest | 4.0 | 11.1 |
+| log posterior: up / down | 14 / 25 (p = 0.11) | 20 / 19 |
+| evaluations, sum, relative to as fitted | 0.957 | 1.088 |
+
+The two columns are the same within their errors (absolute differences in ln M500, paired: Wilcoxon p = 0.49; in
+log posterior p = 0.84). The window acts on the optimiser as any last-digit change does: the path branches after
+about a hundred evaluations and ends at another point of the same flat maximum, about 1 per cent away in M500.
+The evaluation count of section R1 of the speed report (37 per cent more in one run) was one draw of this scatter;
+over 39 fits the window needed 4 per cent fewer evaluations and the moved start 9 per cent more.
+
+### 4.2 Whole fits
+
+Job 1902121 (tree `2ef14e5`, both switches, image cache on) repeated 26 mock and 26 real fits that job 1902090 had
+run with the cache alone ("cache") and, for 19 of them, also with the unchanged code ("plain"); 11 were run twice
+("rep"). The mocks also have their production fit ("prod", same numerics as plain). One real fit, PSZ2
+G263.19-25.19, failed at the start of the sampler in both new runs and in the plain run of job 1902090 as well,
+with density parameters on their prior limits; it is counted nowhere below.
+
+Differences of ln M500 (posterior median) between two runs of the same target:
+
+| pair | what differs | n | identical | mean | sd | largest | up / down |
+|---|---|---|---|---|---|---|---|
+| plain - prod, mocks | nothing (other node, other run) | 10 | 6 | -0.011 +- 0.008 | 0.025 | 0.072 | 1 / 3 |
+| cache - plain | nothing in the numerics | 19 | 6 | -0.011 +- 0.009 | 0.041 | 0.163 | 5 / 8 |
+| rep - new, not windowed | nothing | 5 | 1 | -0.013 +- 0.008 | 0.018 | 0.040 | 1 / 3 |
+| rep - new, windowed | nothing | 6 | 6 | 0 | 0 | 0 | |
+| new - cache, windowed | window, matrix | 26 | 0 | +0.007 +- 0.006 | 0.033 | 0.124 | 16 / 10 (p = 0.33) |
+| new - cache, not windowed | matrix | 21 | 5 | +0.003 +- 0.003 | 0.015 | 0.046 | 8 / 8 |
+| new - cache, all | | 50 | 5 | +0.005 +- 0.004 | 0.026 | 0.124 | 25 / 20 (p = 0.55) |
+| new - plain | | 19 | 4 | +0.002 +- 0.006 | 0.025 | 0.060 | 9 / 6 |
+| new - prod, mocks, windowed | | 14 | 0 | -0.001 +- 0.004 | 0.016 | 0.039 | 7 / 7 |
+
+Four real fits are partly windowed (4 or 8 of 12 images) and are in "all" only.
+
+The first three rows are the scatter of the fit itself: the same numerics, run again, give another mass in two
+thirds of the cases, 2 to 4 per cent away (section 5 has the reason). The rows with the switches have the same
+scatter and no mean beyond their errors. In units of the posterior half-width, new - cache has mean +0.06 +- 0.07
+and rms 0.49; cache - plain has -0.08 +- 0.07 and rms 0.33. The largest entries of both (0.124 and 0.163) are the
+same target, whose cache run is the outlier.
+
+The best log posterior of the chains differs between runs by a few units either way (new - cache: median 0.0, 22
+up, 23 down), and the widths of ln M500 agree (median ratio new / cache 1.009).
+
+A direction would show here as a mean. The bound from whole fits is limited by the rerun scatter: |mean| below
+0.02 in ln M500 at two sigma for windowed fits. The bound from section 4.1, where the start is shared, is 0.005,
+and section 2 puts the direct effect at 6e-5.
+
+## 5. Reproducibility and the FFTW plans
+
+Pass-1 fits are not reproducible to the bit: of 10 mocks rerun with the unchanged code, 4 gave another chain.
+The cause is in the image-grid PSF. mbproj2d and the tail of `KingAnglePSF` make their FFTW plans with
+`FFTW_MEASURE`, which times candidate algorithms when the fit is set up and keeps the fastest. On a busy node the
+timing differs from run to run, another plan sums in another order, and the last digit of the model differs.
+Repeats of one PSF evaluation in new processes on the node matched the first in 1 of 10; with the PSF switched off
+10 of 10; with the window 9 of 9 and 7 of 7.
+
+`WindowedAnglePSF` plans with `FFTW_ESTIMATE` and chooses its groups by counted work, so the same input gives the
+same bits. In job 1902121 the six repeated fits with every image windowed reproduced their chains exactly; of the
+five repeated fits without a windowed image one did.
+
+`FFTW_ESTIMATE` costs speed: in separate processes a 234 px transform took 0.335 ms against 0.292 ms with a
+measured plan, a 280 px one 0.433 against 0.262. The window is faster than the image grid in spite of that. A plan
+measured once and stored as FFTW wisdom, imported by every fit, would give measured speed and fixed bits for both
+paths; that is not written.
+
+## 6. Speed
+
+**One evaluation** (login node, one core, cache off): 106.5 ms to 50.4 ms in mocks at z <= 0.15 (median factor
+2.09, range 1.70 to 2.20), 1.98 in real fits with every image windowed, 97.7 to 81.0 ms at z = 0.2, and 1.11 to
+1.18 where no image is windowed (the projection alone).
+
+**Stage 2 of the optimiser with the cache**, same start (section 4.1, on node cores next to running fits): 2.29
+times less time per evaluation, 2.41 in total.
+
+**Whole fits**, run time as recorded by the fit. "plain", "cache" and "new" ran on the same kind of node in two
+jobs of 52 and 64 fits; "prod" ran on the pass-1 nodes with 72 fits each.
+
+| time ratio (sum over fits) | every image windowed | no image windowed | all |
+|---|---|---|---|
+| plain / new | 3.10 (n 6; optimiser 4.66, sampler 1.93) | 1.83 (n 13; 2.50, 1.07) | 2.17 (n 19) |
+| cache / new | 2.32 (n 26; 2.65, 2.00) | 1.38 (n 21; 1.54, 1.20) | 1.83 (n 50) |
+| prod / new | 4.72 (n 26; 6.45, 3.04) | 2.28 (n 21; 2.90, 1.56) | 3.47 (n 51) |
+| plain / cache | 1.30 (n 6) | 1.40 (n 13) | 1.36 (n 19) |
+| new / rep | 1.00 (n 6) | 1.04 (n 5) | 1.03 (n 11) |
+
+The 51 fits took 287.6 core hours in production, 147.0 with the cache and 81.6 with the cache and both switches.
+
+The 3,976 finished pass-1 fits spent 63 per cent of their 21,763 core hours at z = 0.1, 23 per cent at z = 0.2 and
+14 per cent above. With the factors of the first row (windowed at z = 0.1, not windowed above) the campaign would
+take 1 / 2.5 of its time; with the third row 1 / 3.4. The first is the like-for-like number. The fits still to run
+on 2026-11-24 were mostly the long ones at z = 0.1, which moves the figure up a little.
+
+Two cautions. Between 03:30 and 04:00 of the job other processes of this test held more cores than were free
+(load 75 to 77 on 72 cores), so fits running then lost a few per cent. And the non-windowed fits gained more on
+the node (1.38 over the cache) than one evaluation gains on the login node (1.11 to 1.18): the single product
+moves about 540 MB less memory per evaluation, which matters when 72 fits share the memory bus, but this was not
+measured separately.
+
+## 7. Limits
+
+- The window needs the mask box grown by the kernel reach inside the grid. At z = 0.2 the masks reach the edge in
+  most mocks (7 of 9 here), and those fits take 23 per cent of the campaign time. Padding the buffer instead
+  of refusing would extend the window to them; the cyclic wrap of the image grid would then be absent from the
+  model, which is a change of the model at the edge and not of the rounding, and needs its own test.
+- The fit does not record how many images were windowed; it prints the count. It should go into `result.json`.
+- A windowed PSF fills the mask box only. The fit puts the image-grid PSF back after the sampler; code that reads
+  model images during the fit outside the mask would get the floor value.
+- Mixed fits (some images windowed) and fits without a windowed image keep `FFTW_MEASURE` plans for the rest and
+  are not reproducible to the bit.
+- About 4,000 fits of pass 1 were made with both switches off and the last 978 with both on (2026-11-26). A sample
+  fitted partly with and partly without them is one method to within the numbers above; the switch is recorded per
+  fit (`fitfix` in `result.json`).
+- Not tested: more than 12 images, pixel sizes other than 8 to 24 arcsec, the fast-fit presets.
+
+## 8. How to reproduce
+
+Unit tests: `tests/unit/test_massfit_psf_window.py` (window against image grid inside the mask for three
+geometries, bit identity of two windows, edge masks, switch defaults) and `tests/unit/test_massfit_band_response.py`
+(matrix against group projection).
+
+A fit with the switches:
+
+    python -m tngxmm.massfit.fit_hydrostatic ... --fitfix psf_eval=window,projection=matrix
+
+The measurements of this page were made with scripts kept outside the package, in `psfwin/` of the campaign's
+development directory: `surface.py` and `surface_summary.py` (section 2), `refcheck.py` and `ref_summary.py`
+(section 3), `opt_pairs_node.py` and `opt_summary.py` (4.1), `pairs.py` and `pairs_split.py` with `nwin.py`
+(4.2 and 6), `repro.py` and `fftplan.py` (5), `campaign.py` (6). The fits are those of jobs 1902090 (plain, cache)
+and 1902121 (new, rep), plan `FIT_PLAN_fastfit_test2.txt`.

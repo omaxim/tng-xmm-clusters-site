@@ -1,0 +1,14 @@
+tngxmm.massfit.optimiser\_bounds
+================================
+
+.. automodule:: tngxmm.massfit.optimiser_bounds
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clip_free_parameters
+      clip_to_bounds
+      clipped_starts
+   

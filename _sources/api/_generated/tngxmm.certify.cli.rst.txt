@@ -1,0 +1,13 @@
+tngxmm.certify.cli
+==================
+
+.. automodule:: tngxmm.certify.cli
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      closure_gen_arms
+      load_params
+   

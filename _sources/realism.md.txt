@@ -1,0 +1,69 @@
+# The realism evaluation and frozen mode
+
+A hydrostatic mass from a mock behaves like one from a real cluster only if the mock looks like the real
+observation.  The `realism` pipeline measures this: for a real donor observation and the mock replicas observed
+under its conditions, classifier two-sample tests measure how well the two can be told apart.  An AUC near 0.5 means they
+cannot.  The pipeline is not part of `__default__`.
+
+## Results so far
+
+The mocks are not yet indistinguishable from the real observations. On the development donors a classifier on 17
+image statistics separates them with AUC 0.88 (logistic regression) to 0.97 (gradient boosting), and one on DINOv3
+embeddings with AUC 0.91; the gate proposed before any real-cluster machine-learning result is AUC <= 0.75. The
+separation comes from the background and field statistics and from the gas itself (TNG-Cluster halos are brighter and
+hotter than the real clusters they are matched to). Every number so far is of a development configuration, measured on
+donors that were used to develop the instrument model; the frozen evaluation on 84 untouched donors, which measures the
+current configuration, has not been run. Numbers, samples and the drivers of the separation: {doc}`validation`; figure:
+{doc}`figures` (realism).
+
+This page is therefore the description of the test, not of its result.
+
+## What is compared
+
+* Real side: the donor's own PPS images and exposure maps.
+* Mock side: the replica views of the donor (`donors.targets`), re-observed by the instrument stage
+  (`instrument.replay_views`, environment `realism`) under the preset's observing conditions, with the luminosity of
+  the simulation's gas, as the production mocks. The count-matching factor f of each view (the real net counts in
+  0.15-1 R500 over the replica's, `realism.measure_count_matching`; median 0.54 for TNG-Cluster) is reported, not
+  applied: thinning a replica to the real counts would hide the simulation's luminosity excess from the classifier
+  with a factor measured on the data. A replay thinned by f exists as a diagnostic (`instrument.replay.thin_table`)
+  and the frozen evaluation refuses it.
+* Tests: a classifier on image statistics (`tngxmm.realism.features`, `tngxmm.realism.c2st`: all features, each
+  group alone and without it, a univariate table) and one on DINOv3 embeddings (`tngxmm.realism.dino`), each with a
+  donor-bootstrap standard error and a permutation null.
+
+The pipeline page is {doc}`pipelines/realism`.  The step order (the steps share files, so they are separate runs),
+the commands and the environment each step needs (scikit-learn and torch AND Kedro in one interpreter for the DINO and
+classifier nodes) are in the section "The realism evaluation" of {doc}`dev/KEDRO`; `slurm/realism_frozen.sh` runs the
+chain on one node.
+
+## The donor split
+
+`realism.build_split` sorts every donor into `development` (donors on whose mocks a change of the instrument stage was
+designed or tuned), `fresh` (evaluated by the independent audit, not used for tuning), `earlier` (appear only in earlier
+evaluation runs), `heldout` (every other donor with at least `min_replicas` replica views: the donors of the frozen
+evaluation) and `ineligible`.  The split is written once: the dataset that stores it
+(`tngxmm.core.datasets.FrozenReportDataset`) refuses to replace a stored split by a different one, and the hash of its
+rows goes into every report.
+
+The registered split has 84 held-out donors; the sha256 of its rows is
+`499e3e00581e7843ac74dc35572bcda996f9baffc38508905456a3a014e0066d` (`realism.frozen.n_heldout`, `split_sha256`).
+It had 85 until 2026-11-12, when three observations were excluded from the donors because SAS cannot build a
+response for them: 0780291001 (MOS2 in a fast mode with the cluster on its central CCD), which was a held-out donor
+with five replica views, and 0747420101 and 0161560101 (the cluster outside or at the edge of the field), which had
+no replica views and no role in the split. The author signed this split off on 2026-11-12, before any frozen run.
+
+## Modes
+
+`params:realism.mode` is `development` (the default) or `frozen`.  In `frozen` mode the run is checked against the
+pre-registered section `realism.frozen` of the parameters before the selection and the count matching compute anything,
+and again, with the replay record, before the report: the configuration, the preset and its spec hash, the conditions
+rule (`donors.observing_conditions`) and the donor set must be the registered ones, and only the held-out donors are
+evaluated.  What may differ in a frozen run is the mode itself, the registration, paths and numbers of processes
+(`tngxmm.realism.report.FROZEN_MAY_VARY`); everything else is part of the registered configuration, identified by its
+sha256 (`frozen_config_sha256`).  A mismatch raises an error listing the differences
+(`tngxmm.realism.report.frozen_mismatches`, `require_frozen`).
+
+The report (`realism.c2st_report`, JSON and Markdown) states the donors and views, the replicas per donor, the
+count-matching factors, every AUC with its uncertainty, the list of configurations tried (`variants_tried`), the
+preset with its spec hash, the commit, and that every view is of a full snapshot.

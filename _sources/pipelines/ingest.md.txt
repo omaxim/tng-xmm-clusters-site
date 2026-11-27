@@ -1,0 +1,17 @@
+# ingest
+
+```{eval-rst}
+.. automodule:: tngxmm.ingest.pipeline
+   :noindex:
+   :no-members:
+```
+
+Run it with ``kedro run --pipeline ingest``.  The stage is the only one that knows a simulation's file format: its
+node dispatches each planned run to the loader of the preset's simulation (`tngxmm.ingest.loaders`) and returns one
+record per run and snapshot.  Every later node is the same for every simulation ({doc}`/simulations`).  The nodes
+below are generated from the registry; datasets without a catalog entry stay in memory between nodes.
+
+## Nodes
+
+```{kedro-pipeline} ingest
+```

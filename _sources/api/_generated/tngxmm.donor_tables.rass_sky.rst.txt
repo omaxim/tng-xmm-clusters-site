@@ -1,0 +1,27 @@
+tngxmm.donor\_tables.rass\_sky
+==============================
+
+.. automodule:: tngxmm.donor_tables.rass_sky
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ANNULUS_DEG
+      LHB_KT
+      CXB_INDEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_table
+      donor_sky
+      fetch
+      fit
+      main
+      parse_page
+      tool_url
+      xcm
+   

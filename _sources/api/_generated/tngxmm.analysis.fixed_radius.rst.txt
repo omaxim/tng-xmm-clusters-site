@@ -1,0 +1,24 @@
+tngxmm.analysis.fixed\_radius
+=============================
+
+.. automodule:: tngxmm.analysis.fixed_radius
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compare
+      fixed_radius_rows
+      main
+      mass_within
+      r500_kpc
+      report_lines
+      spearman
+   

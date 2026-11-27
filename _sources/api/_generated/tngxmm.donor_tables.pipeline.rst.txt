@@ -1,0 +1,20 @@
+tngxmm.donor\_tables.pipeline
+=============================
+
+.. automodule:: tngxmm.donor_tables.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_donor_conditions
+      build_donor_nh_total
+      build_fwc_reference
+      build_mos_background
+      build_qpb_corners
+      create_pipeline
+      extra_donor_rows
+      fetch_pps_archive
+      measure_mos_background
+   

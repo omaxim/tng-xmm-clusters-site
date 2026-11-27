@@ -1,0 +1,21 @@
+tngxmm.donors.draw\_donor
+=========================
+
+.. automodule:: tngxmm.donors.draw_donor
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      backfill_psz2_mass
+      build_donor_pool
+      draw_donor
+      load_donor_tables
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DonorTables
+   

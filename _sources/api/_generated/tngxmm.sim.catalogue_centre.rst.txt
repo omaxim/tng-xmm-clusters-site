@@ -1,0 +1,44 @@
+tngxmm.sim.catalogue\_centre
+============================
+
+.. automodule:: tngxmm.sim.catalogue_centre
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      UPP_C500
+      UPP_GAMMA
+      UPP_ALPHA
+      UPP_BETA
+      UPP_RMAX_R500
+      PIXELS_PER_FWHM
+      MAX_MAP_PIXELS
+      EDGE_TEST_RADIUS_FRACTION
+      EDGE_TOLERANCE_SIGMA
+      FWHM_PER_SIGMA
+      CMB_TABLE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      catalogue_position
+      cic_map
+      cmb_cl
+      cmb_table_path
+      cmb_white_transfer
+      filtered_map
+      kernel_outside
+      local_maxima
+      map_pixel_kpc
+      merged_peak
+      quadratic_peak
+      saddle_snr
+      segment_centroid
+      steepest_ascent
+      sz_kernel
+      upp_pressure
+      upp_projected
+   

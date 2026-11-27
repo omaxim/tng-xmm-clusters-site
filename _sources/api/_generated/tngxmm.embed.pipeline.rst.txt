@@ -1,0 +1,13 @@
+tngxmm.embed.pipeline
+=====================
+
+.. automodule:: tngxmm.embed.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+      extract_embeddings_node
+   

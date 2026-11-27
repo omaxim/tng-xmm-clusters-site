@@ -1,0 +1,26 @@
+tngxmm.realism.report
+=====================
+
+.. automodule:: tngxmm.realism.report
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FROZEN_MAY_VARY
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_report
+      conditions_table_sha256
+      config_sha256
+      folds_sha256
+      format_markdown
+      frozen_config_sha256
+      frozen_mismatches
+      frozen_settings
+      require_frozen
+   

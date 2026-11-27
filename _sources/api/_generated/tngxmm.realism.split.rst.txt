@@ -1,0 +1,22 @@
+tngxmm.realism.split
+====================
+
+.. automodule:: tngxmm.realism.split
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ROLES
+      DEFAULT_EXCLUDED_ROLES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_split
+      check_split
+      donors_of
+      rows_sha256
+   

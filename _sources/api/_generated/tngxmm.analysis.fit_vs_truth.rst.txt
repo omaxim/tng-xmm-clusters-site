@@ -1,0 +1,37 @@
+tngxmm.analysis.fit\_vs\_truth
+==============================
+
+.. automodule:: tngxmm.analysis.fit_vs_truth
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KPC_CM
+      FRACTIONS
+      NGRID
+      RMIN_KPC
+      NSAMP
+      SEED
+      TRUTH_FIELDS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compare
+      draw
+      fit_profiles
+      fit_setup
+      log_slope
+      loglog
+      main
+      nfw_mass
+      profiles_from_params
+      rho_crit_cgs
+      so_masses
+      truth_profiles
+      vikhlinin_ne
+      xray_hse_mass
+   

@@ -1,0 +1,14 @@
+# realism
+
+```{eval-rst}
+.. automodule:: tngxmm.realism.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline realism`; catalog `conf/base/catalog/realism.yml`.
+
+## Nodes
+
+```{kedro-pipeline} realism
+```

@@ -1,0 +1,22 @@
+tngxmm.analysis.tables
+======================
+
+.. automodule:: tngxmm.analysis.tables
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BASE_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attach_halo_groups
+      closure_table
+      mock_table
+      mock_truth_redshift
+      real_table
+   

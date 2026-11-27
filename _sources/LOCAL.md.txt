@@ -1,0 +1,250 @@
+# Running tngxmm on a laptop
+
+The simulation, the instrument stage and the hydrostatic *fits* need the cluster
+(TNG snapshots, the XMM CCF, AtomDB, HEASoft/XSPEC). Everything downstream of
+the stored products runs on a workstation from a local data bundle:
+
+| stage | runs locally from the bundle | needs |
+|---|---|---|
+| `obs` (`obs build-observations`) | yes | nothing (inputs are in the package) |
+| `donors` (replica, gate P, folds, max targets) | yes | `tables/splits`; the halo tables are in `campaigns/` |
+| `photometry` on stored views (`measure_lx`, `photometry remeasure-lx`) | yes | `tables`, `legacy_v3` (ECF table), `views` |
+| `massfit` renders (`render-fit-v4`) | yes | `responses`, `rate_cache`, `fits`, `true_profiles`, `legacy_v3`, `legacy_v2`; patched mbproj2d |
+| `bank` | yes | `views` and/or `mosaics`, `obs_mosaics` |
+| `embed` | yes (CPU fp32; a GPU for the full bank) | bank renders; the DINOv3 weights from Hugging Face after accepting their licence (not bundled) |
+| `viz` | yes | `embeddings`, `tables` (the `ml` stage is not implemented) |
+| `sim`, `instrument`, campaign generation | no | TNG-Cluster / TNG300 snapshots, CCF, AtomDB, xmm_simulator |
+| `massfit` fits | no, unless HEASoft/XSPEC and AtomDB APEC 3.1.3 are installed locally | XSPEC (a rate-cache miss calls it) |
+
+## 1. Install
+
+```bash
+python3.10 -m venv ~/venvs/tngxmm && . ~/venvs/tngxmm/bin/activate
+pip install -e ".[analysis]"                # from a checkout (or: pip install <wheel>)
+tngxmm --help && tngxmm cite --lint
+```
+
+A non-editable install also works: the catalogue tables, `citations/`,
+`inputs/`, `LICENSES/` and the bundle manifest are shipped inside the package.
+For massfit renders install mbproj2d at `ff497101` and apply the two patches
+in `environment/patches/` (LGPL-3.0-or-later; `patch -p1 < <patch>` in the
+mbproj2d checkout); for the temet-exact checks `git submodule update --init
+external/temet`. Pinned versions per stage: `environment/*.lock.txt`.
+
+## 2. Make the bundle (on the cluster)
+
+```bash
+tngxmm data bundle --list                               # every item, its source and size
+tngxmm data bundle --list --stage photometry --set campaign=$TNGXMM_PROD/campaign_v1
+tngxmm data bundle --make /ptmp/.../bundle \
+    --stage photometry --stage massfit-render --stage bank \
+    --set campaign=<campaign tree> --set fits=<fit root> \
+    --max-files views=2000                              # a small bundle
+```
+
+Items (`src/tngxmm/core/bundle.yml`):
+
+| item | content | size (measured) |
+|---|---|---|
+| `tables` | frozen tables of the data package (splits, donor offsets and thresholds, APEC tables, results CSVs) | 22 MB |
+| `legacy_v3`, `legacy_v2` | byte-identical copies of the external input tables the package reads (ECF table, APEC tables, fit target lists, catalogue snapshot) | 12.9 MB + 0.8 MB |
+| `views` | per view: merged image + coverage, point sources, metadata, per-camera images; no event lists, no tngref maps | about 7 MB per view (22 GB for 3,119 views) |
+| `tngref_maps` | optional TNG reference maps | about 32 MB per map uncompressed |
+| `obs_mosaics` | band 2+3 mosaics and PPS exposure maps of the 638 observations of the bank | data asset `obs` |
+| `responses` | RMF + on-axis ARF per camera and filter | 33 MB |
+| `rate_cache` | the mbproj2d rate cache of the fits to render (renders then need no XSPEC) | a few MB (3.5 MB for the fits, 5.7 MB render cache) |
+| `fits` | per fit: `result.json`, `provenance.json`, chain, cropped images | a few MB per fit |
+| `true_profiles` | truth profiles for the render overlays | 0.2 MB |
+| `mosaics`, `embeddings` | bank mosaics; DINOv3 embeddings | data assets |
+
+`--make` copies, then writes `SHA256SUMS` and `bundle.json` into the bundle;
+`tngxmm data verify` checks every `SHA256SUMS` under `$TNGXMM_DATA`.
+
+## 3. Use it
+
+```bash
+export TNGXMM_DATA=~/tngxmm-bundle                 # the bundle IS the data root
+export TNGXMM_SITE_FILE=~/tngxmm-bundle/laptop.env  # optional, from environment/sites/laptop.env.example
+export MBPROJ_RESP=$TNGXMM_DATA/massfit/responses
+export TNGXMM_MBPROJ_CACHE_DIR=$TNGXMM_DATA/massfit  # directory CONTAINING mbproj2d_cache/
+tngxmm data verify
+```
+
+* Photometry on stored views: `tngxmm photometry ...` / `tngxmm photometry
+  remeasure-lx $TNGXMM_DATA/campaign --preset v1 --workers 4` (the ECF is read from
+  `$TNGXMM_DATA/tables/ecf_table_v2.npz` or the frozen copy in `legacy_v3/`).
+* Renders (`tngxmm massfit render-fit-v4`): `--fit-dir
+  $TNGXMM_DATA/massfit/fits/<fit> --cache-dir $TNGXMM_DATA/massfit --resp
+  $MBPROJ_RESP --true-profiles $TNGXMM_DATA/massfit/true_profiles --out <dir>`.
+* Bank, embed: `tngxmm bank ...`, `tngxmm embed extract --device cpu
+  --precision fp32 ...`.
+
+No path of the cluster is needed: every machine path in the package is a site
+variable (`environment/sites/README.md`); without one the package raises an
+error naming the variable to set, or uses a placeholder `$NAME/...` that does
+not exist.
+
+## What still cannot run locally, and why
+
+* The simulation and the instrument stage need TNG snapshots (TBs on
+  `/virgotng`), the XMM CCF and AtomDB, and the sim environment (pyXSIM, SOXS,
+  xmm_simulator, threeML).
+* The hydrostatic fits need XSPEC (HEASoft) and AtomDB APEC 3.1.3 whenever the
+  rate cache misses; on Vera XSPEC runs in an apptainer image whose bind mounts
+  (`TNGXMM_SITE_CONTAINER_BINDS`) restrict where tables may live. A native
+  local HEASoft works without that restriction (leave the variable unset).
+* The e2e acceptance tests (`tests/e2e/`) need the fixtures
+  (`TNGXMM_FIXTURES`) and the stage environments; they skip cleanly elsewhere.
+* The extraction of the literature values: the paper sources are in a private
+  references area outside git; the extracted values are public
+  (`inputs/literature_values.csv`), so nothing downstream needs the papers.
+
+## Without the cluster
+
+Sections 1 to 3 are for the analysis stages from a bundle made on the cluster. This section is for a machine that
+has no access to it: the code from the repository, everything else from the repository's release files. A fit of a
+stored mock and the whole chain of a new mock view (gas from the FLAMINGO data service, view, SAS source list, fit
+target, fit) were run this way on 2026-11-25 from empty directories, with only the fetched directory visible to
+the containers; the view (75 per-camera files, merged images, source list), the SAS list and the chain of the fit
+were identical to the production ones (snapshot 48, halo 32749932).
+
+What the machine must have: Python 3.10, a C++ compiler (mbproj2d builds an extension), `git`, `tar`, and
+`apptainer` for XSPEC and SAS, which run in the HEASoft images. While the repository is private, a GitHub login
+(`gh auth login`, or a token in `$GH_TOKEN`); it is read when a download starts and stored nowhere.
+
+### Environments
+
+```bash
+git clone https://github.com/omaxim/tng-xmm-clusters.git && cd tng-xmm-clusters
+git submodule update --init external/temet                       # mock generation only
+
+# fits (mbproj2d + XSPEC): the lock, mbproj2d at its commit, the Kedro overlay, the package
+python3.10 -m venv ~/venvs/tngxmm-massfit && V=~/venvs/tngxmm-massfit/bin
+$V/python -m pip install "$(grep -i '^pip==' environment/massfit.lock.txt)"
+grep -v -E '^\s*(#|$)|^MBProj2D @' environment/massfit.lock.txt > /tmp/massfit.req
+$V/python -m pip install --no-deps -r /tmp/massfit.req
+$V/python -m pip install --no-deps --no-build-isolation \
+    "MBProj2D @ git+https://github.com/jeremysanders/mbproj2d@ff497101bba96ebaed871858c0cee0e2f6387b99"
+$V/python -m pip install -c environment/kedro.lock.txt "kedro==0.19.14" "kedro-datasets[pandas-csvdataset,json-jsondataset]"
+$V/python -m pip uninstall -y kedro-telemetry && $V/python -m pip install --no-deps -e .
+```
+
+The simulation environment is built the same way from `environment/sim.lock.txt` (without its `xmm_simulator @`
+line), then xmm_simulator at `9fdedb4e` with `environment/patches/xmm_simulator-9fdedb4e-utils.patch` applied
+(`sha256sum -c environment/patches/xmm_simulator-installed.sha256` in the site-packages directory confirms the
+files), `environment/temet.lock.txt`, a `.pth` file naming `external/temet`, the Kedro overlay and `hdfstream`.
+`environment/bootstrap.sh` holds the same steps with the cluster's interpreter and compiler paths. Measured: 0.8 GB
+for the fit environment (81 s to build), 1.3 GB for the simulation environment.
+
+### Data and software
+
+```bash
+tngxmm data fetch --list                                         # every item: download and disk size
+tngxmm data fetch ~/tngxmm-local --stage fit --name mock_48_32749932_v0
+tngxmm data fetch ~/tngxmm-local --stage mock
+source ~/tngxmm-local/activate.sh
+```
+
+`fetch` downloads the items of `src/tngxmm/core/fetch.yml`, checks them against the sha256 list of their release,
+unpacks them, re-points the cluster paths that the stored tables and the fit-image links carry, and writes
+`site.env` (the site file), `activate.sh` (the variables, and `environment/bin` on `PATH` for the `xspec` wrapper)
+and `bin/sasrun`. It can be repeated: what is unpacked is skipped. `--name` picks the chunks that hold a mock view
+or a fit through the release manifests; `--all-chunks` takes all of them. The same as a node:
+`kedro run --pipeline setup --params setup.root=<dir>,setup.stages=[fit]`.
+
+| what | download | on disk (measured) |
+|---|---|---|
+| a fit of stored mocks: package data, responses, AtomDB, CCF, HEASoft 6.35.1 image, fit support, one chunk of 75 views | 25.4 GB | 25 GB |
+| each further chunk of 75 views | 1.8 GB | 1.8 GB |
+| all 5,001 views of pass 1 | 120 GB | 121 GB |
+| mock generation: the above without views, plus the images of the real observations, SAS, HEASoft 6.33.2 image, CCF extras, halo tables | 44.3 GB | 42 GB |
+| per generated halo: gas cube, view | | 0.07 GB + 0.02 GB |
+| all finished fits | 12.4 GB | 12.4 GB |
+| by name only: donor event lists 46 GB, fixtures 2.6 GB, reference library 1.3 GB, embeddings 0.9 GB, image bank 1.3 GB | | |
+
+The fetched directory of the fit stage holds about 410,000 files, most of them the links of the fit-image tree of
+all 5,001 views; a file system with a limit on the number of files should have room for them.
+
+### A fit of a stored mock
+
+The stage `fit` fetches the data package and the response set pass 1 was made with (`data_v1p1`,
+`responses_obs_v1`): a mock records the response set of its donor and is fitted with that one. The stages `mock`
+and `realfit` fetch the tables and responses of the 808 observations (`data_v1p2`, `responses_obs_v2`); give them
+a root of their own.
+
+```bash
+T=~/tngxmm-local/prod_v1/pass1/plan/lane2/targets_pass1_lane2.csv
+(head -1 $T; grep '^mock_48_32749932_v0,' $T) > one.csv
+mkdir -p work cache && cp -r ~/tngxmm-local/prod_v1/pass1/caches/seed/mbproj2d_cache cache/ && cd cache
+MBPROJ_IMG_ROOT=~/tngxmm-local/prod_v1/pass1/v1_flamingo_l1m8_pass1/fitimg MBPROJ_WORK=../work \
+tngxmm massfit fit-hydrostatic --targets ../one.csv --tag pass1 --workers 1 --all --nprocesses 1 --resume --quick \
+    --cache-dir $PWD --preset v1_flamingo_l1m8_pass1 --seed 20261008 --crop-r500 3 --fallback-bg-prior-dex 0.3 \
+    --resp ~/tngxmm-local/prod_v1/responses_v1 --order as-listed
+```
+
+About 12 minutes for this z = 1.5 mock on one core; a z = 0.1 mock takes hours ({doc}`production`).
+
+### A fit of a real observation
+
+```bash
+tngxmm data fetch ~/tngxmm-real --stage realfit                  # 99 GB: images, event lists, calibration, responses
+source ~/tngxmm-real/activate.sh
+```
+
+A real fit reads the per-camera images, the event lists and flare series of the observation, the extra calibration
+files and its source list; the targets and plans of the 623 and of the 170 added observations are under
+`prod_v1/real` and `prod_v1/real_extra`. The fitter's arguments are those of the plan file.
+
+### On another cluster
+
+`slurm/viper_fits.sh` runs the streams of a plan on half a node of the MPCDF cluster Viper, and
+`tngxmm massfit fit-plan streams` cuts a target list into such plans:
+
+```bash
+tngxmm massfit fit-plan streams --targets <targets.csv> --run-dir <run> --jobs 4 --streams 4 --tag pass1 \
+    --img-root <image root, or - for the real observations> --seed-cache <dir>/mbproj2d_cache \
+    --max-workers 16 --fitter-args "--preset v1_flamingo_l1m8_pass1 ..."
+sbatch --export=ALL,TNGXMM_VIPER_ROOT=<root>,PLAN=<run>/PLAN_node00.txt,TREE=<code tree>,DATA=<data package>,OBSRESP=<response set> slurm/viper_fits.sh
+```
+
+A stream runs its list in pieces of two fits a worker (`CHUNK_PER_WORKER`), each piece with new processes, and then
+once more whole, which retries what failed and writes the results table. A fit worker grows by about 0.3 GB with
+every fit it has run; a job of 128 workers that ran whole lists reached its memory limit after about 450 fits.
+
+`slurm/viper_views.sh` makes the views of a target list there: generation, source detection and fit targets, with
+the views that are finished kept. A halo-snapshot without an observation in its window (`paired` False) has no view
+and is left out. Measured on seven views at z = 0.08 to 0.93: generation 2.5 to 3.3 min and about 5 GB a process,
+detection 10 to 18 min and about 0.35 GB a process, 25 MB of products a view.
+
+```bash
+sbatch --cpus-per-task=8 --mem=32000M --time=01:55:00 --export=ALL,TNGXMM_VIPER_ROOT=<root>,TARGETS=<targets.csv>,TREE=<code tree>,OUT=<run dir>,PRESET=<preset>,GEN_PAR=3,SAS_PAR=8 slurm/viper_views.sh
+```
+
+The targets are dealt in turn to the `jobs x streams` streams, longest first: in the order of a cost table
+(`--costs`, a CSV `name, core_h`) when there is one, else in the order of the list, which is then taken to be
+longest first (`fit-plan remaining` writes it by angular size). Every stream has its own target table
+(`<run>/targets/`), work directory (`<run>/work/<stream>`) and copy of the seed rate cache
+(`<run>/caches/<stream>/mbproj2d_cache`), so the streams of all jobs can run at the same time. A stream gets one
+worker per target, at most `--max-workers`. The list for another cluster comes from the results of the run so far:
+`fit-plan remaining` (the targets without a finished fit), `fit-plan refit-sample` (a seeded sample of finished
+fits to repeat there as a control) and `fit-plan rank-sample` ({doc}`production`, section 6). Measured on Viper on
+2026-11-26 with one fit per worker: 0.5 GB per mock fit and 1.2 GB per real fit while the optimiser runs. The compute nodes have no network, so the
+roots are fetched on a login node first; a copy between two clusters of the same centre is several times faster
+than the download.
+
+### A new mock view
+
+```bash
+T=campaigns/v4_flamingo_l1m8_pass1/targets_v4_flamingo_l1m8_pass1.csv
+(head -1 $T; grep '^v4_flamingo_l1m8_pass1-s048-h32749932-v0,' $T) > one.csv
+# the gas: the ingest node with ingest.stream_missing=true ({doc}`simulations`), about 25 s and 440 MB of transfer a halo
+python -m tngxmm.core.runner campaign run --preset v1_flamingo_l1m8_pass1 --snap 48 --targets-csv one.csv \
+    --out-root tree --cube-root cubes --workers 1                 # 3 minutes; --snap: only that snapshot's cubes are needed
+tngxmm instrument sas-queue build-mock --targets one.csv --tree tree --queue tree/sas/queue.json
+python -m tngxmm instrument sas-queue run --queue tree/sas/queue.json            # 7 minutes
+tngxmm massfit fit-plan pieces --targets one.csv --root tree --preset v1_flamingo_l1m8_pass1 --out-dir tree/fit --pieces 1
+TNGXMM_PY=$(which python) python -m tngxmm.core.runner queue run --queue tree/fit/queue_fit_targets.json
+```
+
+The fit then takes `tree/fit/pieces/targets_000.csv` and `MBPROJ_IMG_ROOT=tree/fitimg`, with the fit environment.
+Not in the releases: the gas cubes of pass 1 (576 GB; any halo is fetched again from the data service).

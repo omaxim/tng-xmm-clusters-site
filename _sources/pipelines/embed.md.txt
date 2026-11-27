@@ -1,0 +1,14 @@
+# embed
+
+```{eval-rst}
+.. automodule:: tngxmm.embed.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline embed`; catalog `conf/base/catalog/embed.yml`.
+
+## Nodes
+
+```{kedro-pipeline} embed
+```

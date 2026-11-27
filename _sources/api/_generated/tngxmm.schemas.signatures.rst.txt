@@ -1,0 +1,14 @@
+tngxmm.schemas.signatures
+=========================
+
+.. automodule:: tngxmm.schemas.signatures
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      EcfLookup
+      HaloSource
+      MeasureApertures
+   

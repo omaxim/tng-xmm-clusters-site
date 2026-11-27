@@ -1,0 +1,61 @@
+tngxmm.core.diskguard
+=====================
+
+.. automodule:: tngxmm.core.diskguard
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      EXIT_DISK
+      INTERRUPTED
+      LOG_PREFIX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      atomic_open
+      atomic_path
+      check_space
+      clear_stop
+      completed_or_tick
+      copy_file
+      csv_tail_complete
+      disk_message
+      existing_dir
+      failure_status
+      fits_complete
+      free_gb
+      fsync_file
+      hdf5_complete
+      install_stop
+      interrupted_status
+      is_disk_error
+      is_interrupted
+      npz_complete
+      probe_write
+      read_json
+      remove_stale_tmp
+      repair_csv_tail
+      request_stop
+      stop_requested
+      sync_tree
+      text_says_disk
+      tmp_name
+      write_json
+      write_text
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SpaceGuard
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      DiskFull
+   

@@ -1,0 +1,24 @@
+tngxmm.instrument.select\_pn\_mode
+==================================
+
+.. automodule:: tngxmm.instrument.select_pn_mode
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PN_MODES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      select_pn_mode
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PnMode
+   

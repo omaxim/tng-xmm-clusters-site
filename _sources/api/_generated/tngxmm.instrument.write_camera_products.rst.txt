@@ -1,0 +1,26 @@
+tngxmm.instrument.write\_camera\_products
+=========================================
+
+.. automodule:: tngxmm.instrument.write_camera_products
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BANDS_OUT
+      BANDS_OUT_PPS
+      ASSUMED_SUBMODE_LABEL
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_v4_keys
+      mock_obsid
+      percam_wcs_header
+      v4_merged_header
+      write_camera_products
+      write_ftz
+      write_source_list_fits
+   

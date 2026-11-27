@@ -1,0 +1,32 @@
+tngxmm.donors.build\_replica\_targets
+=====================================
+
+.. automodule:: tngxmm.donors.build_replica_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TARGET_FAMILY
+      CAMPAIGN_SNAPS
+      MASS_BIAS_TOLERANCE_DEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_replica_targets
+      make_mock_obsid_v4
+      mass_match_bias
+      prepare_halo_units
+      replica_provenance
+      seed_for_view
+      select_reference
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ReplicaSpec
+   

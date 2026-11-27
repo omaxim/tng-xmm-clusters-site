@@ -1,0 +1,30 @@
+tngxmm.obs.build\_observations
+==============================
+
+.. automodule:: tngxmm.obs.build_observations
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CATALOGUE_DIR
+      REFERENCE_MASSES_CSV
+      INPUT_FILES
+      SAME_CLUSTER_ARCMIN
+      WL_SOURCE_BY_SAMPLE
+      MATCHING_MASS_RULE
+      DERIVATIONS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_cluster_ids
+      build_observations
+      build_reference_pool
+      import_donor_tables
+      load_inputs
+      matching_masses
+      write_observations
+   

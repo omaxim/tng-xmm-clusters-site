@@ -1,0 +1,38 @@
+tngxmm.core.campaign\_checks
+============================
+
+.. automodule:: tngxmm.core.campaign_checks
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      C6_ZERO_IF_BELOW
+      C6_MEASURED_IF_ABOVE
+      C6_APERTURES
+      C6_ANNULUS_PIX_TOL
+      EXPMAP_ZERO_MAX_FRAC
+      BAND_1
+      PPS_KINDS
+      RESULT_DTYPES
+      C4_DONOR_OFFSET_TOL_ARCMIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      format_report
+      load_results
+      run_checks
+      view_dir
+      view_seed
+      write_report
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CheckResult
+      Report
+   

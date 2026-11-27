@@ -1,0 +1,36 @@
+tngxmm.obs.pps\_products
+========================
+
+.. automodule:: tngxmm.obs.pps_products
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BUILT_BANDS
+      BUILT_CARDS
+      TREE_PRODUCT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_mosaic
+      build_mosaics
+      built_name
+      camera_sets
+      data_sha256
+      exposure_sets
+      extend_manifest
+      fetch_products
+      fetch_unlisted
+      images_root
+      manifest_rows
+      read_manifest
+      sha256
+      stage_observations
+      stage_products
+      status
+      sum_images
+   

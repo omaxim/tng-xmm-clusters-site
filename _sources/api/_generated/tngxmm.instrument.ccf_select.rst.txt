@@ -1,0 +1,24 @@
+tngxmm.instrument.ccf\_select
+=============================
+
+.. automodule:: tngxmm.instrument.ccf_select
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CCF_RULES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      camera_files
+      constituents
+      default_analysis_date
+      iso_date
+      rule_of
+      select
+      validity_breaks
+   

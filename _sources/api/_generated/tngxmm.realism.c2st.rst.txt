@@ -1,0 +1,33 @@
+tngxmm.realism.c2st
+===================
+
+.. automodule:: tngxmm.realism.c2st
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CLASSIFIERS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ablation_table
+      c2st
+      c2st_arrays
+      classifier_factory
+      donor_bootstrap
+      feature_group_variants
+      mean_auc
+      null_summary
+      oof_scores
+      paired_difference
+      permutation_null
+      permute_within_donor
+      require_sklearn
+      subset_auc
+      table_arrays
+      univariate_table
+   

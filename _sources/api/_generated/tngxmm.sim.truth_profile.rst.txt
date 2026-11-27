@@ -1,0 +1,43 @@
+tngxmm.sim.truth\_profile
+=========================
+
+.. automodule:: tngxmm.sim.truth_profile
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FORMAT
+      READABLE_FORMATS
+      P_TO_KEV_CM3
+      GAS_FIELDS
+      METAL_FIELDS
+      REQUIRED
+      REQUIRED_FORMAT3
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_truth_profile_file
+      grid_edges
+      hse_from_phase
+      hse_from_truth_profile
+      is_sphere_truth
+      metallicity_profiles
+      path_for
+      phase_profiles
+      read_truth_profile
+      shell_index
+      shell_median
+      shell_order
+      summary_json
+      write_truth_profile
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MassAccumulator
+   

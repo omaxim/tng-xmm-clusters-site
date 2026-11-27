@@ -1,0 +1,13 @@
+tngxmm.ingest.pipeline
+======================
+
+.. automodule:: tngxmm.ingest.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_canonical_cubes
+      create_pipeline
+   

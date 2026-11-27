@@ -1,0 +1,31 @@
+tngxmm.core.rng
+===============
+
+.. automodule:: tngxmm.core.rng
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SCHEME
+      SPLIT_SEED
+      VIEW_PURPOSES
+      CAMERA_PURPOSES
+      DONOR_PURPOSES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      as_view
+      seed_for
+      seed_for_donor
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ViewId
+      ViewStreams
+   

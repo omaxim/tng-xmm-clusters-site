@@ -1,0 +1,31 @@
+tngxmm.core
+===========
+
+.. automodule:: tngxmm.core
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   bundle
+   campaign_checks
+   compare_tables
+   cosmology
+   datasets
+   diskguard
+   fetch
+   freeze
+   hashing
+   logging
+   membudget
+   node_queue
+   paths
+   pool
+   provenance
+   rng
+   runner
+   site
+   units

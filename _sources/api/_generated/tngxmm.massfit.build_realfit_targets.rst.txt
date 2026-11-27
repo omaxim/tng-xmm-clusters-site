@@ -1,0 +1,38 @@
+tngxmm.massfit.build\_realfit\_targets
+======================================
+
+.. automodule:: tngxmm.massfit.build_realfit_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LEGACY_LZ
+      OBS_IMAGE_ROOT
+      PPS_SOURCE
+      SEED_CACHE
+      REF_FAMILIES
+      REF_SOURCES
+      EXCLUDED_REFERENCES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_parser
+      build_realfit_targets
+      count_images
+      dr15_source_list
+      fit_arguments
+      image_index
+      load_observations
+      main
+      normalise
+      observations_csv
+      reference_masses
+      stage_source_lists
+      target_names
+      write_obsmli_like
+      write_targets_provenance
+   

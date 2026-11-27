@@ -1,0 +1,325 @@
+# Pre-registered rules of 2026-11-04 (DESIGN v4)
+
+Written on 2026-11-04, before any fit under the configuration these rules judge (spec hash of preset `v1`
+`66a72be359876779` and its successors from this commit on; on 2026-11-04 no closure cell, real refit or pass-1 view
+existed for it).
+Each rule says what is measured, how it is judged, and what a verdict does. Thresholds come from published practice
+where it exists; where it does not, the number is ours, is said to be ours, and is listed in
+`docs/assumptions/OPEN_ITEMS.md`, section P. On 2026-11-04 no result of the configuration these rules judge existed. Some
+choices were made knowing results of earlier configurations; they are named where they are made (section 1). A rule
+may say "decided by run X": then the rule, not the outcome, is what is fixed here.
+
+The code that applies the rules: `validation.closure_grid` (`CLOSURE_RULE`, `ARM_RULE`, `ARM_BASE`, `ARM_ROLE`,
+`SAMPLER_RULE`, `QPB_LEVEL_RULE`, the arm lists `B1_DECISION_ARMS`, `B1_BUDGET_ARMS`, `Q18_ARMS`; `analyse` writes
+every verdict to `closure_verdict.json`), `conf/base/parameters/certify.yml` (the confirmation run), `massfit.fit_qc`
+(the science-sample flags), `bank.filter_rows` (the training filter) and `donors.pair_projections` (the pairing on the
+fit mass).
+
+## Published precision these rules are set against
+
+| source | what it quotes |
+|---|---|
+| Ettori et al. (2019, X-COP, abstract, p. 1) | hydrostatic masses "recovered with a relative (statistical) median error of 3 % at R500"; method systematics "of the order of 5% at both R500 and R200" |
+| Pratt et al. (2019, review, Sect. 3.2.2, p. 13) | spherical symmetry and gas clumping "few %" each, the hydrostatic bias itself "< 10 - 30%", the absolute X-ray temperature calibration 15-20 per cent |
+| CHEX-MATE Collaboration (2021, abstract, p. 1) | exposures "designed to obtain individual mass measurements accurate to 15 −20% under the hydrostatic assumption" |
+| Nelson et al. (2014, p. 9) | on simulated clusters, a mass reconstruction that adds the gas motions to the hydrostatic term recovers the true mass to within 5 per cent at every radius, for relaxed subsamples of up to half the clusters (f_relax < 50 per cent) |
+| Vehtari et al. (2021, pp. 4 and 6) | R-hat < 1.01 and a rank-normalised ESS above 400 as first checks; whether a Monte-Carlo error is small enough "requires domain expertise" |
+| Foreman-Mackey et al. (2013, p. 11) | run the sampler for a few (say 10) autocorrelation times; too few steps is the common mistake |
+
+No paper gives a pass threshold for a closure test of a mock-image pipeline, or a per-term budget of an XMM-Newton
+hydrostatic mass below these sizes. The thresholds below are therefore ours, placed against these numbers.
+
+## 1. The closure grid B1
+
+**Amendment of 2026-11-11, made knowing the result.** Job 1896730 (gate arm with the pixel average) gave FAIL under
+the rule below: 1.046 on the 27 usable clean fits, 0.89 on real backgrounds. The author decided that the grid is
+reported as the measured error of the method, with its verdict as it came out, and that it no longer gates the
+freeze. The freeze is judged on the pilot (`docs/dev/PILOT.md`), which measures the two things the grid cannot: the
+agreement of real fits with published hydrostatic masses, and the ratio of the fit to the hydrostatic and true mass
+on simulated gas. The rule below is left as written; nothing in it was changed to fit the result. No further closure
+or sampler run is made before the freeze.
+
+Grid: true M500 2, 4, 8 x 1e14 Msun, z 0.06, 0.2, 0.5, cool-core and non-cool-core, three seeds (donors), clean and
+real background: 54 fits per background and arm. Gate arm `v1sas`.
+
+* **Usable fit.** Status ok, a finite ratio, and no flag of `fit_qc.QC_EXCLUDING`, the flags that keep a mock or a real
+  fit out of the science sample: a posterior at a prior edge of c200 or Z, the outer-pressure run-away, the centre
+  flag, no background annulus (`bg_fallback`), and, new on 2026-11-04, a first guess limited by the field (`field_edge`) or
+  none (`no_seed`, the pivot start). The same flags apply to every mock and real fit, so the grid judges the regime the
+  science sample keeps (DESIGN v3 section 2 made the QC sample the science sample; the closure grid now follows it).
+* **Statistic.** Per background, the median of ln(M500_fit / M500_true) over the usable fits, pooled over mass,
+  profile, redshift and seed, with a bootstrap 95 per cent interval over the fits (10,000 resamples, seed 20261104).
+  Pooled, not per cell: the per-cell rule 1.00 +- 0.03 with three seeds passes an unbiased cell 40-55 per cent of the
+  time at a per-fit scatter of 0.07-0.1, and all 18 cells with a probability below 1e-4 (memo of 2026-11-03, item 2).
+  It is kept as a report. This argument from power was made after the per-cell rule had failed for the earlier freeze
+  candidate (13 of 72 cells); the windows themselves are DESIGN v2's, set before any v2 fit.
+* **Domain.** A redshift with fewer than half of its 18 fits usable is out of the domain: it enters no median and is
+  reported with its counts. A background needs two redshifts in the domain, else it is INCOMPLETE. This is how a
+  cluster that fills the field at z = 0.06 is handled: by the same flags that remove such targets from the headline
+  statistics of both sides (section 7), not by a closure rule of its own. Disclosed: the domain rule and the QC
+  exclusion of closure fits were proposed (memo of 2026-11-03, item 2(c)) after the z = 0.06 cells of earlier
+  configurations were known to fail (fitted background about 20 per cent low, DECISIONS "The background-cell deficit");
+  every median is therefore also reported with all ok fits and every redshift, and the z = 0.06 cells are shown in the
+  per-cell report.
+* **Clean cells (the gate).** PASS when the 95 per cent interval of the pooled ratio lies inside [0.95, 1.05] and every
+  redshift median in the domain lies in [0.90, 1.10]. These are the clean windows of DESIGN v2, set before any v2 fit,
+  and the 5 per cent is the X-COP method systematic (Ettori et al. 2019) and the precision of the simulation method
+  test of Nelson et al. (2014): the fitter on its own data must do as well as the methods it is compared with. At a
+  per-fit scatter of 0.05 (the V4 clean cells) and 54 fits the interval is +-0.017, so an unbiased fitter passes with
+  probability near 1, one 2 per cent high with 0.92 (2 per cent low 0.96), one 4 per cent high with 0.21 (low 0.27;
+  bootstrap simulation with the three redshift windows). A clean FAIL is a fitter defect, whatever the real cells show.
+* **Real cells, tail (the gate).** PASS when at most 5 per cent of the ok fits (2 of 54) lie outside [0.67, 1.5]
+  (DESIGN v2 section 3; certification `R4_real_tail`).
+* **Real cells, the hydrostatic-bias window (not the gate).** PASS when the pooled median itself lies in [0.92, 1.08]
+  and every redshift median in the domain in [0.85, 1.15]: DESIGN v2's rule R4, set before any v2 fit and made a
+  report in v3 after the v2 results; it is restored here before any fit it judges. A FAIL does not stop the
+  production: in the matched mock-real comparison one fitter serves both sides, so a method term common to both
+  cancels to first order. It does forbid quoting a mock M_X / M_true as a hydrostatic bias without the measured
+  closure median beside it. At a per-fit scatter of 0.1 the median's standard error is 0.017: a true 0.95 passes with
+  probability 0.97, a true 0.92 with 0.5, a true 0.90 with 0.1. The 0.08 is ours (DESIGN v2), between the 5 per cent
+  method systematic of X-COP and the 10 per cent below which Pratt et al. (2019) place the hydrostatic bias of relaxed
+  clusters.
+* **Failed, missing and pivot fits.** More than 10 per cent failed fits in a background is a FAIL (DESIGN v2 section 3,
+  certification `max_fail_frac`). Any missing or stale fit makes the background INCOMPLETE: a grid not finished is not
+  judged. More than 10 per cent of fits started from the pivot (no first guess, or a failed seed step) makes it
+  INCOMPLETE: such a fit is excluded from every statistic (it is `no_seed`), and when they are many the grid does not
+  test the procedure the real targets go through. A closure record with status ok whose result.json cannot be read
+  (its QC unknown) counts as stale. Order within a background: a missing or stale fit makes it INCOMPLETE first; else
+  more than 10 per cent failed fits make it FAIL, even when pivot starts or the domain would make it INCOMPLETE; else
+  INCOMPLETE for pivot starts or too few redshifts; else the windows decide. Across the two backgrounds INCOMPLETE wins
+  over FAIL in the gate.
+* **Exit codes** of `closure_grid analyse`: 0 PASS, 1 FAIL, 2 INCOMPLETE, from the clean and tail verdicts.
+
+The confirmation run (`conf/base/parameters/certify.yml`, DESIGN v4) takes the same windows on its fresh grid, and
+restores R3p's 95 per cent half-width of 0.07 (DESIGN v3; v3.1 had loosened it to 0.10 after the v2 results). At the
+D1 scatter of 0.3 the half-width is 1.96 x 1.2533 x 0.3 / sqrt(n), 0.07 at n = 111 (where a bootstrap meets it about
+half the time). The plan is 16 fresh views per cell (192), about 136 science fits at the D1 QC loss of 29 per cent
+(half-width about 0.063). A width not met is INCOMPLETE (`max_blocks` 2): a block of views (two more per cell, a new
+sample seed, no cluster drawn before) is added and the rule read again; only a miss after the second block FAILs. The
+stop looks at the width, never at the median. One difference from the grid of B1: in the certification a redshift
+rule below its minimum count is INCOMPLETE and keeps the gate closed, where B1 leaves such a redshift out of the domain;
+the fresh grid's redshifts (0.15, 0.4, 0.75) hold no field-filling cell, so the stricter form costs nothing there.
+
+## 2. Paired study arms
+
+* **Statistic.** For an arm and its base (`ARM_BASE`: `v1` for the arms masked with the cell's simulated sources,
+  `v1sas` for those masked with its SAS list, `v1` also for `v1_obsresp_shared`, the arm without the suffix for a
+  re-seed), d = ln M500(arm) - ln M500(base) of the same cell and seed, over the pairs whose two fits are both usable.
+  The verdict is taken on the real-background cells (54 pairs); the clean cells and all ok pairs without the QC
+  exclusion are reported. Median and bootstrap 95 per cent interval as above; fewer than 27 pairs is INCOMPLETE.
+* **Verdict**, with delta = 0.03:
+  * NEGLIGIBLE: the interval lies inside +-0.03; the arm is reported and enters no budget.
+  * SYSTEMATIC: the interval reaches beyond +-0.03 and excludes 0; MATERIAL as well when |median| > 0.03.
+  * INCONCLUSIVE: the interval reaches beyond +-0.03 and includes 0; the term enters at the far end of the interval,
+    or seeds are added before the paper.
+* **Why 0.03.** It is DESIGN v2's MATERIAL line (R2, set before the v2 fits) and the old per-cell tolerance, and it
+  equals the 3 per cent median statistical error of the X-COP hydrostatic masses at R500 (Ettori et al. 2019), the
+  best-measured XMM-Newton masses: a term below it cannot change a comparison with them. Pratt et al. (2019) give the
+  smaller systematic terms of a hydrostatic mass as "few %". The value is ours (OPEN_ITEMS P).
+* **Power.** At n = 54 the interval half-width is about 0.33 s, s the scatter of the paired differences. At true zero
+  an arm is NEGLIGIBLE with probability 1.0 / 0.89 / 0.44 / 0.15 for s = 0.03 / 0.05 / 0.07 / 0.09; a true shift of
+  0.03 is SYSTEMATIC with probability 0.98 / 0.93 / 0.72 / 0.52, one of 0.05 with 1.0 / 1.0 / 0.99 / 0.90 (bootstrap
+  simulation of the rule). The re-seed arms
+  `v1sas_r2` and `v1sas_r3` (the gate arm with another chain seed, nothing else changed) measure the floor: if either
+  is not NEGLIGIBLE, the grid has too few cells for this rule, seeds are added (three more donors per z), and delta
+  does not move.
+* **What a verdict does** (`ARM_ROLE`):
+
+| role | arms | a SYSTEMATIC or INCONCLUSIVE verdict |
+|---|---|---|
+| error, one alternative calibration or model | `v1_psfon`, `v1_spflat`, `v1_psfell` | enters two-sided at the absolute value of its median (INCONCLUSIVE: at the far end of its interval) |
+| pair, two directions | `v1_vighi` / `v1_viglo` (TN-0018 off-axis flux accuracy), `v1_nustarhi` / `v1_nustarlo` (EPIC-to-NuSTAR), `v1_qpbhi` / `v1_qpblo` and `v1_qpbsoft` / `v1_qpbhard` (section 3), `v1sas_seedhi` / `v1sas_seedlo`, `v1sas_prot0` / `v1sas_prot90`, `v1sas_crop2p5` / `v1sas_crop4` (section 8) | each arm judged alone; the pair enters as the asymmetric interval [min(0, a, b), max(0, a, b)] of its medians that are not NEGLIGIBLE |
+| range | `v1_xcallo` (a correct ACIS calibration; `v1_xcalhi` a diagnostic) | enters one-sided, [median, 0] |
+| bound, an assumption with no published error size | `v1_nhhi` (the whole molecular column one way), `v1_esasalt` (the oldest FWC set) | the shift is quoted two-sided as a stated bound, and a SYSTEMATIC verdict makes the assumption a stated limitation |
+| decision | `v1_qpbfree` (section 3), `v1_sptie` (section 4) | decides a production choice by the rule of its section |
+| reseed, sampler | `v1sas_r2`, `v1sas_r3`; the arms of section 5 | power check; the rule of section 5 |
+| diagnostic | every other arm (`v1_obsresp_shared`, the shared responses against the per-observation ones the presets now use; `v1_mix`, `v1_grid`, `v1_long`, `v1_half`, `v1_deep`, `v1_vigcw`, `v1_fpmask`, `v1_axpt`, `v1_vigzero`, `v1_qpbflat`) | reported |
+
+  Terms that enter combine in quadrature (each is a different calibration file or model choice); a pair or a range
+  keeps its own sides (`closure_grid.budget`, written to `closure_verdict.json`). The budget is reported beside every
+  result it applies to; it is never subtracted.
+* **`v1_psfell` per band.** The verdict is on the mass of the joint four-band fit, as for every arm. Per band the
+  analysis reports the counts within theta500 of the arm's cells over the base cells; no verdict is taken per band.
+  If the arm is not NEGLIGIBLE, the term enters at its |median|, and one refit of its cells without the 4.5-12 keV
+  images (the band that holds the ELLBETA rows above 10 keV, which Read et al. 2011 could not fit stably) is reported
+  beside it; the refit does not replace the term.
+* **Vignetting arms.** The size 1 +- 0.05 theta / 10' is the reading of XMM-SOC-CAL-TN-0018 Sect. 4.5 declared in
+  OPEN_ITEMS P (one coherent radial error, all cameras alike); the MOS-to-pn difference of up to 20 per cent at about
+  12' (Sect. 2.3) stays a stated real-side term, not an arm.
+
+## 3. The QPB level in production (review 7, B1)
+
+XMM-ESAS (Snowden et al. 2008, Sect. 3.1.1) and the X-COP imaging (Ghirardini et al. 2019, p. 3) fix the level of the
+filter-wheel-closed template by the corners; the X-COP spectral fits leave it free within 10 per cent (Sect. 2.4.2,
+p. 6). The rule (`QPB_LEVEL_RULE`, `qpb_level_decision`):
+
+* `v1_qpbfree` NEGLIGIBLE under section 2: the level is free on both sides in production (a hashed `massfit` field
+  then replaces the fit-fix, and the spec hash moves). Freeing it removes the one real-side term with no published
+  size; its precision cost is reported, and bought back with R3p views if needed.
+* SYSTEMATIC or INCONCLUSIVE: the level stays fixed by the corners, the published imaging practice, and the four level
+  arms are sized from the real free-level fits, in both directions (`qpb_level_error_from_fits`): per image, d_up =
+  q84 - m and d_down = m - q16, with q16 and q84 the percentiles of the fitted over corner level on the real refits made
+  with the level free, and m the median of the same ratio on the `v1_qpbfree` cells, whose corners predict the field
+  exactly (so m is the free fit's own offset). The noise of the real free fits is left in: the size is an upper
+  estimate. Until those fits exist, the arms keep the lower bound of `QPB_LEVEL_ERROR` and are reported as such.
+* If the level stays fixed, whether the mocks get pn-corner soft protons is decided before the regeneration.
+
+## 4. Sky and soft-proton levels across bands (STATUS Q7)
+
+* **Soft protons.** Fit-fix `sp_bands = 'tied'` (hashed field `massfit.sp_band_tie`, closure arm `v1_sptie`): one
+  free level per camera, the bands in the ratios of the Leccardi & Molendi (2008) broken power law in counts
+  (`esas_background.sp_band_factor`, the pn hard band without the Cu-line gap). X-COP models this component with a
+  fixed spectral shape and a free normalisation (Ghirardini et al. 2019, Sect. 2.4.2, p. 7), and the mocks draw that
+  spectrum, so the tie is exact for the mocks and an assumption for real data. Leccardi & Molendi (2008) measured the
+  shape on the MOS; the pn takes the same shape, an extrapolation, in the mocks and in the tie alike. Rule
+  (`sp_tie_decision`), in two steps:
+  * mock side: `v1_sptie` must be SYSTEMATIC and bring the real-cell median nearer the truth than `v1`, by a gain g in
+    |median ln(M_fit / M_true)|; otherwise the free level per image stays;
+  * real side, before adoption: the real targets are refitted with the tie, and the paired shift tied - free is
+    judged by the arm rule of section 2. The tie is adopted only if that shift is NEGLIGIBLE or smaller than g (its far
+    end if INCONCLUSIVE); a shift that is not NEGLIGIBLE then enters the budget as a real-side error term. Beside it,
+    `sp_band_ratio_check` reports, per camera and band, the median over the real free-level fits of the fitted
+    soft-proton band ratio minus the Leccardi & Molendi ratio (0 if the real bands follow the assumed spectrum; the
+    pn rows show the extrapolation). It is a report: the decision rests on the paired shift.
+* **Sky.** Not tied. The X-COP imaging measures the sky level of each image from the regions beyond 2 R500 (Ghirardini
+  et al. 2019, Sect. 2.2.4, p. 4), as the production fit's free level per image does. Tying it across bands would need
+  the sky spectrum folded through each camera's response, which the X-COP imaging does not do.
+* **Walkers inside the bounds.** Covered by `walker_start = 'scaled'`, which redraws starts outside a prior's support;
+  decided with the sampler (section 5).
+
+## 5. The sampler (STATUS Q18) and `chain_lp_rising`
+
+The Q18 job fits `Q18_ARMS` on B1's views with B1's commit. Rule (`SAMPLER_RULE`, `sampler_verdict`), on all usable
+pairs of both backgrounds:
+
+* Reference: `v1sas_delong` (long chains, differential-evolution move, scaled start). It is itself not converged by
+  R-hat, so agreement with it is agreement between samplers, not accuracy.
+* A candidate (`v1sas`, `v1sas_de`, `v1sas_scaled`, `v1sas_long`) is **eligible** when (a) its paired difference from
+  the reference is NEGLIGIBLE under section 2 and (b) its Monte-Carlo scatter, 1.4826 MAD of the candidate minus its
+  re-seed (`*_r2`) over sqrt 2, is at most 0.015 in ln M500. Vehtari et al. (2021) leave the size of an acceptable
+  Monte-Carlo error to the field; 0.015 is half the 3 per cent statistical error of the X-COP masses (it adds 12 per
+  cent to that error in quadrature) and is the SENS tolerance, the scatter of the median between three re-seeds. Ours.
+* A candidate is **converged** when every one of its fits has a rank-normalised split R-hat below 1.01 and a bulk ESS
+  above 400 (Vehtari et al. 2021). B9 found none so; R-hat over the walkers of one ensemble is a mixing check, not a
+  formal test.
+* **Choice:** the cheapest converged eligible candidate first; else, among the eligible candidates whose scatter is
+  within 0.005 of the smallest, the cheapest, equal costs going to the smaller scatter; if none is eligible, the
+  reference itself if its own re-seed scatter is within 0.015; else no choice, the author decides, and the Monte-Carlo
+  term is carried from the repeats. The chosen sampler serves the real refits, pass 1 and every later fit, mocks and
+  real data alike. Costs on the 108 fits of the grid (`SAMPLER_RULE['cost_core_h']`, from the quick fits of the grid
+  of 2026-10-28 and the long-over-quick ratio 2.4-2.7 of the release 1.1.3 grid):
+
+  | arm | chains | core-hours per 108 fits |
+  |---|---|---|
+  | `v1sas` | quick, stretch move, ball start | 40 |
+  | `v1sas_de` | quick, differential-evolution move | 40 |
+  | `v1sas_scaled` | quick, scaled start | 40 |
+  | `v1sas_long` | long, stretch move | 100 |
+  | `v1sas_delong` (reference) | long, differential-evolution move, scaled start | 100 |
+* **`chain_lp_rising` cuts nothing.** A chain whose log posterior still rises is a chain run for too few
+  autocorrelation times; the remedy Foreman-Mackey et al. (2013, p. 11) give is to run it longer, which is the sampler
+  rule above, not a cut. No chain passes Vehtari's R-hat, so leaving out the rising ones would select on a diagnostic
+  that tracks the signal (17 per cent of the long chains rise by more than 2 sd, STATUS B9) without leaving converged
+  chains. The flag's rate is compared between mocks and real fits (certification `Rqc_seed_chain`, reported), and
+  every science median is given with and without the flagged fits.
+* Cost: the eight arms are about 560 core-hours (the four arms of the Q18 job and their repeats), about two jobs of
+  the current length on one node, each on its own go.
+
+## 6. The matching mass (C1)
+
+**Amendment of 2026-11-12, made before any pass-1 view exists and with the pilot results in hand.** Pass 1 is run
+first on FLAMINGO L1_m8: 5,001 candidate halo-snapshots (`campaigns/v4_flamingo_l1m8_pass1`; the 3,258 of the rule
+below are the halo-snapshots of the TNG campaign). The list is generated and fitted under a preset of its own,
+`v1_flamingo_l1m8_pass1`: one projection, every view under the reference observation as it is, with no draw among
+neighbours and no jitter. The reference is 0762440401, chosen by the rule below. Two points differ from the rule
+as registered, both by the author's decision of that day. The cluster sits at the reference's core offset, 1.78
+arcmin from the optical axis, as every production view sits at its donor's, and not on axis. Every view of the list
+is fitted, whatever the domain prediction says (it puts 2,290 of the 5,001 views outside the domain): the
+prediction is a column of the fit targets and decides nothing, because whether a fit is outside the domain is known
+only when it has run. One point the rule did not foresee: the 665 views of the snapshot at z = 0 cannot be observed
+at the halo's redshift and keep the redshift of their row in the source list (0.042 to 0.114). The fits carry the
+concentration prior of the same day (ledger `fit.cm_prior`). The rule below is left as written.
+
+* **Pass 1** (the design note of 2026-10-27, option c of the memo of 2026-11-03): one view of every candidate
+  halo-snapshot (3,258), projection axis 0, under one reference observation, on axis at the halo's redshift, fitted
+  with the production fit and the sampler of section 5; that fit mass is the halo-snapshot's first matching mass. The
+  reference (`pair_projections.pass1_reference`): among the observations with all three cameras in full-frame modes,
+  the one with the smallest summed |percentile rank - 0.5| over the effective exposure of each camera, the HI4PI
+  column, N_H,tot / N_HI and the flare-filtered particle background; ties by obsid; its obsid and values are recorded
+  before the job. One reference, not each halo's 0.78-matched donor, so that no catalogue mass or bias factor enters
+  the first matching mass.
+* **Pairing** on (ln M_fit, z) on both sides, with the window and distance of the matched draw (`PairingSpec`);
+  catalogue masses (Planck, ACT, lensing) are cross-checks only.
+* **Convergence** (`CONVERGENCE_MAX_CHANGED_FRAC`, `CONVERGENCE_MAX_ITERATIONS`, `convergence_state`): stop when fewer
+  than 5 per cent of the paired halo-snapshots change any physics donor between two iterations, or after three
+  iterations of pass 2. The history (share changed, median |d log M_fit| per iteration, `pairing_changes`) is reported;
+  a pairing that does not converge is reported as NOT_CONVERGED and not extended.
+* **Edge test** of a simulation streamed in a mass window about its targets (FLAMINGO L1_m8: log M500c(true) within log
+  M_cat - 0.15 to + 0.25; `window_edge_share`): at most 5 per cent of its paired halo-snapshots in either outer tenth
+  of the window, else its pairing is incomplete at that end and the mass range it covers is stated.
+* Gate P is redone on M_fit. Until convergence, every realism verdict, gate P, the matched-draw figures and any L_X-M
+  comparison are conditional on the 0.78 pairing and the frozen realism run waits. The 5 per cent, three iterations
+  and the outer tenth are ours (OPEN_ITEMS P).
+
+## 7. Training filter of the ML bank, and field-edge targets
+
+* **Bank** (`bank.filter_rows`, rule `seed_unmeasured`, the default since 2026-11-04): a mock row whose seed photometry
+  measured no positive luminosity (`lx500_seed` <= 0 or missing) is left out of training, and a real row of that kind
+  is flagged out of the domain at prediction (`out_of_domain`). The seed photometry is the same code on a mock fit
+  target and a real observation. The rule it replaces read the generation's `lx_r500_erg_s`, measured in the true
+  R500 at the true centre, which no real observation has. A dropped row is a non-detection, a censored value (Kelly
+  2007): an estimator that takes censored data keeps it as an upper limit instead, and then the rule is not applied.
+  The fixture bank keeps the earlier rule by name.
+* **Field-edge targets** (21 real: 17 PSZ2, 4 ACT, 19 of them at z <= 0.077) and the target without a source list:
+  out of the headline statistics on both sides by one rule, the QC flags `field_edge` and `no_seed` read from each
+  fit's own record (`mass_seed_source`), with `bg_fallback` as before. They stay in the tables and in training. The
+  mock and real field-edge fractions are reported side by side (certification `Rqc_seed_chain`). The two field-edge
+  targets at z = 0.33 and 0.72 are looked at by hand and reported; no rule changes for them.
+
+## 8. Protection radii (STATUS Q14; memo of 2026-11-03, item 6)
+
+* **Core protection of the point-source mask** (Q14): one PSF half-energy width, 16.487 arcsec, as since 2026-11-03;
+  the sensitivities of Q14 were measured about the old 90 arcsec rule and are void. The arms `v1sas_prot0` and
+  `v1sas_prot90` (sensitivity test S3) bracket it and enter as a pair under section 2.
+* **Protection in the centre search**: kept, max(r90, HEW) about the nominal position (a published positional error
+  used as the region the cluster may occupy; a cool core can be detected as point-like, Pacaud et al. 2016). The check,
+  fixed now: per catalogue, the share of final centres within one HEW of a source the search left unmasked because of
+  the protection, mocks (each physics donor weighted once) against the real share with a bootstrap 95 per cent
+  interval over clusters. One-sided: it fails if the mock share lies below the real interval, that is, if real
+  peaks are captured by such sources more often than mock ones (member AGN have no mock counterpart). A failure is
+  answered by a refit of the affected real targets with those sources masked, its paired shift in ln M entering as a
+  real-side term under section 2; the radius is not changed on that result. The search must record the protected
+  sources of every target for this check. Not coded yet: the centre search does not record them, and the check is
+  written before the regeneration.
+
+## 9. Fit-level tests that become B1 arms (STATUS B4, B5, B7)
+
+* **B4 and S6, the first guess.** `v1sas_seedhi` / `v1sas_seedlo`: the cell's first-guess mass times exp(+-0.143), one
+  standard deviation of the Bulbul et al. (2019) relation's scatter at fixed luminosity (sigma_lnL 0.27 over the slope
+  1.89, p. 22); the centre stays, the crop, pixel and start follow. A pair under section 2. If either is not
+  NEGLIGIBLE, the slope d ln M_fit / d ln M_seed is reported, and with it the shift TNG-Cluster's luminosity excess
+  induces in mock first guesses, beside every mock-real L_X-M_fit comparison; it is not subtracted.
+* **S2, the crop.** `v1sas_crop2p5` / `v1sas_crop4`, a pair.
+* **S3 and Q14.** `v1sas_prot0` / `v1sas_prot90` (section 8). The DET_ML 6 arm of S3 needs a new detection and is not
+  part of B1.
+* **R1, R10, R11** are login analyses of B1's output (the QC prior-edge fraction at 0.01 and 0.05 on the B1 fits, the
+  SAS lists of the B1 cells, the seed annulus on the B1 cells), reported. **S1** compares generation products, not
+  fits, and stays outside B1.
+* **B7, the donor jitter**, is not an arm. It is a zero-mean jitter in ln t (0.15 per view, 0.05 per camera) and a
+  random roll and pointing, which the three donor seeds of every cell already sample. To first order a zero-mean
+  jitter adds scatter, not bias; the second-order bias is (1/2) c sigma^2, with c the curvature of ln M_fit in ln t
+  from the three exposures of `v1_half`, `v1` and `v1_deep` (x 0.5, 1, 10) and sigma^2 = 0.15^2 + 0.05^2
+  (`closure_grid.jitter_bias`, written to `closure_verdict.json`). It enters the budget only if above 0.03.
+
+**Arm lists and cost.** `B1_DECISION_ARMS` (gate, base, re-seeds, `v1_qpbfree`, `v1_sptie`, `v1_half`,
+`v1_deep`) are needed before the regeneration; `B1_BUDGET_ARMS` make the budget; `Q18_ARMS` follow on B1's views. At
+about 0.8 node-hours per arm of 108 quick fits (the QPB level arms on the real cells only), B1 with the decision arms
+is about 3 node-hours plus about 6, and the budget arms about 16 plus the generation of their cells. Each group runs
+on its own go, one node at a time; the rules hold whenever a group runs.
+
+## What is ours
+
+The windows of section 1 (DESIGN v2's values, restored), delta = 0.03, the 27-pair minimum, the domain rule (half the
+fits, two redshifts), the 10 per cent pivot limit, the 0.015 Monte-Carlo limit, the 0.005 tie-break and the cost order, the quadrature
+combination of terms, the pairing's 5 per cent, three iterations and outer tenth, R3p's 16 views per cell and its blocks (two views per cell, at most two), and the
+one-sided protection check. Each is in OPEN_ITEMS P with the reason.

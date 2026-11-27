@@ -1,0 +1,30 @@
+tngxmm.instrument.sas\_queue
+============================
+
+.. automodule:: tngxmm.instrument.sas_queue
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KEEP
+      PPS_PATTERN
+      RESERVED_CORES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_mock_queue
+      build_real_queue
+      finished
+      mock_view_name
+      parse_cores
+      real_entry_from_dir
+      run_queue
+      select_cores
+      stage_links
+      stage_only
+      target_view_dirs
+   

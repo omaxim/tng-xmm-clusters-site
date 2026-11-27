@@ -1,0 +1,20 @@
+tngxmm.massfit.diagnose\_bands
+==============================
+
+.. automodule:: tngxmm.massfit.diagnose_bands
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_RESP_DIR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      diagnose_bands
+      main
+      rate
+   

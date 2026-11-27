@@ -1,0 +1,43 @@
+tngxmm.sim
+==========
+
+.. automodule:: tngxmm.sim
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   abundances
+   apply_absorption
+   build_apec_table
+   build_box_halos
+   catalogue_centre
+   cli
+   compute_apec_spectra
+   compute_hse_mass
+   compute_hse_stream
+   compute_true_profiles
+   cutout_gas
+   data_inputs
+   emission
+   generate_photons
+   generate_view
+   load_catalog_meta
+   load_halo_gas
+   mock_cutout
+   outskirts_convergence
+   pipeline
+   project_luminosity
+   project_tngref_map
+   read_halo_source
+   schemas
+   select_halos
+   snapshots
+   sph_map
+   sphere_cutouts
+   temet_xray
+   truth_profile
+   truth_sphere

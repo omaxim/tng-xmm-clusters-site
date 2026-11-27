@@ -1,0 +1,19 @@
+tngxmm.analysis
+===============
+
+.. automodule:: tngxmm.analysis
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   chain_drift
+   estimands
+   fit_vs_truth
+   fixed_radius
+   pilot_report
+   pipeline
+   tables

@@ -1,0 +1,36 @@
+tngxmm.instrument.load\_responses
+=================================
+
+.. automodule:: tngxmm.instrument.load_responses
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      INSTRUMENTS
+      PN_READOUT_TILT_DEG
+      VIGNETTING_BEYOND
+      ARF_MODELS
+      FILTER_EXTENSION
+      UPSTREAM_FILTER
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ccf_choice
+      ensure_atomdb
+      get_response
+      load_responses
+      set_filter_transmission
+      set_mirror_area_file
+      use_ccf_files
+      warm_responses
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CameraResponse
+   

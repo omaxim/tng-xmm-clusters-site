@@ -1,0 +1,26 @@
+tngxmm.viz.plot\_realfit\_masses
+================================
+
+.. automodule:: tngxmm.viz.plot_realfit_masses
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      REALFIT
+      KIND_COLOUR
+      REF_MARKER
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_parser
+      main
+      median_boot
+      merge
+      plot_realfit_masses
+      ratio_table
+      read_fit_dirs
+   

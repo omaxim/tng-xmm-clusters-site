@@ -1,0 +1,60 @@
+tngxmm.core.pool
+================
+
+.. automodule:: tngxmm.core.pool
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_GAS_LOAD_CONCURRENCY
+      VIEWS
+      MEASURE_COLS
+      EXTRA_COLS
+      RESULT_COLUMNS
+      REPLICA_VIEW_COLUMNS
+      OPTIONAL_REPLICA_VIEW_COLUMNS
+      REPLICA_ROW_COLUMNS
+      DEFAULT_TASK_FN
+      EXCLUDED_STATUS
+      REPLICA_CAMERAS
+      REPLICA_REAL_EXPOSURE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clear_gas_semaphore
+      donor_column
+      excluded_donors
+      excluded_status
+      gas_load_concurrency
+      gas_load_slot
+      halo_projection_anchors
+      install_gas_semaphore
+      make_halo_tasks
+      memory_line
+      progress_line
+      read_done_keys
+      read_excluded_keys
+      read_excluded_rows
+      read_replica_packages
+      read_replica_view_columns
+      read_targets
+      replica_package
+      resolve_callable
+      results_csv_path
+      run_campaign
+      run_pool
+      safe_call
+      select_campaign_halos
+      split_excluded
+      view_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ResultsWriter
+   

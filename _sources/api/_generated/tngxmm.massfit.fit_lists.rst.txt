@@ -1,0 +1,31 @@
+tngxmm.massfit.fit\_lists
+=========================
+
+.. automodule:: tngxmm.massfit.fit_lists
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FINISHED
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      finished_names
+      parse_counts
+      rank_spread_sample
+      read_tables
+      spread_ranks
+      stratified_refit_sample
+      unfinished_targets
+      write_names
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      FitListError
+   

@@ -1,0 +1,13 @@
+tngxmm.core.compare\_tables
+===========================
+
+.. automodule:: tngxmm.core.compare_tables
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compare_tables
+      summary
+   

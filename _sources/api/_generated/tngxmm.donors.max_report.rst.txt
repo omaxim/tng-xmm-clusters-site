@@ -1,0 +1,17 @@
+tngxmm.donors.max\_report
+=========================
+
+.. automodule:: tngxmm.donors.max_report
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cost_estimate
+      donor_use_table
+      max_report
+      report_markdown
+      summarise
+      write_max_outputs
+   

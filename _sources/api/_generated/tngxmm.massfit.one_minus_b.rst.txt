@@ -1,0 +1,24 @@
+tngxmm.massfit.one\_minus\_b
+============================
+
+.. automodule:: tngxmm.massfit.one_minus_b
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_MOCK_ROOT
+      DEFAULT_TARGETS_DIR
+      TARGETS
+      CLASSES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      load_results
+      main
+      one_minus_b
+      theta500_arcmin_obs
+   

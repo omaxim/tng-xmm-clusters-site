@@ -1,0 +1,41 @@
+tngxmm.massfit.render\_fit\_v4
+==============================
+
+.. automodule:: tngxmm.massfit.render_fit_v4
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TRUE_PROF
+      HSE_LABELS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      align
+      aperture_in_fit_cosmology
+      bank_norm_like
+      bank_norm_params
+      best_fit_maps
+      east_left
+      find_truth_profile
+      fit_sources
+      load_fit
+      load_truth_curves
+      main
+      masking_record
+      mass_within
+      mock_truth_z
+      pars_summary
+      rebuild_fit
+      reference_values
+      render_fit_v4
+      render_slide
+      render_truth_comparison
+      significance
+      sky_extent
+      target_row
+   

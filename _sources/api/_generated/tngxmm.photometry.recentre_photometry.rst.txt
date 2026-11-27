@@ -1,0 +1,12 @@
+tngxmm.photometry.recentre\_photometry
+======================================
+
+.. automodule:: tngxmm.photometry.recentre_photometry
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      recentre_observation
+   

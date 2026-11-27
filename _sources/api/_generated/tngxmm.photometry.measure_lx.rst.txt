@@ -1,0 +1,37 @@
+tngxmm.photometry.measure\_lx
+=============================
+
+.. automodule:: tngxmm.photometry.measure_lx
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CAMPAIGN_APERTURES
+      LX_FLAG_COLUMNS
+      SEED_APERTURES
+      SEED_FLAG_COLUMNS
+      CORE_EXCISED_APERTURES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      campaign_lx
+      core_excised_lx
+      emsce_mean_exposure
+      measure_lx
+      measure_lx_flagged
+      prepare_lx_image
+      seed_lx
+      sources_to_pixels
+      t_vir_keV
+      view_lx_sources
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LxImage
+   

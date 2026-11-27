@@ -1,0 +1,35 @@
+tngxmm.ingest.eagle\_remote
+===========================
+
+.. automodule:: tngxmm.ingest.eagle_remote
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SNAP_TAGS
+      ELEMENT_NAMES
+      ATOMIC
+      OTHER_Z_OVER_A
+      MAX_INDEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      canonical_gas_arrays
+      electron_abundance_full
+      ingest_run
+      ingest_snapshot
+      key_cells
+      main
+      read_cube
+      snapshot_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      HashIndex
+   

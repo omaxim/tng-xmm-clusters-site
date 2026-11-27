@@ -1,0 +1,13 @@
+tngxmm.setup.pipeline
+=====================
+
+.. automodule:: tngxmm.setup.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+      fetch_release_data
+   

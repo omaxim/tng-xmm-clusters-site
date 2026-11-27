@@ -1,0 +1,13 @@
+tngxmm.sim.apply\_absorption
+============================
+
+.. automodule:: tngxmm.sim.apply_absorption
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_absorption
+      tbabs_sigma
+   

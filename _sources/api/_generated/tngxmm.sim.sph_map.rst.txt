@@ -1,0 +1,14 @@
+tngxmm.sim.sph\_map
+===================
+
+.. automodule:: tngxmm.sim.sph_map
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      sph_map
+      temet_commit
+      temet_sphmap
+   

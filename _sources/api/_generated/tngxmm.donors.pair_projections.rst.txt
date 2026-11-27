@@ -1,0 +1,44 @@
+tngxmm.donors.pair\_projections
+===============================
+
+.. automodule:: tngxmm.donors.pair_projections
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PAIRED_COLUMN
+      ANCHOR_COLUMN
+      ANCHORS_COLUMN
+      SHORTFALL_MASS_EDGES_MSUN
+      HALO_KEY
+      CALIPER_SD
+      ASSIGNMENTS
+      CONVERGENCE_MAX_CHANGED_FRAC
+      EDGE_TENTH
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      caliper_dex
+      convergence_state
+      drop_unpaired
+      format_anchor_map
+      pair_projections
+      paired_mask
+      paired_value
+      pairing_changes
+      pairing_summary
+      parse_anchor_map
+      pass1_reference
+      shortfall_by_mass_z
+      window_edge_share
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PairingSpec
+   

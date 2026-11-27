@@ -1,0 +1,29 @@
+tngxmm.core.provenance
+======================
+
+.. automodule:: tngxmm.core.provenance
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      RUN_STAMP_KEYS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_provenance
+      git_dirty
+      git_hash
+      input_record
+      portable_path
+      provenance_stamp
+      read_table_provenance
+      refresh_table_provenance
+      refuse_dirty_data_write
+      split_run_stamps
+      table_provenance_path
+      write_table_provenance
+   

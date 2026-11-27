@@ -1,0 +1,29 @@
+tngxmm.embed.write\_embeddings
+==============================
+
+.. automodule:: tngxmm.embed.write_embeddings
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LICENCE_FILENAME
+      LICENCE_SOURCE
+      VECTOR_DATASETS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      licence_text
+      read_embeddings
+      write_embeddings
+      write_licence_copy
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      EmbeddingsWriteError
+   

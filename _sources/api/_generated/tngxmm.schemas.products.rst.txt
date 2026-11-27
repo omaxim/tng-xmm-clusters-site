@@ -1,0 +1,29 @@
+tngxmm.schemas.products
+=======================
+
+.. automodule:: tngxmm.schemas.products
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BANDS_KEV_SAS
+      REQUIRED_PERCAM_KEYS
+      REQUIRED_MOCK_KEYS
+      REQUIRED_SAS_KEYS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      expected_files
+      parse_percam_filename
+      percam_filename
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PercamName
+   

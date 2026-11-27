@@ -1,0 +1,25 @@
+tngxmm.instrument.donor\_footprint
+==================================
+
+.. automodule:: tngxmm.instrument.donor_footprint
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FOOTPRINT_RULES
+      FOOTPRINT_BAND
+      LEVEL_RADIUS_ARCMIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_detector_footprint
+      donor_efficiency
+      donor_pointing
+      efficiency_from_expmap
+      find_expmaps
+      footprint_response
+   

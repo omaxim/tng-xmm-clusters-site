@@ -1,0 +1,45 @@
+tngxmm.massfit
+==============
+
+.. automodule:: tngxmm.massfit
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   band_response
+   build_fit_targets
+   build_realfit_targets
+   build_responses
+   build_source_thresholds
+   cache_io
+   check_preflight
+   cli
+   cm_prior
+   diagnose_bands
+   domain_predict
+   esas_background
+   fit_hydrostatic
+   fit_lists
+   fit_plan
+   fit_psf
+   fit_qc
+   guess_mass
+   like_cache
+   mask_point_sources
+   model_shells
+   one_minus_b
+   optimiser_bounds
+   patch_apec
+   pipeline
+   pn_oot
+   prepare_images
+   psf_window
+   qpb_template
+   render_fit_v4
+   sample_posterior
+   schemas
+   set_molecular_weight

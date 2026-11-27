@@ -1,0 +1,26 @@
+tngxmm.donors.validate\_population
+==================================
+
+.. automodule:: tngxmm.donors.validate_population
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compare_samples
+      read_legacy_population
+      reference_seed_lx
+      report_path
+      resolve_convention
+      standardise_mocks
+      standardise_reference
+      validate_population
+      write_gate_report
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GatePSpec
+   

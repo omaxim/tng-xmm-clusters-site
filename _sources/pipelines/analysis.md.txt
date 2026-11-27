@@ -1,0 +1,14 @@
+# analysis
+
+```{eval-rst}
+.. automodule:: tngxmm.analysis.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline analysis`; catalog `conf/base/catalog/analysis.yml`.
+
+## Nodes
+
+```{kedro-pipeline} analysis
+```

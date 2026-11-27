@@ -1,0 +1,294 @@
+# Instrument background of the mocks
+
+Each mock view carries the background of the real observation whose conditions it is observed under (the
+conditions donor).  This page lists the components, where each level comes from, and the factors that were removed
+at the integration of 2026-10-30 because they were measured on replays or fitted on donors rather than taken from
+calibration data.
+
+## Components
+
+| component | level | spatial form | source |
+|---|---|---|---|
+| quiescent particle background (QPB), every camera | the donor's unexposed corners per PPS band, relative to the corners of the CCF filter-wheel-closed (FWC) event lists; a camera without a usable corner level takes the FWC level | FWC event density per band (`instrument.qpb_spatial = 'fwc'`) | XMM-ESAS mosback / pnback (Snowden et al. 2008; Kuntz & Snowden 2008); table `donor_qpb_corners.csv` |
+| residual soft protons, MOS | IN/OUT excess at 10-12 keV over the corner QPB and the CXB | the CCF flare maps of the filter and band, smoothed 1' (`instrument.soft_proton_map = 'flare'`) | De Luca & Molendi (2004); Kuntz & Snowden (2008); table `donor_mos_background.csv` |
+| residual soft protons, pn | the same IN/OUT excess, a lower bound without validation (below) | as the MOS | De Luca & Molendi (2004); Marelli et al. (2021); ledger `instrument.pn_soft_protons_inout` |
+| sky: local hot bubble, Galactic halo | the donor field's levels from its RASS spectrum in the 1-2 deg annulus, at the published median temperatures (0.111, 0.191 keV) | vignetted | Snowden et al. (2008); Yeung et al. (2024); Henley & Shelton (2013); table `donor_sky_rass.csv`; ledger `instrument.sky_background` |
+| sky: unresolved CXB | the Moretti et al. (2003) 0.5-2 keV total less the AGN drawn (23 per cent), photon index 1.41, absorbed by the donor's total Galactic column | vignetted | Moretti et al. (2003); De Luca & Molendi (2004) |
+| field AGN | Moretti et al. (2003) soft-band counts | the SAS elliptical PSF | ledger `instrument.point_sources` |
+| pn out-of-time events | the Users Handbook fraction of the readout mode; energies with the CTI correction of the assigned row | uniform along the column of the event | Users Handbook Sect. 3.3.10; SAS epevents; CCF EPN_CTI (below) |
+
+The corner levels are those of the instrument stage and of the fit's ESAS background model
+(`massfit.qpb_model = 'esas-fwc-corners'`, the presets' fit background): the corner count rate of each MOS CCD or pn quadrant,
+within the flare intervals of the PPS images, over the corner rate of the FWC lists on the same CCDs and in the same
+band.  The pn corner counts have the out-of-time events of the in-field X-rays subtracted column by column.  The
+in-field over corner ratio of the QPB is a detector property (Leccardi & Molendi 2008, App. B), so the FWC spectrum
+scaled band by band with the corners is the in-field QPB of the observation.  On the field of 471 real observations
+beyond 2 R500 the corner-scaled FWC template lies below the data, as a background component must: median
+template / data 0.90 for the pn in 4.5-12 keV, 0.88 and 0.92 for MOS1 and MOS2 (job 1890062; DECISIONS, "The pn
+corner level: the cause of the excess").
+
+## The pn Cu-line gap
+
+The PPS pn images in 4.5-12 keV leave out PI 7.8-8.2 keV, the Cu K-alpha line of the pn particle background
+(selection in the XPROC0 history of the images; Mateos et al. 2009, Sect. 2, for the 2XMM processing).  Since the
+integration every preset applies the same selection to the mock pn images and to the fit's pn band
+(`instrument.pn_hard_band = 'pps'`, `massfit.pn_hard_band = 'pps'`).  The gap holds 28 per cent of the FWC pn rate
+in 4.5-12 keV and 1.4-3.6 per cent of the cluster counts.  Before it, the v1 mocks' pn hard-band field was 31 per
+cent brighter than the real one, about what the Cu line adds to a contiguous band.
+
+## Residual soft protons of the pn
+
+The donor table `donor_mos_background.csv` holds the pn as well as the MOS (`donor_tables.mos_background.cameras`).
+The pn excess is measured exactly as the MOS one: the in-field 10-12 keV rate beyond max(1.5 R500, 3') of the
+cluster and within 12' of the pointing, within the PPS flare intervals, minus the corner-scaled FWC in-field rate
+and the CXB (De Luca & Molendi 2004).  The 10-12 keV band lies above the Cu-line gap of the pn hard band, so the pn
+fluorescence lines do not enter it.  The stage turns the excess into a soft-proton rate with the quiescent
+soft-proton spectrum of Leccardi & Molendi (2008) and spreads it flat over the field of view, as for the MOS.
+
+The pn value is a lower bound and has no validation:
+
+* the pn corners are not shielded from the sky.  Marelli et al. (2021, Sect. 2) find focused soft protons and photons
+  over the whole pn out-of-field area, most near the edge of the field.  The corner scale therefore overestimates the
+  pn particle level, the particle rate subtracted from the in-field rate is too high, and the excess too low, the
+  more so the stronger the soft protons;
+* the method papers (De Luca & Molendi 2004; Leccardi & Molendi 2008) use MOS data only, no source calibrates a pn
+  IN/OUT excess against a soft-proton level, and no measured pn quiescent soft-proton spectrum exists, so the pn
+  takes the MOS spectrum.
+
+The data package has held the table with the pn columns since 2026-11-03 (provenance in
+`donor_mos_background.provenance.json`).  A table measured before the pn was added has no pn columns, and the stage
+refuses it when the pn is simulated; it used to leave the pn without soft protons.  The table with the pn columns
+comes from
+
+    kedro run --pipeline donor_tables --nodes donor_tables.build_fwc_reference,donor_tables.measure_mos_background,donor_tables.build_mos_background
+
+(`docs/dev/KEDRO.md`; shardable with `--params donor_tables.mos_background.shard=k/n`), after which
+`donor_mos_background.csv` and its line of `SHA256SUMS` in the data package are replaced.  Every donor is measured
+again, because the camera list enters the signature of the stored results.
+
+One replay measured the effect (job 1891399, 199 TNG views with and without the pn rate, 638 donors measured, 511
+with a finite pn rate).  Median log10 of the pn background beyond 8' over the donor's:
+
+| pn band | without pn soft protons | with |
+|---|---|---|
+| 0.2-0.5 keV | +0.032 | +0.074 |
+| 0.5-1 keV | -0.021 | +0.025 |
+| 1-2 keV | -0.079 | +0.011 |
+| 2-4.5 keV | -0.093 | +0.029 |
+| 4.5-12 keV | -0.095 | +0.003 |
+
+The MOS are unchanged.  The soft-band background ratio pn / (MOS1 + MOS2) rises from 1.05 to 1.18, the real data
+give 1.32; the background hardness rises from 1.63 to 1.72 against 1.68 in the real data.  A pn level still below
+the real one fits a lower bound; the hardness says the MOS spectrum is somewhat too hard for the pn.  This is one replay, not a validation of the pn level.
+The replay used the table measured on 2026-10-30; the table was measured again at the final centres on 2026-11-03
+(next section).
+
+## Donor tables measured about the cluster
+
+Six donor tables depend on where the real cluster is.  The core offsets (`donor_core_offsets.csv`) place the mock
+cluster on the detector; the anomalous-CCD table (`donor_soft_ccd.csv`) and the in-field background table
+(`donor_background.csv`) are measured beyond 1.5 R500 of the cluster and the IN/OUT soft-proton rates
+(`donor_mos_background.csv`) beyond max(1.5 R500, 3') of it; the corner QPB table (`donor_qpb_corners.csv`) is
+measured for the donors of the same catalogue; the condition table (`donor_conditions.csv`) copies the core offsets
+and the background levels, dimensions of the condition space.  All take the centre of the real fits, the guarded
+centre of `obs_centres_guarded_v4.csv`.  They are written with a provenance sidecar (`<table>.provenance.json`: the
+input files with their sha256, relative to the data package or the repository, the commit, `git_dirty`, and for the
+measured tables the measurement version and, for the two corner tables, the rule of the FWC reference), into the
+data package only from a committed, clean tree (`core.provenance.refuse_dirty_data_write`; `--allow-dirty` or
+`allow_dirty: true` in a catalog entry for development), and the instrument stage, the conditions donor and the fits
+read the data-package copy only when the sidecar says `git_dirty` false, records the current measurement version and
+FWC rule, and names the current centre and seed tables (the core offsets: the centre table and `observations.csv`;
+the two corner tables: also the anomalous-CCD table; the condition table: also the current core-offset and
+background tables; `instrument.donor_tables.check_table`, `donors.build_core_offsets.check_core_offsets_table`).  The
+inputs must be current themselves: an input of the data package whose own sidecar records `git_dirty` true is
+refused, and so is the centre table when it was not copied from the current seed table or that seed table is not
+current for the production preset (`photometry.build_obs_centres_guarded.check_centres_table`, which calls
+`photometry.build_obs_seed_lx.check_seed_table`).  The real fit reads the corner table through the same check.
+
+The other files a view is made from are checked too (`sim.data_inputs`): the total column, the RASS sky, the active
+CCDs and the CCD maps, the source thresholds (also their measurement version and columns) and the catalogue positions
+(also their redshift and position rules and columns) by their sidecars, as above, and their readers refuse a stale
+package copy; the APEC tables, the ECF table and the reddening table of the package, which come from outside it
+(AtomDB, the frozen release-3 table, IRSA), and the AtomDB files the photon spectra are drawn from (the APEC
+continuum and lines of the preset's version, the ionisation balance and abundance files pyatomdb opens) by their
+sha256, pinned in `sim/data_manifest.csv`, which is part of the spec hash.  Each view, and each closure cell, records
+the sha256 of every one of them (`data_inputs` of `obs_meta.json` or `truth.json`), and a stored view or cell is
+reused only when that record is the current one.  The campaign plan makes these
+checks before any view, so a table measured under an older version stops the plan, as the real fit stops at a corner
+row without its FWC epoch.
+
+The tables are built in this order, from the merged, committed tip:
+
+1. the catalogue positions, `python -m tngxmm.photometry.catalogue_positions --psz2 ... --dr6 ... --counterparts
+   $TNGXMM_SITE_REFS/psz2_counterparts/psz2_counterpart_redshifts.csv` (the counterpart table from
+   `tools/psz2_counterpart_redshifts.py`);
+2. the active CCDs with the CCD maps, `tngxmm donors active-ccds`, and the source thresholds,
+   `tngxmm massfit build-source-thresholds --pps-cache ...` (their sha256 enters the seed hash);
+3. the real seed table, `tngxmm photometry obs-seed-lx --preset v1`;
+4. the guarded centres, `tngxmm photometry obs-centres-guarded`;
+5. the core offsets, `kedro run --pipeline donors --nodes donors.build_core_offsets`;
+6. the donor tables, first the PPS event lists and flare series the corner and IN/OUT measurements read
+   (`fetch_pps_archive`: only what the cache lacks; its donor list comes from the guarded centres), then the tables
+   (shard `measure_mos_background` and `build_qpb_corners` with `--params donor_tables.<node's parameters>.shard=k/n`,
+   then run them unsharded):
+
+       kedro run --pipeline donor_tables --nodes donor_tables.fetch_pps_archive,donor_tables.build_donor_nh_total,donor_tables.build_donor_background,donor_tables.build_donor_soft_ccd,donor_tables.build_fwc_reference,donor_tables.measure_mos_background,donor_tables.build_mos_background,donor_tables.build_qpb_corners,donor_tables.build_donor_conditions
+
+7. the RASS sky after the total column, `python -m tngxmm.donor_tables.rass_sky <work> --out
+   $TNGXMM_DATA/tables/donor_sky_rass.csv`;
+8. `realism.frozen.conditions_table_sha256` registered again;
+9. every mock view and every closure cell generated again.
+
+Until 2026-11-03 the core offsets came from the plain 16" peak within 4' of the observation position, without source
+masking, and the two measured tables from the centres of 2026-10-24 (anomalous CCDs) and 2026-10-30 (IN/OUT).  The
+rebuild of 2026-11-03 at the final centres (commit 0bcc9a0, about 20 minutes on four cores of the login node) changed:
+
+* core offsets: 96 placements moved by more than 1", 54 by more than 1', 39 by more than 2', 10 by more than 4', at
+  most 8.7' (0675470901, now 5.8' off axis against 3.3' before); over the usable rows the median offset stays 1.69'
+  and the 90th percentile falls from 2.86' to 2.55'.  The three excluded observations stay beyond the 6' limit (57',
+  17.8', 7.1'); 0720700101 has no guarded centre (no source list) and is flagged `no_centre`, it is excluded from the
+  generation anyway;
+* condition table: the same 604 donors and 588 in the pool; 51 placements moved by more than 1' (50 in the pool), and
+  the robust spread of the core-offset dimension fell from 0.49' to 0.45'.  The five candidates change for 221 of the
+  603 physics donors, the conditions donor of 693 of the 2835 replica views and of about 2660 of the 9584 views of the
+  maximal list;
+* anomalous CCDs: 66 donors had moved by more than 4" since 2026-10-24 (31 by more than 1'); the 558 donors with the
+  same centre and R500 are reproduced exactly.  The CCDs the fits leave out changed for 6 cameras of 5 donors
+  (0404410101 MOS1 CCD 4 dropped; 0502020101 MOS2 CCD 6 dropped; 0654440201 MOS2 CCDs 2 and 5 added; 0677830135 MOS1
+  CCD 4 and MOS2 CCD 5 added; 0762871001 MOS1 CCD 2 dropped); the excess rates the stage adds changed for 47 entries
+  of 22 donors;
+* IN/OUT soft protons: the IN/OUT columns of 72 donors changed (the corner columns did not).  `sp_rate` changed by more
+  than 1 per cent for 37 / 40 / 28 donors (MOS1 / MOS2 / pn), by more than 10 per cent for 4 / 6 / 5, at most 62 / 64 /
+  96 per cent.  0827010601 lost its IN region in every camera (its centre is now 0.74' from the pointing, 3.39'
+  before, so 1.5 R500 covers the 12' circle).
+
+`donor_background.csv` is measured about the centres too (the in-field decomposition beyond 1.5 R500), at those of
+2026-10-24 (66 donors have moved by more than 4" since, 31 by more than 1').  The stage reads only its live times, which
+are on-axis exposures and do not depend on the centre, but the condition table takes its `qpb_scale_<cam>` as the
+dimension `log_qpb_<cam>`: for the moved donors the conditions donor is chosen with background levels of the old
+centres.  The copy of 2026-10-24 has no provenance, so since review 6 the stage refuses it, and step 6 above builds it
+again.  The current code also drops the range clip and the replay calibration of that table (a constant per camera,
+which cancels in the condition distances), so the rebuild turns the levels set to 1 there (23 / 65 / 31 donors, MOS1 /
+MOS2 / pn) into their measured values or NaN, and takes 39 donors out of the pool (a camera without a positive flat
+level, mostly MOS2).  That is the author's decision (STATUS A0).
+
+### Donors without a soft-proton rate
+
+The IN/OUT rate is missing where 1.5 R500 of a nearby cluster covers the 12' circle about the pointing (112 of the 588
+donors of the conditions pool, all three cameras) or where the pn has no usable corner level (4 more: 0506210101,
+0780291001, 0502790101, 0810231001, pn only).  These observations had soft protons like any other: 98.7 to 99.2 per
+cent of the measured rates are positive.  A rate of 0, which the stage used to give them, is therefore the lowest
+possible value rather than a measurement, and it falls on the nearby clusters: 90 per cent of the pool donors at
+z < 0.1 have no rate in some camera, 6 per cent at 0.1-0.2, 1 per cent at z >= 0.2.
+
+The presets (`instrument.sp_rate_unmeasured = 'nearest-in-fold'`) give such a camera the measured rate of the nearest
+donor of the conditions pool in the same donor fold that has one (condition-space distance from the donor, ties by
+obsid).  The view records it: `SPRATE` is the lent rate, `SPRFLAG` says `substitute`, `SPSUBST` names the lending
+observation, and `soft_protons` of `obs_meta.json` and of the conditions record holds the rate, its source and the
+distance of each camera.  The alternative `'refuse'` stops such a view, and the plan-time check of the donor tables
+lists the donors it would stop.  No rate is set to 0 for want of a measurement.  What the rule gives (tables of
+2026-11-03):
+
+* 116 pool donors take a substitute (112 in all three cameras, 4 for the pn); the lending donor is their nearest
+  measured neighbour in the median (the fourth at the 90th percentile), at a condition-space distance of 2.63 (10-90th
+  percentile 1.72-3.93, at most 5.68), nearer than their own fifth condition neighbour (3.34);
+* the lent rates have the median of the measured ones (MOS1 7.05e-4 against 6.54e-4, MOS2 6.86e-4 against 6.49e-4,
+  pn 1.81e-3 against 1.82e-3 counts/s/arcmin2 in 0.5-12 keV), as expected of a property of the observation (its
+  orbit phase and flare screening) rather than of the cluster;
+* 458 of the 2835 replica views (16 per cent) and about 1850 of the 9584 views of the maximal list (19 per cent) had a
+  rate of 0 in some camera before and carry a lent rate now.
+
+Leaving such donors out of the conditions pool instead would keep every view to one observation, but the pool would
+shrink from 588 to 472 donors, the conditions donor would change for 44 per cent of the replica views and 49 per cent
+of the maximal list (mostly through the robust spreads of the condition space, which the pool sets), and the clusters
+that fill the field would be observed under smaller ones' conditions: for physics donors with theta500 above 8' (median
+10.6') the median theta500 of the conditions donor would fall from 8.7' to 5.9'.
+
+## Factors removed at the integration (2026-10-30)
+
+| factor | what it did | now | source of the replacement |
+|---|---|---|---|
+| `donor_tables.background.calibration` (pn 0.947 in 4.5-12 keV, 0.096 and 0.65 in the two soft bands; MOS 0.93-1.03) | divided the flat level of the in-FOV image decomposition by the median response of the same measurement to 195 nominal-background replays | removed; the decomposition is no longer a QPB level | corner levels (ESAS) |
+| shrinkage of the band levels (`BAND_PRIOR_DEX = 0.3`, `BAND_FLOOR_DEX = 0.03`), the clip `QPB_SCALE_RANGE = (0.2, 10)`, the population band shape | pulled noisy band levels towards the 4.5-12 keV level, replaced out-of-range levels by 1 | removed | corner levels per band |
+| MOS RGA vignetting dipole (`instrument.mos_rga_vignetting = 'pps-measured'`, a = 0.0125 per arcmin) | azimuthal modulation of the MOS vignetting fitted on 60 donors' PPS exposure maps | removed at the integration; since 2026-11-03 the stage applies the RGA obscuration of the SAS calibration layer (`instrument.mos_rga_vignetting = 'ccf'`, row S11 of {doc}`xmm_simulator_changes`) | CCF RGSn_QUANTUMEF (RGA_OBSCURATE) through CAL_getRGAObscure |
+| out-of-time CTI, 1.4e-3 per row (`pn_oot_cti` of the stage and the fit) | shifted the energies of pn out-of-time events, measured on real streak hardness | removed; replaced by the shift that the CCF CTI calibration gives (section on the out-of-time energies) | CCF EPN_CTI through the SAS calibration routines |
+
+The pn gap level rescaling of release 1.1.3 (`pn_gap_qpb_level`, 0.947 / 1.067) was removed before the
+integration.  `tests/unit/test_pn_hard_band_gap.py` fails if a module-level `*CALIBRATION*` constant or those numbers
+reappear in the instrument stage, the corner module or the fit's ESAS code.
+
+The pn QPB level of a mock is now the donor's corner level instead of the calibrated in-field
+level; the pn in-field level of the v1 mocks was about 1.106 / 0.947 = 1.17 times the donor's in 4.5-12 keV as the
+decomposition measures it.  The pn background below 4.5 keV no longer contains the flat share of the residual soft
+protons that the in-field decomposition carried: release 1.1 measured the replicas' pn 1-4.5 keV background
+0.13-0.16 dex below the donors' with the corner level.  The pn IN/OUT soft protons (section "Residual soft
+protons of the pn") take that place as a lower bound.  At the integration the MOS exposure maps and photons were
+radially symmetric about the telescope axis, while the real PPS maps carry the RGA modulation (up to about 12 per
+cent at 10 arcmin); since 2026-11-03 the stage applies the RGA obscuration of the calibration.  None of these effects
+has been measured on regenerated mocks yet: that needs a node job.
+
+## Energies of the pn out-of-time events
+
+An out-of-time event is registered while its CCD is read out.  Its charge travels the rows between where the photon
+landed and the readout node, but `epevents` gives it the RAWY of the readout phase and corrects it for the charge
+transfer inefficiency of that row: the Users Handbook (Sect. 3.3.10) says out-of-time events "get a wrong RAWY value
+assigned and thus finally a wrong CTI correction", and `epevents withoutoftime=yes` builds the official out-of-time
+list the same way ("a new RAWY is simulated by randomly shifting the pattern along the RAWY axis and performing the
+gain and CTI correction afterwards").  The stage does what `epevents` does.  With c(A, y) the ratio of corrected to
+raw amplitude at row y for raw amplitude A, an event of energy E that landed at row y_t and is registered at y_r gets
+
+    E_OoT = E c(A, y_r) / c(A, y_t),    A = E / c(A, y_t).
+
+c is not ours: `tools/pn_cti/build_pn_cti_probe.sh` links a short program against the SAS 22.1.0 libraries and runs
+isolated events through the two RAWY-dependent CAL routines that `epevents` calls (`CAL_pnCtiCorrect`,
+`CAL_pnAdditionalGainCtiCorrect`, with the task's defaults: CTI accuracy level 2, long-term CTI with its soft-energy
+and RAWY terms) on the CCF in use (EPN_CTI_0058), for the four pn imaging modes, every CCD and the epochs
+2000-04-01 and 1 January 2001 to 2027.  The CAL state carries the CCD temperature, on which the CTI model depends
+(at 1 keV k of CCD 4 in 2002 is 8.0e-4 per row at 183 K, 7.3e-4 at 193 K and 3.1e-4 at 213 K): the probe sets it to
+183.2 K, the pn focal-plane temperature of the housekeeping parameter F1128 in the PPS event lists (-89.95 C at every
+epoch read), as `epevents` does; Dennerl et al. (2002) give -90 C as the operating temperature in orbit.  Along a
+column ln c is a straight line in RAWY to 1 per cent at most, so the table
+(`tngxmm/instrument/calibration/pn_cti_slopes.csv`, module `tngxmm.instrument.pn_oot_energy`) stores its slope
+k and intercept per mode, epoch, CCD and amplitude, and
+
+    E_OoT = E exp(k(A) (y_r - y_t)).
+
+The temperature correction of `epevents` multiplies all rows of a CCD alike and the gain of a readout channel does
+not depend on RAWY, so neither enters the ratio.  Values (Full Frame, 2010, mean of the twelve CCDs): k = 1.09e-3
+per row at 0.5 keV, 9.2e-4 at 1 keV, 7.6e-4 at 2 keV, 5.8e-4 at 5 keV, and k grows with time (8.7e-4 at 1 keV in
+2001, 1.01e-3 in 2025).  An event of 0.75 keV that lands next to the row boundary (RAWY 190) and is registered at
+RAWY 13 loses 17 per cent of its energy, where the removed 1.4e-3 per row took 22 per cent.  The table is checked
+against the pipeline itself: in the PPS event lists the slope in RAWY of ln(PI / 5 PHA) of single-pixel events, the
+correction `epevents` applied, is 0.990 times the table's k (16-84 per cent 0.974-1.008, 21 observations of
+2000-2025; `tools/pn_cti/pps_cti_slope_check.py` and its unit test).  The table of 2026-10-30, evaluated without
+the CCD temperature, had k 1/1.24 of the PPS slope.  The fit's out-of-time template (`massfit.pn_oot_energy`) moves
+its counts between the bands with the same k at each band's centre, averaged over the CCDs, at the image's `SUBMODE`
+and `DATE-OBS`.  Within a CCD the column mean of k is used (the 16-84 per cent range over the columns of CCD 4 is
+about +-8 per cent).  Left out: the precursor dependence of the CTI correction (with an event ahead in its frame
+and column the CAL lowers the correction by 2-4 per cent, but the source columns of real streaks carry 0.005 events
+per column and frame, so it moves the streak hardness by less than 0.003) and the pixel-by-pixel correction of split
+events.
+
+The streak hardness follows its column.  The statistic of the e2e test, HR(1-2 keV / 0.5-1 keV) of the streak far
+from the source over that of the source, depends on the spectrum of the column that feeds the streak, so a mock and
+a real streak are each compared with the ratio expected from their own column
+(`measure_oot_streak.expected_far_hardness`: every event of the column given copies on the far-side rows with the
+table's factor; for real streaks the events come from the PPS event lists).  The 78 real Full Frame streaks read
+0.027 +- 0.017 below their expectation, 42 realistic TNG views 0.026 +- 0.026 (median) below theirs: the estimator
+reads about 0.03 low on both, and the shift itself follows the calibration.  The real streaks give 0.83
+(0.71-0.96), the TNG views 0.86 with this table, the remaining 0.01-0.02 being the TNG columns, which are slightly
+harder against their cores than the real ones.  The fixture view of the e2e test has a softer source (HR 0.76
+against 1.07 for the real streaks) and reads 0.89 +- 0.05 over 12 seeds against 0.90 expected from its own column;
+one seed scatters by 0.16, and the shift against the same seed with unchanged energies by 0.06 about its
+expectation (-0.13), so the e2e test compares its run with the expectation from its column and tests the paired
+shift, not the real range.
+
+## Choices that are kept, with the reason
+
+* The FWC event density and the CCF soft-proton maps are placed on the packaged detector mask by SAS's own DET -> sky
+  solution of the observation the masks were made from (0827340901), read event by event from its PPS event lists
+  (`donor_background.DET_TO_MASK`, `tools/det_to_mask.py`; scatter 0.12 arcsec).  Until 2026-11-03 a registration
+  cross-correlated with the mask did this; the two agree to one mask pixel.
+* `donor_tables.fwc.band_conv`, the ratio of the stage's FWC spectrum to the CCF FWC event rate per band: both are
+  calibration data, so it is a unit conversion.
+* Selection thresholds that classify rather than scale (anomalous MOS CCDs, footprint, matching costs).

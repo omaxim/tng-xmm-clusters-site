@@ -1,0 +1,28 @@
+# The assumptions ledger
+
+Every assumption of the pipeline is an entry of `docs/assumptions/assumptions.yml`, traced to a published number or
+method (`literature`: citation key, page, the quoted text), a decision or measurement of this project (`validation`),
+an instrument document (`instrument`), or a convention with no physical effect.  An entry that has neither a citation
+nor a validation is marked `open` and listed in the open items; nothing is justified that is not.
+
+`tngxmm ledger check` verifies that every hashed spec field of the production presets is named in the `used_by` of at
+least one entry and that every reference resolves.  The proofs (each quoted text boxed on its page of the cited
+paper) are made by a tool in the private references area, which is not in the repository; `tngxmm ledger html`
+builds the review page from the ledger and those proofs, one self-contained HTML file organised by pipeline and
+node, with links to Kedro-Viz.
+
+Beside the generated list below: {doc}`assumptions/OPEN_ITEMS` (what is unjustified or only partly justified) and
+{doc}`assumptions/SENSITIVITY_TESTS` (the measured effect of the choices); the decisions behind the validations are
+in {doc}`dev/DECISIONS`.
+
+```{toctree}
+:hidden:
+
+assumptions/OPEN_ITEMS
+assumptions/SENSITIVITY_TESTS
+```
+
+## Entries
+
+```{assumption-ledger}
+```

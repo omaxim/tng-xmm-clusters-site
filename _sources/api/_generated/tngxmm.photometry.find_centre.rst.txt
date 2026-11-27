@@ -1,0 +1,36 @@
+tngxmm.photometry.find\_centre
+==============================
+
+.. automodule:: tngxmm.photometry.find_centre
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      METHODS
+      GUARD_MIN_SEARCH_ARCSEC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      find_centre
+      find_centroid_centre
+      find_peak_centre
+      find_peak_centre_guarded
+      find_peak_centroid_centre
+      locate_cluster
+      measure_flux_centroid
+      mock_catalogue_start
+      mock_key
+      mock_nominal
+      nominal_xy
+      transfer_offset
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Centre
+   

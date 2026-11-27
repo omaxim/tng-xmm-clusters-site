@@ -1,0 +1,6 @@
+tngxmm.embed.cli
+================
+
+.. automodule:: tngxmm.embed.cli
+
+   

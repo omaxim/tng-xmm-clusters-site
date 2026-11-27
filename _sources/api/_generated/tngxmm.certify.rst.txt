@@ -1,0 +1,18 @@
+tngxmm.certify
+==============
+
+.. automodule:: tngxmm.certify
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   cli
+   pipeline
+   queues
+   rules
+   sample
+   stage

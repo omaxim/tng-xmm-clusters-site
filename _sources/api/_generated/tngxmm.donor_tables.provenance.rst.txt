@@ -1,0 +1,13 @@
+tngxmm.donor\_tables.provenance
+===============================
+
+.. automodule:: tngxmm.donor_tables.provenance
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attach
+      recorded_input
+   

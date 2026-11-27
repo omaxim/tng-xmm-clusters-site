@@ -1,0 +1,50 @@
+tngxmm.instrument
+=================
+
+.. automodule:: tngxmm.instrument
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   active_ccds
+   apply_pattern_loss
+   area_perturbation
+   calibrate_boresight
+   calibration_axis
+   ccf_select
+   cli
+   compute_ecf
+   conditions_donor
+   donor_background
+   donor_corner_qpb
+   donor_footprint
+   donor_inout_sp
+   donor_soft_ccd
+   donor_tables
+   effective_area
+   fwc_state
+   galactic_column
+   load_responses
+   make_exposure_maps
+   measure_oot_streak
+   obs_responses
+   patch_psf
+   pipeline
+   pn_oot_energy
+   point_sources
+   readout_windows
+   reimage_mock
+   replay
+   rga_obscuration
+   run_xmm_simulator
+   sas_detect
+   sas_headers
+   sas_queue
+   schemas
+   select_pn_mode
+   simulate_instrument
+   write_camera_products

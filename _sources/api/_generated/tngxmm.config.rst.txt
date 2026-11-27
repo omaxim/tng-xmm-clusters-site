@@ -1,0 +1,68 @@
+tngxmm.config
+=============
+
+.. automodule:: tngxmm.config
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Z_AG89_TABLE_UNIT
+      OBSERVATION_TABLES
+      BANK_SAMPLE
+      OBSERVATION_COLUMNS
+      OBSERVATION_KEY
+      COLUMN_KINDS
+      PRODUCTION_CONDITIONS
+      ALL_TNG_SNAPS
+      V1_SNAPSHOT_Z
+      PASS1_CONDITIONS
+      PASS1_VIEWS
+      PASS2_PROJECTION
+      SOURCE_PRESETS
+      PASS1_PRESETS
+      PASS2_PRESETS
+      BOX_PRESETS
+      PRODUCTION_PRESET
+      PRODUCTION_PRESETS
+      RESPONSE_PAIRS
+      DOC_HASH_BEGIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      P
+      calibration_tables_sha256
+      canonical_cell
+      check_response_pairing
+      data_manifest_sha256
+      get_preset
+      observation_columns_sha256
+      observation_tables_sha256
+      spec_hash_markdown
+      table_columns_digest
+      write_doc_hashes
+      write_parameters
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CampaignSpec
+      ConstantsSpec
+      CosmologySpec
+      DonorSpec
+      InstrumentSpec
+      MassfitSpec
+      PhotometrySpec
+      RuntimeSpec
+      SimSpec
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ResponsePairingError
+   

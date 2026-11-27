@@ -1,0 +1,12 @@
+tngxmm.sim.generate\_photons
+============================
+
+.. automodule:: tngxmm.sim.generate_photons
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      generate_photons
+   

@@ -1,0 +1,205 @@
+# Glossary
+
+The terms, labels and version names used on this site and in the code, each defined once. The physical quantities
+(masses, radii, bias ratios) are defined with their table columns in {doc}`definitions`.
+
+## Samples and views
+
+halo-snapshot
+: One halo of one simulation at one snapshot (`sim`, `snap`, `halo_id`).
+
+descriptor
+: The YAML file that describes one simulation for the `ingest` stage (`src/tngxmm/ingest/descriptors/<name>.yml`):
+  family (`tng`, `swift`, `gizmo`, `eagle`), cosmology, snapshots, halo catalogue and the conversion of its fields
+  to canonical gas cells. A preset that names one (`sim.source`) carries its sha256 in the spec hash.
+
+canonical cube
+: The particles of one halo-snapshot inside a cube about the halo centre, in physical units and the field names
+  of `tngxmm.ingest.schema`, whatever the simulation. FLAMINGO, SIMBA and EAGLE are generated from stored cubes;
+  TNG converts its cells to the same form in memory (`runtime.cube_store`).
+
+view
+: One projection of a halo-snapshot along a simulation axis (`view` 0, 1, 2 = line of sight along the simulation z, y, x axes), observed as
+  one mock XMM observation. `view_id` names it; the products live in `<tree>/<preset>/<sim>/<snap>/<halo>/view<v>/`.
+  The pass-2 presets have six views per halo-snapshot, along the six icosahedral axes
+  (`sim.projection = 'icosahedral6'`, `view` 0 to 5).
+
+reference observation, donor
+: One of the real XMM-Newton observations of SZ- or lensing-selected clusters (`obs.observations`, 808 rows). A view
+  is matched to one of them and borrows its redshift and its observing conditions. "Donor" is the short name used in
+  the code.
+
+bank, added observations
+: The bank is the 638 observations the table held until 2026-11-25 (`in_bank` True, `donors.reference_sample =
+  'bank638'`). The 170 observations added on that day from an archive search have `in_bank` False and `sample` and
+  `mass_class` = `extra`; a preset reads them only with `donors.reference_sample = 'bank638+extra'`
+  (`v1_flamingo_l1m8_pass2_extra`). The hash of every other preset covers the bank rows only.
+
+physics donor
+: The reference observation a view replicates: it fixes the redshift z_obs, the matching mass and the real
+  cluster the mock is compared with.
+
+conditions donor
+: The observation whose observing conditions (live times, filters, pn mode, exposure maps, background, N_H, roll,
+  core offset) the instrument stage uses for a view. Since release 1.1.1 it is drawn among the N = 5 nearest
+  observations of the physics donor in a space of observing conditions, with jitter of exposure, roll and pointing
+  (`donors.observing_conditions`); before, it was the physics donor itself. The pass-1 preset uses the rule `donor`:
+  the view's donor as it is, without neighbours or jitter.
+
+pass 1, pass 2
+: The two passes of the pairing on the fit mass (PREREGISTRATION section 6). Pass 1 observes projection 0 of every
+  candidate halo-snapshot under one reference observation and fits it; that fit mass is the halo-snapshot's first
+  matching mass. Pass 2 observes every halo-snapshot with a pass-1 fit along the six icosahedral axes, each view
+  under a different observation of its window in redshift and fitted mass; the mass is the fitted hydrostatic mass
+  on both sides (`tngxmm donors pair-projections`; with `--assignment least-used` a halo-snapshot takes the
+  observations of its window that serve the fewest views so far). For FLAMINGO L1_m8 pass 1 is the list
+  `campaigns/v4_flamingo_l1m8_pass1/` (5,001 views under observation 0762440401) and the preset
+  `v1_flamingo_l1m8_pass1`; {doc}`production` follows it step by step. It has been generated and fitted with short
+  chains. The pass-2 presets are `v1_flamingo_l1m8_pass2` and `v1_flamingo_l1m8_pass2_extra`; the pass-2 list with
+  the 170 added observations is not built yet, because it needs their fits.
+
+replica, K
+: The K views matched to one reference observation (K = 5 in the replica list). `rep` numbers them.
+
+target list
+: A table with one row per view to generate (`campaigns/v4/targets_v4.csv`, the replica list of 2,840 views;
+  `campaigns/v4_max/targets_v4_max.csv`, the maximal list; `campaigns/v4_box/`, the box list).
+
+replica list, maximal list, matched draw (K')
+: The replica list draws K = 5 TNG-Cluster views per reference observation, matched in mass and redshift. The
+  maximal list uses every eligible halo-snapshot of TNG-Cluster and TNG300 with a donor each. A matched draw takes K'
+  views per observation from the maximal list so that the mass distribution matches the real sample. See
+  {doc}`samples`.
+
+donor fold
+: A group of reference observations used for cross-validation; an observation and every mock made under its
+  conditions are in the same fold, so no model is tested on a cluster whose conditions it saw in training.
+
+halo group, halo fold
+: Every view of one physical halo, at every snapshot and along every line of sight: the split unit
+  `zoom_target_id`, which is the TNG-Cluster zoom target and the z = 0 object of a halo of a TNG box. The FLAMINGO,
+  SIMBA and EAGLE tables carry a snapshot's halo id there; such a table is refused until a column that follows the
+  halo (FLAMINGO's HBT+ track) or halo-snapshot groups are asked for. A halo group sits in one halo fold and is one
+  unit of the bootstrap
+  (release 1.2, `tngxmm donors halo-folds`), so no model is tested on a halo it was trained on and the views of a
+  halo are never resampled apart. `halo_id` is an index of one snapshot's catalogue and does not name a halo.
+
+count matching, f
+: The ratio f of a real cluster's net counts in 0.15-1 R500 to its replica's, reported by the realism evaluation as
+  a measure of the luminosity difference. No production mock or frozen realism replay is thinned by it; a thinned
+  replay is a diagnostic ({doc}`definitions`).
+
+## The fit and a run
+
+concentration prior
+: The prior on the NFW concentration c200 of the hydrostatic fit (`massfit.cm_prior`). The default `dutton14` is
+  log-normal about the c200(M200, z) relation of Dutton & Maccio (2014), 0.11 dex wide, evaluated at the M200 of the
+  sampled halo, with c200 bounded at 0.5-20; `flat` is flat in ln c200 over 1-10 (Sanders et al. 2018). Ledger
+  entry `fit.cm_prior`.
+
+domain, domain prediction
+: A fit is inside the domain of the measurement when it carries none of the four flags that are known before it
+  runs: `centre` (the centre search was flagged), `bg_fallback` (an image has fewer than 50 exposed pixels beyond 2 R500:
+  the cluster fills the field), `field_edge` (the first guess is limited by the field) and `no_seed` (no first
+  guess). They come from the target and the geometry of the images, not from what the fit returns, so cutting on
+  them cannot select on the result. Fits outside the domain are reported apart. `tngxmm massfit predict-domain`
+  evaluates the flags before the fit; in pass 1 the prediction is a column of the fit targets and decides nothing.
+
+fit target, fit plan, sweep
+: A fit target is one row of the table the fitter reads: a view or an observation with its centre, redshift and
+  first-guess mass. A fit plan is the file a fit job reads (`slurm/fits.sh`): one stream per line with its target
+  table, image root, work directory, workers and rate cache. `tngxmm massfit fit-plan jobs` splits a long target
+  table over several jobs and adds a last plan, the sweep, that lists every target.
+
+done-marker
+: The file that marks an item as finished: `obs_meta.json` of a view, `sas_detect/provenance.json` of a SAS
+  detection, `provenance.json` of a fit. It is written last and atomically, and removed first when the item is made
+  again, so an item cut by a kill or a full disk is never taken for a finished one ({doc}`when-a-run-stops`).
+
+exit 28, `interrupted: disk`
+: A stage driver stopped by a full disk or an exhausted quota prints one line starting with `DISK FULL:` and exits
+  with code 28. The items it could not finish have the status `interrupted: disk`, are recorded in no table and are
+  made again by the same command.
+
+## Masses and the three curves
+
+M500c, M_true
+: The true total mass inside the radius where the mean density is 500 times the critical density, from the
+  particles. "black" in older notes and in figure legends of the mass profiles.
+
+M_HSE
+: The intrinsic hydrostatic mass of the simulated gas, from its 3-D profiles (Barnes et al. 2021 estimator).
+  "red" in older notes.
+
+M_X
+: The hydrostatic mass measured by the X-ray fit (mbproj2d) on an image. "blue" in older notes.
+
+The colour names blue, red and black come from the mass-profile figures (`viz.plot_mock_truth`) and survive in column
+names: `ln_br` = ln(M_X / M_HSE), `ln_bt` = ln(M_X / M_true), `ln_rt` = ln(M_HSE / M_true).
+
+## Claims of the paper plan
+
+claim A
+: On real clusters, the X-ray fit reproduces published XMM hydrostatic masses (Lovisari et al. 2020), cluster by
+  cluster, with the same mass definition.
+
+claim B
+: The ratio of the X-ray mass of real clusters to their lensing mass is consistent with M_X / M_true of the mocks
+  (spherical-overdensity masses).
+
+claim C
+: On mocks, the bias of the X-ray method alone: M_X / M_HSE inside the true R500c (a fixed radius).
+
+claim D
+: A model trained on mock images predicts the masses of real clusters; tested on held-out donor folds. Not part of
+  the first paper: the `ml` stage is not implemented, and claims A to C do not rest on it.
+
+None of the four is established yet; {doc}`validation` gives the status of each.
+
+## Gates and tests
+
+gate
+: A pass/fail rule fixed before the measurement it judges. A failed gate is reported, not relaxed silently; where a
+  rule was changed after the data were seen, the page says so.
+
+gate P (population)
+: Kolmogorov-Smirnov tests of the views of a target list against the reference observations in matching mass,
+  redshift, live times, N_H and theta500, with a critical distance from a bootstrap. The replica list fails it in mass
+  (D = 0.241 against 0.061); see {doc}`samples`.
+
+closure test, closure grid
+: Idealised clusters in exact hydrostatic equilibrium (two profiles, three masses; two redshifts in the grid of 2026-10-17, three in the grid of the rules of 2026-11-04) put through the
+  whole chain and fitted; M_fit / M_true measures the bias of the measurement itself. Data modes: `clean` (no sky,
+  particle background or AGN), `agnonly`, `bgonly`, `real` (all three).
+
+C2ST
+: Classifier two-sample test: a classifier is trained to tell mock from real images; the cross-validated area under
+  the ROC curve (AUC) is 0.5 when it cannot. Grouped by donor, with a donor bootstrap and a permutation null.
+
+frozen evaluation
+: The realism test on 84 held-out donors, with every setting registered before the run (`realism.frozen`); the
+  code refuses a run that differs. Not run yet.
+
+campaign check C1-C17
+: Acceptance checks of a generated campaign tree (completeness, spec hash, offsets, products, ...), `campaign check`.
+
+R1-R12, S1-S9
+: Sensitivity tests of the assumption ledger: R are measurements made on the login node, S are tests that need new
+  generations or fits ({doc}`assumptions/SENSITIVITY_TESTS`). They are unrelated to the rule labels R3, R4, R7, R8
+  of the certification rules (`conf/base/parameters/certify.yml`).
+
+## Versions and labels
+
+The project uses one version number for the package and keeps older labels in file and key names. What each means:
+
+| label | what it is |
+|---|---|
+| 1.0.0 ... 1.1.3 | package releases (`tngxmm.__version__`, `CHANGELOG.md`); the current one is in the page title |
+| `v1`, `v1_tng300`, `v1_tng100`, `v1_tng50` | the TNG presets (`tngxmm.config.PRODUCTION_PRESETS`); `v1` (TNG-Cluster) is the production campaign |
+| `v1_flamingo`, `v1_flamingo_l1m8`, `v1_simba`, `v1_eagle`, `v1_common`, `v1_flamingo_l1m8_pass1`, `v1_flamingo_l1m8_pass2`, `v1_flamingo_l1m8_pass2_extra` | the presets of the other simulations (`config.SOURCE_PRESETS`), of TNG-Cluster under the `common` emission, of pass 1 of the pairing on the fit mass (`config.PASS1_PRESETS`: one projection under one reference observation) and of pass 2 (`config.PASS2_PRESETS`: six projections, each under a paired observation); every preset is in `tngxmm.config.PRESETS`, one spec hash each |
+| V3.2, V4, V4.1 | configurations before the package releases, listed as 3.2, 4.0 and 4.1.0 in `CHANGELOG.md` (V3.2: the earlier code base; V4: the first campaign of this package; V4.1: the configuration that release 1.0.0 froze) |
+| `v4` in `campaigns/v4/`, `targets_v4.csv`, `sim.rng_campaign = 'v4'`, `obsid_style 'v4'`, `header_style 'v4'` | the target lists drawn for V4 and the random-stream key they fix; the v1 presets keep them so that the same views get the same random draws |
+| `golden_v1`, `golden_v1.1`, `golden_v1.1.1` | the golden products of the fixture halo, named by the last release that regenerated them |
+| DESIGN v3, PLAN_V41, CHECKS, D1, J1c | internal planning documents and study names of the development, not part of the repository; where a number comes from one of them, the page states the number and its configuration |
+| spec hash, generation hash | sha256 of the preset (all hashed fields) and of the part that determines the generated products (without the fit settings), stamped on every product |
+| seed hash | hash of the seed procedure of the fit (its code, the seed sections of the preset and the tables it reads); the real seed table and the guarded centres are read only when they carry the current one |

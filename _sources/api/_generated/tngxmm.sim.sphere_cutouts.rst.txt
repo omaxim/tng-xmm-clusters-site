@@ -1,0 +1,29 @@
+tngxmm.sim.sphere\_cutouts
+==========================
+
+.. automodule:: tngxmm.sim.sphere_cutouts
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FIELDS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_sphere_cutouts
+      cut_radius_kpc
+      is_cutout_directory
+      minimum_image
+      open_cutout_directory
+      periodic_select
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CutoutDirectorySource
+   

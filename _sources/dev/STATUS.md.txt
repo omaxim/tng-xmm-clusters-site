@@ -1,0 +1,685 @@
+# Open work (2026-11-04, updated 2026-11-26)
+
+This list replaces the to-do lists of `docs/dev/archive` and the open items that were scattered over
+`DECISIONS.md`, `docs/assumptions/OPEN_ITEMS.md`, `REVIEW_RESPONSE_v1.1.3.md`, `LX_GAS_EXPLORATION.md`,
+`LX_CROSS_SIM.md` and the L_X gap investigation. `DECISIONS.md` stays the record of what was decided and measured; this
+page only says what is still to do, who or what decides it, and what was closed at the integration of 2026-10-30
+(spec hash of preset `v1`: `42991eed10507b97`; `12641be3938b849d` since the merge of the out-of-time energies, pn-oot-cti;
+`94cd70cfd496ef42` since the removal of the last tuned constants on 2026-11-03, DECISIONS "No tuned factors: the last
+replacements"; `6678315105753621` after the first independent review, DECISIONS "Independent review of the
+replacements, round 1"; `fef1c34c6c0fe914` since the soft-proton rule for donors without a measured rate, DECISIONS
+"Independent review, round 5"; `4f3e8995401e3c53` since the chain fixes of B11; `9937b33364b11ac4` since the package
+calibration tables entered the spec hash on 2026-11-04, 3283b9e; `9ee9e06acaf41d07` since the packaged observation
+table entered it, `0c5f1754d7c1220a` since the data manifest did and `66a72be359876779` since the AtomDB files of the
+photon spectra entered the manifest, DECISIONS "Independent review, round 6", 7458bc3; seed hash `46e8f5657f30f47f` with the installed tables since the redshift rule 3 of review 7,
+`19686254f36729d9` before).
+
+Two results fix the triage. First, TNG-Cluster is 0.2-0.4 dex brighter in soft-band L_X than the observed relations at
+fixed mass, and FLAMINGO L1_m8 through the same mock pipeline is 0.33 dex fainter than TNG-Cluster at matched true mass
+and sits on the real pool ({doc}`../simulations`): the excess is a property of the TNG gas, so work whose purpose was to
+bring TNG-Cluster onto the observed trend is closed. Second, the standing rule that no tuned, replay-measured or
+hand-derived factor enters a mock or a fit ({doc}`../background`): items that asked for such a factor are void.
+
+No science number has been measured on mocks regenerated under the integration configuration yet. Every job below needs
+the author's explicit go. "Login work" means analysis or code on the login node.
+
+State on 2026-11-12. Spec hash of `v1` `c2e6b282f6aab356`, generation hash `6edbe80999c787ac`, seed hash
+`67670d464ce8f888` (CHANGELOG, top entry). The pilot is done: 60 real and 60 mock fits ({doc}`PILOT`). Since
+2026-11-11 the freeze is judged on the pilot and the closure grid no longer gates it (PREREGISTRATION section 1).
+The next run is pass 1 on FLAMINGO L1_m8 ({doc}`../production`); it is prepared and not submitted. Rules of a run:
+every submission is deliberate (the runner needs `--go`), at most two nodes at once, each fully used (more queued
+fits than workers), 48 hours a job at most. An item written before 2026-11-10 that is known to be overtaken says
+so.
+
+State on 2026-11-26. The spec hash of `v1` is unchanged (`c2e6b282f6aab356`).
+
+* Observations. `src/tngxmm/obs/catalogue/observations.csv` has 808 rows: the bank of 638 (`in_bank` True) and 170
+  observations added on 2026-11-25 from an archive search (`in_bank` False, `sample` and `mass_class` = `extra`;
+  inputs under `obs/catalogue/inputs_extra/`, module `obs/extra_observations.py`, sky columns from HEASARC nH and
+  IRSA dust in `obs/sky_columns.py`). The hash of a preset with `donors.reference_sample = 'bank638'` covers the
+  bank rows only, so no existing hash changed; `v1_flamingo_l1m8_pass2_extra` (`'bank638+extra'`) covers all rows.
+  The data package `data_v1p2` and the response set `responses_obs_v2` hold the tables and responses of the 808; the
+  rows and files of the 638 are those of `data_v1p1` and `responses_obs_v1`. The conditions table has the flags
+  `pool` (the pool of the rule `nn`, the bank only) and `lends` (700 observations: 548 of the bank, 152 added).
+  Donor folds are assigned on the bank only.
+* Pass 1. The 5,001 views of `v1_flamingo_l1m8_pass1` are generated and are fitted with the short chain (150 burn-in
+  and 300 sampling steps, 136 walkers), which is short of convergence by the diagnostics the fit records; the
+  fitted masses serve the pairing. About 4,000 fits were made on the home cluster. The remaining 978 were run on
+  2026-11-26 on a second cluster (not all had finished when this was written) with `psf_eval = window` and `projection = matrix`, after 75 finished z = 0.1
+  mocks refitted with the two switches gave ln M500 (switched minus production) mean +0.001 +- 0.006, median
+  +0.0005, 38 up and 37 down, two of the 75 beyond 0.25 ({doc}`PSF_WINDOW_VALIDATION`).
+* Real observations. 623 of the bank are fitted. The 170 added ones are being fitted with the same settings.
+* Pass 2. Six icosahedral views per halo-snapshot (`sim.projection = 'icosahedral6'`), each under a different
+  observation of the window in redshift and fitted mass, by least-used assignment (`tngxmm donors pair-projections
+  --assignment least-used`). The list with the added observations waits for the fits of the 170 and is not built;
+  no pass-2 view of the final list exists. `v1_flamingo_l1m8_pass2_extra` fits with `massfit.psf_eval = 'window'`
+  and `massfit.projection = 'matrix'`; pass 1 on the home cluster and the 623 real fits used the evaluation on the
+  whole grid.
+* Away from the cluster. `tngxmm data fetch` has the stages `fit`, `mock`, `realfit` and `analysis`
+  ({doc}`../LOCAL`). The releases of the repository hold the pass-1 views, the fits finished by 2026-11-25, the
+  images and event lists of all 808 observations, both data packages and both response sets.
+* Open. Some fits of the largest z = 0.055 mocks stop when the start points of the sampler are drawn; the cause is
+  understood and the fix is pending. The pass-2 fits are to run with chains long enough to converge; the chain
+  length is being measured and no criterion is fixed yet.
+
+## Open
+
+### A. Background and instrument
+
+* **A0. Data products the configuration reads, to build before any job (login work), all from the merged, committed
+  tip (every writer into the data package refuses an uncommitted tree).** Done: the donor tables measured about the
+  cluster, built again at the final centres on 2026-11-03 (todo/r5-donor-tables 0bcc9a0, clean tree): core offsets
+  `e52150f0`, condition table `30a8f3ec` (registered in `realism.frozen`), anomalous CCDs `1e1d2d20`, IN/OUT
+  `25b3c8ba` (MOS and pn); each has a provenance sidecar and the readers refuse a stale or dirty-built copy. Not done:
+  the RASS sky table `donor_sky_rass.csv` of the package has no provenance sidecar and is refused
+  (`check_table('sky')`) until step 7 rebuilds it. Since 2026-11-04 (todo/r6-checks) every data-package file a view is
+  made from is checked before the view and recorded with it (`sim.data_inputs`): the files a builder of this package writes by their provenance
+  sidecar (measurement version and FWC rule where versioned, the catalogue positions' redshift and position rules and
+  columns, the current inputs, a clean tree; the centre table only when copied from a current seed table), the APEC,
+  ECF and reddening tables of the package and the AtomDB files of the photon spectra by their sha256 pinned in
+  `sim/data_manifest.csv`; the same before every closure cell (todo/r6-inputs), whose `truth.json` records them, and a
+  stored view or cell is reused only when its record is the current one. The readers of the active CCDs, CCD maps,
+  catalogue positions and source thresholds check their table too. Every package table but the pinned ones is refused
+  until rebuilt. To do, from the merged,
+  committed tip, in this order (one list, also in `docs/background.md`):
+  1. `catalogue_positions_v4.csv` with the columns of the catalogue entry (theta500 of the SZ mass, redshift type,
+     error and source): `python -m tngxmm.photometry.catalogue_positions --psz2 ... --dr6 ... --counterparts
+     $TNGXMM_SITE_REFS/psz2_counterparts/psz2_counterpart_redshifts.csv` (redshift rule 3, with the SPT and ACT
+     counterparts since review 7; the PSZ2, ACT DR6 and counterpart files must be the pinned ones,
+     `catalogue_positions.INPUT_PINS`; the current table is refused);
+  2. the active CCDs and the CCD maps, `tngxmm donors active-ccds`, and the source thresholds,
+     `tngxmm massfit build-source-thresholds --pps-cache ...` (both read by the views and, the thresholds, by the seed
+     photometry, whose seed hash takes their sha256);
+  3. the real seed table, `tngxmm photometry obs-seed-lx --preset v1` (seed hash 46e8f5657f30f47f with the installed
+     tables since the redshift rule 3 of review 7, 19686254f36729d9 at 7458bc3; it moves with every edit of a
+     seed-procedure module and with the rebuilt tables of steps 1 and 2, so the table must be measured at the tip that
+     runs);
+  4. the guarded centres from it, `tngxmm photometry obs-centres-guarded`;
+  5. the core offsets, `kedro run --pipeline donors --nodes donors.build_core_offsets`;
+  6. the donor tables, `kedro run --pipeline donor_tables --nodes` `fetch_pps_archive` (the PPS event lists and
+     flare series the corner and IN/OUT measurements read; it fetches only what the cache lacks and needs the guarded
+     centres for the donor list), `build_donor_nh_total`, `build_donor_background`,
+     `build_donor_soft_ccd`, `build_fwc_reference`, `measure_mos_background` (sharded:
+     `--params donor_tables.mos_background.shard=k/n`, then unsharded), `build_mos_background`, `build_qpb_corners`
+     (shardable the same way), `build_donor_conditions` (each node name prefixed `donor_tables.`); the in-field
+     background table of 2026-10-24 has no provenance and is refused, and its rebuild takes 39 donors out of the
+     conditions pool (`docs/background.md`): the author's decision;
+  7. the RASS sky of every donor field after the total column,
+     `python -m tngxmm.donor_tables.rass_sky <work> --out $TNGXMM_DATA/tables/donor_sky_rass.csv`;
+  8. `realism.frozen.conditions_table_sha256` registered again with the new condition table;
+  9. every mock view regenerated, into a new tree, and every closure cell generated again: views and cells made before
+     the catalogue rule of version 3, the chain fixes of B11 and these tables are void (a resumed campaign regenerates
+     views made under another catalogue rule; the closure resume does the same, and `GEN_FROM` stops on them).
+  The end-to-end v1 test (`test_campaign_v1_replica`) fails against the package until then.
+
+  Then G1 (golden fixtures).
+* **A1. Regenerate mocks on the integration configuration and measure what changed.** The pn particle background is now
+  the donor's corner level (the v1 level was about 1.17 times it in 4.5-12 keV); the pn residual soft protons are the
+  IN/OUT excess, a lower bound (pn-inout-sp, merged; without them the replicas' pn 1-12 keV background was 0.08-0.10
+  dex below the donors', with them within 0.03 dex above 1 keV, replay job 1891399), read from the pn columns of
+  `donor_mos_background.csv` (in the data package since 2026-11-03);
+  the MOS vignetting carries the RGA obscuration of the SAS calibration layer; the sky of each donor field comes from
+  its RASS spectrum; the soft protons follow the CCF flare maps;
+  the pn Cu-line gap is on (before it the pn hard-band field of the mocks was +0.27 in ln above the real one).
+  Decided by: node job (regeneration of the 467 views of the memo-4 set), then login analysis (`sky_level_4a.py`).
+  If the pn soft band is still short, the author decides whether to state it or model it. Source: `background.md`,
+  DECISIONS "The pn Cu-line gap everywhere", "Sky background, memo 4".
+* **A2. Sky level per camera and band.** Memo 4 found the pn 0.5-1 keV field of the mocks +0.20 +- 0.04 in ln above the
+  real one, the MOS fields within 7 per cent, and the split into vignetted and flat parts poorly determined (the rule
+  |median| <= 0.1 failed). Repeat on the regenerated views of A1. The origin of the sky norms is Q6. Decided by: login
+  work after A1. Source: DECISIONS "Release 1.1.3, continued", ledger `instrument.sky_background`.
+* **A3. Effects modelled from the calibration again.** The MOS RGA azimuthal modulation comes from the RGA obscuration of
+  the SAS calibration layer (`instrument.mos_rga_vignetting = 'ccf'`, in the presets since 2026-11-03; ledger
+  `instrument.vignetting_axis_rga`).  The pn out-of-time energies are modelled again, from the EPN_CTI calibration
+  (`instrument.pn_oot_energy`, pn-oot-cti, merged); the CTI table is evaluated at the pn CCD temperature and checked
+  against the PPS energy correction, and the streak hardness follows its column for mocks and real streaks alike (A5).
+* **A5. pn streak hardness: explained, calibration fixed.** The CTI table of the out-of-time energies had been
+  evaluated without the CCD temperature in the CAL state, so its k was 0.74-0.88 of the RAWY slope of the PPS energy
+  correction. Rebuilt at 183.2 K (pn focal-plane housekeeping F1128, the same at every epoch), it follows that slope to
+  0.990 (`tools/pn_cti/pps_cti_slope_check.py`, unit and e2e tests). Against the hardness expected from its own column a
+  streak reads about 0.03 low on real data (78 Full Frame streaks, -0.027 +- 0.017) and on realistic TNG views (42,
+  -0.026 +- 0.026, median): an estimator offset common to both. Open, no model change: the brighter half of the real
+  streaks (C > 30 000) reads 0.059 +- 0.020 below its expectation, the fainter half -0.002 +- 0.026. Source: DECISIONS
+  "Independent review, round 5" (pn out-of-time energies at the CCD temperature); `TODO_RUN/a5-streak-hardness/REPORT.md`.
+* **A4. Smaller instrument gaps, not fixed.** pn out-of-time events from photons that land in the non-read rows between
+  a window and the readout node (Large Window fraction 0.16 per cent); MOS1 epochs before 2012 image one CCD more than
+  the packaged mask; MOS1 band-1 extended detections (+7 and +12 extended sources in the two deep fields of the 5-CCD
+  MOS1 donor, cause not found). Decided by: login work, if the author wants them chased. Source: DECISIONS "Readout
+  windows", "SAS-ready products: open points" 2.
+* **A6. What is left of the L_X truth ratio.** The ratio is now stated beside every L_X figure as the net ratio of the
+  measurement chain, with its measured steps (`validation.md`, "The L_X estimator against the intrinsic luminosity";
+  closed below). Open:
+  * A6a. `docs/figures/lx_mass.png` is not remade: it predates the rebuild of `obs_seed_lx_v4.csv`, and its caption's 615
+    real observations no longer reproduce (637 from the current table; the +0.31 dex at 4-7e14 Msun does). Remake once
+    A0's tables are final; the remake also draws the annotation.
+  * A6b. The ratio and its steps on the regenerated views of A1, and the R500 aperture step by step.
+  * A6c. The steps leave -0.02 to -0.03 dex unexplained at z_obs above 0.5.
+  * A6d. The real-side steps are not measured, so whether the ratio cancels between mocks and real data is not known.
+* **A7. MOS corner regions and the MOS1 soft band.** De Luca & Molendi (2004, Sect. 3.1) mask parts of the MOS CCD 2 and
+  7 corners that photons and low-energy particles reach; the corner mask of the pipeline does not, and the paper gives
+  no outline. The MOS1 0.5-1 keV level error stays high under the new FWC reference (0.080 over the fit regions, 0.13
+  within 5'; long closed exposures differ by up to 0.27 in ln on the central CCD), cause unknown. Decided by: login study
+  of the donors' corner images against the FWC data, then the author. Source: DECISIONS "Independent review, round 5"
+  (QPB level error).
+
+* **A8. Seed table and guarded centres for the seed hash `67670d464ce8f888`: in progress (2026-11-12).** The seed
+  hash moved with the concentration prior although no seed value changes. The real seed table (`tngxmm photometry
+  obs-seed-lx`) and the guarded centres (`tngxmm photometry obs-centres-guarded`) carry the hash they were measured
+  under and are refused under another, so both are built again before a fit (steps 3 and 4 of A0). Decided by: login
+  work. Source: CHANGELOG, top entry; DECISIONS "The concentration prior".
+
+### B. Fitter
+
+* **B1. Closure grid on the 2026-11-03 configuration.** Overtaken in part: the gate arm ran (with the pixel average
+  as job 1896730) and failed the rule, and since 2026-11-11 the grid is reported as the measured error of the method
+  and no closure or sampler run is made before the freeze ("Closed on 2026-11-12" below). Which of the study arms
+  listed here have run is not recorded on this page. The text of 2026-11-04 follows. The rule must be written before the run: the registered
+  1.00 +- 0.03 per cell failed for the earlier freeze candidate (13 of 72 cells). Arms: `v1` (the ESAS background, flat
+  priors, the first guess iterated on the image through the Bulbul et al. 2019 relation), `v1_mix` (the mixture background), `v1_esasalt` (wrong FWC template), `v1_half` and
+  `v1_deep` (half and ten times the exposure: the S/N dependence without thinning), `v1_nhhi`. About 3 node-hours per
+  grid. Waits on A0. The grid runs on the configuration of 2026-11-04 (the B11 fixes and the round-6 input checks,
+  spec hash `66a72be359876779`); cells generated before B11 are void. Arms added in round 5: the response arms `v1_xcallo` (the range is
+  [`v1_xcallo`, nominal]; `v1_xcalhi` a diagnostic), `v1_nustarhi`, `v1_nustarlo`, `v1_obsresp`, `v1_obsresp_shared`
+  (Q20), and the sampler arms of Q18, which run after B1 on its views and its commit. Arms added in round 6: the
+  vignetting arms `v1_vighi`, `v1_viglo` (the effective area times g = 1 + 0.05 theta / 10' or 1 / g,
+  XMM-SOC-CAL-TN-0018 Sect. 4.5) and the ELLBETA PSF
+  arm `v1_psfell`, reported per band.
+  Source: DECISIONS "Fitter freeze", "Counts check ... result", LXGAP report section 6 (item 4) and section 7,
+  `validation.md`.
+* **B2. Residual of the closure deficit.** With the background known, five of the six groups with a background come
+  within about 5 per cent of the clean cells, but the clean cells are themselves 0.945 at z = 0.2, and a cluster that
+  fills the field (z = 0.06) cannot be separated from a flat background (fitted background about 20 per cent low).
+  Decided by: login analysis of the B1 output. Source: DECISIONS "The background-cell deficit", "Fitter freeze".
+* **B3. Refit the 638 donor observations with the settled fitter** (6-8 node-hours; prepared in
+  `V113/realfit_113`). Needed by C1. Waits on Q1-Q3. Source: DECISIONS "Design note: matching on the hydrostatic fit
+  mass", step 1.
+  Since 2026-11-26: 623 observations of the bank are fitted, and the 170 added observations are being fitted with
+  the same settings.
+* **B4. Does M_fit depend on its L_X seed?** The seed sets the first-guess mass and c200. A fit-level test (a 43-view arm
+  is about 4 hours on one node). Waits on Q3. Source: DECISIONS "Forecast of the L_X(1 Mpc)-M_fit comparison"
+  ("Not modelled"), LXGAP report section 6 (item 3).
+* **B5. Repeat the fit-level sensitivity tests measured on V4** (R1, R10, R11, S1, S2, S3, S6) on the current
+  configuration. Decided by: node job. Source: `SENSITIVITY_TESTS.md` status table, `validation.md`.
+* **B6. S8: isolate the deviations from Barnes et al. (2021) on the truth step** (star-forming gas excluded, own mu).
+  R5 only bounds their sum at +0.024 in the median. A few core-hours, with the particle reads on a node. Source:
+  `SENSITIVITY_TESTS.md` S8, ledger `truth.star_forming_gas`, `truth.own_mu`.
+  Done on 2026-11-04 (24 TNG-Cluster halo-snapshots): star-forming cells kept -0.0003, mu = 0.59 -0.0041, both
+  -0.0045 in the median of ln M_HSE(< R500c) / M500c against the headline (`SENSITIVITY_TESTS.md` S8).
+* **B7. Effect of the donor jitter (exposure, roll, pointing) on M_X:** fits of jittered and unjittered replays. Decided
+  by: node job. Source: REVIEW_RESPONSE minor issues.
+* **B9. Convergence of the chains: measured on the stored chains; the sampler is Q18.** No long chain has mixed per
+  walker: the autocorrelation time of ln M500 is of order 10^3 steps (emcee's estimate is a tenth of any window, 31
+  steps on 300, 139 on 1,500, and independent AR(1) walkers with tau = 500-1,500 give the same tau, R-hat and ESS), and
+  repeats give an ESS of the median about equal to the number of walkers (90-130). The last tenth's mean log posterior
+  exceeds the first tenth's in 79 per cent of fits (50 if stationary), by more than 2 sd in 17 per cent. Monte-Carlo
+  scatter of the median about a shared start: NMAD 0.010-0.011 per chain (RMS 0.014-0.027), on mocks; a bias shared by
+  chains with the same start is not measured. Quick chains: quick-minus-long scatter NMAD 0.028-0.032 (17-27 per cent
+  beyond 0.05), 16-84 widths 20 per cent narrower than the long chains'. Sampler options behind switches and diagnostics
+  in every result.json: merged (0711254, closed below). Decided by: the author (Q18); a long-chain arm in B1 with
+  independent repeats. Source: `TODO_RUN/b9-chain-convergence/REPORT.md`; DECISIONS "Analyses of 2026-11-03" (B9).
+* **B12. Normalisation of the z = 0.5 closure cells.** After B11 the clean cells at z = 0.5 hold 2.0 +- 0.4 (8e14 Msun)
+  and 1.3 +- 0.6 (4e14) per cent fewer counts within R500 than the fit model at the truth, in every band (0.996-1.002 at
+  z <= 0.2). Most of it is the model's discretisation: mbproj2d evaluates the density at the centres of shells one fit
+  pixel wide (8" = 50 kpc at z = 0.5, against core radii of 134-169 kpc). Halving the fit pixel raises the ratio by 0.84
+  (8e14) and 1.43 (4e14) per cent (0.15-0.3 per cent at z <= 0.2), about 1.1 and 1.9 per cent in the continuum limit;
+  the 8e14 remainder is about 0.9 +- 0.4 per cent. Options: model shells finer than the fit pixel, or a finer fit pixel
+  at high z (cost about the square of the factor). Decided by: login work, then the author. Source: `TODO_RUN/fwdcheck`;
+  DECISIONS "Independent review, round 5" (B11).
+* **B13. Mass of the 8e14 Msun, z = 0.06 closure cell.** Ten times deeper, its counts within R500 agree with the model
+  at the truth to 0.2 per cent in every band, but the fit to them gives M500 0.951 +- 0.016 of the truth (Z 0.30 +-
+  0.02) and lowers the C statistic by 62 from the truth: the radial shape differs (0.5-1 R500 0.5-4 per cent high),
+  not the normalisation. Candidates: the PSF (the stage's energy- and angle-dependent King against the fit's on-axis
+  King) for a cluster that fills the field, and the crop. Decided by: login work on the deep cell. Source: as B12.
+
+* **B14. The 18 pilot fits at a bound of the flat c200 prior: not refitted under the new prior.** 11 of the 28
+  in-domain mock fits and 7 of the 39 in-domain real fits ended at a bound of the flat prior. Reweighting covers only
+  the fits that were not at a bound (median change of M500 0.3 per cent real, 0.0 per cent mock, at most 10 per
+  cent). No fit has run under the Dutton & Maccio prior yet. Decided by: node job (the author's go). Source:
+  {doc}`PILOT`, "After the pilot"; DECISIONS "The concentration prior".
+  Since 2026-11-26: the fits of pass 1 ran under the Dutton & Maccio prior; the 18 pilot fits are still not
+  refitted.
+* **B15. Why the mock fits lie above the simulation's own hydrostatic mass: cause not established.** Against the
+  truth profiles (`analysis.fit_vs_truth`) the image fit is 6 per cent high at 0.5 R500, and the fitted temperature
+  is 9 per cent above the spectroscopic-like temperature of the simulated gas. Decided by: login analysis, then the
+  author. Source: the pilot report; {doc}`PILOT`, "How the result is read".
+
+### C. Matching and samples
+
+* **C1. Match mocks to real observations on the estimated hydrostatic fit mass (author decision of 2026-10-27, not
+  implemented).** Real refits (B3); pass 1: one view per halo-snapshot (3,258 views and fits, 11 + 33 = 44 node-hours)
+  under one reference observation chosen by the stated rule (since 2026-11-12 defined on FLAMINGO L1_m8: 5,001 views
+  under 0762440401, preset `v1_flamingo_l1m8_pass1`, every step with its command on {doc}`../production`; not
+  submitted), then pairing on (ln M_fit, z) with dz_max 0.25; pass 2:
+  production views under the paired donors and re-pairing, stopping when fewer than 5 per cent of the pairs change or
+  after three iterations. Pass 2 costs 63 + 65 = 128 node-hours for the first iteration with six views per halo-snapshot
+  (44 with one view), 6-7 for each further iteration. Waits on Q1 and Q8. Source: DECISIONS "Design note: matching on
+  the hydrostatic fit mass, in two passes".
+  Since 2026-11-26: pass 1 is generated and fitted, and the pass-2 pairing is implemented (`tngxmm donors
+  pair-projections`, presets of `config.PASS2_PRESETS`); the state paragraph above has the details. Left: the fits
+  of the 170 added observations, the pass-2 list, its generation and its fits.
+* **C2. Report from C1.** The mock and real L_X(1 Mpc)-M_fit relations (slope, normalisation at 5e14 Msun, scatter,
+  bootstrap intervals over halos and observations), the cross-checks of the real M_fit against Planck, ACT and lensing
+  masses and of the mock M_fit against the true M500c, gate P and the sample figures redone on the new pairing. The
+  forecast (+0.29 +- 0.08 dex offset) is not a result. The L_X excess is reported as a property of TNG-Cluster. Decided
+  by: login work after C1. Source: same design note, step 6; "Forecast of the L_X(1 Mpc)-M_fit comparison".
+* **C3. Selection of the real pool is not modelled** (archive selection on top of the SZ or lensing selection). A forward
+  model of the PSZ2 detection with L-Y covariance on the mock pool would give it; otherwise it stays a stated
+  limitation. Decided by: the author's scope, then analysis. Source: `samples.md`, LXGAP report section 6 (item 5).
+* **C4. Change of the gas state between z_snap and z_obs** is not quantified (the change of M500c is: median +0.001 in
+  ln M). The 60-snapshot `v1_common` views, with |dz| median 0.006 against 0.033, allow the comparison. Decided by: login
+  analysis once those views exist (E4). Source: ledger `method.snapshot_to_zobs`, REVIEW_RESPONSE M7.
+
+* **C5. The pairing command of pass 2 is not written.** `donors.pair_projections` holds the rule (window, distance,
+  convergence, edge test); no command or node reads the pass-1 fit table, pairs on (ln M_fit, z) and writes the
+  target list of pass 2. Decided by: login work. Source: DECISIONS "The pass-1 preset" (Path), E2 below.
+  Since 2026-11-19 `tngxmm donors pair-fit-mass` pairs the other way round for a trial (one mock per observation,
+  nearest pass-1 fit mass at the nearest snapshot, `donors.pair_fit_mass`) and writes a target list the pass-1
+  preset generates; it does not replace the command described here.
+  Since 2026-11-25: written. `tngxmm donors pair-projections` (`donors/pair_six_views.py`) reads the fit tables of
+  pass 1 and of the real observations and writes the pass-2 list; `--assignment least-used` gives a halo-snapshot
+  the observations of its window that serve the fewest views so far.
+* **C6. The pass-1 views of the z = 0 snapshot.** The 665 views of snapshot 78 cannot be observed at z = 0 and are
+  placed at the redshift of the donor the catalogue-mass rule gave their source row (0.042 to 0.114). Their theta500
+  is 8.5 to 31 arcmin, so all of them are predicted outside the domain of the fit. They are generated and fitted
+  like the others. Decided by: the author. Source: `campaigns/v4_flamingo_l1m8_pass1/README.md`, "The snapshot at
+  z = 0".
+
+### D. Realism
+
+* **D1. Frozen realism evaluation on the 84 held-out donors (85 until 2026-11-12): not run.** All AUCs quoted on `validation.md` come from
+  older configurations. One node (`slurm/realism_frozen.sh`). Held until C1 (the evaluation compares each mock with its
+  paired donor) and Q4 (the count matching it uses). Source: DECISIONS "Frozen evaluation: pre-registration",
+  `validation.md`, REVIEW_RESPONSE M2.
+
+### E. Release 1.2
+
+* **E1. Switch the presets to six icosahedral projections** (`sim.projection = 'icosahedral6'`; the cubes of 5.66 R500c
+  and the 4 R500c emitting cylinder of `sim.mock_cylinder_r500` are in every preset since 2026-11-03). New spec hashes, `realism.frozen` registered again, goldens regenerated
+  (G1). Generation of the 19,548 views (6 x 3,258) is about 63 node-hours at 310 views per node-hour. The groundwork is
+  merged and tested; the TNG cubes (job 1889862) and the FLAMINGO L1_m8 cubes exist. Waits on Q8. Source: DECISIONS
+  "Release 1.2 (planned)", "Design note ... Release 1.2".
+  Since 2026-11-25: the six projections are set in the pass-2 presets (`config.PASS2_PROJECTION`,
+  `v1_flamingo_l1m8_pass2`, `v1_flamingo_l1m8_pass2_extra`); the TNG presets stay on three axes.
+* **E2. Conditions donor per projection, distinct physics donors, unpaired halo-snapshots: code and tests done, set in
+  no preset.** `donors.observing_conditions.per_projection` (hashed only when set) draws the conditions donors of a
+  halo-snapshot's views in view order, each from the first integer of its own `conditions` stream, among the five
+  nearest observations of its physics donor's fold that no earlier view took; the views never share one. The anchors are
+  those of every view of the halo-snapshot (read before `runtime.exclude_donors`), so an excluded donor or a rerun on
+  some views changes no other view. `donors.pair_projections` gives a halo-snapshot up to six distinct physics donors in
+  a fixed window (dz 0.25, 0.10 dex) on mass columns the caller names, repeats the nearest in turn when short, reports
+  the shortfall by mass and z and flags a halo-snapshot without an observation in the window unpaired; gate P, the
+  matched draw, the replica's mass check and the realism selection drop unpaired rows, and the generation refuses
+  them. Indication (3-D M_HSE against the 165 converged V4 real fits): 610 of 3,202 halo-snapshots unpaired (531 at
+  z >= 0.7), 1,503 with six distinct donors. Left: a command or node for the pairing (C1), generating unpaired views
+  (E1), one fold per halo (E3), the 0.10 dex window (the author). Source: DECISIONS "Release 1.2 groundwork: E2 and E3".
+  Since 2026-11-25: the pairing has its command (C5). The pass-2 presets use the conditions rule `donor`: each view
+  under the observation its row names, and no two views of a halo-snapshot under the same observation.
+* **E3. Folds and bootstrap grouped by halo: code done, used by no production table.** `donors.halo_groups`: the split
+  unit is (sim, zoom_target_id), the TNG-Cluster zoom target or the z = 0 object of a TNG box halo; a table whose identity
+  column holds a snapshot's halo id at several snapshots (FLAMINGO, SIMBA, EAGLE so far) is refused until a column that
+  follows the halo (FLAMINGO L1_m8: HBT+ `track_id`) or halo-snapshot groups are asked for. The halos are 535 (352
+  TNG-Cluster, 171 TNG300, 11 TNG100, 1 TNG50; the "2,657 groups" were (sim, halo_id) pairs). Halo folds (5, seed
+  20261103) beside the unchanged, linked donor folds, with the same number of folds: fold f trains on the views whose
+  halo and donor are both outside f and tests on those with both in f; only 19 per cent of the maximal and box views are
+  ever tested and 35 of their 535 halos never are. Halo bootstrap: halos drawn with replacement with all their views,
+  no interval below two halos. Tables read only against a pinned sha256; a candidate table is in `campaigns/halo_folds/`.
+  To decide: which table to freeze, and whether the release 1.2 pairing draws a halo's physics donors from its own fold
+  (then every view and halo is tested). Decided by: the author. Source: DECISIONS "Release 1.2 groundwork: E2 and E3".
+* **E4. `v1_common` on the TNG mini snapshots:** the cube index files of the 51 mini snapshots (a `campaign mock-cutout`
+  node job) are not made and nothing is generated. The 3,159 views reuse zoom targets (views per target median 6, p90 27,
+  maximum 89), so folds and bootstraps must group by zoom target (E3, in place: with the candidate table they keep its
+  folds, 56-60 per fold, and 91 of the 292 targets are never tested). Decided by: node job. Source: DECISIONS "P4: the
+  TNG mini snapshots under the common mode". The X_H choice is Q9.
+
+### F. Multi-simulation
+
+* **F1. Verification subset of the abundance modes:** about 300 views per simulation, generated twice from the same
+  streams under `full` and `common`, with the paired differences of L_X, fitted T and Z and the fit masses. The driver
+  (`multisim_verify_modes.py`) is prepared and not submitted. Decided by: node job. Source: DECISIONS "Emission
+  abundances: the author's decisions".
+* **F2. FLAMINGO L1_m8 production run:** views, spherical truth and fits for the 5,000 halo-snapshots (the download is
+  complete; the Kedro manifest check has been run on snapshot 78 only, 665 halos, no failure). Run the check on the
+  other eight snapshots (login), then generate (node). Source: `simulations.md`, DECISIONS "FLAMINGO L1_m8".
+  Since 2026-11-26: the pass-1 views of the 5,001 halo-snapshots are generated and fitted; the production views
+  are those of pass 2 (C1).
+* **F4. Where the extra emission of TNG-Cluster sits** (about 60 per cent gas fraction, the rest the emission measure of
+  the 0.15-1 R500c shell): density profiles against X-COP (Ghirardini et al. 2019) at matched M_fit. A description of the
+  excess for the paper, not a correction. Decided by: the author's scope; analysis after C1. Source: LXGAP report section
+  6 (item 2).
+* **F5. Controlled image comparison with L1_m8, without thinning.** L1_m10 images match TNG-Cluster in P2, P3, the
+  centroid shift and the classifier AUC, but not in concentration (0.215 against 0.242; real 0.252) or the outer slope
+  (-5.4 against -3.8); L1_m8 separates resolution from physics. Decided by: node job. Source: DECISIONS "P3: controlled
+  image test, result".
+
+### G. Documentation, ledger and fixtures
+
+* **G1. Regenerate the golden fixtures** (v1 spec `198b80e9d4563eec`, now `66a72be359876779`) with
+  `tools/make_v1_golden.sh`, then install them as `golden_v1.1.3` and update `GOLDEN_SPEC_HASH` in
+  `tests/fixtures/golden_layout.py` and the sha256 list. Ready since 2026-11-03: the script cuts the mock gas from the
+  10 R500c fixture cutout `tng/067_19542651_r100.hdf5` (the 5.66 R500c cube of v1 reaches its corners at 9.80 R500c; the
+  7.2 R500c cutout is too small), runs SAS detection on the three views and fits them with the preset's procedure (SAS
+  list, centre from the catalogue entry); `test_campaign_v1_replica` passes on the new cutout (4 tests, 6.5 min); since
+  the catalogue rule of version 3 it passes only with the rebuilt catalogue table, so G1 waits on A0. Job
+  script `tngxmm_dev/NEXT_JOBS/G1/G1_golden.sbatch` (one node, about 1-1.5 h). The C1-C17 fixture test and the
+  golden comparisons skip until then. Decided by: compute-node job (author's go). Source: DECISIONS "Emission
+  abundances: the author's decisions" (consequence 2).
+* **G3. Ledger upkeep.** `lxalt.entropy_cut`: its `open:` and OPEN_ITEMS row removed; `instrument.cluster_psf_onaxis`
+  carries the measured +0.001. Left: `fit.background_seed` and `donors.matching_mass` once Q2 and C1 are settled.
+  Decided by: login work. Source: OPEN_ITEMS A and B.
+* **G6. `validation.md` after the reruns:** replace the numbers measured on older configurations as B1, C2 and D1
+  arrive, and add a section on the scope of the bias measurement (thermal against total pressure, clumping, total against
+  HI4PI column) and on which of the three bias numbers (0.845, 0.847, 0.931) applies. Source: REVIEW_RESPONSE re-review,
+  items 1 and 2.
+* **G7. Author's literature tasks:** the 43 rows of `REFERENCE_LEDGER.md` not yet checked by hand; the PDF of Efron
+  (1979) for `method.c2st_donor_bootstrap`; whether the Nelson et al. (2014a) PDF should back a truth entry; journal page
+  numbers (the proofs use arXiv pages); whether `xmm_simulator` should `cite_also: [seppi2026]`; the multi-paper overlaps
+  (`flamingo` with schaye2023 and kugel2023, `eagle` with schaye2015, `illustristng` with pillepich2018, `tngcluster`
+  with nelson2019_tngdr); the BibTeX key nelson2019_tngdr defined twice in `citations/sim.yml`. The BibTeX records of
+  Ettori et al. 2013, Nelson et al. 2014a, Carter and Read 2007, Seppi et al. 2026, Molendi et al. 2016 and Smith et al.
+  2016 exist (`citations/evidence2026.yml`); duplicate keys are merged and six papers with two keys aliased, and
+  `test_cites` checks both. Source: OPEN_ITEMS C and G, `REFERENCE_LEDGER.md`.
+* **G8. Unit suite on the login node:** the three tests of `test_instrument_active_ccds.py` failed on the login node in
+  the environment (they failed on the base commit too). Check on a node whether they still do. Source: DECISIONS "P1: the
+  canonical layer for TNG, and the regression".
+
+* **G9. Kedro fixture of the real fit (Abell 1835, 0551830101): not yet run to the end.**
+  `test_massfit_real_fit_through_kedro` fits the observation through the node `massfit.fit_real`; the fit takes more
+  than an hour on one core with the pixel-averaged model and has not finished in a test run. Decided by: a run on a
+  node or a long login run. Source: `tests/e2e/test_kedro_fixtures.py`.
+* **G10. `check_seed_table` still compares the whole `observations.csv`.** The spec hash takes the table by its read
+  columns since 2026-11-12; the seed table's own check does not, and its code is part of the seed hash, so the same
+  rule there waits for the next change of the seed procedure. Until then a rebuilt `observations.csv` needs the
+  seed table and the guarded centres measured again. Source: DECISIONS "The observation table enters the hash by
+  the columns that are read" (Left as they are).
+* **G11. End-to-end test of a disk stop: not yet run.** `tests/e2e/test_campaign_disk_full.py` generates the fixture
+  halo against a full disk and continues it; it needs a data package that matches the code. The stops are tested
+  per stage with stand-ins. Source: DECISIONS "A full disk stops a run and the same command continues it".
+* **G12. Unit suite in the simulation environment on the final tip.** To run again on the commit that is submitted.
+  Decided by: login work.
+
+### H. Machine learning
+
+* **H1. The ML stage is not implemented** (`ml` is not registered; no estimator has been trained; claim D rests on it).
+  It needs the regenerated mocks and the fit-mass pairing, donor-grouped folds, and rows with `lx == 0` filtered out of
+  the training. Decided by: the author, when to start. Source: REVIEW_RESPONSE M12, `archive/PLAN.md` W8.
+
+## Needs the author's decision
+
+* **Q7. Two fit proposals not implemented:** tie the sky and soft-proton levels across bands (the X-COP way); start the
+  MCMC inside the parameter bounds. Options: implement each behind a hashed switch and test in B1; drop. Source:
+  integration notes.
+* **Q8. When release 1.2 is switched on.** Options: with the fit-mass matching (pass 2 with six views); after pass 1
+  only; stay on three axes for now. Source: DECISIONS "Release 1.2 (planned)".
+  Since 2026-11-25: taken with the fit-mass matching: pass 2 has six views (E1).
+* **Q9. Hydrogen fraction of the TNG mini snapshots under `common`.** They lack element fractions, so X_H = 0.76 replaces
+  the cell's own and L_X is 0.0085 dex (about 2 per cent) brighter than at full snapshots. Options: keep and report; use
+  X_H = 0.76 at every snapshot of a common-mode TNG preset. Source: DECISIONS "P4".
+* **Q10. Window of the SPH fill-factor check C17.** FLAMINGO L1_m10 has a median fill of 0.95 (0.84-1.05), so the window
+  0.9-1.1 set for Voronoi cells flags 10 of 100 halos (L1_m8: 0.971). Options: a separate window for SPH runs; keep the
+  common one. Source: DECISIONS "P3: FLAMINGO".
+* **Q11. SIMBA and EAGLE.** Contact the author of the TNG-format conversions (needed before anything is published) and
+  ask for the SIMBA wind flag (`DelayTime`) or use the original snapshots; until then both stay internal and SIMBA's
+  decoupled winds stay in the emission. Source: ledger `multisim.simba_winds`, `simulations.md` "Data use".
+* **Q12. Public release.** Permission of the TNG team for the fixture cutouts, the licence of `xmm_simulator` and
+  contact with its author, the DINOv3 licence for published embeddings, where the data package lives after the account
+  ends, and a hygiene scan of the history before the first public push. Source: REVIEW_RESPONSE M12 and re-review item 7,
+  `archive/PLAN.md` section 8.
+* **Q13. Cap factor of the maximal-list donors** (`donors.max.cap_factor` = 2.0; 1.5 and 3 move the median donor distance
+  by +16 and -15 per cent, beyond the 10 per cent tolerance). Options: keep 2.0 and carry the shift as a systematic;
+  test the mass effect. Source: ledger `method.maximal_list_donors` (S5).
+* **Q14. Core protection in the point-source mask: one PSF half-energy width (16.487 arcsec) since 2026-11-03, 90
+  arcsec before.** On the 90 arcsec rule, protection 0 / 45 / 135 arcsec changed ln(blue/red) by
+  +0.013 / +0.009 / -0.008, not shown equivalent within 0.015. Options: carry as a systematic; run a larger test. Source:
+  ledger `fit.point_source_thresholds`.
+* **Q16. Diagnostic truth columns** (every intrinsic-HSE estimator except the headline `m500c_hse_msun` and its set).
+  Options: keep them; delete them. Source: DECISIONS "Intrinsic hydrostatic truth: one methodological line".
+* **Q17. The 398 photon lists (8.1 GB) of the L_X gap test** in `tngxmm_dev/MULTISIM/lxgap/job/run/`. They are deleted
+  only on the author's go. Source: DECISIONS "L_X gap test: result".
+* **Q18. Sampler of the hydrostatic fit (B9).** No stored chain has mixed per walker. A long chain's median carries a
+  Monte-Carlo scatter of about 0.01 in ln M500 about its start; a bias shared by chains with the same start is not
+  measured. A quick chain's quick-minus-long scatter is 0.03, with 16-84 widths 20 per cent narrower than the long
+  chains'. Options: (a) keep, and carry the scatter in the closure rule and in every single-fit comparison; (b) long
+  chains where single fits are compared (closure cells, real refits); (c) a fit-QC flag for fits whose log posterior
+  still rises; (d) walkers started at the posterior's scale; (e) differential-evolution moves or another sampler, tested
+  in B1 with independent repeats. (c)-(e) are merged with the defaults unchanged (0711254): fit-fix `sampler_moves =
+  'de'` (emcee's DEMove alone; emcee 3.1.6's DESnookerMove does not keep the target and is not used), `walker_start =
+  'scaled'`, the reported QC column `chain_lp_rising` (one-sided, above 2 sd, cuts nothing), closure arms `v1sas_de`,
+  `v1sas_scaled`, `v1sas_long`, `v1sas_delong`. Login pilot (4 cells at z = 0.5, 2 seeds): no chain, quick or long,
+  resolves its ESS; on quick chains the DE move lowers R-hat over walkers (median 1.53-1.78 against 2.34) and no DE
+  chain climbs, and both switches narrow the seed scatter of ln M500 (rms 0.023-0.044 against 0.121, 0.049 without the
+  climbing cell; the median of 200 draws has a noise floor of about 0.02); long DE chains accept 0.03-0.06 with single
+  walkers stuck, and the arms share starts and optima, so the pilot makes no accuracy claim. Next:
+  `tngxmm_dev/NEXT_JOBS/Q18` on B1's views with B1's commit (about 280 core-h, 6-7 h on one node). Source: DECISIONS
+  "Analyses of 2026-11-03" (B9), "Independent review, round 5" (sampler).
+* **Q19. `donor_background.csv` and the conditions pool.** It is measured at the centres of 2026-10-24 (31 donors moved
+  by more than 1'); the stage reads only its live times, but its `qpb_scale` sets the condition-space dimensions
+  `log_qpb_*`. Since review 6 the table is under the provenance check, and the copy of 2026-10-24 has no sidecar, so the
+  stage refuses it and step 6 of A0 builds it again; the rebuild with the current code (no clip, no calibration
+  constant) takes 39 donors out of the conditions pool (a camera without a positive flat level, mostly MOS2). Options:
+  rebuild, as A0 now does (then a new condition table and registration); keep the old table and state it, by dropping
+  `"background"` from `CENTRE_TABLES` in `instrument/donor_tables.py` (the table is then recorded per view but not
+  checked). Source: DECISIONS "Independent review, round 6" (the files a view is made from); `background.md`.
+* **Q20. Instrument responses (review 5, A4; review 6, A1).** Mocks are made and fitted with one response per camera (a 2020 RMF, the
+  CCF ARFs with the MOS quantum efficiency of 2002 that SAS no longer selects), so a mock fit never meets a calibration
+  or epoch error that a real fit has: real fits read T +1.0 / +2.2 / +4.1 per cent high at 3 / 5 / 8 keV in the median
+  (about +3 per cent in M500 at 5 keV, up to about +8 per cent for hot, late clusters). Three terms make it up: the
+  EPIC-to-NuSTAR correction (+0.9 / +1.9 / +3.5), the withdrawn MOS quantum efficiency (-1.2 / -1.7 / -2.4) and the
+  rest, rising with the date (+0.3-2.1 / +0.6-3.0 / +1.2-4.5); measured separately, they add to the total of every
+  epoch within 0.06 points. The presets keep the shared responses with the highest file-name issue as the production
+  choice until the author decides, not for the size of their error; with cifbuild's files the shared set reads +2.2 /
+  +3.9 / +6.7 per cent high (review 6, A1). The switches, the file selection, the safeguards and the arms are merged
+  with the defaults unchanged (4cc6b69, closed below); the fit checks the epoch index and a mock's `QEFILE` (7a335fa).
+  Options: build the per-observation response set (`tngxmm_dev/NEXT_JOBS/responses/OBS_RESPONSES.sbatch`, one
+  node, about 73 core-h, 65-90 min; exit 1 is expected, 0720700101 is recorded as failed) and switch both sides to it
+  before the regeneration (`instrument.responses = 'donor'`, `massfit.responses = 'per-observation'`, both
+  `ccf_selection = 'valid-at-date'`; every spec hash and the real seed hash move, and the real fit targets are rebuilt;
+  the adoption is on todo/r5-responses-adopt2, f2403cc, not merged: it was cut before the other round-6 merges and
+  needs the response set, its coverage test made to skip until that set exists, and the docs); keep the shared set,
+  with SAS's choice of calibration files and the larger error, and quote the term as a real-side systematic measured
+  by `v1_obsresp_shared` once the set exists. Source: `docs/dev/reports/R5-A4-responses.md`; DECISIONS "Independent
+  review, round 5" (responses), "Independent review, round 6" (responses).
+  Since then: adopted. `instrument.responses = 'donor'` and `massfit.responses = 'per-observation'` are the preset
+  defaults (`src/tngxmm/config.py`), and the response sets are built: `responses_obs_v1` for the bank,
+  `responses_obs_v2` for the 808 observations (`tngxmm instrument obs-responses plan / run / adopt / manifest`).
+* **Q21. Centres of nearby clusters without a bright core.** The guarded centre of 0675470901 (z = 0.08, the cluster
+  fills the field) is a compact source flagged extended by emldetect, 6.0' from the PSZ2 position (2.5 r90): the search
+  radius is the first-guess theta500 (12.5') and the search masks only sources with EP_EXTENT = 0. Its mocks now sit
+  5.8' off axis. Options: limit the search for such clusters (to r90, or by masking extended-flagged compact sources),
+  or keep the rule and flag them. Source: DECISIONS "Independent review, round 5" (donor tables).
+* **Q22. Form of the `edge` flag of a mock's catalogue position.** It is set where the filter kernel's support about
+  the position reaches beyond the 4 R500c cylinder, which is every PSZ2 view of the review's sample (67 of 67: the
+  PSZ2 kernel reaches 5 theta500(MSZ) plus 17' beyond the position) and 52 of 69 ACT views; `edge_weight` records the
+  share of the kernel there (PSZ2 2-17 per cent, median 4; ACT 0-13, median 3). Options: keep the literal kernel
+  support and read the flag with `edge_weight`; a threshold on `edge_weight`. Flags select nothing either way. Source:
+  OPEN_ITEMS P ("edge flag"); DECISIONS "Independent review, round 5" (catalogue entry).
+* **Q23. The three `off-halo` PSZ2 views of the sample.** Their position lies outside the halo's projected R500c: one
+  after the 10' merge, two on a neighbour 7-8.5' away whose slope leaves the halo no maximum of its own. This is what
+  the catalogue would report for that projection, and the mock's centre search starts there. The 10' merge is repeated
+  from each new maximum (a greedy ascent), a reading of PSZ2 Sect. 2.1, 3.1 and 7.1, which do not decide it (review 6,
+  C11; OPEN_ITEMS P, "PSZ2 merge repeated"). Options: keep them, flagged; leave such views out of the comparisons; a
+  single merge or the Sect. 3.1 reference rule (raises `POSITION_RULE_VERSION`). Source: as Q22.
+* **Q24. Noise model of the PSZ2 filter.** PSZ2 positions are taken on the white-noise filter, while the six-channel
+  matched filter of PSZ2 weights by the measured cross-channel power, which the CMB dominates on large scales. A single
+  143 GHz channel with a lensed CMB moved the peaks by median 11" (90th percentile 70") at z < 0.2 and 4" (26") above,
+  0.06 r90 or less in the median on the views without a flag; the large moves are white-filter merges (722" for
+  h1475690-v0). Options: keep the white filter, declared; a modelled multi-channel noise term (itself a model choice).
+  Source: OPEN_ITEMS P ("noise model of the PSZ2 filter").
+* **Q25. MMF3 position pixels.** MMF3 positions lie on 1.72' HEALPix pixels (PSZ2 Sect. 6.2); 1.72'/sqrt(12) = 0.50' rms
+  per axis if POS_ERR leaves the quantisation out, which the paper does not say (App. C.2 suggests it is included). 147
+  of the 427 PSZ2 donors have an MMF3 reference position. Options: leave it unmodelled, as now; add the quantisation to
+  the drawn error of those entries. Source: OPEN_ITEMS P ("PSZ2 positional error and position pixels").
+* **Q26. The 4 untyped PSZ2 donors with a WHL counterpart.** Their PSZ2 redshift is neither the WHL photometric nor a
+  spectroscopic redshift of the counterpart's entry (probably follow-up spectroscopy), so under redshift rule 2 their
+  mocks are fitted at the exact redshift, like the X-ray, SZ and database counterparts and the 51 donors that name none.
+  Options: keep them untyped and stated; leave them out of the comparisons. Source: OPEN_ITEMS P ("typing of a PSZ2
+  redshift", "redshift error of a mock"); DECISIONS "Independent review, round 6" (PSZ2 counterpart redshifts).
+
+## Closed on 2026-11-12
+
+| item | decision | where |
+|---|---|---|
+| Q3 c200 prior (reopened after the pilot) | the Dutton & Maccio (2014) relation at the sampled M200 as a log-normal prior, 0.11 dex, c200 within 0.5-20, in every preset; the flat prior over 1-10 is the option `cm_prior = flat`; decided with the pilot results in hand (18 of 67 in-domain fits at a bound of the flat prior). Open part: B14 | DECISIONS "The concentration prior"; ledger `fit.cm_prior` |
+| the observation table in the spec hash | by the 38 columns the stages read (`config.OBSERVATION_COLUMNS`), not as a file; a test fails when a module outside the table's builder names an unhashed column. Open part: G10 | DECISIONS "The observation table enters the hash by the columns that are read" |
+| C1, the pass-1 list and its preset | 5,001 FLAMINGO L1_m8 views under 0762440401; preset `v1_flamingo_l1m8_pass1` (spec hash 6f1ce16eb9c5fff3): the cluster at the reference's core offset, every view fitted, the domain prediction a column only, photon lists not kept; commands from the list to the fit plans. Open parts: the run itself, C5, C6 | DECISIONS "The pass-1 preset"; {doc}`../production`; PREREGISTRATION section 6 |
+| a full disk during a run | generation, SAS queue and fit batch stop with exit 28 and continue with the same command; done-markers written last; the caches written atomically. Open part: G11 | DECISIONS "A full disk stops a run and the same command continues it"; {doc}`../when-a-run-stops` |
+| speed of the likelihood | about four times faster than the pilot code; the cached radii and buffers exact, the sparse painting and the Fourier-space PSF sum to rounding (nine pilot chains); no full fit compared | DECISIONS "Faster likelihood" |
+| D1, the donor split of the frozen evaluation | signed off by the author with 84 held-out donors (split sha256 499e3e00...); 0780291001, 0747420101 and 0161560101 excluded, no response can be built for them. The run itself stays D1 | DECISIONS "Three observations left out of the real list and the donors"; `realism.md` |
+| the pilot | 60 real and 60 mock fits done; two mock fits without a result (a sampler that could not start, a per-fit timeout in the optimiser); MACS J0717.5+3745 (0672420201) refitted after the template fix: 11.87 (11.28-12.42) against 12.91 (12.22-13.46) e14 Msun of Lovisari et al. (2020), pull -1.2 (it was -10.7 without a particle background). Open parts: B14, B15 | {doc}`PILOT`; CHANGELOG "Real templates off the image" |
+| B1 as the gate of the freeze (2026-11-11) | the grid failed its rule (1.046 on the 27 usable clean fits, 0.89 on real backgrounds) and is reported as the measured error of the method; the freeze is judged on the pilot; no closure or sampler run before it. An amendment made knowing the result | PREREGISTRATION section 1 |
+
+## Closed on 2026-11-03 (no tuned factors)
+
+| item | decision | where |
+|---|---|---|
+| Q1 fitter configuration | the ESAS / X-COP background (option a) with the total Galactic column, flat priors, the first guess iterated on the image through the Bulbul et al. (2019) relation (neither the published nor the true mass enters) | DECISIONS "No tuned factors: the last replacements"; the closure grid on it is B1 |
+| Q2 `TYPICAL_EPIC` seed prior | removed with `massfit.bg_seed`; the ESAS background has no seed prior | ledger `fit.background_seed` |
+| Q3 c200 prior and first-guess mass | flat log c200 at every signal level; first guess from Bulbul et al. (2019) iterated on the image (MCXC procedure) | ledger `fit.priors_low_signal`, `fit.seed_lx` |
+| Q4 count matching of the realism evaluation and `v1_thin` | the frozen evaluation is unthinned (f reported only); `v1_thin` replaced by `v1_half` (half exposure) | `realism.md`; DECISIONS |
+| Q5 `FWC_REGISTRATION` | replaced by SAS's DET -> sky solution of the mask observation (`DET_TO_MASK`); the pn tilt from the same | ledger `instrument.qpb_spatial`, `instrument.pn_readout_tilt` |
+| Q6 provenance of the sky norms | each donor field's LHB and halo levels from RASS at published median temperatures; unresolved CXB from the Moretti counts | ledger `instrument.sky_background`; checked by A2 |
+| Q15 free metallicity | kept free with a flat 0-2 prior (X-COP practice; a fixed 0.3 biases the TNG temperatures) | ledger `fit.metallicity`, `fit.priors_low_signal` |
+
+## Closed on 2026-11-03 (documentation)
+
+| item | decision | where |
+|---|---|---|
+| G2 `INTEGRATION_REPORT.md` | it exists since the integration (1571cf7) and every reference to it resolves; its last section records what became of its open points by 2026-11-03, the FWC geometry (Q5) settled by SAS's DET -> sky solution (`DET_TO_MASK`, `tools/det_to_mask.py`), and the review rounds | `INTEGRATION_REPORT.md`, "After the integration" |
+| G4 release 1.2 statements | six projections, cubes of 5.66 R500c, the 4 R500c emitting cylinder: REVIEW_RESPONSE corrected (it said ten); the decision log names the emitting cylinder | `docs/decisions.md`; REVIEW_RESPONSE, minor issues |
+| G5 CHANGELOG entry of the integration | the entry existed (1571cf7); added the hash history, the L_X verdict, the golden fixtures and the release 1.2 groundwork; the heading stays "not released" until the author numbers it | `CHANGELOG.md` |
+| F6 analysis cosmology of the fits | stated on the page: mocks are made in each simulation's cosmology, every fit uses Planck 2015; for FLAMINGO about 0.5 per cent in angular scale, at most 0.01 dex in mass; the fit is not given the simulation's cosmology | `simulations.md`, "One graph for every simulation" |
+
+## Closed on 2026-11-03 (code)
+
+| item | decision | where |
+|---|---|---|
+| A5 (the fetch item; the pn streak item A5 stays open) negative result of the PPS fetch | an index that lists the donor's files but none of a kind is recorded beside the cache with date, query and response, and not asked again while the query is the same; a 404 or a page without any file of the donor is reported in `error` and asked again; `refetch_none` asks again about the recorded donors | DECISIONS "Donor tables" (negative results of the PPS fetch); `donor_tables/archive.py` |
+
+## Closed on 2026-11-04 (independent review, round 6)
+
+| item | decision | where |
+|---|---|---|
+| A1 responses: the stated reason and the checks (the adoption stays Q20) | the shared default stated as the production choice pending the author, its error quoted for both selections, the cancellation argument withdrawn; the three terms add to the total within 0.06 points; `v1_xcallo` per camera at 10 keV (pn -21.7, MOS1 -24.2, MOS2 -24.0 against 29 / 17 / 22); fit-time checks of the epoch index and a mock's `QEFILE`; the donor ARF averaged over each stage bin (7a335fa) | DECISIONS "Independent review, round 6" (responses); `docs/dev/reports/R5-A4-responses.md` |
+| A2 no vignetting or PSF calibration arm | `v1_vighi`, `v1_viglo` (effective area times 1 +- 0.05 theta / 10', XMM-SOC-CAL-TN-0018 Sect. 4.5, a per-camera residual flux difference read as radially coherent; form declared); `v1_psfell` (cluster photons with the CCF ELLBETA PSF, on-axis King fit, reported per band); off in every preset, not run (44d8e45) | ledger `instrument.vignetting_psf_calibration`; OPEN_ITEMS P |
+| A3 PSZ2 photometric counterparts at the exact redshift | redshift rule 2: 31 phot (26 redMaPPer v5.10 errors from NED, 5 paper errors), 5 spec, 4 untyped (Q26); older tables refused; 143 of the 2,840 targets get a drawn redshift (44d8e45) | ledger `fit.catalogue_redshift`; OPEN_ITEMS P; `docs/data.md` |
+| B1 / B2 donor-table checks | sidecars record `measure_version` and the FWC rule; node `donor_tables.build_qpb_corners`; stage and real fit read the corner table through one check; the centre check chains to the seed check; dirty-built inputs refused (bbbc02a) | `instrument.donor_tables`; `background.md` |
+| the files a view is made from (finding 8 of the branch review) | every data-package file a view or closure cell reads checked and recorded (`data_inputs`); APEC, ECF, SFD and 35 AtomDB files pinned in `sim/data_manifest.csv`; observations.csv and the manifest in the spec hash (C10); the readers check their tables; cached views and cells reused only with the current record; one nine-step rebuild list (A0); v1 `66a72be359876779` (bbbc02a, 7458bc3) | `sim.data_inputs`; DECISIONS "Independent review, round 6" |
+| B4 docs that the code contradicts | Q14, B1, Q1, the round-1 rows, DECISIONS round 5, INTERFACES and the table schema, OPEN_ITEMS P line numbers; "bounds" no longer used for one-sided arms (bbbc02a) | this page; OPEN_ITEMS |
+| C1 / C3 / C8 / C9 / C10 | `n_pivot` counts failed seeds; Lx photometry and recentring take `mu_tvir`; count-matching annulus stated as a diagnostic; `REGION_MAX_ARCSEC` in OPEN_ITEMS P, an unknown pn mode refused; observations.csv in the spec hash (bbbc02a) | DECISIONS "Independent review, round 6" |
+| C11 PSZ2 merge iterated | kept, declared as a greedy ascent read from PSZ2 Sect. 2.1, 3.1 and 7.1; the choice is Q23 | OPEN_ITEMS P ("PSZ2 merge repeated") |
+
+## Closed on 2026-11-03/04 (independent review, round 5)
+
+| item | decision | where |
+|---|---|---|
+| B5 seed hash covers part of the procedure; the mock hash is never compared | the hash covers the code of every module the seed procedure loads under either source-list rule (syntax trees), the seed sections of the preset it is given, and the catalogue positions, ECF table and source thresholds; the procedure no longer reads the production preset's photometry; mock, closure and real seeds are compared in gate P, the certification queue and the certification gate; realism checks the seed table | `guess_mass.SEED_PROCEDURE_MODULES`, `build_obs_seed_lx.seed_hash`, `tests/unit/test_seed_hash.py` |
+| C9 seed table provenance | records what the procedure reads (observations, catalogue positions, ECF table, source thresholds, roots of images and lists) and the numpy, scipy and astropy versions; the table's bytes and its observations table are checked | `build_obs_seed_lx.build_obs_seed_lx`, `check_seed_table` |
+| B3 / B4 donor tables at superseded centres; C12 pn soft protons | core offsets from the guarded centres; the anomalous-CCD, IN/OUT and condition tables measured again at the final centres; provenance sidecars checked by the readers; writers refuse an uncommitted tree; a camera without a measured soft-proton rate takes the nearest measured donor's rate in its fold, recorded per view, never 0 (`instrument.sp_rate_unmeasured`) | DECISIONS "Independent review, round 5" (donor tables); `background.md` |
+| A1 QPB level error unbounded | measured on the CCF filter-wheel-closed exposures, per camera and band, a lower bound for real data; FWC references of the donor tables, real templates and stage maps from the observation's epoch and CCD state; closure arms `v1_qpbhi`, `v1_qpblo`, `v1_qpbsoft`, `v1_qpbhard` | DECISIONS "Independent review, round 5" (QPB level); `docs/dev/reports/QPB-LEVEL-FWC.md` |
+| A5 (pn streak) CTI table | evaluated at the pn CCD temperature (183.2 K), checked against the PPS energy correction (0.990) | DECISIONS "Independent review, round 5" (pn out-of-time energies) |
+| fits raised TypeError | the job's `centre_xy` is consumed before `run_one` (every fit had failed since 74fb587); job keys tested against `run_one` | `tests/unit/test_fit_job_keys.py` |
+| generation raised TypeError | `run_xmm_simulator` takes every keyword the view set-up passes (since 6f99d21) | `tests/unit/test_instrument_view_kwargs.py` |
+| A4 instrument responses: the fixes (the adoption is Q20) | calibration files chosen as SAS cifbuild chooses them (`instrument.ccf_select`, the same file as cifbuild for all 436 scope-types; `ccf_selection` on both sides, default the old rule); exact EXPIDSTR match; presets pair the response switches, a fit refuses a mock made with another response (`RESPSRC`, `CCFSEL`) and planning refuses donors without a response set; calibration-error arms `v1_xcallo`, `v1_nustarhi`, `v1_nustarlo` (diagnostic `v1_xcalhi`), `v1_obsresp`, `v1_obsresp_shared`; spec hashes unchanged (4cc6b69) | DECISIONS "Independent review, round 5" (responses); `docs/dev/reports/R5-A4-responses.md`; ledger `instrument.response` |
+| B1 / B2 / C4 the mock's catalogue position | rule version 3: the detection reached from the halo centre by steepest ascent; PSZ2 the peak after the 10' merge on the white filter; ACT DR6 the S/N-weighted centre of the S/N > 3 segment on the CMB + white-noise filter (Planck 2018 lensed TT, 14 uK arcmin), the map scaled so that the halo's own maximum carries `fixed_SNR`; MACS the X-ray peak; the realism start of a mock is its own first pass, the guarded X-ray peak found from its catalogue entry; flags recorded, never used to select (5cffd64) | DECISIONS "Independent review, round 5" (catalogue entry); ledger `fit.centre`; OPEN_ITEMS P |
+| A3 photometric redshifts | a photometric-redshift donor's mock is fitted at z_obs plus a drawn `redshiftErr`; the truth tables, the renderer and the count-matching annulus stay at z_obs; realism features and mock aperture photometry at the fitted z; a photometric fit without z_obs is refused | ledger `fit.catalogue_redshift` |
+| resume under a changed rule | generation, closure fits, collect, the closure table, the certification queue, the campaign cache and `fit-hydrostatic --resume` follow the rule version, the full rule keys, the current redshift draw and the image tree; stale closure records count as incomplete; `GEN_FROM` stops instead of regenerating | `validation/closure_grid.py`; `tests/unit/test_validation_closure_grid.py` |
+| B11 generator-instrument-fitter chain | one effective area (`instrument.arf_model = 'fit-linear'` from the CCF files of `ccf_selection`), the images' channels (`massfit.band_channels = 'image-pi'`), the CCF vignetting at the photons' energies before the PSF (`massfit.vignetting_model = 'sub-band'`), the pn readout rows left to the donor footprint (`instrument.pn_edge_rows = 'footprint'`), depth arms that scale the live times; responses of stage and fit within 0.25 per cent; counts within R500 against the model at the truth 0.996-1.002 at z <= 0.2 (z = 0.5 is B12); fits to the cells' own counts (maximum likelihood, background zero), M500 / truth and Z: 0.926 +- 0.052 / 0.25 +- 0.05 (8e14 Msun, z = 0.06), 0.951 +- 0.016 / 0.30 +- 0.02 (the same ten times deeper, B13), 1.008 +- 0.039 / 0.30 +- 0.04 (4e14, z = 0.06), 1.031 +- 0.032 / 0.22 +- 0.05 (4e14, z = 0.2), 0.995 +- 0.011 / 0.32 +- 0.02 (8e14, z = 0.2, deep), 1.048 +- 0.036 / 0.28 +- 0.05 (8e14, z = 0.5, deep), 1.018 +- 0.043 / 0.17 +- 0.07 (4e14, z = 0.5, deep); spec hash of v1 `4f3e8995401e3c53` (1bac885) | DECISIONS "Independent review, round 5" (B11); ledger `instrument.effective_area`, `fit.band_channels`, `fit.vignetting_energy`, `instrument.pn_edge_rows` |
+| Q18 sampler switches and chain diagnostics (the choice stays Q18) | fit-fix `sampler_moves` (stretch, or emcee's DEMove alone) and `walker_start` (ball or scaled), set by no preset; `chain_diagnostics` in every result.json, ESS and N/tau only where resolved; QC column `chain_lp_rising` reported only; one list of late fit-fix defaults, so every closure `fit_config` is unchanged (0711254) | DECISIONS "Independent review, round 5" (sampler); ledger `method.sampler_switches` |
+| package calibration tables outside the spec hash | the sha256 of every `calibration/*.csv` of the package (pn CTI slopes, the CMB spectrum of the ACT filter) enters the spec hash; v1 `9937b33364b11ac4`; the seed hash does not move (3283b9e) | `config.calibration_tables_sha256` |
+
+## Closed on 2026-11-03 (analysis)
+
+| item | decision | where |
+|---|---|---|
+| B8 metallicity of the mocks against the fit | measured on the 18 D1 views above 20,000 counts: Z_fit / Fe(gas) 0.60 [0.04, 1.10] at z < 0.15 and 1.33 [0.91, 2.53] above (pooled 0.97), 0.003-11 per view; table, element mix and untracked rule below 10 per cent; the TNG gas Fe (0.25 lodd) is half of 0.3 AG89 = 0.48 lodd; the image fit's free Z is a nuisance parameter, not an abundance (Q15 unchanged); the closure Z rise is B11 | `TODO_RUN/b8-metallicity/REPORT.md` |
+| B10 ledger entries of the fit with incomplete evidence | 24 evidence blocks, all boxed; the lower Z edge 0 is the physical bound and a hard bound of mbproj2d (no rate for Z < 0); the upper edge 2, the P_out run-away level -30, the 50-pixel background minimum and three seed constants are design parameters (OPEN_ITEMS P); no paper read freezes the outer pressure at a floor | ledger `fit.metallicity`, `fit.molecular_weight`, `fit.outer_pressure`, `method.background_fallback_fov` |
+| F3 why L1_m8 is fainter than L1_m10 in L_X | about 0.14 dex at 4-10e14 Msun (three like-for-like estimators), 0.04-0.07 at 1.6-3e14, 0-0.02 at 1.2-1.6e14; 0.05 dex gas fraction, about 0.09 dex missing hot gas at 0.06-0.5 R500c; not separable into resolution and calibration; L1_m8 stays the reference; the LXGAP "+0.1 dex at 1-1.6e14" was a binning artefact | `simulations.md` "Resolution"; `TODO_RUN/f3-l1m8-vs-l1m10/REPORT.md` |
+| F7 SIMBA and EAGLE cooling-rate diagnostics | the converted field was read in the P2 route, which P2b replaced; the v1_simba / v1_eagle truth comes from the original-snapshot cubes, which carry no cooling rate | ledger `multisim.net_heating`, `multisim.truth_on_cubes` |
+| A6 truth ratio beside every L_X figure | stated as the net ratio of the measurement chain with its measured steps (exposure map -0.059, PSF -0.018, annulus -0.003, out-of-time -0.005 dex; sum -0.078 against -0.079 measured); the figure code computes it from its own rows | `definitions.md` (L_X); `validation.md`; `internal/ledger_tests/lx_truth_ratio_terms.py` |
+
+## Closed on 2026-11-03 (independent review, round 1)
+
+| item | decision | where |
+|---|---|---|
+| A1 mock QPB template was the drawn truth | built like a real one: own corner measurement, the other FWC half; soft-proton shape measured for one other shape by arm `v1_spflat` (one direction, not a bound; not run) | ledger `fit.particle_background_esas` |
+| A2 / A7 mock centres and seeds from the true centre | nominal position = the mock's simulated catalogue entry (rule version 3, `sim.catalogue_centre`) moved by an error drawn from the published positional error (until rule version 3: true centre + donor's catalogue offset); one two-pass procedure on both sides; no 4' cap | ledger `fit.centre`, `fit.seed_lx` |
+| A3 exact Galactic column in mock fits | kept; no published per-field error; measured in one direction by arm `v1_nhhi` (not a bound) | ledger `instrument.galactic_column_total` |
+| A4 soft photons missing after retargeting | photons absorbed with the conditions donor's column in production | ledger `instrument.conditions_donor` |
+| A5 / A6 true source lists and true apertures in Lx | seeds mask with the SAS list on both sides; the campaign Lx columns documented as truth-side | INTERFACES (Lx seeds) |
+| A8 core protection 90" / 0.4 | the on-axis PSF half-energy width, 16.487" | ledger `photometry.lx_core_protection` |
+| A9 matching on PSZ2 / 0.78 | stays until C1; realism verdicts stated as conditional | ledger `donors.matching_mass` |
+| A10 flare-map normalisation region | the IN/OUT region, cluster excluded | ledger `instrument.soft_proton_spatial` |
+| A11 RASS CXB | fixed at the Moretti total | ledger `instrument.sky_background` |
+| B2 closure gate arm | `v1sas`; cells get their SAS detection at generation | `closure_grid.GATE_ARM` |
+| B4 stale seed table | provenance seed hash checked | `build_obs_seed_lx.check_seed_table` |
+| B5 seed iteration | bracketed, field-edge ring fill, status counts recorded | ledger `fit.seed_lx` |
+| C cluster PSF | `king-energy-angle` in production; arm `v1_psfon` is the reverse study | ledger `instrument.cluster_psf_onaxis` |
+
+Round 2 (DECISIONS "Independent review, round 2"): centring by the PSZ2 counterpart rule with published positional
+errors (`catalogue_positions_v4.csv`), point sources masked in the peak search, the first-guess iteration stepping
+down from an unmeasurable pivot, every closure cell detected and seeded, the free-QPB-level arm `v1_qpbfree`, the
+generation Lx masked with the simulated sources and documented as truth-side.  The real seed table and the centre
+table copied from it are rebuilt from the committed code (login, 3117a07: 616 converged, 21 field-edge, 0 pivot).
+
+Round 3 (DECISIONS "Independent review, round 3"): mocks start from their own thermal-SZ centre plus the drawn
+catalogue error; seed hash over the procedure's code (round 5: every module it loads).  Round 5: the QPB level error
+per camera and band from the FWC exposures, with arms `v1_qpbhi`, `v1_qpblo`, `v1_qpbsoft`, `v1_qpbhard`; the real
+free-level fits now check it rather than set it.
+
+Still to run, each on the author's go: the data-package tables of A0 (the nine-step list);
+the closure grid with `v1sas`, `v1_nhhi`, `v1_spflat`, `v1_psfon`, `v1_qpbfree`, `v1_qpbhi`, `v1_qpblo`, `v1_qpbsoft`,
+`v1_qpbhard` (with `--backgrounds real` for the QPB arms), the response arms `v1_xcallo`, `v1_nustarhi`,
+`v1_nustarlo`, `v1_obsresp`, `v1_obsresp_shared` and the calibration arms `v1_vighi`, `v1_viglo`, `v1_psfell` (node,
+B1); the sampler arms after it (node, Q18); the
+per-observation response set if Q20 adopts it (node); regeneration of every mock in a new tree (node); the real fits
+with the QPB level free (node).  Decisions waiting on the author: the gate thresholds set after v2 (R3p 0.10, the
+real-cell median as a report), the matching mass until C1, a free or fixed QPB level in production, the bank's
+training filter on the truth-side Lx, the thresholds of the paired study arms, the responses (Q20), the sampler
+(Q18), the catalogue-entry points Q22-Q25, the in-field background table and the conditions pool (Q19) and the
+untyped WHL donors (Q26).
+
+## Closed at the integration
+
+| item | source | why it is closed |
+|---|---|---|
+| Replay calibration of the donor background table (pn 0.947, 0.096, 0.65; MOS 0.93-1.03), with the shrinkage priors (`BAND_PRIOR_DEX`, `BAND_FLOOR_DEX`) and the clip `QPB_SCALE_RANGE` | DECISIONS "No tuned calibration factors"; `background.md` | void under the no-factor rule; removed in `b6a7637`; the QPB level of every camera is the donor's corner level (ESAS) |
+| "Recalibrate the pn level with the current stage" (0.947 against 1.106), replay "Job 4", the pn gap level rescaling `pn_gap_qpb_level` (0.947 / 1.067) | DECISIONS "The pn Cu-line gap everywhere", "No tuned calibration factors" | void; the rescaling and its replay script were deleted before the integration; the gap mocks draw the FWC spectrum at the corner scale |
+| pn band-1 calibration factor 0.0959 of the background table | DECISIONS "Donor tables" | void with the table calibration |
+| MOS RGA vignetting dipole measured on 60 donors (`mos_rga_vignetting = 'pps-measured'`) | OPEN_ITEMS A; ledger `instrument.vignetting_axis_rga` | void; removed at the integration; since 2026-11-03 the effect is modelled from the calibration (`instrument.mos_rga_vignetting = 'ccf'`, A3) |
+| pn out-of-time CTI 1.4e-3 per row | DECISIONS "No tuned calibration factors" | void; removed from stage and fit, the effect is dropped |
+| Exploration switch `sim.gas_clump_fcut` and the clump removal | `LX_GAS_EXPLORATION.md`; ledger `lxalt.clump_removal` | red herring (L_X result); removed in `fe68605`; the numbers stay in the exploration page |
+| Gas cuts, floors, entropy cut, clump and substructure masks, luminosity corrections as ways to lower the TNG L_X; the ledger entry `lxalt.entropy_cut` with its `open:` | `LX_GAS_EXPLORATION.md`; OPEN_ITEMS A | red herring: the excess is the TNG gas and no defensible cut removes it (at most about 0.06 dex); the `open:` was removed on 2026-11-03 |
+| Node job `alt_lx.py` over about 1,650 halo-snapshots and the "Not verified" list of the gas exploration | `LX_GAS_EXPLORATION.md` sections 7 and 8 | red herring: it turns subset numbers for cuts nobody adopts into population numbers |
+| "Add the core-excised relation and an image-level substructure mask to the comparison" | `LX_GAS_EXPLORATION.md` recommendation | red herring: both are aimed at the excess, and the comparison already uses the observers' aperture |
+| Remainder +0.09 +- 0.09 dex of the excess "not proven closed", attribution of the +0.19 dex to f_gas, clumping, profile shape | DECISIONS "The soft-band luminosity excess of TNG-Cluster" | superseded by the gap test: -0.33 dex FLAMINGO against TNG-Cluster, independent recomputation -0.36, temet against SOAP -0.42; the excess is reported as a model property |
+| Node job `xsim_tngfmt.py` over the TNG-Cluster primaries (about 1,650 halo-snapshots); slope of the TNG-Cluster relation; observed f_gas at 2e14 Msun; (1+z)^3 factor of SOAP at z = 0.5 | `LX_CROSS_SIM.md` sections 4-6 | superseded by the gap test through the mock pipeline; the (1+z)^3 factor was verified in the FLAMINGO checks (P3) |
+| Population L_X with `full` emission for the TNG-Cluster primaries (1 node-hour) | LXGAP report section 7 | superseded by the paired test; `full` is the default of every production preset |
+| FLAMINGO anchor depends on resolution (L1_m10 only); released products on the legacy emission table (+0.022 dex) | LXGAP report section 4, items 1 and 2 | done: L1_m8 is the production FLAMINGO source, `full` abundances are the default (author, 2026-10-28) |
+| Matching on the true mass with count matching ("a mock is not given another mass") | DECISIONS "The soft-band luminosity excess" decision | reversed by the author on 2026-10-27; mocks are matched on the estimated hydrostatic fit mass (C1) |
+| Which Planck (1-b) (0.78, 0.688, 0.8, ...), sensitivity test S7 and the assumed bias of `donors.matching_mass` | DECISIONS "Open: which Planck (1-b)" (matching-mass section); OPEN_ITEMS B | superseded: catalogue masses and the assumed bias leave the matching and serve as cross-checks only |
+| Forecast of the L_X(1 Mpc)-M_fit offset (+0.29 +- 0.08 dex) | DECISIONS "Forecast ..." | a forecast, replaced by the measured +0.309 dex (true mass) of the gap test; the real comparison is C2 |
+| Counts check of the freeze, the arm `v1_thin` (factor 0.54), decision 6 of 1.1.3 (count-matched fit arm) | DECISIONS "Counts check ... result" | run once, the rule failed; the measured factor is void under the no-factor rule; replaced by the two-exposure design in B1 |
+| Release 1.1.3 decision 1 (closure deficit): (a) rerun, (b) own-background seed, (c) divide the deficit out | DECISIONS "Release 1.1.3 ... Open decisions" | (a) and (b) done (216-cell grid; change of ln M -0.003); (c) void as a calibration; the cause is the background split (oracle: five groups of six gain 10-25 per cent); remainder B1, B2 |
+| Chains, one against nine starts, the PSF in the fit, the shape of the QPB, the metallicity prior, the vignetted fraction, the width of the background prior as causes of the deficit; `method.multistart_optimiser` | DECISIONS "Fitter freeze", "Release 1.1.3, continued" | tested, none moves the closure beyond noise; one start and the quick chains stay |
+| Arm `v1_frzsplit` (vignetted fraction measured on the annulus) | DECISIONS "The background-cell deficit" | worse (0.68-0.94), not pursued |
+| S9 / F5 (own-QPB seed, PLAN_V41 decision 5) | `SENSITIVITY_TESTS.md` S9; archive PLAN_V41 | the arm was run (job 1889894); the choice of seed is Q2 |
+| Unit error of the `donor-table` seed (flat part not divided by rho); residual soft protons drawn with the QPB switched off; resumed views losing their observation columns | DECISIONS "Release 1.1.3, continued" | fixed with tests |
+| Release 1.1.3 decision 2 (gate P of the replica list) | DECISIONS "Release 1.1.3, continued" | option (a) taken: the matched draw passes gate P strictly and is the sample of every population statistic |
+| Release 1.1.3 decision 3 (off-axis cluster PSF) | DECISIONS "Release 1.1.3, continued"; ledger `instrument.cluster_psf_onaxis` | measured: paired change +0.001 (-0.021 to +0.019); the on-axis King stays; options (b) and (c) not needed; the ledger text is G3 |
+| Release 1.1.3 decision 4 (sky background) | DECISIONS "Release 1.1.3, continued" | measured in memo 4; the per-donor scaling is not switched on; the ROSAT option was not pursued; the rest is A2 and Q6 |
+| Release 1.1.3 decision 5 (Kedro graph) and the Kedro-Viz findings | DECISIONS; REVIEW_RESPONSE | option (a) kept as documented; the findings are answered in the response; `archive/KEDRO_PLAN.md` step 7 (Kedro-Viz) done in 1.1.3 |
+| Pn corner level excess and the steps 2 and 3 of option (d); Large Window pn donors with a zero template | DECISIONS "The pn corner level: the cause of the excess" | cause found (Cu line in the PPS pn hard band); the rule holds on all 638; Large and Small Window pn images are left out of the ESAS fit |
+| Apply the pn Cu-line gap to mocks and fit; "presets not switched" | DECISIONS "The pn Cu-line gap everywhere", "No tuned calibration factors" | done at the integration: `pn_hard_band = 'pps'` in every preset |
+| Audit of the factors already in production and their replacement by calibration data | DECISIONS "No tuned calibration factors" (audit) | done except `FWC_REGISTRATION` (Q5); `band_conv` and the selection thresholds are kept: unit conversion and classifiers |
+| Multi-simulation phases P0-P4 (abundance modes, canonical layer, SIMBA and EAGLE, mini snapshots, FLAMINGO); `common` against `full` as the default | DECISIONS "Multi-simulation pipeline" | done; `full` is the default (author, 2026-10-28); `common` stays for `v1_common` |
+| SIMBA and EAGLE loaders as modules | DECISIONS "P2: SIMBA and EAGLE" | done in `ingest/simba.py` and `ingest/eagle.py`; both stay internal (Q11) |
+| FLAMINGO L1_m8 download of 5,000 halo-snapshots; cubes of 5.66 R500c; symmetric or shifted sample window | DECISIONS "FLAMINGO L1_m8" | done (2026-10-30); the sample is streamed, the window question is moot |
+| Usability criteria U1 and U2 of the controlled image test, `p3_resolution.py` (counts per emitter) | DECISIONS "Audit: no calibration factors" | withdrawn: they rest on measured thinning; the resolution rule, which needs none, is met |
+| FoF against sphere X-ray outskirts check; spherical HSE truth for z > 0.7 | `archive/STATUS.md` to-do 3; DECISIONS 2026-10-08 | superseded by the cube cutouts (convergence test) and the spherical truth of 2026-10-09 |
+| Make the fitted Barnes estimator the headline (`hse_pressure = "thermal-fit"`) | DECISIONS "Barnes-faithful fitted HSE estimator" | decided on 2026-10-12 (headline `barnes21_nosf_fit_mu`) |
+| RAWY <= 12 in every pn band; fixed CIF analysis date; pn Small Window width; the product-name schema `PERCAM_RE` | DECISIONS "SAS-ready products: open points", "pn readout-edge rows", "pn Small Window width" | resolved 2026-10-12 and 2026-10-19, and in 1.1.2 |
+| Donor identities in the SAS headers; memory of the FWC single-pixel table | DECISIONS "SAS-ready products: open points" 4 and 7 | a statement and a transient 0.3 GB; nothing to do |
+| Archive to-do lists: closure-grid fixes of V4c, camera layout A10, node check 5, fetcher gap, acceptance rule of 2026-10-08, Kedro fixture test, V4.1 items R0, F1-F8, K1-K8, J1-J3 | `archive/STATUS.md`, `archive/PLAN_V41.md`, `archive/HANDOVER.md` | done or superseded by later sections of DECISIONS; the open parts are B1, B3, C1 |
+| Archive questions to the author (account end date, repository, attribution, zoom split seed, ML targets, camera offsets) | `archive/PLAN.md` section 8, `archive/HANDOVER.md` F.3 | answered at the time; what is still open is Q12 and H1 |
+| Real-fit open scientific questions of the hand-over (fit / M_Planck ratio rising with theta500, steep T at R500, rebin-centre) and the legacy-fitter reproducibility of A1835 | `archive/HANDOVER.md` section H, `archive/STATUS.md` | superseded: the real observations are refitted with the settled fitter (B3) and the fitter is seeded |
+| OPEN_ITEMS sections E, F, H, J, O and the resolved rows of G, I, K-N (pattern loss, mock AGN band, crop, photon sampling numerics, kernel widths, metal axis) | `OPEN_ITEMS.md` | resolved in the file itself |
+| Progenitor selection of TNG-Cluster, real-against-real null of the realism test, the replica mass-match bias | DECISIONS "Release 1.1.3, continued" | measured: -0.032 in ln M_HSE / M500c against TNG300 at matched mass; null AUC 0.49 +- 0.03; both documented |

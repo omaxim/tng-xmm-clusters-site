@@ -1,0 +1,12 @@
+tngxmm.ingest.cli
+=================
+
+.. automodule:: tngxmm.ingest.cli
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ingest_tng_snapshots
+   

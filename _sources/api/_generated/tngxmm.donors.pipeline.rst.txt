@@ -1,0 +1,19 @@
+tngxmm.donors.pipeline
+======================
+
+.. automodule:: tngxmm.donors.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_donor_folds_node
+      build_core_offsets_node
+      build_max_targets_node
+      build_replica_targets_node
+      create_pipeline
+      sample_matched_node
+      validate_matched_population_node
+      validate_population_node
+   

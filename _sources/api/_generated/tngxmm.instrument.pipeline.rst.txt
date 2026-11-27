@@ -1,0 +1,15 @@
+tngxmm.instrument.pipeline
+==========================
+
+.. automodule:: tngxmm.instrument.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      collect_instrument_products
+      create_pipeline
+      replay_views
+      run_sas_detection
+   

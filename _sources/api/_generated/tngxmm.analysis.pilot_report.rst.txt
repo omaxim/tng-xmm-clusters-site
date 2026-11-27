@@ -1,0 +1,37 @@
+tngxmm.analysis.pilot\_report
+=============================
+
+.. automodule:: tngxmm.analysis.pilot_report
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      REFERENCE_KEY
+      COMPARISON_KEY
+      NBOOT
+      QUESTIONS
+      DOMAIN_FLAGS
+      FIT_FLAGS
+      USABLE
+      IN_DOMAIN
+      OUTSIDE
+      READINGS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      mock_rows
+      pilot_report
+      ratio_summary
+      reading
+      real_rows
+      run_facts
+      tension
+      tension_summary
+      trend
+      write_figure
+   

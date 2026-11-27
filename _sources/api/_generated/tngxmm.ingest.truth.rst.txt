@@ -1,0 +1,13 @@
+tngxmm.ingest.truth
+===================
+
+.. automodule:: tngxmm.ingest.truth
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cube_truth
+      cube_truth_hse
+   

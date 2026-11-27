@@ -1,0 +1,105 @@
+tngxmm.validation.closure\_grid
+===============================
+
+.. automodule:: tngxmm.validation.closure_grid
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      GEN_ARMS
+      GEN_ARM_BASE
+      GEN_ARM_THIN
+      GEN_ARM_EXPOSURE
+      QPB_LEVEL_ERROR
+      QPB_SOFT_BANDS
+      QPB_LEVEL_RULE
+      FIT_ARMS
+      DATA_MODES
+      DEFAULT_FIT_ARMS
+      AGN_BG_RULE
+      TOLERANCE
+      CLOSURE_RULE
+      ARM_RULE
+      ARM_BASE
+      ARM_ROLE
+      SAMPLER_RULE
+      B1_DECISION_ARMS
+      R_OUT_KPC
+      TRUTH_COMPOSITION
+      CLOSURE_LATE_DEFAULTS
+      CELL_RECORD_COLUMNS
+      EXTRA_COLUMNS
+      JITTER_SIGMA_LN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      analyse
+      arm_shift
+      arm_verdicts
+      budget
+      cache_parent
+      catalogue_position_current
+      cell_name
+      cell_seed
+      cell_view_id
+      cells_from
+      closure_record
+      collect
+      copy_settled_cache
+      detect_cell
+      fit_config
+      fit_dir
+      fit_done
+      fit_extras
+      fit_name
+      fit_view
+      gate_verdict
+      gen_arms_of
+      gen_spec
+      generate_view
+      generation_done
+      ideal_photon_kwargs
+      is_pivot
+      jitter_bias
+      main
+      make_slot_caches
+      mode_verdict
+      needs_sas_list
+      paired_differences
+      pick_donors
+      plan_grid
+      qpb_level_decision
+      qpb_level_error_from_fits
+      qpb_level_scales
+      read_plan
+      response_coverage
+      run_fits
+      run_forked
+      run_generation
+      run_warm
+      sampler_verdict
+      seed_factor_ln
+      seed_scale
+      sp_band_ratio_check
+      sp_tie_decision
+      stale_views
+      summarise
+      thin_events
+      truth_constants
+      usable
+      verdict
+      view_dir
+      warm_generation_tables
+      warm_rate_cache
+      write_plan
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      instrument_components
+   

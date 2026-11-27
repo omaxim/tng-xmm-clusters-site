@@ -1,0 +1,18 @@
+tngxmm.embed
+============
+
+.. automodule:: tngxmm.embed
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   cli
+   extract_dinov3
+   extract_embeddings
+   pipeline
+   schemas
+   write_embeddings

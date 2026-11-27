@@ -1,0 +1,27 @@
+tngxmm.core.freeze
+==================
+
+.. automodule:: tngxmm.core.freeze
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      G3_MEDIAN_DEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      fit_sanity
+      freeze_check
+      leakage_test
+      population_report
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FreezeItem
+   

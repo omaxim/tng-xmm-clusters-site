@@ -1,0 +1,25 @@
+tngxmm.ingest.eagle
+===================
+
+.. automodule:: tngxmm.ingest.eagle
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NAME
+      STATUS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      canonical_gas
+      descriptor
+      gas_fn
+      halo_table
+      ingest_run
+      ingest_snapshot
+      main
+   

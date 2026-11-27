@@ -1,0 +1,210 @@
+# Samples and selection
+
+Which simulated halos and which real observations enter, how they are paired, what each target list is used for, and
+the selection effects that are not modelled. Figure: {doc}`figures` (samples).
+
+## The simulated sample
+
+TNG-Cluster (Nelson et al. 2024, Sect. 2.2) re-simulates 352 halos of a 1 Gpc dark-matter-only parent box. They were
+chosen on their **z = 0** mass alone: every halo above M200c = 1e15 Msun in the volume, plus halos drawn at random in
+0.1 dex bins so that, together with TNG300, the distribution in halo mass is flat from 10^14.3 to 10^15 Msun. The
+pipeline takes the primary zoom target of each re-simulation at the nine full snapshots (z = 0 to 1.5) wherever its
+M500c is at least 1e14 Msun: 2,463 halo-snapshots (350 at z = 0, 292 at z = 0.5, 67 at z = 1.5).
+
+Consequences:
+
+* At z > 0 the sample is the main progenitors of massive z = 0 clusters, not a mass-complete sample at that epoch:
+  halos that are massive at z = 1 but do not grow into the z = 0 selection are missing, and the progenitors are
+  biased towards early-forming, fast-growing systems. Formation history and dynamical state affect the hydrostatic
+  bias, so a bias measured on these halos at z > 0 is that of the progenitor population.
+* The mass function is not cosmological: by construction it is flat in log mass over 10^14.3-10^15 Msun at z = 0.
+  No weighting to a cosmological mass function is applied. TNG300 (a periodic box, every FoF central above the mass
+  cut) is the volume-limited comparison: 742 halo-snapshots in the maximal list.
+* Each halo-snapshot is projected along the three simulation axes (three views); the views of one halo are not
+  independent. Folds and bootstrap resamples that group them take every view of a halo, at every snapshot, together
+  (release 1.2, `donors.halo_groups`): the 3,258 halo-snapshots of the maximal and box lists are 535 halos (352
+  TNG-Cluster zoom targets, 171 TNG300, 11 TNG100 and 1 TNG50 z = 0 objects).
+
+What the selection does to the hydrostatic bias is measured against TNG300, which runs the same physics on every
+halo above the mass cut (`internal/ledger_tests/progenitor_bias.py`, v1.0.1 trees). Within each snapshot the TNG300
+halo-snapshots are reweighted to the M500c distribution of the TNG-Cluster ones in the mass range both cover (0.1 dex
+bins), and the medians of ln(M_HSE / M500c) at R500c are compared:
+
+| z_snap | TNG-Cluster / TNG300 halo-snapshots | TNG-Cluster minus TNG300 [ln] | 95 per cent interval |
+|---|---|---|---|
+| 0 | 203 / 154 | -0.015 | -0.074, +0.031 |
+| 0.1 | 229 / 137 | -0.009 | -0.049, +0.037 |
+| 0.2 | 211 / 109 | -0.066 | -0.123, -0.018 |
+| 0.3 | 250 / 105 | -0.052 | -0.086, +0.025 |
+| 0.4 | 227 / 79 | -0.020 | -0.059, +0.041 |
+| 0.5 | 170 / 66 | -0.037 | -0.119, +0.046 |
+| 0.7 | 194 / 37 | -0.066 | -0.143, +0.013 |
+| 1.0 | 80 / 21 | -0.064 | -0.135, +0.018 |
+| all, matched within each snapshot | 1,564 / 708 | -0.032 | -0.050, -0.011 |
+
+At the same mass and redshift the TNG-Cluster halos have an intrinsic hydrostatic mass about 3 per cent lower (6-7
+per cent at z = 0.2 and above 0.7, 1-2 per cent at z <= 0.1), consistent with progenitors of massive clusters growing
+faster than the average halo of their mass. A bias measured on TNG-Cluster above z = 0 therefore
+overstates the population bias by this amount; the TNG300 halos are the population sample (they reach only about
+4e14 Msun above z = 0.5). Overall medians: 0.883 (TNG-Cluster) and 0.914 (TNG300), {doc}`figures` (hse_bias_truth).
+
+## The real sample
+
+638 archival XMM-Newton observations of 611 clusters, selected by their catalogue: Planck PSZ2 (414 observations),
+ACT DR6 (207), CCCP (10) and Weighing the Giants (7); z = 0.045 to 1.48, median 0.28; catalogue M500 from 1.6e14 to
+2.1e15 Msun, median 4.9e14 Msun ({doc}`data`, `obs.observations`). Every one of them is an observation that someone
+proposed and that was carried out, so the sample inherits the selection of the XMM archive (bright, nearby, interesting
+or follow-up targets) on top of the SZ or lensing selection. This selection is not modelled.
+
+These 638 are the bank (`in_bank` True in `src/tngxmm/obs/catalogue/observations.csv`). On 2026-11-25 an archive
+search added 170 observations to the table (`in_bank` False, `sample` and `mass_class` = `extra`; inputs under
+`src/tngxmm/obs/catalogue/inputs_extra/`, module `obs/extra_observations.py`), which now has 808 rows. Every number
+of this page is for the bank; the target lists below pair with the bank only. Of the bank, 623 observations have a
+hydrostatic fit; the 170 added ones are being fitted with the same settings.
+
+### How the added observations were chosen
+
+The archive search of 2026-11-20 matched clusters of MCXC-II, eRASS1, ACT DR6, PSZ2 and the SPT catalogues that the
+bank does not hold with public XMM-Newton observations and left 194 candidates. Each was then graded in three
+steps (`obs/candidate_quality.py`, `tngxmm obs grade-candidates`):
+
+1. Measurements on the pipeline images, 0.5-2 keV summed over the cameras, with the same function as for the bank:
+   the exposure at the catalogue position, the coverage of R500, a background rate beyond 1.3 R500, the counts
+   inside 0.5 R500, the peak of the smoothed image, and the 4.5-12 keV rate beyond 1.3 R500 per camera.
+2. Flags from these numbers. The thresholds are screening values set for this search; none is fitted to a result:
+
+   | flag | set when |
+   |---|---|
+   | `FAIL:no_images` | the archive products hold no per-camera image with its exposure map |
+   | `FAIL:clean_exposure<5ks` | the longest camera exposure after the pipeline's flare screening is below 5 ks |
+   | `short_exposure` | that exposure is between 5 and 10 ks |
+   | `FAIL:centre_off_detector` | the median exposure within 0.5 arcmin of the position is below 0.5 of the maximum of the exposure map |
+   | `cameras:<present>` | fewer than three cameras have images |
+   | `r500_cover<0.9` | less than 0.9 of the disc of radius theta500 has an exposure above 0.2 of the maximum |
+   | `no_offsource_region` | fewer than 20 background blocks of 8 x 8 pixels lie beyond 1.3 theta500, so there is no background rate |
+   | `FAIL?:not_detected` | (counts - background) / sqrt(counts) inside 0.5 theta500 is below 5 |
+   | `point_like_core` | more than 0.6 of the net counts of 0.5 theta500 lie within 20 arcsec of the peak |
+   | `peak_far_from_position` | the peak is further from the catalogue position than max(1 arcmin, 0.3 theta500) |
+   | `high_particle_bg` | the 4.5-12 keV rate of a camera beyond 1.3 theta500 is above the 95th percentile of the bank's rates for that camera (0.0500 pn, 0.0081 MOS1, 0.0068 MOS2 counts/s/arcmin2) |
+   | `window_mode` | the pn sub-mode is a window mode other than full window, or a MOS sub-mode is a partial window |
+
+3. A grade by eye. Contact sheets of all 194 candidates (the smoothed image with circles at 0.5 and 1 theta500 and
+   the flags) were inspected, and each candidate got `pass`, `reject` or `hold` in the column `grade` and, where the
+   case was not plain, a sentence in `eye_note`. This step is manual. Its criteria are not written down beyond those
+   notes, and the grade is not a function of the flags: 170 passed, 13 were rejected, 11 held; two candidates with a
+   clean exposure of 3.6 and 4.0 ks passed (signal-to-noise 51 and 28), and nine without a `FAIL` flag were
+   rejected because the emission is a point source or a foreground galaxy.
+
+`inputs_extra/candidates_graded.csv` holds all 194 rows with the measurements, the flags (without the `FAIL`
+prefixes), `grade` and `eye_note`. The 170 rows with `grade` = `pass` are the added observations; `hold` rows are
+not used. The selection is therefore reproducible from that file, and the flags from the images, but the grade
+itself only by looking again.
+
+A donor-matched comparison removes part of it: each mock is observed under the conditions of a real observation and
+compared with that observation, so exposure, background, field and redshift are matched by construction. It does not
+remove a selection on cluster properties (luminosity, morphology, cool core) that correlates with mass at fixed
+catalogue mass, because the mocks are paired by mass and redshift only. X-ray selection favours cool cores at fixed
+mass (Rossetti et al. 2017: 59 per cent cool cores in MACS against 29 per cent in a Planck SZ sample), and an archive of
+pointed observations can carry part of it. The paper states this as a limitation and bounds it with a rule written
+before the comparison: at z < 0.35 the mock-against-real comparison is also given separately for cool-core and
+non-cool-core clusters, classified on both sides by the same photometry with c = F(< 40 kpc) / F(< 400 kpc) and the
+threshold 0.075 of Santos et al. (2008) as used by Rossetti et al., together with the cool-core fractions of the real
+pool and of the paired mocks. Above z = 0.35 XMM-Newton does not resolve the 40 kpc core (Rossetti et al. leave those
+clusters out), so c is given there as a same-photometry label, not as a class. Ledger entry: `samples.archive_selection`.
+
+## Pairing: the matching mass
+
+A halo-snapshot is paired with a reference observation when their masses and redshifts are close (median
+|delta log M| = 0.08 dex, 90th percentile 0.19). The mass of the real side is the "matching mass": the catalogue
+M500 divided by (1 - b) = 0.78 for PSZ2 clusters (the CCCP baseline of Planck Collaboration 2016, Planck 2015
+results XXIV, Table 2; 1,887 of the 2,840 replica views), and the
+catalogue M500c for ACT DR6 (Sect. 2.5 of the ACT DR6 cluster catalogue; these masses are already calibrated to
+weak lensing, which corresponds to a factor of about 0.65 on the SZ scaling relation according to the ledger entry)
+and for the lensing catalogues. Ledger entry:
+`donors.matching_mass`. The two SZ halves therefore differ by a factor of about 1.2 in mass scale.
+
+This catalogue matching mass belongs to the replica, maximal and box lists. Since the decision of 2026-10-27 the
+production pairing matches on the fitted hydrostatic mass on both sides, with no catalogue mass and no bias factor.
+Pass 1 gives every FLAMINGO L1_m8 halo-snapshot a fitted mass from one view; pass 2 pairs each of its six
+icosahedral views with a different observation of the window in redshift and fitted mass (`tngxmm donors
+pair-projections`, `donors/pair_projections.py`; under `--assignment least-used` the observations of the window
+that serve the fewest views so far). The pass-2 list that includes the 170 added observations is not built yet: it
+waits for their fits.
+
+What depends on this assumed bias: which halo is paired with which observation, and through that every comparison at
+fixed observation (realism, count matching, mock against real fits). What does not: the bias estimands of a mock
+(M_X, M_HSE and M_true of the same halo, {doc}`definitions`). The sensitivity test S7 redrew the replica list with
+(1 - b) = 0.84 and 0.90 ({doc}`assumptions/SENSITIVITY_TESTS`, R12): gate P fails at every value (mass D 0.241, 0.229,
+0.207), the median halo mass of the views moves by -0.008 and -0.018 dex, and almost every individual pairing
+changes. A population result therefore depends weakly on the assumed bias, a result about "the mock of this real
+cluster" strongly.
+
+## The target lists and what each feeds
+
+| list | file | views | used for |
+|---|---|---|---|
+| replica list | `campaigns/v4/targets_v4.csv` | 2,840 (K = 5 per observation, 1,082 halo-snapshots, 593 observations) | the realism evaluation and its frozen split |
+| maximal list | `campaigns/v4_max/targets_v4_max.csv` | 9,615 (TNG-Cluster 7,389 = every halo-snapshot x 3 views, TNG300 2,226) | the production generation (`slurm/campaign_all.sh`); contains the replica views; the certification sample of mock fits is drawn from its TNG-Cluster test split, stratified in redshift and mass (`params:certify.sample`) |
+| box list | `campaigns/v4_box/targets_v4_box.csv` | 159 (TNG100, TNG50) | resolution tests |
+| matched draw (K' = 5) | `campaigns/v4_max/sampler_recommended_*` (R = 12; `calibration_k5_*` is the R = 9 variant) | 3,111 draws from the maximal list | every population statistic (passes gate P) |
+| real fits | `campaigns/realfit_v4/targets_realfit_v4.csv` | 638 observations | the X-ray fits of the real clusters (claims A and B) |
+
+## Gate P: the replica list fails, the matched draw passes
+
+Gate P compares the views of a list with the reference observations (Kolmogorov-Smirnov distance D against a
+bootstrap critical value; `campaigns/v4/gate_p.md`). For the replica list:
+
+* redshift, live times, N_H, theta500, filters and modes pass;
+* the matching mass fails: D = 0.241 against a critical 0.061. The heaviest real clusters have too few TNG-Cluster
+  halos of their mass at their redshift, so the mocks are lighter on average;
+* coverage fails: 593 of the 638 observations (93 per cent) have views, below the 95 per cent rule. 14 ACT clusters
+  at z = 1.16-1.34 have no snapshot within the +-0.15 window (snapshots 50 and 40 are 0.5 apart), and 432 views use
+  the nearest snapshot outside the window.
+
+No variant of K or of the window passes the mass test on the nine full snapshots. Decision of release 1.1.3: every
+population statistic uses the **matched draw** (`campaigns/v4_max/sampler_recommended_*`: K' = 5 views per
+observation drawn from the maximal list, each view at most 12 times, |z_obs - z_snap| <= 0.25, TNG-Cluster and
+TNG300; 3,111 draws, 2,921 of TNG-Cluster and 190 of TNG300), and the replica list keeps its role in the realism
+pairing, where each mock is compared with its own donor. Recomputed with the current code from the committed inputs,
+the matched draw passes gate P strictly: matching mass D = 0.026 (critical 0.067), redshift 0.036 (0.069), live times,
+N_H, theta500, filters and modes all within their critical values, coverage 0.978.
+
+How much the failure of the replica list matters for the bias: the intrinsic M_HSE(< R500c) / M500c has a median of
+0.877 on the replica views and 0.885 on the matched draw (v1.0.1 trees), a difference of under 1 per cent.
+
+## Snapshot redshift and observed redshift
+
+A view is the gas of z_snap observed at z_obs ({doc}`definitions`). Replica list: |z_obs - z_snap| has a median of
+0.033 and a 90th percentile of 0.088. The estimands are defined at 500 rho_c(z_obs) for the true, the hydrostatic and
+the X-ray mass alike, so the comparison of the three is consistent; what changes is the halo the comparison is
+about. On the 9,774 views of the maximal and box lists as generated (release 1.0.1 trees), M500c at 500 rho_c(z_obs)
+differs from M500c at 500 rho_c(z_snap) of the same particles by a median of +0.001 in ln M (16-84 per cent -0.036 to
++0.042, 5-95 per cent -0.062 to +0.073), negative when z_obs > z_snap. The gas itself (its temperature, structure and
+dynamical state) stays that of z_snap. Its effect is measured on the truth of the production tree. Within one
+halo-snapshot the views differ only in z_obs, so a line through their ln(M500c,HSE / M500c) against z_obs - z_snap
+gives the change of the definition at fixed gas (+0.52 per unit z in the median) and an intercept, the bias with the
+definition of z_snap. Between neighbouring snapshots of one TNG-Cluster halo the intercept, less the definitional
+change, moves by -0.61 per unit redshift in the median (bootstrap 95 per cent -0.66 to -0.53; 2,108 snapshot pairs of
+350 zoom targets): that is the gas-only slope k. The term k (z_obs - z_snap) then has a mean of -0.0012 over 7,374
+views (-0.0033 when halo-snapshots with too few views for a line enter with their median), because the views are
+displaced in both directions (mean z_obs - z_snap +0.001). In the three redshift bins z_snap < 0.25, 0.25-0.6 and
+above 0.6 the mean displacement is +0.012, -0.015 and +0.008, so a bin moves by at most 0.01. If every view were
+displaced the same way the shift would be 0.033 (|k| times the median |dz| of 0.054). Single halos scatter widely
+(16-84 per cent of k -3.2 to +2.1, mergers between snapshots), so |k dz| of one view (median 0.044) bounds the added
+scatter from above. The paper states the term as measured: -0.001 to -0.003 in ln for the whole population, and for
+every subsample it reports the mean k dz of that subsample; a subsample where it exceeds 0.03 carries it as an arm
+under the pre-registered arm rule (delta = 0.03). MACSIS has the same sign with a smaller size (the T-M normalisation
+15 per cent lower at z = 1 than at z = 0; Barnes et al. 2017), a different quantity in a different simulation. The
+direct comparison with the 60-snapshot `v1_common` views (|dz| median 0.006) is not part of the first paper. Script
+`internal/ledger_tests/c4_gas_state_zobs.py`; ledger entry `method.snapshot_to_zobs`.
+
+## Other simulations
+
+FLAMINGO, SIMBA and EAGLE are periodic boxes, so their halo samples are volume-limited at every snapshot; their
+presets use the snapshots nearest the nine TNG redshifts. The FLAMINGO L1_m8 sample was drawn before any streaming
+to fill the (mass, redshift) plane of the 638 real observations: centrals from SOAP-HBT, every halo above 6e14
+Msun, and below it random halos in cells of 0.1 dex in true M500c from 1.2e14 Msun per snapshot, weighted by the
+density of real observations, at least 8 per cell that real observations reach: 5,000 halo-snapshots of 2,143
+halos, with at least six candidates for 611 of the 638 observations. The other 27 are the most massive clusters and
+those above z = 1.25, of which the 1 Gpc box holds too few. The production halo lists of SIMBA and EAGLE are not drawn yet. Rule and
+tables: [DECISIONS, FLAMINGO L1_m8](dev/DECISIONS.md#flamingo-l1_m8-the-production-flamingo-source-streamed-sample-rule-stated-before-the-streaming).

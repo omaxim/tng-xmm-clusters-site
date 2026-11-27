@@ -1,0 +1,27 @@
+tngxmm.sim.cutout\_gas
+======================
+
+.. automodule:: tngxmm.sim.cutout_gas
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      HEAVY_CELL_FACTOR
+      ZOOM_SOURCE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_box
+      check_sphere
+      cutout_file
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CutoutGasSource
+   

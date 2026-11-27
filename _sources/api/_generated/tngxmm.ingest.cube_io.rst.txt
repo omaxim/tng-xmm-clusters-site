@@ -1,0 +1,21 @@
+tngxmm.ingest.cube\_io
+======================
+
+.. automodule:: tngxmm.ingest.cube_io
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_kind
+      cube_path
+      halos_in
+      manifest_path
+      read_halo
+      sha256_array
+      update_manifest
+      verify_halos
+      verify_run
+      write_halo
+   

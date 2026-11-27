@@ -1,0 +1,42 @@
+tngxmm.massfit.fit\_psf
+=======================
+
+.. automodule:: tngxmm.massfit.fit_psf
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CORE_RADIUS_ARCSEC
+      TAIL_PIX_ARCSEC
+      CCF_E_RANGE_KEV
+      KERNEL_VERSION
+      BAND_ENERGY_PARTS
+      BAND_ENERGY_GRID
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      angle_weights
+      band_energy_mixture
+      ccf_dir
+      core_kernel
+      king_angle_nodes
+      king_angle_psf_for
+      king_density
+      king_eef
+      king_params
+      king_psf_for
+      pad_pixels
+      tail_transfer
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      KingAnglePSF
+      KingPSF
+      KingSumPSF
+   

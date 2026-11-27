@@ -1,0 +1,25 @@
+tngxmm.bank.filter\_rows
+========================
+
+.. automodule:: tngxmm.bank.filter_rows
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      RULES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      filter_rows
+      out_of_domain
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      FilterRuleError
+   

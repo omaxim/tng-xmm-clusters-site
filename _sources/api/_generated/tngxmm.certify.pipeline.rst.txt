@@ -1,0 +1,15 @@
+tngxmm.certify.pipeline
+=======================
+
+.. automodule:: tngxmm.certify.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_certification_rules
+      closure_and_real_seed_hash
+      create_pipeline
+      select_certification_sample
+   

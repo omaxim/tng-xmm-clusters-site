@@ -1,0 +1,14 @@
+tngxmm.core.node\_queue
+=======================
+
+.. automodule:: tngxmm.core.node_queue
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      done
+      parse_cores
+      run_queue
+   

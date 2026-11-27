@@ -1,0 +1,18 @@
+tngxmm.sim.compute\_hse\_stream
+===============================
+
+.. automodule:: tngxmm.sim.compute_hse_stream
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CHUNK_ROWS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_hse_truth_streamed
+   

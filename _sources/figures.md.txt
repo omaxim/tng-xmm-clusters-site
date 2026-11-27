@@ -1,0 +1,196 @@
+# Figures
+
+The figures of this site, made from results that exist on disk by `python -m tngxmm.viz.doc_figures` (module
+{py:mod}`tngxmm.viz.doc_figures`). No figure runs a simulation or a fit. Each input file is recorded in
+`docs/figures/manifest.json` with its root variable, relative path, size and sha256 (the tables under each figure),
+and `python -m tngxmm.viz.doc_figures --check` tells whether an input has changed since. Files under `$TNGXMM_DEV`
+are in the development area, not in the data package; they have to move into the data package before a reader can
+remake those figures.
+
+Paper candidates are written as PDF as well. "Paper candidate" means the figure type is proposed for the paper; most
+of them need to be remade on the final configuration first (the caveat of each says so).
+
+| figure | purpose | source data | configuration | paper candidate |
+|---|---|---|---|---|
+| pipeline_overview | data flow, where mocks and real data share code | none (diagram) | current | yes |
+| mock_vs_real | a mock beside the observation it replicates | golden fixture view, PPS mosaic | release 1.1.1 (current) | yes |
+| samples | mass-redshift plane of both samples; z_snap against z_obs | target lists, observation table, v1.0.1 results | target lists of 2026-10-12; v1.0.1 trees | yes |
+| lx_mass | L_X-M of mocks and real clusters, same estimator | v1.0.1 results, real L_X table | v1.0.1 | no (mass axes differ) |
+| closure | M_fit / M_true of idealised clusters by cell and data mode | closure-grid fit table | V4 (2026-10-17) | yes, after a rerun |
+| hse_bias_fits | M_X, M_HSE, M_true ratios of 43 mock fits | certification fit table | V4 (2026-10-17) | no (43 views) |
+| hse_bias_truth | intrinsic hydrostatic bias of the whole population | v1.0.1 results | v1.0.1 (truth unchanged since) | yes |
+| realism | C2ST AUC by feature group and per statistic | realism reports | development rounds of 2026-10-21 and 2026-10-25 | no (frozen evaluation pending) |
+| convergence | emission from beyond the gas cube | convergence test tables | release 1.1 geometry (current) | yes |
+
+## pipeline_overview
+
+```{image} figures/pipeline_overview.png
+:width: 100%
+```
+
+The stages of the pipeline and the products between them. The mock branch (simulation, instrument) and the real
+branch (PPS products of the reference observations) meet in the same photometry, the same source detection rules
+and the same hydrostatic fit; the comparison uses three masses per mock (M_X, M_HSE, M_true; {doc}`definitions`).
+The node-level graph is in the README and in Kedro-Viz.
+
+```{figure-inputs} pipeline_overview
+```
+
+## mock_vs_real
+
+```{image} figures/mock_vs_real.png
+:width: 100%
+```
+
+Left: the 0.5-2 keV mock of TNG-Cluster halo 19542651 at snapshot 67 (z = 0.503, M500c = 1.5e14 Msun from the group
+catalogue), view 0, observed at z_obs = 0.496 as XMM observation 0656201501 (the golden fixture products of release
+1.1.1, the current configuration). Right: the PPS mosaic of that observation (PSZ2 G308.33-20.21, z = 0.48, catalogue
+M500 = 1.06e15 Msun). Same 4 arcsec pixels, Gaussian smoothing of 2 pixels and the stretch rule of the image bank on
+each panel. Caveats: the halo is the fixture halo, chosen to be small enough to ship, not a mass match to this
+cluster (the catalogue M500 of the cluster is seven times the halo's); the detector orientation differs because the mock is observed with a
+jittered roll angle; the mock field is the donor's exposure-map footprint. A pair from the production replica list
+needs production trees of the current configuration, which do not exist yet.
+
+```{figure-inputs} mock_vs_real
+```
+
+## samples
+
+```{image} figures/samples.png
+:width: 100%
+```
+
+Left: the 2,463 TNG-Cluster halo-snapshots with M500c >= 1e14 Msun at the nine full snapshots (grey; jittered in z for
+visibility), the 2,840 views of the replica list at their z_obs and true M500c (orange), the 638 real observations at
+their catalogue M500 (blue) and their matching mass (open circles, PSZ2 masses divided by 0.78). Right: for the 9,774
+views of the maximal and box lists as generated in the v1.0.1 trees, z_obs - z_snap against the change of M500c from
+500 rho_c(z_snap) to 500 rho_c(z_obs) of the same particles (median |dz| 0.055, 90th percentile 0.119; ln M change
+median +0.001, 5-95 per cent -0.062 to +0.073). The replica list has |dz| median 0.033, 90th percentile 0.088.
+Caveats: the halos above z = 0 are progenitors of z = 0-selected clusters ({doc}`samples`); the replica list fails
+gate P in mass.
+
+```{figure-inputs} samples
+```
+
+## lx_mass
+
+```{image} figures/lx_mass.png
+:width: 70%
+```
+
+Rest-frame 0.5-2 keV luminosity inside R500, scaled by E(z)^-2 (self-similar for a band emissivity independent of
+temperature), against mass. Orange: 6,634 TNG-Cluster views of the v1.0.1 trees with a valid measurement, measured on
+the mock images with the campaign estimator (point sources masked, annulus background); orange line: running median;
+red line: the intrinsic luminosity of the same views. In the median the measurement reads the mocks low:
+log10(measured / intrinsic) over these 6,634 views has a median of -0.077 dex (16-84 per cent -0.141 to -0.045;
+-0.096 dex at 1-2e14 Msun, -0.066 dex above 7e14 Msun). In the 1 Mpc aperture the median is -0.071 dex over 6,967
+views (`LXGAP_INVESTIGATION/REPORT.md`, section 2), within 0.015 dex of that below z_obs = 0.8 and -0.112 dex above
+(851 views). This is the net ratio of the measurement chain, mostly the vignetting, chip gaps and inactive CCDs that
+the on-axis live time and ECF leave out and the PSF; the background annulus is a small part ({doc}`validation`, "The
+L_X estimator against the intrinsic luminosity"; `internal/ledger_tests/lx_truth_ratio.py`). Blue: 615 real
+observations measured with the same estimator on their PPS mosaics. At 4-7e14 Msun the mocks are +0.31 dex brighter.
+Caveats: the mass axes are different quantities (true M500c(z_obs) for the mocks, the catalogue M500 for the real
+clusters, mostly SZ masses, which are biased low), so the offset is not the luminosity excess at fixed true mass
+(+0.28 dex, {doc}`validation`); the v1.0.1 mocks emit from the FoF gas within 2 R200c, not the cube of release 1.1 (a
+median +0.001 dex difference in L on 30 halos); the truth ratio is that of the v1.0.1 configuration, an earlier one
+(on the views of the L_X gap test, release 1.1.3 instrument and `full` emission, L_X(1 Mpc) reads 0.052 dex low); the
+ratio is not known for the real clusters, whose aperture is the catalogue R500, so whether it cancels in the offset
+between the two sides is not measured.
+
+```{figure-inputs} lx_mass
+```
+
+## closure
+
+```{image} figures/closure.png
+:width: 100%
+```
+
+M500_fit / M500_true of idealised clusters in exact hydrostatic equilibrium put through the whole chain: cool-core
+(cc) and non-cool-core (ncc) profiles, M500 = 2, 4, 8e14 Msun, z = 0.1 and 0.6, two seeds per cell. Left: the
+production fit (arm `v4sas`, the SAS source list of the cell) in four data modes; medians clean 0.970, AGN only 0.779,
+background only 0.921, real 0.845. Right: the clean cells fitted with the background fixed (as in production) and free
+(1.032). Grey band: the gate as first registered (1.00 +- 0.03 in every cell). Caveats: measured on the V4
+configuration before the release 1.1 instrument switches; 24 fits per mode; the gate was amended after these results
+({doc}`validation`).
+
+```{figure-inputs} closure
+```
+
+## hse_bias_fits
+
+```{image} figures/hse_bias_fits.png
+:width: 100%
+```
+
+The three masses of 43 mock views (development sample D1, fit group `v4s1`). Left: medians and 16-84 per cent of
+M_X / M_true, M_HSE / M_true and M_X / M_HSE inside 0.5, 0.8, 1 and 1.2 true R500c(z_obs); dashed: medians without the
+12 fits flagged by the QC rules. At R500c: 0.825, 0.866, 0.847 (all) and 0.835, 0.881, 0.931 (without flagged fits).
+Right: M_X / M_true at R500c against true mass, coloured by z_obs; open symbols are flagged fits. Caveats: V4
+configuration; 43 views selected for the development checks, not a population sample; the method bias of the closure
+test (about 15 per cent with a realistic background) is part of M_X / M_true and is not subtracted; the QC selection
+moves the method-bias median by 8 per cent.
+
+```{figure-inputs} hse_bias_fits
+```
+
+## hse_bias_truth
+
+```{image} figures/hse_bias_truth.png
+:width: 100%
+```
+
+The intrinsic hydrostatic mass inside R500c over the true mass for every halo-snapshot of the v1.0.1 trees (headline
+estimator: Barnes et al. 2021 with fitted slopes, non-star-forming gas, each cell's own mean molecular weight). Left:
+against M500c, running median and 16-84 per cent for TNG-Cluster (2,460 halo-snapshots, median 0.883) and TNG300 (742,
+median 0.914). Right: against z_snap. No X-ray fit enters. Caveats: the ratio is at the catalogue R500c(z_snap), not
+at z_obs; the TNG-Cluster halos above z = 0 are progenitors of z = 0-selected clusters; the two simulations cover
+different mass ranges.
+
+```{figure-inputs} hse_bias_truth
+```
+
+## realism
+
+```{image} figures/realism.png
+:width: 100%
+```
+
+How well a classifier tells a mock from the real observation it replicates. Left: C2ST AUC by feature group, one replica
+per donor, 465 against 465 (logistic regression and gradient boosting on the image statistics; logistic regression
+on DINOv3 CLS embeddings reduced to 2, 8 and 32 principal components); dashed: the proposed gate 0.75. Right: the AUC
+of each of the 17 image statistics alone, 194 against 194, with the donor's own observing conditions (grey) and with
+the conditions donor of release 1.1.1 (red); AUC > 0.5 means the statistic is higher in the mocks. Caveats: two
+development rounds before the final release 1.1.1 instrument (2026-10-21 and 2026-10-25), on donors that were used
+to develop the instrument model; the frozen evaluation on 84 untouched donors has not been run.
+
+```{figure-inputs} realism
+```
+
+## convergence
+
+```{image} figures/convergence.png
+:width: 100%
+```
+
+How much of the projected emission comes from gas outside a cube of half-side X R500c: 20 TNG-Cluster halos, three
+views each, 90th percentile over halos and views. Left: the fraction of the emission of the annuli inside R500c.
+Right: the emission from beyond X in each annulus inside X R500c, relative to the median XMM background of the donors.
+Dashed: the 1 per cent rule stated before the run; grey: the production cube (X = 4), where the fractions are 0.12
+per cent (left) and at most 0.62 per cent (right, annulus 1.5-2.5 R500c). Caveat: beyond the XMM field the literal
+rule fails (1.5-2.6 per cent of the background from structure beyond about 6 R500c), which no stored cutout holds.
+
+```{figure-inputs} convergence
+```
+
+## Figures that need data that do not exist yet
+
+| figure | what it needs | cost |
+|---|---|---|
+| instrument and background components of one view (cluster, sky, particle background, soft protons, AGN) | per-component replays of a stored view (`instrument.replay_views` with switches off); not stored by production | login node or one short node job, about 75 s per replay |
+| T-M of mocks and real clusters | spectroscopic temperatures of the real clusters measured like the mocks; only catalogue temperatures of unverified origin exist | a fit campaign on the real observations |
+| closure grid on the current configuration | `slurm/closure_grid.sh` on release 1.1.x | about 3 node-hours |
+| hydrostatic bias from X-ray fits of the whole population, by radius, mass and redshift | production fits of the current campaign | several node-days |
+| realism on held-out donors | the frozen evaluation (`slurm/realism_frozen.sh`) | one node |
+| mock against real fits per observation (claim B) | real and mock fits on the current configuration | node time |
+| emission share of the coarse low-resolution gas | production trees with the cube gas of release 1.1 | none beyond reading the trees, once they exist |

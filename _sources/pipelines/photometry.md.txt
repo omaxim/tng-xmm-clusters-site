@@ -1,0 +1,14 @@
+# photometry
+
+```{eval-rst}
+.. automodule:: tngxmm.photometry.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline photometry`; catalog `conf/base/catalog/photometry.yml`.
+
+## Nodes
+
+```{kedro-pipeline} photometry
+```

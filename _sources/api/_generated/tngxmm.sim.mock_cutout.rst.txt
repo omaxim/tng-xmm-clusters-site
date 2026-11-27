@@ -1,0 +1,29 @@
+tngxmm.sim.mock\_cutout
+=======================
+
+.. automodule:: tngxmm.sim.mock_cutout
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BOX_R500_DEFAULT
+      BOX_PTYPES
+      COVER_NPIX
+      ZOOM_BATCH
+      GEOMETRY_RTOL
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      box_gas_diagnostics
+      halo_boxes
+      is_done
+      mock_cutouts_path
+      resolve_box_r500
+      run_snapshot
+      stored_halos
+      verify_file
+   

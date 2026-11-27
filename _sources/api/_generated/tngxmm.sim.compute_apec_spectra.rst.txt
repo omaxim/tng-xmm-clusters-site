@@ -1,0 +1,28 @@
+tngxmm.sim.compute\_apec\_spectra
+=================================
+
+.. automodule:: tngxmm.sim.compute_apec_spectra
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SOXS_APEC_VERSION
+      ENV_APEC_ROOT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_apec_spectra
+      get_apec_vapec
+      get_apec_var_spec
+      get_dylan_emissivity
+      get_obsframe_emissivity
+      resolve_apec_root
+      resolve_table_path
+      solar_mass_fractions
+      solar_metal_mass_fraction
+      table_name
+   

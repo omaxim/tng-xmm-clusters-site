@@ -1,0 +1,13 @@
+tngxmm.core.logging
+===================
+
+.. automodule:: tngxmm.core.logging
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      configure_logging
+      get_logger
+   

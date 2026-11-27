@@ -1,0 +1,69 @@
+tngxmm.sim.generate\_view
+=========================
+
+.. automodule:: tngxmm.sim.generate_view
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MEASURE_COLS
+      CACHED_META_COLS
+      LX_REFERENCE_GAS
+      TRUTH_SELECTIONS
+      TRUTH_SELECTIONS_HSE
+      BOX_CYLINDER_MARGIN
+      MOCK_GAS_REGIONS
+      TNGREF_COLS
+      SNAPSHOT_COLS
+      VIEW_PRODUCT_FILES
+      SAS_MARKER
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cached_position_current
+      campaign_ccf_dir
+      campaign_source
+      catalogue_position_record
+      default_dependencies
+      draw_observing_conditions
+      ensure_truth_profile
+      generate_halo_views
+      generate_view
+      halo_dir_of
+      hse_truth_kwargs
+      instrument_stage
+      instrument_view_kwargs
+      load_tngref_cells
+      observation_columns
+      opts_sim
+      package_soft_protons
+      photon_switches
+      physics_real_times
+      provenance_fields
+      recorded_provenance
+      reference_clip_kpc
+      result_columns
+      run_halo_task
+      sim_label
+      snapshot_info
+      stage_observing_conditions
+      view_complete
+      view_dir_of
+      view_products
+      view_soft_protons
+      view_truth_columns
+      warm_campaign_caches
+      write_halo_truth_profile
+      write_tngref_view_map
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SimOptions
+      ViewDependencies
+   

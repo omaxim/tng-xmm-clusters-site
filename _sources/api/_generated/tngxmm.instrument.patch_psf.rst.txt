@@ -1,0 +1,13 @@
+tngxmm.instrument.patch\_psf
+============================
+
+.. automodule:: tngxmm.instrument.patch_psf
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      patch_psf
+      psf_convole_evt_fixed
+   

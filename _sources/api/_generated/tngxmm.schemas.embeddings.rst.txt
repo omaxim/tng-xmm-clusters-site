@@ -1,0 +1,12 @@
+tngxmm.schemas.embeddings
+=========================
+
+.. automodule:: tngxmm.schemas.embeddings
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      validate_embeddings
+   

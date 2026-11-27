@@ -1,0 +1,1148 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="tngxmm.core.fetch" href="tngxmm.core.fetch.html"><link rel="prev" title="tngxmm.core.datasets" href="tngxmm.core.datasets.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>tngxmm.core.diskguard - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Development log</a><input aria-label="Toggle navigation of Development log" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/PSF_WINDOW_VALIDATION.html">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-tngxmm.core.diskguard">
+<span id="tngxmm-core-diskguard"></span><h1>tngxmm.core.diskguard<a class="headerlink" href="#module-tngxmm.core.diskguard" title="Link to this heading">¶</a></h1>
+<p>Writes that survive a full disk: atomic files, completeness tests, the disk-full stop.</p>
+<p>A production run can hit the quota in the middle of any write.  Three rules keep such a run resumable,
+and every stage driver (generation pool, SAS queue, fit batch) follows them through this module:</p>
+<ul class="simple">
+<li><p>a product is written under a temporary name in its own directory (<code class="docutils literal notranslate"><span class="pre">.&lt;name&gt;.&lt;pid&gt;.tmp</span></code>), synced and
+renamed (<a class="reference internal" href="#tngxmm.core.diskguard.atomic_path" title="tngxmm.core.diskguard.atomic_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">atomic_path()</span></code></a>, <a class="reference internal" href="#tngxmm.core.diskguard.atomic_open" title="tngxmm.core.diskguard.atomic_open"><code class="xref py py-func docutils literal notranslate"><span class="pre">atomic_open()</span></code></a>, <a class="reference internal" href="#tngxmm.core.diskguard.write_text" title="tngxmm.core.diskguard.write_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_text()</span></code></a>, <a class="reference internal" href="#tngxmm.core.diskguard.write_json" title="tngxmm.core.diskguard.write_json"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_json()</span></code></a>), so a file with
+its final name is complete.  An item with several files gets its done-marker last, after the files
+were synced (<a class="reference internal" href="#tngxmm.core.diskguard.sync_tree" title="tngxmm.core.diskguard.sync_tree"><code class="xref py py-func docutils literal notranslate"><span class="pre">sync_tree()</span></code></a>), and loses the marker first when it is made again;</p></li>
+<li><p>a failure caused by the disk (<code class="docutils literal notranslate"><span class="pre">ENOSPC</span></code> / <code class="docutils literal notranslate"><span class="pre">EDQUOT</span></code>, or the message an external tool leaves:
+<a class="reference internal" href="#tngxmm.core.diskguard.is_disk_error" title="tngxmm.core.diskguard.is_disk_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_disk_error()</span></code></a>, and <a class="reference internal" href="#tngxmm.core.diskguard.failure_status" title="tngxmm.core.diskguard.failure_status"><code class="xref py py-func docutils literal notranslate"><span class="pre">failure_status()</span></code></a>, which also asks the disk itself with a probe write) is
+not a failure of the item: its status is <code class="docutils literal notranslate"><span class="pre">interrupted:</span> <span class="pre">disk</span></code> (<a class="reference internal" href="#tngxmm.core.diskguard.INTERRUPTED" title="tngxmm.core.diskguard.INTERRUPTED"><code class="xref py py-data docutils literal notranslate"><span class="pre">INTERRUPTED</span></code></a>), it is recorded
+nowhere and the next run makes it again;</p></li>
+<li><p>after the first such item the driver takes no new item (<a class="reference internal" href="#tngxmm.core.diskguard.request_stop" title="tngxmm.core.diskguard.request_stop"><code class="xref py py-func docutils literal notranslate"><span class="pre">request_stop()</span></code></a>, seen by the forked workers
+through <a class="reference internal" href="#tngxmm.core.diskguard.stop_requested" title="tngxmm.core.diskguard.stop_requested"><code class="xref py py-func docutils literal notranslate"><span class="pre">stop_requested()</span></code></a>), lets the running ones end and exits with <a class="reference internal" href="#tngxmm.core.diskguard.EXIT_DISK" title="tngxmm.core.diskguard.EXIT_DISK"><code class="xref py py-data docutils literal notranslate"><span class="pre">EXIT_DISK</span></code></a> after one line
+starting with <code class="docutils literal notranslate"><span class="pre">DISK</span> <span class="pre">FULL:</span></code> (<a class="reference internal" href="#tngxmm.core.diskguard.disk_message" title="tngxmm.core.diskguard.disk_message"><code class="xref py py-func docutils literal notranslate"><span class="pre">disk_message()</span></code></a>).</p></li>
+</ul>
+<p>The guard (<a class="reference internal" href="#tngxmm.core.diskguard.check_space" title="tngxmm.core.diskguard.check_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_space()</span></code></a>, <a class="reference internal" href="#tngxmm.core.diskguard.SpaceGuard" title="tngxmm.core.diskguard.SpaceGuard"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceGuard</span></code></a>) runs before the first item and every few minutes.
+<code class="docutils literal notranslate"><span class="pre">os.statvfs</span></code> gives the free space of the file system, not of a user’s quota, so the guard also writes
+and removes a few MB in the output root (<a class="reference internal" href="#tngxmm.core.diskguard.probe_write" title="tngxmm.core.diskguard.probe_write"><code class="xref py py-func docutils literal notranslate"><span class="pre">probe_write()</span></code></a>): that write fails when the quota’s hard limit
+is reached.  Neither sees how much room is left under the quota.</p>
+<p>Settings (environment; the defaults need no tuning): <code class="docutils literal notranslate"><span class="pre">TNGXMM_DISK_PROBE_MB</span></code> (8; 0 = no probe write),
+<code class="docutils literal notranslate"><span class="pre">TNGXMM_DISK_MIN_FREE_GB</span></code> (1, file-system free space) and <code class="docutils literal notranslate"><span class="pre">TNGXMM_DISK_CHECK_S</span></code> (120, the least time
+between two checks of a running driver).</p>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.EXIT_DISK" title="tngxmm.core.diskguard.EXIT_DISK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXIT_DISK</span></code></a></p></td>
+<td><p>exit code of a driver stopped by a full disk (the value of ENOSPC); the job scripts pass it on</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.INTERRUPTED" title="tngxmm.core.diskguard.INTERRUPTED"><code class="xref py py-obj docutils literal notranslate"><span class="pre">INTERRUPTED</span></code></a></p></td>
+<td><p>never written to a results table, made again on resume</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.LOG_PREFIX" title="tngxmm.core.diskguard.LOG_PREFIX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_PREFIX</span></code></a></p></td>
+<td><p>first words of the one log line a stopped driver prints</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.atomic_open" title="tngxmm.core.diskguard.atomic_open"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_open</span></code></a>(path[, mode, fsync])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">open(path,</span> <span class="pre">mode)</span></code> through <a class="reference internal" href="#tngxmm.core.diskguard.atomic_path" title="tngxmm.core.diskguard.atomic_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">atomic_path()</span></code></a>: the file appears under its name only when the block ended without an exception.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.atomic_path" title="tngxmm.core.diskguard.atomic_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_path</span></code></a>(path[, fsync])</p></td>
+<td><p>Yield a temporary path next to <code class="docutils literal notranslate"><span class="pre">path</span></code> for a writer that takes a file name; on a clean exit the file is synced and renamed to <code class="docutils literal notranslate"><span class="pre">path</span></code>, on an exception it is removed and <code class="docutils literal notranslate"><span class="pre">path</span></code> is left as it was.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.check_space" title="tngxmm.core.diskguard.check_space"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_space</span></code></a>(root, *[, min_free_gb, probe_mb])</p></td>
+<td><p><a class="reference internal" href="#tngxmm.core.diskguard.DiskFull" title="tngxmm.core.diskguard.DiskFull"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiskFull</span></code></a> when the file system of <code class="docutils literal notranslate"><span class="pre">root</span></code> has less than <code class="docutils literal notranslate"><span class="pre">min_free_gb</span></code> free (<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_MIN_FREE_GB</span></code>, 1) or a probe write there fails (<a class="reference internal" href="#tngxmm.core.diskguard.probe_write" title="tngxmm.core.diskguard.probe_write"><code class="xref py py-func docutils literal notranslate"><span class="pre">probe_write()</span></code></a>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.clear_stop" title="tngxmm.core.diskguard.clear_stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_stop</span></code></a>()</p></td>
+<td><p>Forget the stop flag (after the pool has shut down).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.completed_or_tick" title="tngxmm.core.diskguard.completed_or_tick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">completed_or_tick</span></code></a>(futures, interval_s)</p></td>
+<td><p>The futures as they end (as <code class="docutils literal notranslate"><span class="pre">concurrent.futures.as_completed</span></code>), and <code class="docutils literal notranslate"><span class="pre">None</span></code> whenever <code class="docutils literal notranslate"><span class="pre">interval_s</span></code> passes without one ending: the driver checks the disk on a tick, so a disk that fills while every worker is busy for hours is noticed without waiting for the next item to end.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.copy_file" title="tngxmm.core.diskguard.copy_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_file</span></code></a>(src, dst[, fsync])</p></td>
+<td><p>Copy <code class="docutils literal notranslate"><span class="pre">src</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code> atomically.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.csv_tail_complete" title="tngxmm.core.diskguard.csv_tail_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">csv_tail_complete</span></code></a>(path)</p></td>
+<td><p>True when the text file is empty or ends with a newline (its last line was written whole).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.disk_message" title="tngxmm.core.diskguard.disk_message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disk_message</span></code></a>(stage, n_interrupted, root[, ...])</p></td>
+<td><p>The log line of a driver stopped by a full disk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.existing_dir" title="tngxmm.core.diskguard.existing_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">existing_dir</span></code></a>(path)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">path</span></code>, or its nearest parent that exists (the directory a probe of a root not made yet uses).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.failure_status" title="tngxmm.core.diskguard.failure_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">failure_status</span></code></a>(exc[, root])</p></td>
+<td><p>The status of an item that failed with <code class="docutils literal notranslate"><span class="pre">exc</span></code>: <code class="docutils literal notranslate"><span class="pre">interrupted:</span> <span class="pre">disk:</span> <span class="pre">...</span></code> when the failure is the disk's, else None (the caller records its own error).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.fits_complete" title="tngxmm.core.diskguard.fits_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fits_complete</span></code></a>(path[, hdus])</p></td>
+<td><p>True when the FITS file (plain or gzipped) opens, holds the HDUs named in <code class="docutils literal notranslate"><span class="pre">hdus</span></code> and every HDU's data can be read to its end.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.free_gb" title="tngxmm.core.diskguard.free_gb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">free_gb</span></code></a>(root)</p></td>
+<td><p>Free space [GB] of the file system that holds <code class="docutils literal notranslate"><span class="pre">root</span></code> (<code class="docutils literal notranslate"><span class="pre">os.statvfs</span></code>; not the quota).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.fsync_file" title="tngxmm.core.diskguard.fsync_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fsync_file</span></code></a>(path)</p></td>
+<td><p>Flush <code class="docutils literal notranslate"><span class="pre">path</span></code> to the disk; a write the kernel had only buffered fails here, not later.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.hdf5_complete" title="tngxmm.core.diskguard.hdf5_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hdf5_complete</span></code></a>(path[, names])</p></td>
+<td><p>True when the HDF5 file opens (a truncated one does not) and holds the objects in <code class="docutils literal notranslate"><span class="pre">names</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.install_stop" title="tngxmm.core.diskguard.install_stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">install_stop</span></code></a>([context])</p></td>
+<td><p>Create the stop flag in the parent, before the workers fork (they inherit it).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.interrupted_status" title="tngxmm.core.diskguard.interrupted_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interrupted_status</span></code></a>([detail])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">interrupted:</span> <span class="pre">disk:</span> <span class="pre">&lt;detail&gt;</span></code> (one line, at most 150 characters of detail).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.is_disk_error" title="tngxmm.core.diskguard.is_disk_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_disk_error</span></code></a>(exc)</p></td>
+<td><p>True when <code class="docutils literal notranslate"><span class="pre">exc</span></code>, or an exception it was raised from or while handling, is a disk-full error: an <code class="docutils literal notranslate"><span class="pre">OSError</span></code> with errno ENOSPC or EDQUOT, or any exception whose message says so (h5py and cfitsio raise without the errno).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.is_interrupted" title="tngxmm.core.diskguard.is_interrupted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_interrupted</span></code></a>(status)</p></td>
+<td><p>True for a status made by <a class="reference internal" href="#tngxmm.core.diskguard.interrupted_status" title="tngxmm.core.diskguard.interrupted_status"><code class="xref py py-func docutils literal notranslate"><span class="pre">interrupted_status()</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.npz_complete" title="tngxmm.core.diskguard.npz_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">npz_complete</span></code></a>(path[, names])</p></td>
+<td><p>True when the <code class="docutils literal notranslate"><span class="pre">.npz</span></code> archive opens, passes its checksums and holds the arrays in <code class="docutils literal notranslate"><span class="pre">names</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.probe_write" title="tngxmm.core.diskguard.probe_write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">probe_write</span></code></a>(root[, mb])</p></td>
+<td><p>Write <code class="docutils literal notranslate"><span class="pre">mb</span></code> MB (default <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_PROBE_MB</span></code>, 8) to a file in <code class="docutils literal notranslate"><span class="pre">root</span></code>, sync it and remove it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.read_json" title="tngxmm.core.diskguard.read_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json</span></code></a>(path)</p></td>
+<td><p>The content of a JSON file, or None when it is missing, empty or cut.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.remove_stale_tmp" title="tngxmm.core.diskguard.remove_stale_tmp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_stale_tmp</span></code></a>(directory[, older_than_s])</p></td>
+<td><p>Remove the temporary files (<code class="docutils literal notranslate"><span class="pre">.&lt;name&gt;.&lt;pid&gt;.tmp</span></code>) left in <code class="docutils literal notranslate"><span class="pre">directory</span></code> (not below it) by a writer that was killed, and return their names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.repair_csv_tail" title="tngxmm.core.diskguard.repair_csv_tail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">repair_csv_tail</span></code></a>(path)</p></td>
+<td><p>Cut a last line without its newline off an append-only table (a row a full disk or a kill left half written) and return the number of bytes removed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.request_stop" title="tngxmm.core.diskguard.request_stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_stop</span></code></a>()</p></td>
+<td><p>Tell the workers to take no new item.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.stop_requested" title="tngxmm.core.diskguard.stop_requested"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop_requested</span></code></a>()</p></td>
+<td><p>True once a disk-full stop was requested in this run (False without a flag).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.sync_tree" title="tngxmm.core.diskguard.sync_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync_tree</span></code></a>(root)</p></td>
+<td><p>Flush every regular file below <code class="docutils literal notranslate"><span class="pre">root</span></code> to the disk (links are not followed) and return <code class="docutils literal notranslate"><span class="pre">{relative</span> <span class="pre">path:</span> <span class="pre">size}</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.text_says_disk" title="tngxmm.core.diskguard.text_says_disk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text_says_disk</span></code></a>(text)</p></td>
+<td><p>True when <code class="docutils literal notranslate"><span class="pre">text</span></code> (a message, the stderr or the log of a tool) holds a disk-full message.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.tmp_name" title="tngxmm.core.diskguard.tmp_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmp_name</span></code></a>(path)</p></td>
+<td><p>The temporary name of <code class="docutils literal notranslate"><span class="pre">path</span></code>: <code class="docutils literal notranslate"><span class="pre">.&lt;name&gt;.&lt;pid&gt;.tmp</span></code> in the same directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.write_json" title="tngxmm.core.diskguard.write_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_json</span></code></a>(path, obj[, fsync])</p></td>
+<td><p>Write <code class="docutils literal notranslate"><span class="pre">obj</span></code> as JSON to <code class="docutils literal notranslate"><span class="pre">path</span></code> atomically (<code class="docutils literal notranslate"><span class="pre">dump_kwargs</span></code> go to <code class="docutils literal notranslate"><span class="pre">json.dump</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.write_text" title="tngxmm.core.diskguard.write_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_text</span></code></a>(path, text[, fsync])</p></td>
+<td><p>Write <code class="docutils literal notranslate"><span class="pre">text</span></code> to <code class="docutils literal notranslate"><span class="pre">path</span></code> atomically.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.SpaceGuard" title="tngxmm.core.diskguard.SpaceGuard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpaceGuard</span></code></a>(*roots[, interval_s])</p></td>
+<td><p><a class="reference internal" href="#tngxmm.core.diskguard.check_space" title="tngxmm.core.diskguard.check_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_space()</span></code></a> on some roots, at most once per <code class="docutils literal notranslate"><span class="pre">interval_s</span></code> (<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_CHECK_S</span></code>, 120).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tngxmm.core.diskguard.DiskFull" title="tngxmm.core.diskguard.DiskFull"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiskFull</span></code></a>(message)</p></td>
+<td><p>A write failed because the disk or the quota is full (errno ENOSPC).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.EXIT_DISK">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">EXIT_DISK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#tngxmm.core.diskguard.EXIT_DISK" title="Link to this definition">¶</a></dt>
+<dd><p>exit code of a driver stopped by a full disk (the value of ENOSPC); the job scripts pass it on</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.INTERRUPTED">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">INTERRUPTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'interrupted:</span> <span class="pre">disk'</span></em><a class="headerlink" href="#tngxmm.core.diskguard.INTERRUPTED" title="Link to this definition">¶</a></dt>
+<dd><p>never written to a results table, made again on resume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>status prefix of an item stopped by a full disk</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.LOG_PREFIX">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">LOG_PREFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DISK</span> <span class="pre">FULL:'</span></em><a class="headerlink" href="#tngxmm.core.diskguard.LOG_PREFIX" title="Link to this definition">¶</a></dt>
+<dd><p>first words of the one log line a stopped driver prints</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.DiskFull">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">DiskFull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#DiskFull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.DiskFull" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#OSError" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></a></p>
+<p>A write failed because the disk or the quota is full (errno ENOSPC).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.text_says_disk">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">text_says_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#text_says_disk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.text_says_disk" title="Link to this definition">¶</a></dt>
+<dd><p>True when <code class="docutils literal notranslate"><span class="pre">text</span></code> (a message, the stderr or the log of a tool) holds a disk-full message.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.is_disk_error">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">is_disk_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#is_disk_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.is_disk_error" title="Link to this definition">¶</a></dt>
+<dd><p>True when <code class="docutils literal notranslate"><span class="pre">exc</span></code>, or an exception it was raised from or while handling, is a disk-full error: an
+<code class="docutils literal notranslate"><span class="pre">OSError</span></code> with errno ENOSPC or EDQUOT, or any exception whose message says so (h5py and cfitsio raise
+without the errno).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.interrupted_status">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">interrupted_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#interrupted_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.interrupted_status" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">interrupted:</span> <span class="pre">disk:</span> <span class="pre">&lt;detail&gt;</span></code> (one line, at most 150 characters of detail).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.is_interrupted">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">is_interrupted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#is_interrupted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.is_interrupted" title="Link to this definition">¶</a></dt>
+<dd><p>True for a status made by <a class="reference internal" href="#tngxmm.core.diskguard.interrupted_status" title="tngxmm.core.diskguard.interrupted_status"><code class="xref py py-func docutils literal notranslate"><span class="pre">interrupted_status()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.failure_status">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">failure_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#failure_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.failure_status" title="Link to this definition">¶</a></dt>
+<dd><p>The status of an item that failed with <code class="docutils literal notranslate"><span class="pre">exc</span></code>: <code class="docutils literal notranslate"><span class="pre">interrupted:</span> <span class="pre">disk:</span> <span class="pre">...</span></code> when the failure is the
+disk’s, else None (the caller records its own error).  The disk is blamed when the exception says so
+(<a class="reference internal" href="#tngxmm.core.diskguard.is_disk_error" title="tngxmm.core.diskguard.is_disk_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_disk_error()</span></code></a>) or, with <code class="docutils literal notranslate"><span class="pre">root</span></code>, when a probe write there fails: an external tool that ran
+out of space often reports something else.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.tmp_name">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">tmp_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#tmp_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.tmp_name" title="Link to this definition">¶</a></dt>
+<dd><p>The temporary name of <code class="docutils literal notranslate"><span class="pre">path</span></code>: <code class="docutils literal notranslate"><span class="pre">.&lt;name&gt;.&lt;pid&gt;.tmp</span></code> in the same directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.fsync_file">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">fsync_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#fsync_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.fsync_file" title="Link to this definition">¶</a></dt>
+<dd><p>Flush <code class="docutils literal notranslate"><span class="pre">path</span></code> to the disk; a write the kernel had only buffered fails here, not later.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.atomic_path">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">atomic_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#atomic_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.atomic_path" title="Link to this definition">¶</a></dt>
+<dd><p>Yield a temporary path next to <code class="docutils literal notranslate"><span class="pre">path</span></code> for a writer that takes a file name; on a clean exit the
+file is synced and renamed to <code class="docutils literal notranslate"><span class="pre">path</span></code>, on an exception it is removed and <code class="docutils literal notranslate"><span class="pre">path</span></code> is left as it was.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.atomic_open">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">atomic_open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#atomic_open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.atomic_open" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">open(path,</span> <span class="pre">mode)</span></code> through <a class="reference internal" href="#tngxmm.core.diskguard.atomic_path" title="tngxmm.core.diskguard.atomic_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">atomic_path()</span></code></a>: the file appears under its name only when the block
+ended without an exception.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.write_text">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">write_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#write_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.write_text" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">text</span></code> to <code class="docutils literal notranslate"><span class="pre">path</span></code> atomically.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.write_json">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">write_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dump_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#write_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.write_json" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">obj</span></code> as JSON to <code class="docutils literal notranslate"><span class="pre">path</span></code> atomically (<code class="docutils literal notranslate"><span class="pre">dump_kwargs</span></code> go to <code class="docutils literal notranslate"><span class="pre">json.dump</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.copy_file">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">copy_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fsync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#copy_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.copy_file" title="Link to this definition">¶</a></dt>
+<dd><p>Copy <code class="docutils literal notranslate"><span class="pre">src</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code> atomically.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.sync_tree">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">sync_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#sync_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.sync_tree" title="Link to this definition">¶</a></dt>
+<dd><p>Flush every regular file below <code class="docutils literal notranslate"><span class="pre">root</span></code> to the disk (links are not followed) and return
+<code class="docutils literal notranslate"><span class="pre">{relative</span> <span class="pre">path:</span> <span class="pre">size}</span></code>.  Called before an item’s done-marker is written, so that a write error the
+kernel deferred stops the item instead of leaving a marker next to a short file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.remove_stale_tmp">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">remove_stale_tmp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">older_than_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#remove_stale_tmp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.remove_stale_tmp" title="Link to this definition">¶</a></dt>
+<dd><p>Remove the temporary files (<code class="docutils literal notranslate"><span class="pre">.&lt;name&gt;.&lt;pid&gt;.tmp</span></code>) left in <code class="docutils literal notranslate"><span class="pre">directory</span></code> (not below it) by a writer
+that was killed, and return their names.  <code class="docutils literal notranslate"><span class="pre">older_than_s</span></code>: leave younger files alone, for a directory
+other processes may be writing to; an item’s own directory is cleaned with 0 when the item starts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.read_json">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">read_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#read_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.read_json" title="Link to this definition">¶</a></dt>
+<dd><p>The content of a JSON file, or None when it is missing, empty or cut.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.fits_complete">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">fits_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#fits_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.fits_complete" title="Link to this definition">¶</a></dt>
+<dd><p>True when the FITS file (plain or gzipped) opens, holds the HDUs named in <code class="docutils literal notranslate"><span class="pre">hdus</span></code> and every HDU’s
+data can be read to its end.  A file cut by a full disk fails one of these.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.hdf5_complete">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">hdf5_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#hdf5_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.hdf5_complete" title="Link to this definition">¶</a></dt>
+<dd><p>True when the HDF5 file opens (a truncated one does not) and holds the objects in <code class="docutils literal notranslate"><span class="pre">names</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.npz_complete">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">npz_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#npz_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.npz_complete" title="Link to this definition">¶</a></dt>
+<dd><p>True when the <code class="docutils literal notranslate"><span class="pre">.npz</span></code> archive opens, passes its checksums and holds the arrays in <code class="docutils literal notranslate"><span class="pre">names</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.csv_tail_complete">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">csv_tail_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#csv_tail_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.csv_tail_complete" title="Link to this definition">¶</a></dt>
+<dd><p>True when the text file is empty or ends with a newline (its last line was written whole).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.repair_csv_tail">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">repair_csv_tail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#repair_csv_tail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.repair_csv_tail" title="Link to this definition">¶</a></dt>
+<dd><p>Cut a last line without its newline off an append-only table (a row a full disk or a kill left
+half written) and return the number of bytes removed.  A missing file is left alone.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.existing_dir">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">existing_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#existing_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.existing_dir" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">path</span></code>, or its nearest parent that exists (the directory a probe of a root not made yet uses).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.free_gb">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">free_gb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#free_gb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.free_gb" title="Link to this definition">¶</a></dt>
+<dd><p>Free space [GB] of the file system that holds <code class="docutils literal notranslate"><span class="pre">root</span></code> (<code class="docutils literal notranslate"><span class="pre">os.statvfs</span></code>; not the quota).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.probe_write">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">probe_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#probe_write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.probe_write" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">mb</span></code> MB (default <code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_PROBE_MB</span></code>, 8) to a file in <code class="docutils literal notranslate"><span class="pre">root</span></code>, sync it and remove it.
+<a class="reference internal" href="#tngxmm.core.diskguard.DiskFull" title="tngxmm.core.diskguard.DiskFull"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiskFull</span></code></a> when the write fails for lack of space or quota; other errors pass through.  This is
+the only test that sees an exhausted quota; it does not tell how much room is left.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.check_space">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">check_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_free_gb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probe_mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#check_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.check_space" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#tngxmm.core.diskguard.DiskFull" title="tngxmm.core.diskguard.DiskFull"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiskFull</span></code></a> when the file system of <code class="docutils literal notranslate"><span class="pre">root</span></code> has less than <code class="docutils literal notranslate"><span class="pre">min_free_gb</span></code> free
+(<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_MIN_FREE_GB</span></code>, 1) or a probe write there fails (<a class="reference internal" href="#tngxmm.core.diskguard.probe_write" title="tngxmm.core.diskguard.probe_write"><code class="xref py py-func docutils literal notranslate"><span class="pre">probe_write()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.SpaceGuard">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">SpaceGuard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">roots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#SpaceGuard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.SpaceGuard" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><a class="reference internal" href="#tngxmm.core.diskguard.check_space" title="tngxmm.core.diskguard.check_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_space()</span></code></a> on some roots, at most once per <code class="docutils literal notranslate"><span class="pre">interval_s</span></code> (<code class="docutils literal notranslate"><span class="pre">$TNGXMM_DISK_CHECK_S</span></code>, 120).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.SpaceGuard.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#SpaceGuard.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.SpaceGuard.check" title="Link to this definition">¶</a></dt>
+<dd><p>Check the roots if the interval has passed (or <code class="docutils literal notranslate"><span class="pre">force</span></code>); <a class="reference internal" href="#tngxmm.core.diskguard.DiskFull" title="tngxmm.core.diskguard.DiskFull"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiskFull</span></code></a> when one is full.
+A root that cannot be probed for another reason (no permission, gone) is left to the write that
+will name it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.install_stop">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">install_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#install_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.install_stop" title="Link to this definition">¶</a></dt>
+<dd><p>Create the stop flag in the parent, before the workers fork (they inherit it).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.clear_stop">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">clear_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#clear_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.clear_stop" title="Link to this definition">¶</a></dt>
+<dd><p>Forget the stop flag (after the pool has shut down).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.request_stop">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">request_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#request_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.request_stop" title="Link to this definition">¶</a></dt>
+<dd><p>Tell the workers to take no new item.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.stop_requested">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">stop_requested</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#stop_requested"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.stop_requested" title="Link to this definition">¶</a></dt>
+<dd><p>True once a disk-full stop was requested in this run (False without a flag).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.completed_or_tick">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">completed_or_tick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">futures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#completed_or_tick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.completed_or_tick" title="Link to this definition">¶</a></dt>
+<dd><p>The futures as they end (as <code class="docutils literal notranslate"><span class="pre">concurrent.futures.as_completed</span></code>), and <code class="docutils literal notranslate"><span class="pre">None</span></code> whenever <code class="docutils literal notranslate"><span class="pre">interval_s</span></code>
+passes without one ending: the driver checks the disk on a tick, so a disk that fills while every worker
+is busy for hours is noticed without waiting for the next item to end.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tngxmm.core.diskguard.disk_message">
+<span class="sig-prename descclassname"><span class="pre">tngxmm.core.diskguard.</span></span><span class="sig-name descname"><span class="pre">disk_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_interrupted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tngxmm/core/diskguard.html#disk_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tngxmm.core.diskguard.disk_message" title="Link to this definition">¶</a></dt>
+<dd><p>The log line of a driver stopped by a full disk.</p>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="tngxmm.core.fetch.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">tngxmm.core.fetch</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="tngxmm.core.datasets.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">tngxmm.core.datasets</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">tngxmm.core.diskguard</a><ul>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.EXIT_DISK"><code class="docutils literal notranslate"><span class="pre">EXIT_DISK</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.INTERRUPTED"><code class="docutils literal notranslate"><span class="pre">INTERRUPTED</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.LOG_PREFIX"><code class="docutils literal notranslate"><span class="pre">LOG_PREFIX</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.DiskFull"><code class="docutils literal notranslate"><span class="pre">DiskFull</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.text_says_disk"><code class="docutils literal notranslate"><span class="pre">text_says_disk()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.is_disk_error"><code class="docutils literal notranslate"><span class="pre">is_disk_error()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.interrupted_status"><code class="docutils literal notranslate"><span class="pre">interrupted_status()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.is_interrupted"><code class="docutils literal notranslate"><span class="pre">is_interrupted()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.failure_status"><code class="docutils literal notranslate"><span class="pre">failure_status()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.tmp_name"><code class="docutils literal notranslate"><span class="pre">tmp_name()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.fsync_file"><code class="docutils literal notranslate"><span class="pre">fsync_file()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.atomic_path"><code class="docutils literal notranslate"><span class="pre">atomic_path()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.atomic_open"><code class="docutils literal notranslate"><span class="pre">atomic_open()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.write_text"><code class="docutils literal notranslate"><span class="pre">write_text()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.write_json"><code class="docutils literal notranslate"><span class="pre">write_json()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.copy_file"><code class="docutils literal notranslate"><span class="pre">copy_file()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.sync_tree"><code class="docutils literal notranslate"><span class="pre">sync_tree()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.remove_stale_tmp"><code class="docutils literal notranslate"><span class="pre">remove_stale_tmp()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.read_json"><code class="docutils literal notranslate"><span class="pre">read_json()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.fits_complete"><code class="docutils literal notranslate"><span class="pre">fits_complete()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.hdf5_complete"><code class="docutils literal notranslate"><span class="pre">hdf5_complete()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.npz_complete"><code class="docutils literal notranslate"><span class="pre">npz_complete()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.csv_tail_complete"><code class="docutils literal notranslate"><span class="pre">csv_tail_complete()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.repair_csv_tail"><code class="docutils literal notranslate"><span class="pre">repair_csv_tail()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.existing_dir"><code class="docutils literal notranslate"><span class="pre">existing_dir()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.free_gb"><code class="docutils literal notranslate"><span class="pre">free_gb()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.probe_write"><code class="docutils literal notranslate"><span class="pre">probe_write()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.check_space"><code class="docutils literal notranslate"><span class="pre">check_space()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.SpaceGuard"><code class="docutils literal notranslate"><span class="pre">SpaceGuard</span></code></a><ul>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.SpaceGuard.check"><code class="docutils literal notranslate"><span class="pre">SpaceGuard.check()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.install_stop"><code class="docutils literal notranslate"><span class="pre">install_stop()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.clear_stop"><code class="docutils literal notranslate"><span class="pre">clear_stop()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.request_stop"><code class="docutils literal notranslate"><span class="pre">request_stop()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.stop_requested"><code class="docutils literal notranslate"><span class="pre">stop_requested()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.completed_or_tick"><code class="docutils literal notranslate"><span class="pre">completed_or_tick()</span></code></a></li>
+<li><a class="reference internal" href="#tngxmm.core.diskguard.disk_message"><code class="docutils literal notranslate"><span class="pre">disk_message()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

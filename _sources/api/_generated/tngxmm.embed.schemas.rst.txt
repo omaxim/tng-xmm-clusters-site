@@ -1,0 +1,14 @@
+tngxmm.embed.schemas
+====================
+
+.. automodule:: tngxmm.embed.schemas
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ACCEPTED_ARTEFACTS
+      EXTRA_ATTRS
+      REGRESSION_D_ENTRIES
+   

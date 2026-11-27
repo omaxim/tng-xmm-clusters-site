@@ -1,0 +1,18 @@
+tngxmm.certify.queues
+=====================
+
+.. automodule:: tngxmm.certify.queues
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_closure_seeds
+      check_seed_pairs
+      closure_fit_tasks
+      env_prefix
+      mock_fit_tasks
+      real_fit_tasks
+      task_id
+   

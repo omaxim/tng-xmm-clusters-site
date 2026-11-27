@@ -1,0 +1,22 @@
+tngxmm.sim.build\_apec\_table
+=============================
+
+.. automodule:: tngxmm.sim.build_apec_table
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TEMET_BANDS
+      CONVENTIONS
+      BANDS
+      DEFAULT_APEC_VERSION
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apec_input_paths
+      build_apec_table
+   

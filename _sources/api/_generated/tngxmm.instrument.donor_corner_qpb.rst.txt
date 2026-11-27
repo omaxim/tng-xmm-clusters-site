@@ -1,0 +1,42 @@
+tngxmm.instrument.donor\_corner\_qpb
+====================================
+
+.. automodule:: tngxmm.instrument.donor_corner_qpb
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      QPB_LEVELS
+      PPS_BANDS_EV
+      PPS_BAND_GAPS_EV
+      OUT_OF_FOV
+      MOS_CORNER_EXCLUDE
+      CORNER_BAND_EV
+      PN_OOT
+      CAMS
+      PN_QUADRANTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_corner_band_scales
+      camera_qpb_level
+      corner_excluded
+      corner_mask
+      corner_scale
+      donor_corner_band_scales
+      donor_corner_counts
+      donor_unit_factors
+      flare_gti
+      fwc_infov_rate
+      fwc_reference
+      gti_mask
+      gti_matching_ontime
+      gti_overlap
+      pattern_max
+      pps_band_parts
+      simulated_corner_measurement
+   

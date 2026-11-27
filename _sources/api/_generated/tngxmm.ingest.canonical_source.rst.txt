@@ -1,0 +1,28 @@
+tngxmm.ingest.canonical\_source
+===============================
+
+.. automodule:: tngxmm.ingest.canonical_source
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PTYPE_KIND
+      GFM_COLUMNS
+      GROUP_FIELDS_NAN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      open_canonical_source
+      protocol_units
+      select_cube_halos
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CanonicalHaloSource
+   

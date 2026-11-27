@@ -1,0 +1,32 @@
+tngxmm.sim.temet\_xray
+======================
+
+.. automodule:: tngxmm.sim.temet_xray
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TABLE_NAME
+      TABLE_SHA256
+      Z_SOLAR_TEMET
+      FIELDS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      import_temet
+      resolve_table_path
+      temet_cell_inputs
+      temet_emissivity
+      temet_luminosity
+      temet_root
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TemetGasSim
+   

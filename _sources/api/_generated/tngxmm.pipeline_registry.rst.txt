@@ -1,0 +1,21 @@
+tngxmm.pipeline\_registry
+=========================
+
+.. automodule:: tngxmm.pipeline_registry
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      EXTRA_PIPELINES
+      NOT_IN_DEFAULT
+      STAGE_ENV
+      NODE_ENV
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      register_pipelines
+   

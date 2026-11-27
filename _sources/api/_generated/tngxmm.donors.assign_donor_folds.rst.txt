@@ -1,0 +1,28 @@
+tngxmm.donors.assign\_donor\_folds
+==================================
+
+.. automodule:: tngxmm.donors.assign_donor_folds
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      N_FOLDS
+      DONOR_FOLD_SEED
+      N_Z_BINS
+      FOLD_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_donor_fold_groups
+      assign_donor_folds
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      DonorFoldError
+   

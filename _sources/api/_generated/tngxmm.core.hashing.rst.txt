@@ -1,0 +1,22 @@
+tngxmm.core.hashing
+===================
+
+.. automodule:: tngxmm.core.hashing
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CHUNK_BYTES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      file_digest
+      md5_file
+      python_code_digest
+      sha256_file
+      update_sha256sums
+   

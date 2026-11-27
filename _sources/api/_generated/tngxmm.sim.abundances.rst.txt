@@ -1,0 +1,32 @@
+tngxmm.sim.abundances
+=====================
+
+.. automodule:: tngxmm.sim.abundances
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MODES
+      UNTRACKED_RULES
+      ELEMENTS
+      METALS
+      COMMON_PATTERN_TABLE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cell_abundances
+      component_spectra
+      components
+      element_spectra
+      solar_mass_fractions
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Components
+   

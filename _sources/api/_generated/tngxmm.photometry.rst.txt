@@ -1,0 +1,28 @@
+tngxmm.photometry
+=================
+
+.. automodule:: tngxmm.photometry
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   build_obs_centres_guarded
+   build_obs_seed_lx
+   catalogue_positions
+   cli
+   estimate_lx_background
+   find_centre
+   measure_apertures
+   measure_centre_offsets
+   measure_fixed_apertures
+   measure_lx
+   measure_mock_lx
+   measure_obs_lx
+   pipeline
+   recentre_photometry
+   remeasure_campaign_lx
+   schemas

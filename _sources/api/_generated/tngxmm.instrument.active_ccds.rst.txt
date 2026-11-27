@@ -1,0 +1,41 @@
+tngxmm.instrument.active\_ccds
+==============================
+
+.. automodule:: tngxmm.instrument.active_ccds
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ACTIVE_CCD_RULES
+      MOS1_CCD4_STRIPE
+      CCDS
+      MASK_CCDS
+      CCD_LOSSES
+      MOS_CCD_CENTRES_MM
+      MOS_FP_ROTATION_DEG
+      LABEL_TOLERANCE_ARCMIN
+      PN_CCD_WIDTH_ARCMIN
+      PN_ROW_NUMBERS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_active_ccds
+      ccd_frame_arcmin
+      ccd_label_map
+      ccd_masked_response
+      date_rule_ccds
+      default_maps_path
+      default_table_path
+      donor_camera_ccds
+      format_ccds
+      mos_ccd_centres_arcmin
+      mos_focal_to_frame_arcmin
+      package_camera_ccds
+      parse_ccds
+      read_active_ccds
+      read_ccd_maps
+   

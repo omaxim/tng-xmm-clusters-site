@@ -1,0 +1,29 @@
+tngxmm.bank.render\_bank
+========================
+
+.. automodule:: tngxmm.bank.render_bank
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      RENDER_VERSION
+      JPG_FLOOR_OFFSET_DEX
+      COLORMAP
+      ARTEFACTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      center_crop
+      colorize
+      encode_png
+      estimate_background
+      normalize_image
+      render_bank
+      render_png
+      render_relpath
+      render_rgb
+   

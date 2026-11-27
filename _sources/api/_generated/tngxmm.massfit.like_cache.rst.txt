@@ -1,0 +1,25 @@
+tngxmm.massfit.like\_cache
+==========================
+
+.. automodule:: tngxmm.massfit.like_cache
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LIKE_CACHE_MODES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attach
+      detach
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ImageLikelihoodCache
+   

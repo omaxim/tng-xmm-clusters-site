@@ -1,0 +1,29 @@
+tngxmm.donors.build\_max\_targets
+=================================
+
+.. automodule:: tngxmm.donors.build_max_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TNG300_PRESET
+      MAX_HALO_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_nearest_donors
+      build_max_targets
+      max_halo_table
+      max_provenance
+      views_per_halo_stats
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MaxSpec
+   

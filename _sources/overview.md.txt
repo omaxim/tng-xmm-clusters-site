@@ -1,0 +1,83 @@
+# What the pipeline does and produces
+
+The pipeline tests whether a hydrostatic mass measured from an XMM-Newton image of a *simulated* cluster scatters
+and is biased in the way the same measurement is on a *real* cluster. Every mock is therefore observed like a real
+observation, measured like a real observation, and compared with the masses the simulation knows exactly.
+
+```{image} figures/pipeline_overview.png
+:width: 100%
+```
+
+## The data flow
+
+```text
+snapshots and halo catalogues ──ingest──> gas cells of each halo in one canonical form (TNG, FLAMINGO, SIMBA, EAGLE)
+              ──sim──> photons of each projection (three along the simulation axes in `v1`, six icosahedral
+                       axes in pass 2; pyXSIM / SOXS, APEC), truth profiles
+real observations ──obs, donors──> which real XMM observation each view replicates (physics donor) and is
+                                   observed under (conditions donor)
+              ──instrument──> EPIC pn and MOS images under the conditions donor's observation: exposure maps,
+                              vignetting, PSF, particle and sky background, field AGN, out-of-time events;
+                              SAS source detection
+              ──photometry──> L_X in apertures, centres, fixed-aperture fluxes
+              ──massfit──> mbproj2d hydrostatic M500 of mock views and of the real observations (the same code)
+              ──viz──> figures of fits and of mocks against their simulation
+              ──bank──> image renders of mocks and real clusters ──embed──> DINOv3 embeddings
+extra pipelines: donor_tables (the per-donor tables of the data package), validation (the closure grid),
+                 analysis (fit tables), certify (pre-registered rules), realism (the classifier test of mocks
+                 against real observations), setup (the downloads of a machine away from the cluster)
+```
+
+A machine-learning stage that estimates masses from the embeddings (a conditional invertible network, `ml`) is
+planned and not implemented: the stage name exists in the package, no code or pipeline does. It is outside the scope
+of the first paper, whose claims (the real fits against published masses, the mock and real mass ratios, and the bias
+of the method on mocks) rest on the fits alone.
+
+Only `ingest` reads a simulation's own files; every later stage receives gas cells and halo rows in the same
+canonical form, whatever the simulation, and only the cosmology of the generation follows the simulation. TNG-Cluster
+and FLAMINGO L1_m8 are the production pair; TNG300 is the volume-limited comparison sample for TNG-Cluster, TNG100
+and TNG50 test resolution, and SIMBA and EAGLE are validation runs.
+
+The stages and their order (`tngxmm.STAGES`) are the Kedro namespaces, the CLI groups, the catalog fragments
+(`conf/base/catalog/<stage>.yml`) and the citation fragments (`citations/`). {doc}`pipelines/index` lists the
+nodes of every pipeline, generated from the registry.
+
+## What it produces
+
+For every view (one projection of one halo-snapshot, observed as one real observation; {doc}`glossary`):
+
+* the photon list and the absorbed events (not kept by a preset that sets `runtime.drop_events`, such as the pass-1
+  preset); per camera and PPS band the image and exposure map; a merged 0.5-2 keV
+  image and its coverage; the list of field AGN; the SAS source list; `obs_meta.json` with the provenance and the
+  observing conditions;
+* for the TNG presets, a temet-exact intrinsic surface-brightness map, which reproduces the official TNG-Cluster
+  X-ray products;
+* one row of the results table: the halo, the redshifts, L_X measured on the image and intrinsic, temperatures, and
+  the true and intrinsic hydrostatic masses ({doc}`definitions`);
+* per halo-snapshot, the 3-D truth profiles behind the masses.
+
+Then, on request: hydrostatic fits of mocks and of the real observations, the closure grid, the realism evaluation and
+the image bank with its embeddings. A mock beside the real observation it replicates (golden fixture products of the
+current configuration):
+
+```{image} figures/mock_vs_real.png
+:width: 100%
+```
+
+The figures of the current results, with their sources and caveats, are on {doc}`figures`; what the results do and
+do not show is on {doc}`validation`.
+
+## Principles of the code
+
+* Every number is a field of `tngxmm.config.CampaignSpec` with value, unit, reading module and citation
+  ({doc}`configuration`); a preset is the whole physics of a run and its sha256 is stamped on every product.
+  `campaign check` (C1-C17) refuses products of another spec.
+* Mocks and real data go through the same code: the photometry, centring, source masking and fitting functions do
+  not know whether an image is simulated.
+* Each function that uses a published method or code carries `@cites(...)`; `CREDITS.md`, the
+  bibliography (`tngxmm cite`) and the Kedro node tags read the keys. Every assumption is traced to a citation, a
+  measurement or an instrument document, or listed as open ({doc}`assumptions`).
+* Each view has random streams keyed by (campaign, snapshot, halo, projection, replica, purpose)
+  through sha256 (`tngxmm.core.rng`), so a rerun, a different number of workers or a Kedro run write the same bytes.
+
+Units and conventions: {doc}`definitions`.

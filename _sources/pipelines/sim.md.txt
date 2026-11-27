@@ -1,0 +1,14 @@
+# sim
+
+```{eval-rst}
+.. automodule:: tngxmm.sim.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline sim`; catalog `conf/base/catalog/sim.yml`.
+
+## Nodes
+
+```{kedro-pipeline} sim
+```

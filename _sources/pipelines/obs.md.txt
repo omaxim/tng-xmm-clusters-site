@@ -1,0 +1,14 @@
+# obs
+
+```{eval-rst}
+.. automodule:: tngxmm.obs.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline obs`; catalog `conf/base/catalog/obs.yml`.
+
+## Nodes
+
+```{kedro-pipeline} obs
+```

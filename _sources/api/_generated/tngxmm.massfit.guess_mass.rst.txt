@@ -1,0 +1,35 @@
+tngxmm.massfit.guess\_mass
+==========================
+
+.. automodule:: tngxmm.massfit.guess_mass
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BULBUL2019
+      SEED_PROCEDURE_MODULES
+      SEED_PROCEDURE_UNHASHED
+      ITER_RTOL
+      ITER_MAX_STEP
+      DM14_SCATTER_DEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      Ez
+      c200_dutton14
+      c200_guess
+      centre_and_seed
+      iterate_m500
+      lx500_of_m500
+      m500_of_lx500
+      m500_over_m200_nfw
+      peak_search_image
+      r500_kpc
+      seed_data_files
+      seed_lx_iterated
+      seed_procedure_hash
+   

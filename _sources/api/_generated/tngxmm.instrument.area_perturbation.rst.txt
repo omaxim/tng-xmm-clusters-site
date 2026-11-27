@@ -1,0 +1,26 @@
+tngxmm.instrument.area\_perturbation
+====================================
+
+.. automodule:: tngxmm.instrument.area_perturbation
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ACIS_PN_S15
+      VIGNETTING_TN18
+      AREA_MODELS
+      THETA_MODELS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      abscorrarea
+      factor
+      parse
+      perturbed_response
+      splint
+      theta_factor
+   

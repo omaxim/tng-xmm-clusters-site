@@ -1,0 +1,21 @@
+tngxmm.massfit.check\_preflight
+===============================
+
+.. automodule:: tngxmm.massfit.check_preflight
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_preflight
+      find_stale_locks
+      main
+      probe_xspec
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PreflightError
+   

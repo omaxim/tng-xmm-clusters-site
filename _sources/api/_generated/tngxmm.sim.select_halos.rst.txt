@@ -1,0 +1,12 @@
+tngxmm.sim.select\_halos
+========================
+
+.. automodule:: tngxmm.sim.select_halos
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      select_halos
+   

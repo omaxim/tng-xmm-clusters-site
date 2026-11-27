@@ -1,0 +1,18 @@
+tngxmm.schemas
+==============
+
+.. automodule:: tngxmm.schemas
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   embeddings
+   ids
+   observing
+   products
+   signatures
+   tables

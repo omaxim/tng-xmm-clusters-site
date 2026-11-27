@@ -1,0 +1,30 @@
+tngxmm.donors.build\_sim\_targets
+=================================
+
+.. automodule:: tngxmm.donors.build_sim_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CUBE_HALO_COLUMNS
+      HALO_SNAPSHOT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_sim_targets
+      cube_halo_table
+      cube_object_split
+      sim_halo_table
+      sim_max_spec
+      write_sim_outputs
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SimTargetsError
+   

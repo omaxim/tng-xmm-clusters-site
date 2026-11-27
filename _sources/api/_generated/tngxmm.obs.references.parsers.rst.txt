@@ -1,0 +1,34 @@
+tngxmm.obs.references.parsers
+=============================
+
+.. automodule:: tngxmm.obs.references.parsers
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SOURCES
+      NOT_PARSED
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_reference_masses
+      load_sz_catalogues
+      parse_applegate2014
+      parse_dec
+      parse_herbonnet2020
+      parse_hoekstra2015
+      parse_lovisari2020
+      parse_mahdavi2013
+      parse_mantz2010b
+      parse_mantz2016
+      parse_martino2014
+      parse_okabe2016
+      parse_ra
+      parse_value
+      parse_wicker2023
+      source_paths
+   

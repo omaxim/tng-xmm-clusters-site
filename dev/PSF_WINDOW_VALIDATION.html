@@ -1,0 +1,1237 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Response to the review of the documentation (release 1.1.2)" href="REVIEW_RESPONSE_v1.1.3.html"><link rel="prev" title="Reference ledger: claims to verify by hand" href="REFERENCE_LEDGER.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>The PSF on the mask window and the projection in one product: what changes, by how much, how fast - tngxmm 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">tngxmm 1.1.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">tngxmm 1.1.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Start here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">What the pipeline does and produces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../definitions.html">Science definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations.html">Simulations and the ingest stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background.html">Instrument background of the mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xmm_simulator_changes.html">Changes to xmm_simulator</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science status</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../validation.html">Validation status</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples.html">Samples and selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figures.html">Figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../realism.html">The realism evaluation and frozen mode</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../assumptions.html">The assumptions ledger</a><input aria-label="Toggle navigation of The assumptions ledger" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../assumptions/OPEN_ITEMS.html">Open items of the assumption ledger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../assumptions/SENSITIVITY_TESTS.html">Sensitivity and convergence tests of the assumption ledger</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../PIPELINE.html">Running the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../production.html">A production run from the target list to the masses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../when-a-run-stops.html">When a run stops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">The data package, bundles and fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LOCAL.html">Running tngxmm on a laptop</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../pipelines/index.html">Pipelines</a><input aria-label="Toggle navigation of Pipelines" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/ingest.html">ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/sim.html">sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/instrument.html">instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/donors.html">donors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/obs.html">obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/photometry.html">photometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/massfit.html">massfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/bank.html">bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/embed.html">embed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/viz.html">viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/validation.html">validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/certify.html">certify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/donor_tables.html">donor_tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/realism.html">realism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/setup.html">setup</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/_generated/tngxmm.html">tngxmm</a><input aria-label="Toggle navigation of tngxmm" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.analysis.html">tngxmm.analysis</a><input aria-label="Toggle navigation of tngxmm.analysis" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.chain_drift.html">tngxmm.analysis.chain_drift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.estimands.html">tngxmm.analysis.estimands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.fit_vs_truth.html">tngxmm.analysis.fit_vs_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.fixed_radius.html">tngxmm.analysis.fixed_radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.pilot_report.html">tngxmm.analysis.pilot_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.pipeline.html">tngxmm.analysis.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.analysis.tables.html">tngxmm.analysis.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.bank.html">tngxmm.bank</a><input aria-label="Toggle navigation of tngxmm.bank" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.assign_donor_folds.html">tngxmm.bank.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.attach_splits.html">tngxmm.bank.attach_splits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.build_manifest.html">tngxmm.bank.build_manifest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.cli.html">tngxmm.bank.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.filter_rows.html">tngxmm.bank.filter_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.lint_ml_columns.html">tngxmm.bank.lint_ml_columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.pipeline.html">tngxmm.bank.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.render_bank.html">tngxmm.bank.render_bank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.schemas.html">tngxmm.bank.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.bank.write_mosaic.html">tngxmm.bank.write_mosaic</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.certify.html">tngxmm.certify</a><input aria-label="Toggle navigation of tngxmm.certify" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.cli.html">tngxmm.certify.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.pipeline.html">tngxmm.certify.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.queues.html">tngxmm.certify.queues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.rules.html">tngxmm.certify.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.sample.html">tngxmm.certify.sample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.certify.stage.html">tngxmm.certify.stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.cites.html">tngxmm.cites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.cli.html">tngxmm.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.config.html">tngxmm.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.core.html">tngxmm.core</a><input aria-label="Toggle navigation of tngxmm.core" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.bundle.html">tngxmm.core.bundle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.campaign_checks.html">tngxmm.core.campaign_checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.compare_tables.html">tngxmm.core.compare_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.cosmology.html">tngxmm.core.cosmology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.datasets.html">tngxmm.core.datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.diskguard.html">tngxmm.core.diskguard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.fetch.html">tngxmm.core.fetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.freeze.html">tngxmm.core.freeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.hashing.html">tngxmm.core.hashing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.logging.html">tngxmm.core.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.membudget.html">tngxmm.core.membudget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.node_queue.html">tngxmm.core.node_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.paths.html">tngxmm.core.paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.pool.html">tngxmm.core.pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.provenance.html">tngxmm.core.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.rng.html">tngxmm.core.rng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.runner.html">tngxmm.core.runner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.site.html">tngxmm.core.site</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.core.units.html">tngxmm.core.units</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.html">tngxmm.donor_tables</a><input aria-label="Toggle navigation of tngxmm.donor_tables" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.archive.html">tngxmm.donor_tables.archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.background.html">tngxmm.donor_tables.background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.catalogue.html">tngxmm.donor_tables.catalogue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.fwc.html">tngxmm.donor_tables.fwc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.mos_background.html">tngxmm.donor_tables.mos_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.pipeline.html">tngxmm.donor_tables.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.provenance.html">tngxmm.donor_tables.provenance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.qpb_corners.html">tngxmm.donor_tables.qpb_corners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.rass_sky.html">tngxmm.donor_tables.rass_sky</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.soft_ccd.html">tngxmm.donor_tables.soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donor_tables.work.html">tngxmm.donor_tables.work</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.donors.html">tngxmm.donors</a><input aria-label="Toggle navigation of tngxmm.donors" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.assign_donor_folds.html">tngxmm.donors.assign_donor_folds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.box_report.html">tngxmm.donors.box_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_active_ccds.html">tngxmm.donors.build_active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_box_targets.html">tngxmm.donors.build_box_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_core_offsets.html">tngxmm.donors.build_core_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_max_targets.html">tngxmm.donors.build_max_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_pass1_targets.html">tngxmm.donors.build_pass1_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_replica_targets.html">tngxmm.donors.build_replica_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.build_sim_targets.html">tngxmm.donors.build_sim_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.cli.html">tngxmm.donors.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.draw_donor.html">tngxmm.donors.draw_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.halo_groups.html">tngxmm.donors.halo_groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.max_report.html">tngxmm.donors.max_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_fit_mass.html">tngxmm.donors.pair_fit_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_projections.html">tngxmm.donors.pair_projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pair_six_views.html">tngxmm.donors.pair_six_views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.pipeline.html">tngxmm.donors.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.sample_matched.html">tngxmm.donors.sample_matched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.schemas.html">tngxmm.donors.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.donors.validate_population.html">tngxmm.donors.validate_population</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.embed.html">tngxmm.embed</a><input aria-label="Toggle navigation of tngxmm.embed" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.cli.html">tngxmm.embed.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.extract_dinov3.html">tngxmm.embed.extract_dinov3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.extract_embeddings.html">tngxmm.embed.extract_embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.pipeline.html">tngxmm.embed.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.schemas.html">tngxmm.embed.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.embed.write_embeddings.html">tngxmm.embed.write_embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ingest.html">tngxmm.ingest</a><input aria-label="Toggle navigation of tngxmm.ingest" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.canonical_source.html">tngxmm.ingest.canonical_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.cli.html">tngxmm.ingest.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.cube_io.html">tngxmm.ingest.cube_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.descriptor.html">tngxmm.ingest.descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.eagle.html">tngxmm.ingest.eagle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.eagle_remote.html">tngxmm.ingest.eagle_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.loaders.html">tngxmm.ingest.loaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.pipeline.html">tngxmm.ingest.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.schema.html">tngxmm.ingest.schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.simba.html">tngxmm.ingest.simba</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.simba_remote.html">tngxmm.ingest.simba_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.swift.html">tngxmm.ingest.swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.swift_remote.html">tngxmm.ingest.swift_remote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.tng.html">tngxmm.ingest.tng</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ingest.truth.html">tngxmm.ingest.truth</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.instrument.html">tngxmm.instrument</a><input aria-label="Toggle navigation of tngxmm.instrument" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.active_ccds.html">tngxmm.instrument.active_ccds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.apply_pattern_loss.html">tngxmm.instrument.apply_pattern_loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.area_perturbation.html">tngxmm.instrument.area_perturbation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.calibrate_boresight.html">tngxmm.instrument.calibrate_boresight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.calibration_axis.html">tngxmm.instrument.calibration_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.ccf_select.html">tngxmm.instrument.ccf_select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.cli.html">tngxmm.instrument.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.compute_ecf.html">tngxmm.instrument.compute_ecf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.conditions_donor.html">tngxmm.instrument.conditions_donor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_background.html">tngxmm.instrument.donor_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_corner_qpb.html">tngxmm.instrument.donor_corner_qpb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_footprint.html">tngxmm.instrument.donor_footprint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_inout_sp.html">tngxmm.instrument.donor_inout_sp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_soft_ccd.html">tngxmm.instrument.donor_soft_ccd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.donor_tables.html">tngxmm.instrument.donor_tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.effective_area.html">tngxmm.instrument.effective_area</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.fwc_state.html">tngxmm.instrument.fwc_state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.galactic_column.html">tngxmm.instrument.galactic_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.load_responses.html">tngxmm.instrument.load_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.make_exposure_maps.html">tngxmm.instrument.make_exposure_maps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.measure_oot_streak.html">tngxmm.instrument.measure_oot_streak</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.obs_responses.html">tngxmm.instrument.obs_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.patch_psf.html">tngxmm.instrument.patch_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.pipeline.html">tngxmm.instrument.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.pn_oot_energy.html">tngxmm.instrument.pn_oot_energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.point_sources.html">tngxmm.instrument.point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.readout_windows.html">tngxmm.instrument.readout_windows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.reimage_mock.html">tngxmm.instrument.reimage_mock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.replay.html">tngxmm.instrument.replay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.rga_obscuration.html">tngxmm.instrument.rga_obscuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.run_xmm_simulator.html">tngxmm.instrument.run_xmm_simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_detect.html">tngxmm.instrument.sas_detect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_headers.html">tngxmm.instrument.sas_headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.sas_queue.html">tngxmm.instrument.sas_queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.schemas.html">tngxmm.instrument.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.select_pn_mode.html">tngxmm.instrument.select_pn_mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.simulate_instrument.html">tngxmm.instrument.simulate_instrument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.instrument.write_camera_products.html">tngxmm.instrument.write_camera_products</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ledger.html">tngxmm.ledger</a><input aria-label="Toggle navigation of tngxmm.ledger" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.assumptions.html">tngxmm.ledger.assumptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.cli.html">tngxmm.ledger.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.proofs.html">tngxmm.ledger.proofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ledger.report.html">tngxmm.ledger.report</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.massfit.html">tngxmm.massfit</a><input aria-label="Toggle navigation of tngxmm.massfit" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.band_response.html">tngxmm.massfit.band_response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_fit_targets.html">tngxmm.massfit.build_fit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_realfit_targets.html">tngxmm.massfit.build_realfit_targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_responses.html">tngxmm.massfit.build_responses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.build_source_thresholds.html">tngxmm.massfit.build_source_thresholds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cache_io.html">tngxmm.massfit.cache_io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.check_preflight.html">tngxmm.massfit.check_preflight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cli.html">tngxmm.massfit.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.cm_prior.html">tngxmm.massfit.cm_prior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.diagnose_bands.html">tngxmm.massfit.diagnose_bands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.domain_predict.html">tngxmm.massfit.domain_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.esas_background.html">tngxmm.massfit.esas_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_hydrostatic.html">tngxmm.massfit.fit_hydrostatic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_lists.html">tngxmm.massfit.fit_lists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_plan.html">tngxmm.massfit.fit_plan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_psf.html">tngxmm.massfit.fit_psf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.fit_qc.html">tngxmm.massfit.fit_qc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.guess_mass.html">tngxmm.massfit.guess_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.like_cache.html">tngxmm.massfit.like_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.mask_point_sources.html">tngxmm.massfit.mask_point_sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.model_shells.html">tngxmm.massfit.model_shells</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.one_minus_b.html">tngxmm.massfit.one_minus_b</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.optimiser_bounds.html">tngxmm.massfit.optimiser_bounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.patch_apec.html">tngxmm.massfit.patch_apec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.pipeline.html">tngxmm.massfit.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.pn_oot.html">tngxmm.massfit.pn_oot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.prepare_images.html">tngxmm.massfit.prepare_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.psf_window.html">tngxmm.massfit.psf_window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.qpb_template.html">tngxmm.massfit.qpb_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.render_fit_v4.html">tngxmm.massfit.render_fit_v4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.sample_posterior.html">tngxmm.massfit.sample_posterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.schemas.html">tngxmm.massfit.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.massfit.set_molecular_weight.html">tngxmm.massfit.set_molecular_weight</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.ml.html">tngxmm.ml</a><input aria-label="Toggle navigation of tngxmm.ml" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.cli.html">tngxmm.ml.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.pipeline.html">tngxmm.ml.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.ml.schemas.html">tngxmm.ml.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.obs.html">tngxmm.obs</a><input aria-label="Toggle navigation of tngxmm.obs" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.build_observations.html">tngxmm.obs.build_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.candidate_quality.html">tngxmm.obs.candidate_quality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.cli.html">tngxmm.obs.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.extra_observations.html">tngxmm.obs.extra_observations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.hydrostatic_bias.html">tngxmm.obs.hydrostatic_bias</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.mass_conversion.html">tngxmm.obs.mass_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.pipeline.html">tngxmm.obs.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.pps_products.html">tngxmm.obs.pps_products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.read_observation_meta.html">tngxmm.obs.read_observation_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.reference_masses.html">tngxmm.obs.reference_masses</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.html">tngxmm.obs.references</a><input aria-label="Toggle navigation of tngxmm.obs.references" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.parsers.html">tngxmm.obs.references.parsers</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../api/_generated/tngxmm.obs.references.sources.html">tngxmm.obs.references.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.schemas.html">tngxmm.obs.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.obs.sky_columns.html">tngxmm.obs.sky_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.photometry.html">tngxmm.photometry</a><input aria-label="Toggle navigation of tngxmm.photometry" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.build_obs_centres_guarded.html">tngxmm.photometry.build_obs_centres_guarded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.build_obs_seed_lx.html">tngxmm.photometry.build_obs_seed_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.catalogue_positions.html">tngxmm.photometry.catalogue_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.cli.html">tngxmm.photometry.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.estimate_lx_background.html">tngxmm.photometry.estimate_lx_background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.find_centre.html">tngxmm.photometry.find_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_apertures.html">tngxmm.photometry.measure_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_centre_offsets.html">tngxmm.photometry.measure_centre_offsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_fixed_apertures.html">tngxmm.photometry.measure_fixed_apertures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_lx.html">tngxmm.photometry.measure_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_mock_lx.html">tngxmm.photometry.measure_mock_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.measure_obs_lx.html">tngxmm.photometry.measure_obs_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.pipeline.html">tngxmm.photometry.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.recentre_photometry.html">tngxmm.photometry.recentre_photometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.remeasure_campaign_lx.html">tngxmm.photometry.remeasure_campaign_lx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.photometry.schemas.html">tngxmm.photometry.schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.pipeline_registry.html">tngxmm.pipeline_registry</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.realism.html">tngxmm.realism</a><input aria-label="Toggle navigation of tngxmm.realism" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.c2st.html">tngxmm.realism.c2st</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.dino.html">tngxmm.realism.dino</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.features.html">tngxmm.realism.features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.matching.html">tngxmm.realism.matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.pipeline.html">tngxmm.realism.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.report.html">tngxmm.realism.report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.selection.html">tngxmm.realism.selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.realism.split.html">tngxmm.realism.split</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.schemas.html">tngxmm.schemas</a><input aria-label="Toggle navigation of tngxmm.schemas" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.embeddings.html">tngxmm.schemas.embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.ids.html">tngxmm.schemas.ids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.observing.html">tngxmm.schemas.observing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.products.html">tngxmm.schemas.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.signatures.html">tngxmm.schemas.signatures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.schemas.tables.html">tngxmm.schemas.tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/_generated/tngxmm.settings.html">tngxmm.settings</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.setup.html">tngxmm.setup</a><input aria-label="Toggle navigation of tngxmm.setup" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.setup.pipeline.html">tngxmm.setup.pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.sim.html">tngxmm.sim</a><input aria-label="Toggle navigation of tngxmm.sim" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.abundances.html">tngxmm.sim.abundances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.apply_absorption.html">tngxmm.sim.apply_absorption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.build_apec_table.html">tngxmm.sim.build_apec_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.build_box_halos.html">tngxmm.sim.build_box_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.catalogue_centre.html">tngxmm.sim.catalogue_centre</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.cli.html">tngxmm.sim.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_apec_spectra.html">tngxmm.sim.compute_apec_spectra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_hse_mass.html">tngxmm.sim.compute_hse_mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_hse_stream.html">tngxmm.sim.compute_hse_stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.compute_true_profiles.html">tngxmm.sim.compute_true_profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.cutout_gas.html">tngxmm.sim.cutout_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.data_inputs.html">tngxmm.sim.data_inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.emission.html">tngxmm.sim.emission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.generate_photons.html">tngxmm.sim.generate_photons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.generate_view.html">tngxmm.sim.generate_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.load_catalog_meta.html">tngxmm.sim.load_catalog_meta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.load_halo_gas.html">tngxmm.sim.load_halo_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.mock_cutout.html">tngxmm.sim.mock_cutout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.outskirts_convergence.html">tngxmm.sim.outskirts_convergence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.pipeline.html">tngxmm.sim.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.project_luminosity.html">tngxmm.sim.project_luminosity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.project_tngref_map.html">tngxmm.sim.project_tngref_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.read_halo_source.html">tngxmm.sim.read_halo_source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.schemas.html">tngxmm.sim.schemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.select_halos.html">tngxmm.sim.select_halos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.snapshots.html">tngxmm.sim.snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.sph_map.html">tngxmm.sim.sph_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.sphere_cutouts.html">tngxmm.sim.sphere_cutouts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.temet_xray.html">tngxmm.sim.temet_xray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.truth_profile.html">tngxmm.sim.truth_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.sim.truth_sphere.html">tngxmm.sim.truth_sphere</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.validation.html">tngxmm.validation</a><input aria-label="Toggle navigation of tngxmm.validation" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.catalogue_moves.html">tngxmm.validation.catalogue_moves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.closure_grid.html">tngxmm.validation.closure_grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.ideal_cluster.html">tngxmm.validation.ideal_cluster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.pipeline.html">tngxmm.validation.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.products.html">tngxmm.validation.products</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.validation.realism.html">tngxmm.validation.realism</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/_generated/tngxmm.viz.html">tngxmm.viz</a><input aria-label="Toggle navigation of tngxmm.viz" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.cli.html">tngxmm.viz.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.doc_figures.html">tngxmm.viz.doc_figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.export_pipeline_graph.html">tngxmm.viz.export_pipeline_graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.pipeline.html">tngxmm.viz.pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.plot_mock_truth.html">tngxmm.viz.plot_mock_truth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.plot_realfit_masses.html">tngxmm.viz.plot_realfit_masses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/_generated/tngxmm.viz.schemas.html">tngxmm.viz.schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../decisions.html">Decision log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">tngxmm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development log</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Development log</a><input aria-label="Toggle navigation of Development log" checked="" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="STATUS.html">Open work (2026-11-04, updated 2026-11-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INTEGRATION_REPORT.html">Integration of 2026-10-30: report for the author</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PREREGISTRATION.html">Pre-registered rules of 2026-11-04 (DESIGN v4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PILOT.html">The pilot run before the freeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DECISIONS.html">Decision record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INTERFACES.html">INTERFACES: the contract between the stages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="KEDRO.html">Kedro pipelines: the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LX_CROSS_SIM.html">The L_X-M500c relation across simulations (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LX_GAS_EXPLORATION.html">The soft-band luminosity excess: alternatives to the emission model (2026-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REFERENCE_LEDGER.html">Reference ledger: claims to verify by hand</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="REVIEW_RESPONSE_v1.1.3.html">Response to the review of the documentation (release 1.1.2)</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="the-psf-on-the-mask-window-and-the-projection-in-one-product-what-changes-by-how-much-how-fast">
+<h1>The PSF on the mask window and the projection in one product: what changes, by how much, how fast<a class="headerlink" href="#the-psf-on-the-mask-window-and-the-projection-in-one-product-what-changes-by-how-much-how-fast" title="Link to this heading">¶</a></h1>
+<p>Written on 2026-11-24 on the branch <code class="docutils literal notranslate"><span class="pre">fastfit</span></code> (<code class="docutils literal notranslate"><span class="pre">2ef14e5</span></code>, merged since). Two fit-fix switches, both off by default:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>switch</p></th>
+<th class="head"><p>values</p></th>
+<th class="head"><p>what it does</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">psf_eval</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image</span></code> (default), <code class="docutils literal notranslate"><span class="pre">window</span></code></p></td>
+<td><p>the off-axis King PSF computed on the bounding box of each image’s mask instead of the whole padded grid (<code class="docutils literal notranslate"><span class="pre">massfit/psf_window.py</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">projection</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">groups</span></code> (default), <code class="docutils literal notranslate"><span class="pre">matrix</span></code></p></td>
+<td><p>all node groups of an evaluation projected in one triangular matrix product instead of one matrix-vector product each (<code class="docutils literal notranslate"><span class="pre">massfit/band_response.py</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Neither changes the model. <code class="docutils literal notranslate"><span class="pre">projection</span> <span class="pre">=</span> <span class="pre">matrix</span></code> returned the same log posterior at every point tested in 85 of 86
+fits. <code class="docutils literal notranslate"><span class="pre">psf_eval</span> <span class="pre">=</span> <span class="pre">window</span></code> changes the model image by the rounding of a single-precision FFT of another length, and
+this page measures what that does to a fit. The fits of pass 1 finished by 2026-11-24 were made with both off.</p>
+<p>Adopted since. The preset <code class="docutils literal notranslate"><span class="pre">v1_flamingo_l1m8_pass2_extra</span></code> sets <code class="docutils literal notranslate"><span class="pre">massfit.psf_eval</span> <span class="pre">=</span> <span class="pre">'window'</span></code> and
+<code class="docutils literal notranslate"><span class="pre">massfit.projection</span> <span class="pre">=</span> <span class="pre">'matrix'</span></code> (2026-11-25), so the pass-2 views of the list with the added observations are
+fitted with both. The last 978 fits of pass 1 were made with both on 2026-11-26, on a second cluster, after a
+control sample: 75 finished z = 0.1 mocks refitted with the two switches gave ln M500 (switched minus production)
+mean +0.001 +- 0.006, median +0.0005, 38 up and 37 down; two of the 75 moved by more than 0.25. The other fits of
+pass 1 (about 4,000, on the home cluster) and the 623 fits of the real observations used the evaluation on the
+whole grid.</p>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>quantity</p></th>
+<th class="head"><p>measured</p></th>
+<th class="head"><p>section</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>log posterior at a fixed point</p></td>
+<td><p>changes by sd 1e-4 (mocks) and 5e-4 (real) about a constant offset, largest 0.038; one single-precision step of an image term is 0.004 to 0.125</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>mass at that change</p></td>
+<td><p>the reweighted mean of ln M500 moves by at most 6e-5, which is 2.4e-3 of the posterior width</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>window against the exact convolution</p></td>
+<td><p>nearer than the image grid in 29 of 40 fits (double-precision reference)</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>end point of a fit</p></td>
+<td><p>moves, as it does for any change in the last digit: a start moved by 1e-6 in ln M500 moves the end point as far as the window does (rms 0.013 in ln M500 both)</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>direction of the move</p></td>
+<td><p>none found. Window minus image grid from the same start: 22 up, 17 down, mean -0.0012 +- 0.0021. Full fits, new minus cache arm: 25 up, 20 down, mean +0.005 +- 0.004</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>posterior widths</p></td>
+<td><p>unchanged, median ratio 1.00</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>reproducibility of a windowed fit</p></td>
+<td><p>6 of 6 repeated fits bit-identical; with the image-grid PSF 1 of 5 (FFTW plans chosen by timing)</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>speed of a fit</p></td>
+<td><p>windowed fits 3.1 times the unchanged code on the same kind of node (2.3 times the cache alone); others 1.8 times (1.4); weighted by pass-1 run time 2.5 times</p></td>
+<td><p>6</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Everything was measured on fits of pass 1 (FLAMINGO mocks) and of the real sample, with the image cache on. Nothing
+here says whether a fit has found its maximum or sampled its posterior; the reruns of unchanged code in section 4
+differ by 2 to 4 per cent in M500, and that scatter is larger than any effect of the two switches.</p>
+</section>
+<section id="what-is-computed">
+<h2>1. What is computed<a class="headerlink" href="#what-is-computed" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">KingAnglePSF</span></code> (<code class="docutils literal notranslate"><span class="pre">massfit/fit_psf.py</span></code>) convolves the cluster image S of every evaluation as</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>model = sum_j  C_j (x) [w_j S]   +   sum_j  T_j (*) B[w_j S]
+</pre></div>
+</div>
+<p>with w_j the hat weight of off-axis node j, C_j the node’s core kernel (reach h pixels, cyclic on the padded grid),
+B the b x b block sums and T_j the tail transfer on the coarse grid. The transforms run on the whole padded grid:
+234 x 234 pixels for a z = 0.1 fit at 12 arcsec, of which a quarter is inside the mask.</p>
+<p>The likelihood reads the model inside the mask only (<code class="docutils literal notranslate"><span class="pre">mbproj2d.fast.calcPoissonLogLikelihoodMasked</span></code>). With O the
+bounding box of the mask, <code class="docutils literal notranslate"><span class="pre">WindowedAnglePSF</span></code> computes the same sums on O:</p>
+<ul class="simple">
+<li><p><strong>Core.</strong> An output pixel takes source pixels within h of it, so the output on O needs the source on O grown by h.
+The weight of a node is non-zero on an annulus about the optical axis. Consecutive nodes are grouped, and a group
+is transformed on a buffer that holds the rows and columns where its weights are non-zero, cut to O grown by h.
+For input rows a..b and output rows u1..u2 the offsets output minus input span u1 - b .. u2 - a; a cyclic length
+N &gt;= max(u2 - a, b - u1) + h + 1 keeps every offset larger than h away from the kernel, so the cyclic convolution
+on N equals the linear one at every output row. The same holds for the columns.</p></li>
+<li><p><strong>Tail.</strong> The block sums A..B of a group’s input are convolved with the transfer at the offsets Y1 - B .. Y2 - A
+for the output blocks Y1..Y2 of O; N &gt;= (B - A + 1) + (Y2 - Y1 + 1) - 1 keeps them apart.</p></li>
+<li><p><strong>Lengths.</strong> The smallest even 2^a 3^b 5^c at or above these minima. For the 234 px grid the four groups run on
+60, 100, 144 and 180 px (core) and 64, 80, 90 and 128 blocks (tail), two nodes each.</p></li>
+<li><p><strong>Unchanged.</strong> The kernel values (<code class="docutils literal notranslate"><span class="pre">KingPSF.resample</span></code>), the tail transfer (<code class="docutils literal notranslate"><span class="pre">tail_transfer</span></code>), the weights, the
+single-precision products w_j S and the order of the block sums. The spectra of a group are summed and inverted
+once, as <code class="docutils literal notranslate"><span class="pre">_fourier_sum</span></code> does for all nodes.</p></li>
+</ul>
+<p>Two things follow from the construction. No part of the kernel is dropped, so there is no truncation error: the
+only difference is rounding. And the model outside O is not computed (it is set to the floor value), so the window
+may be used only where the mask is the only reader; the fit switches back to the image-grid PSF after the sampler.</p>
+<p>An image whose mask box grown by h reaches the edge of the grid keeps <code class="docutils literal notranslate"><span class="pre">KingAnglePSF</span></code>: there the cyclic wrap of the
+grid is part of the model. In the 86 fits of section 2 this is every image of the fits at z &gt;= 0.25 and of most
+fits at z = 0.2; all images are windowed in 34 of 36 fits at z &lt;= 0.15 (25 of 25 mocks, 9 of 11 real).</p>
+<p>The grouping is chosen by counted work (n^2 log2 n per transform, n^2 per element-wise pass) and the plans are made
+with <code class="docutils literal notranslate"><span class="pre">FFTW_ESTIMATE</span></code>, so nothing depends on timing (section 5).</p>
+<p><code class="docutils literal notranslate"><span class="pre">projection</span> <span class="pre">=</span> <span class="pre">matrix</span></code>: <code class="docutils literal notranslate"><span class="pre">Radii.project</span></code> of mbproj2d multiplies the 1056 x 1056 projection matrix by one emissivity
+vector at a time, 61 times an evaluation for a 12-image fit. The matrix is upper triangular, so the emissivities
+are stacked as columns and multiplied once with BLAS <code class="docutils literal notranslate"><span class="pre">dtrmm</span></code>, in double precision, then cast to single as before.</p>
+</section>
+<section id="the-log-posterior-at-fixed-points">
+<h2>2. The log posterior at fixed points<a class="headerlink" href="#the-log-posterior-at-fixed-points" title="Link to this heading">¶</a></h2>
+<p>86 finished fits (57 mocks, 29 real), 100 points of each fit’s stored chain. At each point the log posterior was
+computed four ways: as fitted, with the window, with the matrix projection, with both. The per-image terms are
+single precision in mbproj2d; they were summed in double precision here, so that the comparison is not limited by
+the last addition. A second sum takes the model images and forms the Poisson term in double precision.</p>
+<p><strong>Projection.</strong> Identical at all 100 points in 85 of 86 fits. One real fit differs by at most 1.9e-5. The product
+is the same sum in another order, so identity is observed and not guaranteed.</p>
+<p><strong>Window</strong>, the 40 fits in which every image is windowed (26 mocks, 14 real):</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>mocks</p></th>
+<th class="head"><p>real</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sd of the difference over the chain points, median over fits</p></td>
+<td><p>1.1e-4</p></td>
+<td><p>4.6e-4</p></td>
+</tr>
+<tr class="row-odd"><td><p>the same, largest fit</p></td>
+<td><p>1.0e-3</p></td>
+<td><p>1.1e-2</p></td>
+</tr>
+<tr class="row-even"><td><p>largest difference at any point</p></td>
+<td><p>0.038</p></td>
+<td><p>0.038</p></td>
+</tr>
+<tr class="row-odd"><td><p>in single-precision steps of an image term</p></td>
+<td><p>up to 1.16</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>change of the model flux</p></td>
+<td><p>1e-9, largest 3.5e-8</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>mean difference positive / negative (fits)</p></td>
+<td><p>16 / 10 (p = 0.33)</p></td>
+<td><p>8 / 6 (p = 0.79)</p></td>
+</tr>
+<tr class="row-even"><td><p>shift of the mean of ln M500 when the chain is reweighted</p></td>
+<td><p>at most 1.5e-5</p></td>
+<td><p>at most 5.9e-5</p></td>
+</tr>
+<tr class="row-odd"><td><p>the same in units of the posterior sd</p></td>
+<td><p>at most 2.4e-3</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>correlation of the difference with ln M500, median</p></td>
+<td><p>0.02 to 0.04</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The largest sd belongs to PSZ2 G065.32-64.84 with 1.17 million counts: the term of an image is a number near 1e6
+held in single precision, and its last digit is 0.06 to 0.125.</p>
+<p>A constant offset of the log posterior changes nothing. What could move a mass is a difference that varies with the
+parameters, and the reweighting measures exactly that: weights exp(difference) on the chain points move the mean of
+ln M500 by less than a hundredth of a per cent of M500.</p>
+<p>In the fits where no image is windowed (z &gt;= 0.25 and most of z = 0.2) <code class="docutils literal notranslate"><span class="pre">psf_eval</span> <span class="pre">=</span> <span class="pre">window</span></code> changes nothing: the
+difference is zero at every point.</p>
+</section>
+<section id="which-of-the-two-is-nearer-to-the-exact-convolution">
+<h2>3. Which of the two is nearer to the exact convolution<a class="headerlink" href="#which-of-the-two-is-nearer-to-the-exact-convolution" title="Link to this heading">¶</a></h2>
+<p>The PSF of the fit was recomputed in double precision with numpy’s FFT, from the same kernels, weights and
+single-precision products (40 fully windowed fits, 40 chain points each).</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>image grid</p></th>
+<th class="head"><p>window</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rms distance of the log posterior from the reference, median over fits</p></td>
+<td><p>1.75e-4</p></td>
+<td><p>1.60e-4</p></td>
+</tr>
+<tr class="row-odd"><td><p>largest distance</p></td>
+<td><p>7.7e-3</p></td>
+<td><p>6.6e-3</p></td>
+</tr>
+<tr class="row-even"><td><p>mean offset positive / negative (fits)</p></td>
+<td><p>16 / 24</p></td>
+<td><p>20 / 20</p></td>
+</tr>
+<tr class="row-odd"><td><p>shift of the mean of ln M500 against the reference, largest</p></td>
+<td><p>7.5e-6</p></td>
+<td><p>5.4e-6</p></td>
+</tr>
+<tr class="row-even"><td><p>flux against the reference, largest</p></td>
+<td><p>4.2e-8</p></td>
+<td><p>3.5e-8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The window is nearer to the reference in 29 of 40 fits (Wilcoxon p = 0.001; 20 of 26 mocks, 9 of 14 real). The
+transforms are shorter, so fewer rounding errors add up. Neither is biased against the reference at a level that
+could be measured.</p>
+</section>
+<section id="fits">
+<h2>4. Fits<a class="headerlink" href="#fits" title="Link to this heading">¶</a></h2>
+<section id="same-start-three-optimiser-runs">
+<h3>4.1 Same start, three optimiser runs<a class="headerlink" href="#same-start-three-optimiser-runs" title="Link to this heading">¶</a></h3>
+<p>For 39 fully windowed fits (26 mocks, 13 real) stage 2 of the optimiser was run three times from the best sample
+of the stored chain: as fitted, with the two switches, and as fitted with the start moved by 1e-6 in ln M500. The
+third run has no meaning other than to show what a difference in the sixth digit of one start value does to the
+path of a derivative-free optimiser. All end points were then evaluated the same way (image-grid PSF,
+double-precision sum).</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>end point minus the end point as fitted</p></th>
+<th class="head"><p>window + matrix</p></th>
+<th class="head"><p>start moved by 1e-6</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ln M500: mean</p></td>
+<td><p>-0.0012 +- 0.0021</p></td>
+<td><p>-0.0015 +- 0.0020</p></td>
+</tr>
+<tr class="row-odd"><td><p>ln M500: rms</p></td>
+<td><p>0.0132</p></td>
+<td><p>0.0125</p></td>
+</tr>
+<tr class="row-even"><td><p>ln M500: median absolute</p></td>
+<td><p>0.0056</p></td>
+<td><p>0.0069</p></td>
+</tr>
+<tr class="row-odd"><td><p>ln M500: largest</p></td>
+<td><p>0.050</p></td>
+<td><p>0.041</p></td>
+</tr>
+<tr class="row-even"><td><p>ln M500: up / down</p></td>
+<td><p>22 / 17 (p = 0.52)</p></td>
+<td><p>18 / 21 (p = 0.75)</p></td>
+</tr>
+<tr class="row-odd"><td><p>log posterior: median absolute</p></td>
+<td><p>0.10</p></td>
+<td><p>0.12</p></td>
+</tr>
+<tr class="row-even"><td><p>log posterior: largest</p></td>
+<td><p>4.0</p></td>
+<td><p>11.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>log posterior: up / down</p></td>
+<td><p>14 / 25 (p = 0.11)</p></td>
+<td><p>20 / 19</p></td>
+</tr>
+<tr class="row-even"><td><p>evaluations, sum, relative to as fitted</p></td>
+<td><p>0.957</p></td>
+<td><p>1.088</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The two columns are the same within their errors (absolute differences in ln M500, paired: Wilcoxon p = 0.49; in
+log posterior p = 0.84). The window acts on the optimiser as any last-digit change does: the path branches after
+about a hundred evaluations and ends at another point of the same flat maximum, about 1 per cent away in M500.
+The evaluation count of section R1 of the speed report (37 per cent more in one run) was one draw of this scatter;
+over 39 fits the window needed 4 per cent fewer evaluations and the moved start 9 per cent more.</p>
+</section>
+<section id="whole-fits">
+<h3>4.2 Whole fits<a class="headerlink" href="#whole-fits" title="Link to this heading">¶</a></h3>
+<p>Job 1902121 (tree <code class="docutils literal notranslate"><span class="pre">2ef14e5</span></code>, both switches, image cache on) repeated 26 mock and 26 real fits that job 1902090 had
+run with the cache alone (“cache”) and, for 19 of them, also with the unchanged code (“plain”); 11 were run twice
+(“rep”). The mocks also have their production fit (“prod”, same numerics as plain). One real fit, PSZ2
+G263.19-25.19, failed at the start of the sampler in both new runs and in the plain run of job 1902090 as well,
+with density parameters on their prior limits; it is counted nowhere below.</p>
+<p>Differences of ln M500 (posterior median) between two runs of the same target:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>pair</p></th>
+<th class="head"><p>what differs</p></th>
+<th class="head"><p>n</p></th>
+<th class="head"><p>identical</p></th>
+<th class="head"><p>mean</p></th>
+<th class="head"><p>sd</p></th>
+<th class="head"><p>largest</p></th>
+<th class="head"><p>up / down</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>plain - prod, mocks</p></td>
+<td><p>nothing (other node, other run)</p></td>
+<td><p>10</p></td>
+<td><p>6</p></td>
+<td><p>-0.011 +- 0.008</p></td>
+<td><p>0.025</p></td>
+<td><p>0.072</p></td>
+<td><p>1 / 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>cache - plain</p></td>
+<td><p>nothing in the numerics</p></td>
+<td><p>19</p></td>
+<td><p>6</p></td>
+<td><p>-0.011 +- 0.009</p></td>
+<td><p>0.041</p></td>
+<td><p>0.163</p></td>
+<td><p>5 / 8</p></td>
+</tr>
+<tr class="row-even"><td><p>rep - new, not windowed</p></td>
+<td><p>nothing</p></td>
+<td><p>5</p></td>
+<td><p>1</p></td>
+<td><p>-0.013 +- 0.008</p></td>
+<td><p>0.018</p></td>
+<td><p>0.040</p></td>
+<td><p>1 / 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>rep - new, windowed</p></td>
+<td><p>nothing</p></td>
+<td><p>6</p></td>
+<td><p>6</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>new - cache, windowed</p></td>
+<td><p>window, matrix</p></td>
+<td><p>26</p></td>
+<td><p>0</p></td>
+<td><p>+0.007 +- 0.006</p></td>
+<td><p>0.033</p></td>
+<td><p>0.124</p></td>
+<td><p>16 / 10 (p = 0.33)</p></td>
+</tr>
+<tr class="row-odd"><td><p>new - cache, not windowed</p></td>
+<td><p>matrix</p></td>
+<td><p>21</p></td>
+<td><p>5</p></td>
+<td><p>+0.003 +- 0.003</p></td>
+<td><p>0.015</p></td>
+<td><p>0.046</p></td>
+<td><p>8 / 8</p></td>
+</tr>
+<tr class="row-even"><td><p>new - cache, all</p></td>
+<td><p></p></td>
+<td><p>50</p></td>
+<td><p>5</p></td>
+<td><p>+0.005 +- 0.004</p></td>
+<td><p>0.026</p></td>
+<td><p>0.124</p></td>
+<td><p>25 / 20 (p = 0.55)</p></td>
+</tr>
+<tr class="row-odd"><td><p>new - plain</p></td>
+<td><p></p></td>
+<td><p>19</p></td>
+<td><p>4</p></td>
+<td><p>+0.002 +- 0.006</p></td>
+<td><p>0.025</p></td>
+<td><p>0.060</p></td>
+<td><p>9 / 6</p></td>
+</tr>
+<tr class="row-even"><td><p>new - prod, mocks, windowed</p></td>
+<td><p></p></td>
+<td><p>14</p></td>
+<td><p>0</p></td>
+<td><p>-0.001 +- 0.004</p></td>
+<td><p>0.016</p></td>
+<td><p>0.039</p></td>
+<td><p>7 / 7</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Four real fits are partly windowed (4 or 8 of 12 images) and are in “all” only.</p>
+<p>The first three rows are the scatter of the fit itself: the same numerics, run again, give another mass in two
+thirds of the cases, 2 to 4 per cent away (section 5 has the reason). The rows with the switches have the same
+scatter and no mean beyond their errors. In units of the posterior half-width, new - cache has mean +0.06 +- 0.07
+and rms 0.49; cache - plain has -0.08 +- 0.07 and rms 0.33. The largest entries of both (0.124 and 0.163) are the
+same target, whose cache run is the outlier.</p>
+<p>The best log posterior of the chains differs between runs by a few units either way (new - cache: median 0.0, 22
+up, 23 down), and the widths of ln M500 agree (median ratio new / cache 1.009).</p>
+<p>A direction would show here as a mean. The bound from whole fits is limited by the rerun scatter: |mean| below
+0.02 in ln M500 at two sigma for windowed fits. The bound from section 4.1, where the start is shared, is 0.005,
+and section 2 puts the direct effect at 6e-5.</p>
+</section>
+</section>
+<section id="reproducibility-and-the-fftw-plans">
+<h2>5. Reproducibility and the FFTW plans<a class="headerlink" href="#reproducibility-and-the-fftw-plans" title="Link to this heading">¶</a></h2>
+<p>Pass-1 fits are not reproducible to the bit: of 10 mocks rerun with the unchanged code, 4 gave another chain.
+The cause is in the image-grid PSF. mbproj2d and the tail of <code class="docutils literal notranslate"><span class="pre">KingAnglePSF</span></code> make their FFTW plans with
+<code class="docutils literal notranslate"><span class="pre">FFTW_MEASURE</span></code>, which times candidate algorithms when the fit is set up and keeps the fastest. On a busy node the
+timing differs from run to run, another plan sums in another order, and the last digit of the model differs.
+Repeats of one PSF evaluation in new processes on the node matched the first in 1 of 10; with the PSF switched off
+10 of 10; with the window 9 of 9 and 7 of 7.</p>
+<p><code class="docutils literal notranslate"><span class="pre">WindowedAnglePSF</span></code> plans with <code class="docutils literal notranslate"><span class="pre">FFTW_ESTIMATE</span></code> and chooses its groups by counted work, so the same input gives the
+same bits. In job 1902121 the six repeated fits with every image windowed reproduced their chains exactly; of the
+five repeated fits without a windowed image one did.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FFTW_ESTIMATE</span></code> costs speed: in separate processes a 234 px transform took 0.335 ms against 0.292 ms with a
+measured plan, a 280 px one 0.433 against 0.262. The window is faster than the image grid in spite of that. A plan
+measured once and stored as FFTW wisdom, imported by every fit, would give measured speed and fixed bits for both
+paths; that is not written.</p>
+</section>
+<section id="speed">
+<h2>6. Speed<a class="headerlink" href="#speed" title="Link to this heading">¶</a></h2>
+<p><strong>One evaluation</strong> (login node, one core, cache off): 106.5 ms to 50.4 ms in mocks at z &lt;= 0.15 (median factor
+2.09, range 1.70 to 2.20), 1.98 in real fits with every image windowed, 97.7 to 81.0 ms at z = 0.2, and 1.11 to
+1.18 where no image is windowed (the projection alone).</p>
+<p><strong>Stage 2 of the optimiser with the cache</strong>, same start (section 4.1, on node cores next to running fits): 2.29
+times less time per evaluation, 2.41 in total.</p>
+<p><strong>Whole fits</strong>, run time as recorded by the fit. “plain”, “cache” and “new” ran on the same kind of node in two
+jobs of 52 and 64 fits; “prod” ran on the pass-1 nodes with 72 fits each.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>time ratio (sum over fits)</p></th>
+<th class="head"><p>every image windowed</p></th>
+<th class="head"><p>no image windowed</p></th>
+<th class="head"><p>all</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>plain / new</p></td>
+<td><p>3.10 (n 6; optimiser 4.66, sampler 1.93)</p></td>
+<td><p>1.83 (n 13; 2.50, 1.07)</p></td>
+<td><p>2.17 (n 19)</p></td>
+</tr>
+<tr class="row-odd"><td><p>cache / new</p></td>
+<td><p>2.32 (n 26; 2.65, 2.00)</p></td>
+<td><p>1.38 (n 21; 1.54, 1.20)</p></td>
+<td><p>1.83 (n 50)</p></td>
+</tr>
+<tr class="row-even"><td><p>prod / new</p></td>
+<td><p>4.72 (n 26; 6.45, 3.04)</p></td>
+<td><p>2.28 (n 21; 2.90, 1.56)</p></td>
+<td><p>3.47 (n 51)</p></td>
+</tr>
+<tr class="row-odd"><td><p>plain / cache</p></td>
+<td><p>1.30 (n 6)</p></td>
+<td><p>1.40 (n 13)</p></td>
+<td><p>1.36 (n 19)</p></td>
+</tr>
+<tr class="row-even"><td><p>new / rep</p></td>
+<td><p>1.00 (n 6)</p></td>
+<td><p>1.04 (n 5)</p></td>
+<td><p>1.03 (n 11)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The 51 fits took 287.6 core hours in production, 147.0 with the cache and 81.6 with the cache and both switches.</p>
+<p>The 3,976 finished pass-1 fits spent 63 per cent of their 21,763 core hours at z = 0.1, 23 per cent at z = 0.2 and
+14 per cent above. With the factors of the first row (windowed at z = 0.1, not windowed above) the campaign would
+take 1 / 2.5 of its time; with the third row 1 / 3.4. The first is the like-for-like number. The fits still to run
+on 2026-11-24 were mostly the long ones at z = 0.1, which moves the figure up a little.</p>
+<p>Two cautions. Between 03:30 and 04:00 of the job other processes of this test held more cores than were free
+(load 75 to 77 on 72 cores), so fits running then lost a few per cent. And the non-windowed fits gained more on
+the node (1.38 over the cache) than one evaluation gains on the login node (1.11 to 1.18): the single product
+moves about 540 MB less memory per evaluation, which matters when 72 fits share the memory bus, but this was not
+measured separately.</p>
+</section>
+<section id="limits">
+<h2>7. Limits<a class="headerlink" href="#limits" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The window needs the mask box grown by the kernel reach inside the grid. At z = 0.2 the masks reach the edge in
+most mocks (7 of 9 here), and those fits take 23 per cent of the campaign time. Padding the buffer instead
+of refusing would extend the window to them; the cyclic wrap of the image grid would then be absent from the
+model, which is a change of the model at the edge and not of the rounding, and needs its own test.</p></li>
+<li><p>The fit does not record how many images were windowed; it prints the count. It should go into <code class="docutils literal notranslate"><span class="pre">result.json</span></code>.</p></li>
+<li><p>A windowed PSF fills the mask box only. The fit puts the image-grid PSF back after the sampler; code that reads
+model images during the fit outside the mask would get the floor value.</p></li>
+<li><p>Mixed fits (some images windowed) and fits without a windowed image keep <code class="docutils literal notranslate"><span class="pre">FFTW_MEASURE</span></code> plans for the rest and
+are not reproducible to the bit.</p></li>
+<li><p>About 4,000 fits of pass 1 were made with both switches off and the last 978 with both on (2026-11-26). A sample
+fitted partly with and partly without them is one method to within the numbers above; the switch is recorded per
+fit (<code class="docutils literal notranslate"><span class="pre">fitfix</span></code> in <code class="docutils literal notranslate"><span class="pre">result.json</span></code>).</p></li>
+<li><p>Not tested: more than 12 images, pixel sizes other than 8 to 24 arcsec, the fast-fit presets.</p></li>
+</ul>
+</section>
+<section id="how-to-reproduce">
+<h2>8. How to reproduce<a class="headerlink" href="#how-to-reproduce" title="Link to this heading">¶</a></h2>
+<p>Unit tests: <code class="docutils literal notranslate"><span class="pre">tests/unit/test_massfit_psf_window.py</span></code> (window against image grid inside the mask for three
+geometries, bit identity of two windows, edge masks, switch defaults) and <code class="docutils literal notranslate"><span class="pre">tests/unit/test_massfit_band_response.py</span></code>
+(matrix against group projection).</p>
+<p>A fit with the switches:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python -m tngxmm.massfit.fit_hydrostatic ... --fitfix psf_eval=window,projection=matrix
+</pre></div>
+</div>
+<p>The measurements of this page were made with scripts kept outside the package, in <code class="docutils literal notranslate"><span class="pre">psfwin/</span></code> of the campaign’s
+development directory: <code class="docutils literal notranslate"><span class="pre">surface.py</span></code> and <code class="docutils literal notranslate"><span class="pre">surface_summary.py</span></code> (section 2), <code class="docutils literal notranslate"><span class="pre">refcheck.py</span></code> and <code class="docutils literal notranslate"><span class="pre">ref_summary.py</span></code>
+(section 3), <code class="docutils literal notranslate"><span class="pre">opt_pairs_node.py</span></code> and <code class="docutils literal notranslate"><span class="pre">opt_summary.py</span></code> (4.1), <code class="docutils literal notranslate"><span class="pre">pairs.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pairs_split.py</span></code> with <code class="docutils literal notranslate"><span class="pre">nwin.py</span></code>
+(4.2 and 6), <code class="docutils literal notranslate"><span class="pre">repro.py</span></code> and <code class="docutils literal notranslate"><span class="pre">fftplan.py</span></code> (5), <code class="docutils literal notranslate"><span class="pre">campaign.py</span></code> (6). The fits are those of jobs 1902090 (plain, cache)
+and 1902121 (new, rep), plan <code class="docutils literal notranslate"><span class="pre">FIT_PLAN_fastfit_test2.txt</span></code>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="REVIEW_RESPONSE_v1.1.3.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Response to the review of the documentation (release 1.1.2)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="REFERENCE_LEDGER.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Reference ledger: claims to verify by hand</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Maxim Oweyssi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">The PSF on the mask window and the projection in one product: what changes, by how much, how fast</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#what-is-computed">1. What is computed</a></li>
+<li><a class="reference internal" href="#the-log-posterior-at-fixed-points">2. The log posterior at fixed points</a></li>
+<li><a class="reference internal" href="#which-of-the-two-is-nearer-to-the-exact-convolution">3. Which of the two is nearer to the exact convolution</a></li>
+<li><a class="reference internal" href="#fits">4. Fits</a><ul>
+<li><a class="reference internal" href="#same-start-three-optimiser-runs">4.1 Same start, three optimiser runs</a></li>
+<li><a class="reference internal" href="#whole-fits">4.2 Whole fits</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reproducibility-and-the-fftw-plans">5. Reproducibility and the FFTW plans</a></li>
+<li><a class="reference internal" href="#speed">6. Speed</a></li>
+<li><a class="reference internal" href="#limits">7. Limits</a></li>
+<li><a class="reference internal" href="#how-to-reproduce">8. How to reproduce</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

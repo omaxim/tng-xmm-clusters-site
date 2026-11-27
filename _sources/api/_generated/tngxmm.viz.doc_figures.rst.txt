@@ -1,0 +1,37 @@
+tngxmm.viz.doc\_figures
+=======================
+
+.. automodule:: tngxmm.viz.doc_figures
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MASS_COLOURS
+      STYLE
+      INPUTS
+      PAPER_CANDIDATES
+      CLOSURE_STUDY_ARMS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check
+      fig_closure
+      fig_convergence
+      fig_hse_bias_fits
+      fig_hse_bias_truth
+      fig_lx_mass
+      fig_mock_vs_real
+      fig_pipeline_overview
+      fig_realism
+      fig_samples
+      lx_truth_ratio
+      main
+      make
+      resolve
+      root_dir
+      sha256
+   

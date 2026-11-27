@@ -1,0 +1,30 @@
+tngxmm.photometry.estimate\_lx\_background
+==========================================
+
+.. automodule:: tngxmm.photometry.estimate_lx_background
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LX_BKG_METHODS
+      LX_FLAGS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      king_eef
+      mask_radius_arcsec
+      ring_filled_sum
+      sector_clipped_mean
+      source_mask
+      source_radii_px
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LxBackgroundOptions
+   

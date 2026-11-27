@@ -1,0 +1,13 @@
+tngxmm.obs.schemas
+==================
+
+.. automodule:: tngxmm.obs.schemas
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      QUANTITIES
+      MASS_KINDS
+   

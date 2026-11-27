@@ -1,0 +1,28 @@
+tngxmm.sim.data\_inputs
+=======================
+
+.. automodule:: tngxmm.sim.data_inputs
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MANIFEST
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      atomdb_root
+      check_stage_inputs
+      pinned
+      stage_files
+      view_record
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      DataInputError
+   

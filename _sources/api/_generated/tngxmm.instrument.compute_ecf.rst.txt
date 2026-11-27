@@ -1,0 +1,29 @@
+tngxmm.instrument.compute\_ecf
+==============================
+
+.. automodule:: tngxmm.instrument.compute_ecf
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LEGACY_TABLE_REL
+      LEGACY_ARF_BAND_MEAN_CM2
+      provenance
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      arf_band_mean_cm2
+      build_table
+      build_table_v4
+      compute_ecf
+      ecf_exposure_product
+      ecf_lookup
+      ecf_provenance
+      provenance
+      resolve_table_path
+      response_setup
+   

@@ -1,0 +1,25 @@
+tngxmm.bank.pipeline
+====================
+
+.. automodule:: tngxmm.bank.pipeline
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SEED_PHOTOMETRY_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_donor_folds_node
+      attach_seed_photometry
+      build_manifest_node
+      convert_frames_to_mosaics
+      create_pipeline
+      filter_rows_node
+      render_bank_node
+      select_sources
+   

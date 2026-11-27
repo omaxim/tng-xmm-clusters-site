@@ -1,0 +1,27 @@
+tngxmm.sim.build\_box\_halos
+============================
+
+.. automodule:: tngxmm.sim.build_box_halos
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TNG300_BASE
+      OBJECT_OFFSET
+      ORPHAN_OFFSET
+      OBJECT_OFFSETS
+      ORPHAN_OFFSETS
+      MAX_Z0_GROUP
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_box_objects
+      box_base_path
+      make_object_split
+      root_descendant
+      select_box_halos
+   

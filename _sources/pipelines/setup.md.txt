@@ -1,0 +1,19 @@
+# setup
+
+```{eval-rst}
+.. automodule:: tngxmm.setup.pipeline
+   :noindex:
+   :no-members:
+```
+
+Run it with ``kedro run --pipeline setup --params setup.root=<dir>,setup.stages=[fit]``.  It is not part of
+``kedro run``: nothing is downloaded unless this pipeline is named.  The command ``tngxmm data fetch`` does the same
+without Kedro and lists the sizes first ({doc}`/LOCAL`, "Without the cluster").  A list of several items or stages
+goes into ``conf/local/parameters.yml``, since ``--params`` splits at commas.  Kedro resolves the data package
+and the fixtures root before any node runs, so on a new machine ``$TNGXMM_DATA`` and ``$TNGXMM_FIXTURES`` must name
+directories first (``activate.sh`` of an earlier ``tngxmm data fetch`` sets both; empty directories do).
+
+## Nodes
+
+```{kedro-pipeline} setup
+```

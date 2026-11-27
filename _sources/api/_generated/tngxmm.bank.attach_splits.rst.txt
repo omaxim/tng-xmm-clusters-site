@@ -1,0 +1,28 @@
+tngxmm.bank.attach\_splits
+==========================
+
+.. automodule:: tngxmm.bank.attach_splits
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FROZEN_SPLIT_SHA256
+      FROZEN_SPLIT_COUNTS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attach_splits
+      check_split_leakage
+      load_frozen_split
+      load_zoom_target_ids
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SplitError
+   

@@ -1,0 +1,31 @@
+tngxmm.obs.reference\_masses
+============================
+
+.. automodule:: tngxmm.obs.reference_masses
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MATCH_ARCMIN
+      COLUMNS
+      SOURCES
+      LITERATURE_VALUES_CSV
+      LITERATURE_LINK
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_literature_values
+      cluster_index
+      crossmatch
+      independence
+      jname_position
+      match_row
+      norm_name
+      ref_id
+      sz_rows
+      write_reference_masses
+   

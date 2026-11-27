@@ -1,0 +1,17 @@
+tngxmm.photometry.pipeline
+==========================
+
+.. automodule:: tngxmm.photometry.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+      measure_mock_lx_node
+      mock_apertures_node
+      obs_apertures_node
+      recentre_observations_node
+      remeasure_campaign_lx_node
+   

@@ -1,0 +1,32 @@
+tngxmm.validation.catalogue\_moves
+==================================
+
+.. automodule:: tngxmm.validation.catalogue_moves
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MOVE_COLUMNS
+      STATISTICS
+      AGREEMENT_TESTS
+      AGREEMENT_LEVEL
+      CENTRING_ARM_R95_MPC
+      WITHOUT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      agreement
+      compare_moves
+      difference_bootstrap
+      format_agreement
+      format_report
+      main
+      mock_moves
+      move_statistics
+      real_moves
+      weighted_median
+   

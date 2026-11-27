@@ -1,0 +1,320 @@
+# Validation status
+
+What has been tested, against which rule, with which result, and on which configuration. The mock-making and the
+provenance are checked in detail; the three tests a reader needs before trusting a mock hydrostatic bias are not
+passed. The mass fit is biased low by about 15 per cent once a realistic background is
+present, the replica sample does not match the real sample in mass, and a classifier separates mocks from real
+observations. The pre-registered realism evaluation has not been run. Terms: {doc}`glossary`; quantities:
+{doc}`definitions`; figures: {doc}`figures`.
+
+Every number below names the configuration it was measured on. Most come from release 1.1.1 (`198b80e9d4563eec`)
+or older, and the last section lists which. None was measured on the configuration of the integration of
+2026-10-30 with the pn out-of-time energies from the CTI calibration (spec hash `12641be3938b849d` of preset `v1`:
+`full` emission abundances, the corner QPB level of every camera, the pn Cu-line gap, no RGA dipole, the
+out-of-time energies from EPN_CTI instead of the removed factor; {doc}`background`).
+
+The configuration has changed further since ({doc}`changelog`): the MOS vignetting carries the RGA obscuration of
+the calibration since 2026-11-03 (`instrument.mos_rga_vignetting = 'ccf'`), and the spec hash of `v1` is
+`c2e6b282f6aab356` since 2026-11-12. Two measurements exist on the newer configurations: the closure grid of
+2026-11-10 and the pilot of 60 real and 60 mock fits. They are in the section "The closure grid and the pilot of
+November 2026". No other number on this page has been measured again. Pass 1 of the pairing on the fit mass (5,001
+FLAMINGO L1_m8 views) has been generated and fitted since; its fits use short chains and serve the pairing
+({doc}`production`), and no number of this page comes from them.
+
+## Summary
+
+| test | rule | result | configuration | status |
+|---|---|---|---|---|
+| closure of the mass fit, clean data | M_fit / M_true = 1.00 +- 0.03 in every cell (registered) | median 0.970 (24 fits), single fits 0.89-1.08 | V4, 2026-10-17 | fails the per-cell rule; the median is 3 per cent low with a scatter of about 0.05 per fit |
+| closure of the mass fit, sky + particle background + AGN | as above | median 0.845 (24 fits) | V4, 2026-10-17 | fails |
+| population of the replica list (gate P) | KS distance below the bootstrap critical value; coverage >= 95 per cent | mass D = 0.241 (critical 0.061); coverage 93 per cent; other variables pass | target lists of 2026-10-12 | fails; the replica list is used only for the realism pairing |
+| population of the matched draw (gate P) | as above | mass D = 0.026 (critical 0.067), every variable within its critical value; coverage 0.978 | recomputed for release 1.1.3 | passes; the sample of every population statistic |
+| realism, 17 image statistics (C2ST) | AUC <= 0.75 (proposed before any real-cluster ML result) | 0.883 (logistic) / 0.970 (boosting), 194 against 194 | before the final release 1.1.1 instrument | fails |
+| realism, DINOv3 embeddings (C2ST) | AUC <= 0.75 | 0.913 (PCA-32, 465 against 465) | round 3, 2026-10-21 | fails |
+| frozen realism evaluation (84 held-out donors) | registered in `realism.frozen` | not run | release 1.1.1 | pending |
+| real fits against published XMM hydrostatic masses (claim A) | M_fit / M_ref within 0.90-1.10 | 1.011 [95 %: 0.940, 1.105], 135 clusters | V4, 2026-10-17 | inconclusive (the interval leaves the band). The band was the rule of V4; since 2026-11-10 a real fit is read by the tension between its error bar and the published one (next rows) |
+| closure of the mass fit, gate arm with the model averaged over the pixel | pooled median of the usable clean fits within 0.95-1.05; real-background tail ({doc}`dev/PREREGISTRATION`, section 1) | 1.046 on the 27 usable clean fits (1.015 on the 54 ok fits); 0.89 on real backgrounds | job 1896730, 2026-11-10 | fails; since 2026-11-11 reported as the measured error of the method and no longer a gate of the freeze |
+| pilot, real fits against Lovisari et al. (2020) | the tension per cluster between the two 68 per cent intervals, read with the common offset and the scatter ({doc}`dev/PILOT`) | inside the domain and without a flag from the fit's own result: median ratio 1.020 (0.878 to 1.185), 22 fits, scatter 0.32 in ln, 5 fits beyond 3 sigma | pilot, 2026-11-10, flat c200 prior | no common offset; the scatter is not yet set against that between published analyses; the count predates the refit of MACS J0717.5+3745 |
+| pilot, mock fits against the simulation's hydrostatic and true mass | median M_fit / M_HSE consistent with 1; median M_fit / M_true within 0.70-1.00 ({doc}`dev/PILOT`) | the mock fits lie above the simulation's own hydrostatic mass; the numbers are in the pilot report and not yet on this page | pilot, 2026-11-10, flat c200 prior | open: the cause is not established ({doc}`dev/STATUS`, B15) |
+| real fit / lensing against mock M_X / M_true (claim B) | consistent | 0.824 [0.675, 0.996] (57 clusters) against 0.707 [0.627, 0.937] | V4, 2026-10-17 | consistent, wide intervals |
+| intrinsic luminosity against the official TNG products | per-pixel agreement | the temet-exact maps reproduce the official TNG-Cluster maps to 1e-5 dex; the pipeline's own L_X is +0.0095 dex from temet's (2,463 halos) | current | passes |
+| campaign acceptance checks C1-C17 | every check | pass on the four v1.0.1 production trees (9,774 views; per-view checks on a sample of 500 per tree) | v1.0.1 | passes |
+
+## The closure test
+
+Idealised clusters in exact hydrostatic equilibrium (cool-core and non-cool-core profiles; M500 = 2, 4, 8e14 Msun;
+z = 0.1 and 0.6) are put through the whole chain and fitted with the production fit (the cell's own SAS source
+list, arm `v4sas`). Data modes: `clean` (cluster only), `agnonly`, `bgonly` (sky and particle background) and `real`
+(all of them). 120 fits, 2026-10-17, figure "closure":
+
+| data mode | median M_fit / M_true | fits |
+|---|---|---|
+| clean, background fixed in the model | 0.970 | 24 |
+| clean, background free in the model | 1.032 | 24 |
+| background only | 0.921 | 24 |
+| AGN only | 0.779 | 24 |
+| real (background and AGN) | 0.845 | 24 |
+
+* The rule registered in `PIPELINE.md` before the grid was run, 1.00 +- 0.03 in every cell, fails in every data mode.
+  After the results were seen the gate was moved to the clean cells and to the catastrophic tail of the real cells
+  (the certification rules `R4_clean` and `R4_real_tail`); the change is recorded with its date in the decision log
+  ("Fit crop stays 3 R500; closure background bias carried as a measured calibration").
+* The deficit of the real cells is not the fit crop (0.845 / 0.854 / 0.845 at crops of 3 / 5 / 8 R500), the spatial
+  shape of the background, the SAS detection, the AGN light or the optimiser; it needs the sky and particle
+  background. The AGN-only cells are lower still, which points at the background model of the fit when the data
+  hold no background (the background-free fit of the clean cells gives 1.032).
+* The deficit is a measured property of the method. It is not subtracted from any mock or real result on this
+  site. Its dependence on redshift, mass, profile and S/N is in the figure; with 24 fits per mode it is not
+  measured well enough to be a calibration. An M_X / M_true of a mock is therefore the product of the hydrostatic
+  bias of the gas and a method bias of about 10-15 per cent that depends on the background.
+* The grid was run before the release 1.1 instrument changes (donor background components, footprint, Galactic
+  column). It has to be rerun on the current configuration (`slurm/closure_grid.sh`, about 3 node-hours).
+* The rerun (STATUS B1) is judged by DESIGN v4, written on 2026-11-04 before any of its fits
+  ({doc}`dev/PREREGISTRATION`): the clean cells gate the fitter (pooled median within 0.95-1.05, every redshift within
+  0.90-1.10), the real cells gate the catastrophic tail (at most 5 per cent outside 0.67-1.5), and the real-cell median
+  (within 0.92-1.08, every redshift within 0.85-1.15, DESIGN v2's rule) decides whether a mock M_X / M_true may be
+  quoted as a hydrostatic bias without the method term. Every study arm is judged by one paired rule at 0.03 in ln M.
+  The per-cell rule above is kept as a report.
+
+## The closure grid and the pilot of November 2026
+
+Two runs on the configurations after the integration. Both used the flat concentration prior; the prior was changed
+afterwards (below). The fits of pass 1 ran under the new prior.
+
+The closure grid (job 1896730, 2026-11-10; gate arm with the model averaged over the pixel). Under the rule
+registered on 2026-11-04 the grid fails: the pooled ratio of the usable clean fits is 1.046 (27 usable of 54,
+interval about 1.010 to 1.084; the 54 ok fits give 1.015), and the real-background cells give 0.89. The rule was not
+changed. On 2026-11-11 the author decided, knowing this result, that the grid is reported as the measured error of
+the method on clusters in exact equilibrium and no longer gates the freeze ({doc}`dev/PREREGISTRATION`, section 1).
+Nothing is subtracted for it.
+
+The pilot ({doc}`dev/PILOT`): 60 real observations with a hydrostatic M500 of Lovisari et al. (2020) and 60 FLAMINGO
+L1_m8 views, fitted with the configuration that is to be frozen, quick chains.
+
+* A real fit is read by the tension between the fit's 68 per cent interval and the published one, with the
+  published mass and its errors carried to our cosmology, not by a percentage band about 1. Since the amendment of
+  2026-11-11 three things are read together: the common offset inside the domain, the scatter against the scatter
+  between published analyses of the same clusters, and every cluster beyond 3 sigma traced and listed.
+* About half of each list lies outside the domain of the fit (a flag known before the fit: the centre,
+  a cluster that fills the field, a first guess limited by the field or missing). Those fits are reported apart.
+* Real fits inside the domain and without a flag from the fit's own result: 22 fits, median M_fit / M_published
+  1.020 (0.878 to 1.185), scatter 0.32 in ln, 9 beyond 2 sigma and 5 beyond 3 sigma. With every ok fit inside the
+  domain: 39 fits, median 0.978, intervals overlapping for 14, 19 beyond 2 sigma and 12 beyond 3 sigma. The size of
+  the scatter between published analyses has not been entered in the ledger yet, so the pilot's scatter has no
+  verdict. The fit intervals come from quick chains and may be too narrow; a pull is then too large.
+* One cluster was traced. MACS J0717.5+3745 (pull -10.7) had been fitted without a particle background because its
+  templates were empty. After the fix it gives 11.87 (11.28-12.42) e14 Msun against 12.91 (12.22-13.46), pull -1.2.
+  The counts above still contain the old fit.
+* The mock fits lie above the simulation's own hydrostatic mass, where the reading asks for a ratio of 1. The
+  cause is not established ({doc}`dev/STATUS`, B15), so no M_fit / M_HSE or M_fit / M_true of the pilot is quoted
+  here as a bias.
+* 18 of the 67 in-domain fits ended at a bound of the flat concentration prior. On 2026-11-12 the prior
+  became the Dutton & Maccio (2014) relation (ledger `fit.cm_prior`). The fits that were not at a bound move by a
+  median of 0.3 per cent (real) and 0.0 per cent (mock) when their chains are weighted by the new prior, at most 10
+  per cent; the 18 fits at a bound are not refitted.
+
+The freeze of the configuration is judged on the pilot. The pilot is not the science result: 60 views of one
+projection are too few for a bias to two digits, and its views were not paired on the fit mass. Pass 1 of that
+pairing has been run since; the pass-2 list with the 170 added observations is not built yet ({doc}`samples`).
+
+## Hydrostatic bias of the mocks (preview)
+
+Two measurements exist; neither is on the current configuration and neither is a result yet.
+
+* The intrinsic hydrostatic bias of the whole population (no X-ray fit, figure "hse_bias_truth"): M_HSE(< R500c) /
+  M500c has a median of 0.883 (16-84 per cent 0.781-1.008) over 2,460 TNG-Cluster halo-snapshots and 0.914 over 742
+  TNG300 halo-snapshots, nearly flat in mass and redshift (v1.0.1 trees; the truth stage has not changed since).
+* X-ray fits of 43 mock views (the development sample "D1", V4 configuration, figure "hse_bias_fits"): at the
+  true R500c, M_X / M_true = 0.825, M_HSE / M_true = 0.866, M_X / M_HSE = 0.847 (medians of all 43). Without the 12
+  fits flagged by the QC rules the medians are 0.835, 0.881 and 0.931. The QC flags (posterior at a prior edge,
+  runaway outer pressure, centre, background fallback) select on the outcome, and the method-bias median moves by 8
+  per cent when they are applied, so a result has to be given with and without them. Three re-seeds of the same
+  views give ln(M_X / M_HSE) medians of -0.072, -0.064 and -0.089 without the flagged fits (a 7-8 per cent method
+  bias).
+* Three numbers on this page measure the bias of the method, and they are not the same quantity: the closure ratio
+  M_fit / M_true of idealised clusters with a realistic background (0.845; exact hydrostatic equilibrium, smooth
+  gas), and M_X / M_HSE of TNG mocks with every fit (0.847) or without the QC-flagged fits (0.931), where M_HSE is
+  itself an estimate from the 3-D profiles. None is adopted as a correction: the closure grid has to be rerun on the
+  current configuration first, and the QC choice has to be fixed before the result is seen. The closure ratio is the
+  method bias without clumping and non-thermal pressure; the mock ratio M_X / M_HSE is the one the paper's claim C
+  refers to. What the mocks represent of the physics behind the bias (thermal against total pressure, clumping,
+  temperature weighting, the absorbing column, the epoch) is listed in {doc}`definitions` ("Scope of the bias
+  measurement").
+
+## The population sample
+
+See {doc}`samples`. The replica list fails gate P in mass (the mocks are lighter) and in coverage. Population
+statistics therefore use the matched draw from the maximal list (3,111 draws), which passes gate P strictly when
+recomputed with the current code (matching mass D = 0.026 against 0.067, coverage 0.978). On the intrinsic hydrostatic
+bias the difference between the two samples is under 1 per cent (median M_HSE / M500c 0.877 against 0.885).
+
+## Realism
+
+A classifier can tell a mock from the real observation it replicates. The rule
+AUC <= 0.75 was proposed before any machine-learning result on real clusters (`method.realism_domain_gap`); it is a
+requirement for claim D, not for the hydrostatic bias. Claim D is not part of the first paper; there the realism tests
+are reported as a description of how far the mocks are from the real observations.
+
+| sample, configuration | statistics (logistic / boosting) | DINOv3 PCA-2 / 8 / 32 |
+|---|---|---|
+| 195 donors, v1.0.1 products as stored | 0.993 / 0.999 | 0.973 / 0.998 / 1.000 |
+| 195 donors, count-matched | 0.985 / 0.998 | |
+| 195 donors, instrument fixes of 2026-10-20 | 0.796 / 0.958 | 0.512 / 0.773 / 0.918 |
+| 465 donors, round 3 (2026-10-21) | 0.777 / 0.865 | 0.540 / 0.765 / 0.913 |
+| 194 donors, conditions donor, before the final 1.1.1 instrument | 0.883 / 0.970 | |
+
+Real against real (`internal/ledger_tests/realism_real_null.py`): two disjoint random halves of the real
+observations of the development donors, split by cluster and compared with the same grouped test on the same
+statistics, give AUC 0.49 +- 0.03 (logistic) and 0.49 +- 0.04 (boosting) at 194 against 194 over 20 splits, with a 95th
+percentile of 0.53-0.56 (also at 242 against 242). The mock-against-real AUCs above are therefore far outside what two
+real samples of this size give.
+
+The samples differ between rows, so the rows are not a sequence of improvements on one set. What drives the
+separation (round 3, 465 donors; figure "realism"):
+
+* background features: 0.718 / 0.796; gas features alone (surface-brightness shape and band ratios): 0.664 / 0.677;
+  counts, point sources and footprint: 0.53-0.57;
+* DINOv3 on the cluster region alone 0.560 / 0.691 / 0.825, on the field alone 0.502 / 0.615 / 0.791;
+* single statistics (194 donors): the exposed fraction of the field (AUC 0.28, mocks lower), the background ring ratio
+  (0.68), the number of compact sources (0.36, mocks fewer), the hardness of the source (0.37) and of the background
+  (0.62).
+
+So the separation comes from both sides. The background and field statistics point at the instrument and sky model
+(the fixed sky foreground, `instrument.sky_background`; the pn soft background, which is not measured per donor). The
+gas statistics point at TNG itself: TNG-Cluster halos are brighter than real clusters of the same mass (next
+section), and the band ratio of a mock relative to its donor grows as 0.46 ln(T_sl,mock / T_donor) (465 donors,
+17 sigma; `instrument.galactic_column_total`), i.e. the mock clusters are hotter than the real clusters they are
+matched to. These are properties of the simulation, not of the instrument model.
+
+The frozen evaluation (84 held-out donors never used to tune the instrument stage, every setting registered in
+`realism.frozen`, code that refuses a deviating run; {doc}`realism`) has not been run. It needs one node
+(`slurm/realism_frozen.sh`).
+
+## The luminosity of TNG-Cluster
+
+At fixed true M500c (5e14 Msun, z = 0.2) the soft-band luminosity of TNG-Cluster is +0.28 dex above observed
+relations (Bulbul et al. 2019 +0.41, Lovisari et al. 2020 +0.28, Pratt et al. 2009 +0.20; the references differ by
++-0.1 dex among themselves; each 0.1 of hydrostatic bias in the observed masses adds about +0.09 dex). About 70 per
+cent is explained by the gas fraction, clumping, the density-profile shape and the cool-core mix (+0.19 +- 0.06 stat
++- 0.07 lensing-mass systematic); the remainder, +0.09 +- 0.09 dex, is consistent with zero. The pipeline is ruled
+out as the cause (its intrinsic L_X matches temet's to +0.0095 dex). The excess is reported as a property of the
+simulation and is not calibrated away. Figure "lx_mass" shows the measured L_X of the mocks and of the real
+observations (+0.31 dex at 4-7e14 Msun, with the true mass on one side and the catalogue mass on the other). In the
+median a measured mock L_X is below the intrinsic one: by 0.077 dex inside R500 and 0.071 dex in L_X(1 Mpc) (6,634
+and 6,967 TNG-Cluster views of the v1.0.1 trees, an earlier configuration; 0.052 dex in L_X(1 Mpc) on the 193
+TNG-Cluster views of the L_X gap test), though not in every aperture and sample ({doc}`definitions`, L_X). The next
+section gives its steps. Whether it cancels between mocks and real data is not measured.
+
+FLAMINGO L1_m8, put through the same mock pipeline in 193 pairs matched in true mass, donor, redshift and line of
+sight, is 0.33 dex fainter than TNG-Cluster in L_X(1 Mpc) (0.35 dex intrinsic; the estimator reads FLAMINGO 0.041 dex
+and TNG-Cluster 0.052 dex below their intrinsic L_X(1 Mpc), medians over the 193 pairs) and sits on the real pool
+(-0.04 dex on true mass, +0.03 on its 3-D hydrostatic mass), while TNG-Cluster sits +0.31 and +0.41 dex above it. An
+independent recomputation (-0.36 dex) and a catalogue-level comparison of temet and SOAP luminosities (-0.42 dex)
+confirm the difference; about 60 per cent of it is the gas fraction. No step of the pipeline raises the TNG-Cluster
+luminosities by more than 0.022 dex. The pipeline therefore does not create the excess ({doc}`simulations`).
+
+Consequence for the mass fits: a mock has about twice the net counts of its real counterpart (the count-matching
+factor has a median of 0.54), and no mock is thinned. The S/N of a mock fit (QC exclusions, prior-edge flags)
+therefore differs from that of the real fit of the same observation; the priors themselves are the same at every
+signal level (the concentration-mass relation for c200, flat for the metallicity).
+
+## The L_X estimator against the intrinsic luminosity
+
+The measured L_X of a mock is the net result of every step between the gas and the number in the table: the count
+image (vignetting, chip gaps and inactive CCDs, PSF, pn out-of-time events), the background from the annulus at
+1.1-1.6 aperture radii, the on-axis live time t_eff and the ECF (on-axis response with the Medium filter for every
+camera, APEC at T_vir and Z = 0.3, TBabs on the angr abundances, a table that stops at z = 1). Each step was measured
+on its own for L_X(1 Mpc) of the TNG-Cluster views of the v1.0.1 trees (`internal/ledger_tests/lx_truth_ratio_terms.py`):
+the steps of the image on 135 views (15 per snapshot) from their photon lists and exposure maps, the ECF steps from the
+ECF calculation itself (`tngxmm.instrument.compute_ecf`). Each entry is the median over the 135 views of log10 of the
+luminosity with the step against without it.
+
+| step | median (dex) | 16-84 per cent |
+|---|---|---|
+| gas beyond +-R200c along the line of sight (photons inside 1 Mpc against the intrinsic cylinder) | -0.000 | -0.002 to +0.002 |
+| cluster light in the background annulus | -0.003 | -0.012 to -0.000 |
+| exposure map: vignetting, chip gaps and inactive CCDs, against the on-axis live time | -0.059 | -0.093 to -0.035 |
+| PSF: light scattered out of the aperture and into the annulus (on-axis King profile of each camera) | -0.018 | -0.025 to -0.006 |
+| pn out-of-time events moved along their readout column | -0.005 | -0.012 to -0.002 |
+| ECF temperature: T_vir of the halo mass against the emission-weighted T_ew of the view | -0.003 | -0.012 to +0.001 |
+| ECF beyond z = 1, where the table is clamped (the 448 views at z_obs > 1 of all 6,967) | +0.002 | -0.002 to +0.009 |
+| ECF absorption: the mock photons absorbed with TBabs on lodd, the ECF on angr, at the same column | +0.011 | +0.006 to +0.022 |
+| ECF response: the donor's filter and exposure of each camera, against Medium at equal exposure | +0.007 | -0.000 to +0.010 |
+| sum of the steps | -0.078 | -0.120 to -0.051 |
+| measured on the same 135 views | -0.079 | -0.139 to -0.045 |
+| not explained (measured minus the sum, view by view) | -0.001 | -0.039 to +0.019 |
+
+* Most of the ratio comes from the image and not from the background estimate: the exposure map, the PSF and the
+  out-of-time events applied together give -0.085 dex (16-84 per cent -0.117 to -0.060). The ECF leaves these losses out on
+  purpose, as losses the real images share (the provenance record of `ecf_table_v2.npz`). The cluster light in the
+  annulus is -0.003 dex on the photons and -0.005 dex over all 6,967 views from the intrinsic cylinders (the median
+  light at 1-1.5 Mpc is 1.9 per cent of that inside 1 Mpc).
+* What is not explained depends on redshift. The remainder is +0.008 and +0.003 dex at z_obs below 0.2 and 0.2-0.5
+  (43 and 35 views) but -0.022 and -0.030 dex at 0.5-0.8 and above 0.8 (25 and 32 views). Of the deeper ratio above
+  z_obs = 0.8 (-0.112 dex over 851 views), the PSF (-0.025 dex in the sample there) and the ECF temperature (-0.008
+  dex over all 851) explain part; the rest is not explained.
+* The 65 views with the Thick filter on every camera have a ratio of -0.173 dex, of which the
+  response step gives -0.078; the 2,001 views with Medium on every camera have -0.077 dex.
+* From Z = 0.3 to 0.1 the metallicity of the ECF's spectrum changes the ECF by 0.2 per cent (+0.001 dex), so it is
+  not a term.
+* Some steps differ between a mock and the real observation it replicates. In the campaign columns the ECF
+  temperature is T_vir of the halo's true mass; for a real cluster it is T_vir of an estimated mass (the catalogue
+  mass, or the first guess of the seed procedure); the real-side step is not measured. The mock photons are absorbed
+  with TBabs on lodd at the HI4PI column; modelled as TBabs on the ISM abundances (wilm) at the total column N_HI + 2
+  N_H2 (Willingale et al. 2013), the same step for the donor observations is +0.006 dex, so the mock exceeds its
+  donor by +0.003 dex in this step (16-84 per cent +0.001 to +0.011). The other steps are the same in kind on both
+  sides, but their size depends on the cluster's profile and position on the detector. Whether the net ratio cancels
+  between mocks and real data is not measured.
+* The table holds for the v1.0.1 configuration only (since release 1.1 the mocks are absorbed at the total column
+  and the instrument stage has changed) and for L_X(1 Mpc) only (inside R500 the same steps act, but were not
+  measured one by one).
+
+## Which configuration each number was measured on
+
+| quantity | measured on | still valid for release 1.1.1? |
+|---|---|---|
+| closure grid (120 fits) | V4 (2026-10-17) | no: rerun after the release 1.1 instrument |
+| mock X-ray fits (43 views, re-seeds) | V4 (2026-10-17) | no |
+| real fits (441 observations) | V4 (2026-10-17) | no; the fit physics changed in V4.1 (pn pattern ARF) |
+| sensitivity tests R1-R11, S1-S6 | V4 (the 43 views, reference arm `v4s1`) | no ({doc}`assumptions/SENSITIVITY_TESTS`) |
+| intrinsic HSE bias of the population | v1.0.1 trees | yes for the truth stage (unchanged since) |
+| L_X of the mocks | v1.0.1 trees (FoF gas within 2 R200c, before the cube of release 1.1) | partly: the cube changes L by +0.001 dex in the median (30 halos) |
+| truth ratio of the L_X estimator (-0.071 dex in L_X(1 Mpc), -0.077 inside R500) and its steps | v1.0.1 trees | no: -0.052 dex in L_X(1 Mpc) on the 193 TNG-Cluster views of the L_X gap test (release 1.1.3 instrument), -0.065 for the same views in the v1.0.1 trees; the steps are not measured there |
+| realism AUCs | development configurations of 2026-10-20 to 2026-10-25 | no: the frozen evaluation measures the current one |
+| closure grid, gate arm (108 fits) | job 1896730, 2026-11-10 (model averaged over the pixel, flat c200 prior) | not for the fit of 2026-11-12: the concentration prior changed |
+| pilot (60 real, 60 mock fits) | 2026-11-10, presets `v1` and `v1_flamingo_l1m8` (flat c200 prior) | as above; 18 fits at a prior bound are not refitted |
+| outskirts convergence | release 1.1 geometry (2026-10-24) | yes |
+| the mock and real image pair | golden products of release 1.1.1 | yes |
+
+How far the change of emission moves the TNG numbers, measured on 20 halos per simulation at z = 0.2 (ledger
+`multisim.abundance_modes`): against the legacy emission the `common` mode lowers the intrinsic L_X(0.5-2 keV,
+R500c) by 0.023-0.024 dex in the median, almost all of it helium (the legacy reference table carries the He/H of
+Anders & Grevesse 1989, `common` that of Lodders 2003), and `full` differs from `common` by +0.001 dex
+(TNG-Cluster) and -0.005 dex (TNG300). The hydrostatic truth does not depend on the emission. What would bring the
+numbers to the current configuration is listed on {doc}`assumptions/OPEN_ITEMS`: the closure grid, the frozen
+realism evaluation, the sensitivity suite and the mock and real fits each need node time.
+
+## Other simulations (branch `multisim`)
+
+FLAMINGO, SIMBA and EAGLE go through the same graph after the `ingest` stage. Measured so far:
+
+* Ingest: every gas particle that SIMBA's original snapshots and the TNG-format conversion share is
+  bit-identical (two halos); the originals add the decoupled wind particles, which do not emit either way. EAGLE
+  agrees with its conversion to rounding; its electron abundance of full ionisation changes L_X by +0.0027 dex
+  (one halo). Campaign checks C1-C17 passed on the fixture halos of FLAMINGO L1_m10 and L1_m8, and of SIMBA and
+  EAGLE as read from the conversions.
+* Emission: our L_X(0.5-2 keV, R500c) of FLAMINGO L1_m8 (legacy emission) is +0.028 dex (16-84 per cent +0.018,
+  +0.040) above the sum of FLAMINGO's own per-particle luminosities (20 clusters, z = 0.2).
+* Luminosity through the mock pipeline (199 pairs of TNG-Cluster and FLAMINGO L1_m8 views at matched true M500c,
+  each pair under the same donor, z = 0.1-0.5): the median log10 of L_FLAMINGO / L_TNG-Cluster is -0.325 [95 per
+  cent: -0.375, -0.292] for L_X(1 Mpc) measured on the images, -0.351 for the intrinsic L_X in R500c, and grows in
+  size with mass (-0.24 at 1-2e14 Msun, -0.39 above 4e14 Msun); `full` emission on both sides. Indicative only:
+  against the median real L_X(1 Mpc) of the observations within 0.1 dex in catalogue M500 and 0.1 in z, with the
+  mocks at their true M500c, TNG-Cluster lies +0.31 dex and FLAMINGO L1_m8 -0.04 dex from the real data (the real
+  masses are mostly SZ-based catalogue masses; no conversion between the definitions is applied).
+* Resolution: FLAMINGO L1_m10 represents the integrated quantities (luminosity, spectral temperature, hydrostatic
+  truth) and image statistics at the scale of R500c above about 2e14 Msun, but not structure below about 100 kpc.
+  L1_m8 (gas particles of 1.3e8 Msun) is the production FLAMINGO source.
+
+Of these simulations only FLAMINGO L1_m8 has hydrostatic fits: the 60 views of the pilot and the 5,001 views of
+pass 1 (short chains). No fit of SIMBA or EAGLE has been run.

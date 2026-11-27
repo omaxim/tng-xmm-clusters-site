@@ -1,0 +1,122 @@
+# The data package, bundles and fixtures
+
+## The data package (`$TNGXMM_DATA`)
+
+Heavy and frozen inputs are not in git (`data/` is ignored; only the placeholder `data/manifest.json` is tracked; the package is found through `$TNGXMM_DATA`).  `$TNGXMM_DATA` holds one directory per asset (`tngxmm.core.paths.DATA_ASSETS`):
+
+| asset | content |
+|---|---|
+| `tables` | frozen tables: the donor split, core offsets, APEC tables, results CSVs, and the per-donor tables built by the `donor_tables` pipeline |
+| `legacy_v3`, `legacy_v2` | byte-identical copies of the external input tables the package reads (ECF table, APEC tables, fit target lists, catalogue snapshot) at the same relative path |
+| `obs` | band 2+3 mosaics and PPS exposure maps of the 638 observations of the bank |
+| `mosaics-1`, `mosaics-2` | bank mosaics |
+| `embeddings` | DINOv3 embeddings |
+| `fits` | hydrostatic fit trees |
+| `regression` | stored regression products |
+| `fixtures` | the test fixtures (below) |
+
+Every asset carries a `SHA256SUMS`; `tngxmm data verify` checks them all.  `tngxmm data freeze-legacy` copies the
+external input tables from their source trees into the package; `data/manifest.json` is a placeholder (its `release` is null).
+
+Two packages are in the release files of the repository (`tngxmm data fetch`, {doc}`LOCAL`).  `data_v1p1` holds the
+tables of the bank of 638 observations and goes with the response set `responses_obs_v1`; pass 1 was generated and
+fitted with them.  `data_v1p2` and `responses_obs_v2` hold the tables and responses of the 808 observations of
+`src/tngxmm/obs/catalogue/observations.csv`: the bank and the 170 observations added on 2026-11-25 (`in_bank` False;
+inputs under `src/tngxmm/obs/catalogue/inputs_extra/`).  The rows and files of the 638 are identical in both:
+`tngxmm data compare-tables <data_v1p1>/tables/<name>.csv <data_v1p2>/tables/<name>.csv` reads the two builds of a
+table as text, groups the rows by `obsid` (`--key`) and fails when a row of the earlier build is changed or gone;
+the rows of new keys are counted as added (`--shared-columns` when the new build has a further column).  In
+`data_v1p2` the conditions table `tables/donor_conditions.csv` has two flags: `pool`, the pool of the conditions rule
+`nn`, which holds observations of the bank only, and `lends`, set for every observation that can lend its conditions
+to a view paired with it (700 observations: 548 of the bank and 152 added).  Donor folds are assigned on the bank
+only.
+
+## Tables added at the integration of 2026-10-30
+
+* `tables/donor_sky_rass.csv`: the Local Hot Bubble and Galactic-halo levels of every donor field, fitted to its RASS
+  spectrum in the 1-2 deg annulus about the cluster (`python -m tngxmm.donor_tables.rass_sky`, login node; read under
+  `instrument.sky_model = 'donor-rass'`).
+* `tables/donor_qpb_corners.csv`: the corner QPB level of every EPIC camera per PPS band, per MOS CCD and pn quadrant,
+  for the 638 reference observations (job 1890054, `tngxmm.donor_tables.qpb_corners`), with the MOS columns of
+  `donor_mos_background.csv` beside them (identical values).  The instrument stage takes every camera's particle
+  level from it ({doc}`background`); provenance in `donor_qpb_corners.provenance.json`.  The copy of 2026-10-30 was
+  measured against the FWC reference of every epoch and CCD state and its sidecar records neither the commit's state
+  nor the measurement version, so the stage and the real fit refuse it; it is built again, with its sidecar, by
+  `kedro run --pipeline donor_tables --nodes donor_tables.build_fwc_reference,donor_tables.build_qpb_corners`.
+
+## Files a view is made from
+
+Every file of the data package a mock view reads is checked before the view and recorded in its `obs_meta.json`
+(`data_inputs`: path and sha256; `tngxmm.sim.data_inputs`).  The files a builder of this package writes carry a
+provenance sidecar and are read only when it is current ({doc}`background`, "Donor tables measured about the
+cluster"); the APEC tables, the frozen ECF table and the SFD reddening table come from outside the package and are
+pinned by their sha256 in `src/tngxmm/sim/data_manifest.csv`, part of the spec hash, together with the AtomDB files
+the photon spectra are drawn from (root `atomdb`: `$TNGXMM_APEC_ROOT`, else `$ATOMDB`).  Every pinned row is
+checked.  A new copy of a pinned file is a commit of the manifest (and a new spec hash).  A closure cell records the
+same in its `truth.json`, and a stored view or cell is reused only when its record is the current one.
+
+## Column conventions of the results tables
+
+* `lx_intr_*`: rest-frame 0.5-2 keV luminosity of the gas in the aperture [erg/s].
+* `lx_*_tngref`: the temet-exact value of the official TNG X-ray products, which is the rest-frame luminosity divided
+  by (1 + z) of the snapshot.  Multiply by (1 + z_snap) before comparing with `lx_intr_*`; otherwise the ratio drifts
+  from +0.003 dex at z = 0 to +0.46 dex at z = 1.5.  The columns keep temet's convention so that they can be compared
+  with the published TNG products directly.
+
+## Products of a run and their done-markers
+
+A generated view, a SAS detection and a fit are each finished only through a file written last
+({doc}`when-a-run-stops`):
+
+| item | directory | done-marker | other files |
+|---|---|---|---|
+| view | `<tree>/<sim>/<snap>/<halo>/view<v>/` | `obs_meta.json` (provenance, observing conditions, the files read, the sizes of the products) | `percam/` images and exposure maps, `image_merged.fits`, `image_merged_cov.fits`, `pts_sources.fits`; the absorbed photon list unless the preset sets `runtime.drop_events` |
+| SAS detection | `<view>/sas_detect/` (real: `$TNGXMM_DATA/sas_detect/<obsid>/`) | `provenance.json` (sha256 of the list, number of sources) | `emllist.fits`, `sources.csv`, `edetect_chain.log`, `command.txt` |
+| fit | `<work>/fits/<name>_<tag>/` | `provenance.json` (commit, spec hash, the resolved fit switches, the sha256 of the image tree) | `chain.hdf5`, `mass_profile_samples.npz`, `result.json` |
+
+A fit batch writes `<work>/fits/results_all.csv`, one row per target of the batch with the keys of `result.json`
+(the `fit_results` table, section 4.3 of {doc}`dev/INTERFACES`). A view, a detection or a fit stopped by a full disk
+has the status `interrupted: disk` in the log and is in no table.
+
+Two keys of `result.json` belong to the concentration prior `massfit.cm_prior = 'dutton14'`:
+
+* `c200_prior_range`: the hard range of c200 the fit had, (0.5, 20). The QC flag `prior_edge_c200` reads it.
+* `c200_prior_offset_sd`: the median over the chain of the offset of ln c200 from the Dutton & Maccio (2014)
+  relation at the sample's own M200, in standard deviations of the prior. It is reported and cuts nothing.
+
+A fit with the flat prior has neither key.
+
+## Local bundles
+
+`tngxmm data bundle --list` / `--make <dir> --stage ...` copies the subset of the package an analysis stage needs
+(`src/tngxmm/core/bundle.yml`, `tngxmm.core.bundle`), so the stages after the simulation run on a workstation.  The
+items, their sizes and the use of a bundle are in {doc}`LOCAL`.
+
+## Counterpart redshifts of the PSZ2 donors
+
+`catalogue_positions_v4.csv` is built with the published redshifts of the optical and SPT counterparts PSZ2 names
+(redMaPPer, WHL, MaxBCG, SPT-SZ; `--counterparts`); its ACT counterparts are typed from the ACT DR6 file.  That input,
+`psz2_counterpart_redshifts.csv`, and the NED and VizieR replies it was made from (`cache/`) are kept in the
+references area, `$TNGXMM_SITE_REFS/psz2_counterparts/`, not in the data package;
+`tools/psz2_counterpart_redshifts.py` rebuilds the CSV from that cache without the services.  The builder takes only
+the pinned PSZ2, ACT DR6 and counterpart files (`catalogue_positions.INPUT_PINS`): a rebuilt counterpart table
+changes its pin first.
+
+## Light tables in the repository
+
+The observation tables (`src/tngxmm/obs/catalogue/`) and the donor target lists (`campaigns/<campaign>/`,
+`campaigns/<campaign>_max/`) are committed: they are the inputs the campaign reads and the outputs of the `obs` and
+`donors` nodes, at the paths the CLI writes.  A Kedro run of those nodes rewrites them in place and `git diff` shows
+any change.  `inputs/literature_values.csv` is the public table of every literature value the package uses.
+
+## Fixtures
+
+The fixtures make the pipeline testable without the cluster: two TNG-Cluster halos cut out of the snapshots, the golden
+products of the `v1` preset made from one of them (`golden_v1.1.1`), and two public XMM-Newton observations (2.6 GB
+unpacked, not in git; `tngxmm data fetch <root> --item fixtures`).  Tests find them through `TNGXMM_FIXTURES`; `python tests/fixtures/check_fixtures.py` checks the manifest,
+the sha256 sums and that every file opens.  The contents, the producing scripts and the halo table:
+
+```{include} ../tests/fixtures/README.md
+:start-line: 1
+:heading-offset: 1
+```

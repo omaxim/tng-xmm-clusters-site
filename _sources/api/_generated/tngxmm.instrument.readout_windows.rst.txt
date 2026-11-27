@@ -1,0 +1,29 @@
+tngxmm.instrument.readout\_windows
+==================================
+
+.. automodule:: tngxmm.instrument.readout_windows
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      READOUT_WINDOW_RULES
+      PN_PIXEL_ARCSEC
+      PN_LW_ROWS
+      PN_SW_Q_RANGE_ARCMIN
+      MOS_WINDOW_PIXELS
+      MOS_CCD_PIXELS
+      MOS_CENTRAL_CCD_CENTRE_ARCMIN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_readout_windows
+      ccd_frame
+      read_out_area_arcmin2
+      window_kind
+      window_mask
+      windowed_response
+   

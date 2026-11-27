@@ -1,0 +1,22 @@
+tngxmm.bank
+===========
+
+.. automodule:: tngxmm.bank
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   assign_donor_folds
+   attach_splits
+   build_manifest
+   cli
+   filter_rows
+   lint_ml_columns
+   pipeline
+   render_bank
+   schemas
+   write_mosaic

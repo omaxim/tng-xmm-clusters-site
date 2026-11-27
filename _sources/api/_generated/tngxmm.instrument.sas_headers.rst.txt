@@ -1,0 +1,27 @@
+tngxmm.instrument.sas\_headers
+==============================
+
+.. automodule:: tngxmm.instrument.sas_headers
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      INT32_MAX
+      DEFAULT_EXPOSURE_NUMBER
+      DEFAULT_CCDS
+      PHYS_PIX_ARCSEC
+      PN_FRAME_MS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_sas_keys
+      exposure_id
+      pa_pnt_deg
+      package_sas_donor
+      pn_timing
+      stringify_wide_ints
+   

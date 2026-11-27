@@ -1,0 +1,14 @@
+# validation
+
+```{eval-rst}
+.. automodule:: tngxmm.validation.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline validation`; catalog `conf/base/catalog/validation.yml`.
+
+## Nodes
+
+```{kedro-pipeline} validation
+```

@@ -1,0 +1,14 @@
+tngxmm.donors.box\_report
+=========================
+
+.. automodule:: tngxmm.donors.box_report
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      box_markdown
+      box_summary
+      write_box_outputs
+   

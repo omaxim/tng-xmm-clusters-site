@@ -1,0 +1,37 @@
+tngxmm.instrument.donor\_soft\_ccd
+==================================
+
+.. automodule:: tngxmm.instrument.donor_soft_ccd
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MOS_SOFT_CCD
+      BANDS
+      SOFT_BANDS
+      CONTROL_MAX_FRAC
+      NSIG
+      OUTER_CCDS
+      CAMERAS
+      KS_CCDS
+      COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      anomalous_ccds_by_observation
+      classify
+      donor_soft_ccd
+      mask_to_sky_labels
+      measure_ccd_excess
+      soft_ccd_events
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Unmeasured
+   

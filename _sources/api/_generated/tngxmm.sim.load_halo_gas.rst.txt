@@ -1,0 +1,32 @@
+tngxmm.sim.load\_halo\_gas
+==========================
+
+.. automodule:: tngxmm.sim.load_halo_gas
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LX_REFERENCES
+      SNAPSHOT_FIELDS
+      RESAMPLE_SEED_TAG
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      emission_masks
+      gas_optional
+      load_halo_gas
+      load_reference_cells
+      load_reference_luminosity
+      t_vir_from_catalog
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GasParticles
+      ReferenceCells
+   

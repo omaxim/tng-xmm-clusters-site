@@ -1,0 +1,26 @@
+tngxmm.obs.references.sources
+=============================
+
+.. automodule:: tngxmm.obs.references.sources
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PAPERS
+      CATALOGUE_FILES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build
+      build_inputs
+      read_manifest
+      references_root
+      restore
+      sha256
+      status
+      verify
+   

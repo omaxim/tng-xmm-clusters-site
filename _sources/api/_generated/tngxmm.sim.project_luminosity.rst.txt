@@ -1,0 +1,23 @@
+tngxmm.sim.project\_luminosity
+==============================
+
+.. automodule:: tngxmm.sim.project_luminosity
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PROJECTIONS
+      ICOSAHEDRAL6
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_lx_cylinder
+      n_views
+      project_luminosity
+      project_offsets
+      projection_basis
+   

@@ -1,0 +1,732 @@
+# Open items of the assumption ledger
+
+Written with the first build of `docs/assumptions/assumptions.yml`. Nothing here has an invented
+justification: where a number has neither a citation nor a validation recorded in the repository it is
+listed, and its ledger entry carries `open:`. `tests/unit/test_ledger.py` fails when this list and the
+`open:` entries of the ledger disagree.
+
+## A. Unjustified numbers and rules (no citation, no validation)
+
+Two items were left open by the SENS job (2026-10-18, DECISIONS "SENS job results"; section J), each with a
+measured bound (the reference-table metal axis is fixed in the release V4.1, section O); one remains, the cap factor
+of the maximal list was decided on 2026-11-04 (section P). The MOS RGA vignetting term is
+measured on the donors' own maps (release 1.1). Two were added by the review of the documentation (release 1.1.3): the
+sky background components and the on-axis PSF of the cluster photons; the PSF item is closed (2026-11-03: the cluster
+photons are drawn with the energy- and angle-dependent King PSF). The row of the entropy cut of the L_X exploration
+was removed on 2026-11-03 (section Q): the cut was not adopted, so no number of the pipeline rests on it.
+
+| ledger id | spec fields / parameters | state | next |
+|---|---|---|---|
+| `fit.point_source_thresholds` | `massfit.protect_core_arcsec` = 16.487, the on-axis PSF half-energy width (DET_ML 10 is validated) | The radius is now an instrument property (since 2026-11-03; it was 90 arcsec without precedent). The old test (protection 0 / 45 / 135 arcsec: +0.013 [-0.002, +0.041] / +0.009 [-0.004, +0.024] / -0.008 [-0.022, -0.004]) bounds the size of the change at a few per cent. | Remeasure on the closure grid of the new preset (B1) |
+| `instrument.vignetting_axis_rga` | `instrument.vig_axis` = ccf, `instrument.mos_rga_vignetting` = ccf | The vignetting centre is the calibration-file value (XMM_MISCDATA_0022; within 0.05 arcmin of the donor-measured centre for the pn, 0.16 for the MOS). The MOS RGA modulation comes from the SAS calibration layer (`mos_rga_vignetting = 'ccf'`: RGA_OBSCURATE of RGSn_QUANTUMEF, CAL_getRGAObscure), on in v1 since 2026-11-03. Its amplitude, 0.0142 per arcmin, is 11-14 per cent above the dipole measured on 60 donors' PPS maps; the direction agrees to 1.2 deg. | Replay the realism pairs with 'ccf' (REALISM_BKG/replay_realism_bkg.sbatch); check eexpmap against the handbook formula in the SAS source |
+| `instrument.soft_proton_spatial` | `instrument.soft_proton_map` = flare | The residual soft protons follow the CCF flare maps (XMM_FLARE, Kuntz & Snowden 2008, Sect. 4.3) since 2026-11-03; the fit's template is the same map, so a mock fit never meets a wrong soft-proton shape and a real fit may. | Closure arm `v1_spflat` (flat protons, flare template) measures it for one other shape, in one direction, which is not a bound (node, B1) |
+| `instrument.sky_background` | `instrument.sky_model` | Since 2026-11-03 each donor field has its own Local Hot Bubble and halo levels from its RASS spectrum (1-2 deg annulus, temperatures fixed at the published medians) and the unresolved CXB follows from the Moretti et al. (2003) counts. Not yet checked against the donors' own XMM soft-band field. No SWCX. | Measure the 0.5-1 keV field level of donors and replicas on regenerated views (STATUS A2) |
+| `method.c2st_donor_bootstrap` | `params:realism.c2st.n_boot` = 200 | The donor bootstrap SE is the bootstrap estimate of the standard error (Efron 1979, `efron1979`), but the PDF could not be fetched (Project Euclid blocks automated requests; no arXiv version), so no page-located quote is recorded. | Author: put the PDF in `tngxmm_refs/efron1979/` and record the quote |
+| `method.halo_groups` | `params:bank.folds.halo_folds`, `params:analysis.mock.halo_folds`, `params:analysis.mock.views` (all off in v1); 5 halo folds, seed 20261103; candidate table `campaigns/halo_folds/halo_folds_v4_max_box.csv` (not chosen) | Folds and bootstrap by halo for release 1.2 (`donors.halo_groups`, 2026-11-03). The halo bootstrap is Efron's bootstrap with the halo as the unit (same missing PDF as above); grouped cross-validation (Roberts et al. 2017) and the bootstrap of hierarchical data (Davison & Hinkley 1997, Sect. 3.8) are candidate sources, not yet in `citations/` or checked. | Author: the PDFs; then record the quotes. Decided 2026-11-04: the halo bootstrap is used for every interval of the first paper; the fold table is frozen with the ML stage (H1, not in the first paper), built by the same rule from the release 1.2 view list |
+
+## B. Justified, but the evidence is incomplete
+
+These entries have a citation or a validation; the item says what a referee can still attack.
+
+- `donors.matching_mass`: Planck 2015 XXIV gives (1-b) = 0.78 as a sample-level prior for a count
+  likelihood; we use it per cluster. 0.78 is the low end of later calibrations (0.84-0.95, Herbonnet et
+  al. 2020 and others), and the built-in offset between the PSZ2 (0.78) and the ACT DR6 (A10/WL = 0.65,
+  already calibrated) scales is about 1.20. The sensitivity test S7 ((1-b)_PSZ2 = 0.84 and 0.90) was run on the login
+  node in release 1.1.3 (SENSITIVITY_TESTS.md, R12): the replica list fails gate P in mass at every value (D = 0.241,
+  0.229, 0.207 against 0.061-0.067), the coverage rises from 0.929 to 0.933 and 0.948, the median halo mass of the
+  views moves by -0.008 and -0.018 dex, and almost every individual pairing changes (8.5 and 5.6 per cent of the
+  production views are drawn again). What depends on it: which halo is paired with which real observation (the
+  replica draw and gate P), and through that every mock-to-real comparison at fixed observation (count matching,
+  realism, the comparison of mock and real fits). The bias estimands of a mock (M_X, M_HSE and M500c of the same
+  halo) do not depend on it.
+- `truth.star_forming_gas`: excluding star-forming gas is our deviation from Barnes et al. (2021), who
+  state no gas cut for the 3-D profiles. The three deviations together (fitted slopes, no star-forming gas, own
+  mu) move ln M_HSE(R500c) by +0.024 in the median against the literature-faithful `barnes21` column (16/84
+  percentiles -0.085/+0.141, 7380 views; SENSITIVITY_TESTS.md R5). The individual sizes were measured on 2026-11-04
+  on 24 TNG-Cluster halo-snapshots (SENSITIVITY_TESTS.md S8): keeping the star-forming cells moves the median of
+  ln M_HSE(< R500c) / M500c by -0.0003, mu = 0.59 by -0.0041, both by -0.0045; the +0.024 is therefore the slope
+  method of the `barnes21` column.
+- `truth.own_mu`: the second deviation from Barnes et al.; with mu = 0.59 the median of ln M_HSE(< R500c) / M500c
+  moves by -0.0041 (S8, 2026-11-04; the mu = 0.59 twin is not a column, `compute_hse_truth(mu059_fit=True)`
+  computes it on request).
+- `fit.background_seed`: closed on 2026-11-03: the presets fit the ESAS background (corner-fixed QPB, free sky and
+  soft protons, no prior); the typical-EPIC level calibrated on mocks is removed. Only the diagnostic mixture
+  model keeps `fallback_bg_prior_dex` = 0.3, without a separate test.
+- `fit.priors_low_signal`: closed on 2026-11-03: flat priors at every signal level (Sanders et al. 2018); the
+  20 000-count threshold and the informative priors are diagnostics only. Since 2026-11-12 the concentration has the
+  published relation of `fit.cm_prior` as its prior, again at every signal level; the metallicity prior stays flat.
+  Open: what the low-signal fits lose, measured by closure B1.
+- `fit.metallicity`: the flat 0-2 Z_sun range has no separate test. Its lower edge 0 is the physical bound of an
+  abundance and also a hard bound of the code: mbproj2d's ApecRateCalc.get returns NaN for Z < 0 and the fit turns
+  that into a log-likelihood of -inf. The X-COP abundances were fitted with the same kind of bound (APEC in XSPEC,
+  Ghizzardi et al. 2021, p. 2) and it did not bias them (p. 6), but the authors warn that it can bias small, poorly
+  measured abundances, the regime of the low-count fits here, and recommend allowing negative values, as Mernier et
+  al. (2017, p. 3) do; following that advice would need a change to mbproj2d. A published hydrostatic MBProj2 fit
+  uses a flat 0-1 Z_sun prior (Sanders et al. 2022, p. 18). The code tabulates the emissivity at 0 and 1 Z_sun and
+  scales it linearly (Sanders et al. 2018, p. 21), so the upper edge 2 extrapolates that scaling and is a choice of the
+  prior: about twice the edge of Sanders et al. (1 Z_sun of Asplund et al. 2009 is about 1.07 in lodd units), with no
+  published value, a design parameter (section P). The mean and the average core abundances
+  stay well below it (the mean ICM abundance within r180 is at most 0.26 Z_sun of Anders and Grevesse 1989, about 0.41
+  in lodd units, Molendi et al. 2016, p. 1-2; the average core about 0.8 proto-solar, Mernier et al. 2017, Table 2);
+  single cores are not covered by these averages.
+- `fit.molecular_weight`: the fully ionised count departs from mbproj2d's built-in constant and from the
+  1.83 particles per electron of Sanders et al. (2018, Appendix B); effect +0.03 to +0.05 dex. Since 2026-11-03
+  (section Q) the departure has its sources: a fully ionised plasma holds about 1.92 particles per electron (Yeung
+  et al. 2024, p. 15), and published hydrostatic masses of real (Martino et al. 2014, p. 6) and mock clusters (Nagai
+  et al. 2007, p. 4) use mu ~ 0.6, consistent with full ionisation; a mock XMM-Newton analysis takes the molecular
+  weight from its abundance table (Seppi et al. 2026, p. 13). The review of X-ray masses (Ettori et al. 2013) quotes
+  mu ~ 0.6 for the hydrostatic mass but backs neither count cleanly: its own pressure, P_gas = n_gas kT (p. 8), takes
+  n_gas = n_e + n_p ~ 1.826 n_e (p. 9), the count of mbproj2d. Still open: the correction changes the published code,
+  so the paper has to state it.
+- `fit.outer_pressure`: freezing P_out at the floor changed one real cluster (MACS J1347) by 20 %, so the
+  choice matters; the free outer pressure has the precedent of Sanders et al. (2018). Since 2026-11-03 (section Q)
+  also of a hydrostatic MBProj2 fit with a flat prior on log P_out (Sanders et al. 2022, p. 17). The X-COP code fits
+  the boundary pressure free within a Gaussian prior on the measured SZ pressure (Eckert et al. 2022, p. 5) and starts
+  its mock profiles at 5 R500 to keep it out of the fitted range (p. 6); the earlier backward method fixed it at the
+  pressure measured at the outermost data point, and freeing it over a grid of values from the best-fit density and
+  temperature moved the mass by about 3 per cent (Ettori et al. 2010, p. 6 and 9, Table 4 on p. 19). No paper read
+  (Sanders et al. 2018, 2022; Scheck et al. 2023; Ettori et al. 2010, 2019; Eckert et al. 2022) freezes it at a floor.
+  The run-away level -30 has no source and is a design parameter (section P).
+- `fit.mock_agn`: resolved in release 1.1 (`instrument.agn_lognlogs = 'moretti03-soft'`): production draws the
+  field AGN from the soft-band (0.5-2 keV) counts of Moretti et al. (2003), p. 11 (alpha1 = 1.82, alpha2 = 0.60,
+  S0 = 1.48e-14, N = 6150 per deg^2, BOXED). The hard-band set of the upstream `xmm_simulator` is used only under the
+  stage option `moretti03-hard`, which no v1 preset selects.
+- `method.estimand_fixed_radius`: the estimand of claim C was fixed after seeing the v2 results (disclosed in
+  DESIGN v3).
+- `method.multistart_optimiser`: the grid values (M500 x 0.5, 1, 2; c200 = 3, 7) have no source; the
+  optimiser is not adopted by any preset until the J1 diagnostic.
+- `method.background_fallback_fov`: "beyond 2 R500" now has its precedent in the ledger (Ghirardini et al. 2019,
+  sky level from R > 2 R500, BOXED, p. 4; also Eckert et al. 2022, p. 3); the 50-exposed-pixel minimum is the fitter's
+  constant, a design parameter since 2026-11-03 (section P). A mock XMM-Newton analysis replaces a background region
+  that falls off the field by a corner region chosen by hand (Seppi et al. 2026, p. 5): support for the case, not for
+  the number.
+- `instrument.response`: the presets now generate and fit every image with the SAS 22.1 responses of its own
+  exposure (a mock: its conditions donor's; `instrument.responses`, `massfit.responses`) and the SAS selection of the
+  calibration files (`ccf_selection`). The response sets are built (`tngxmm instrument obs-responses`):
+  `responses_obs_v1` for the bank of 638 observations, with which pass 1 was generated and fitted, and
+  `responses_obs_v2` for the 808 observations, whose files of the 638 are those of the first set. The shared responses they replace (one RMF per camera made in 2020 with SAS 16.1,
+  CCF ARFs with a MOS quantum efficiency SAS no longer selects) read the three-camera temperature of a real
+  observation +1.0 / +2.2 / +4.1 per cent high at 3 / 5 / 8 keV (median of 13 epochs), the sum of the EPIC-to-NuSTAR
+  correction (+0.9 / +1.9 / +3.5), the withdrawn quantum efficiency (-1.2 / -1.7 / -2.4) and the contamination and
+  other MOS terms (rising with the date), each measured on its own; the three add to the total of every
+  epoch within 0.06 points (0.3 at 8 keV in XSPEC). With cifbuild's files the shared set would read +2.2 / +3.9 / +6.7
+  per cent instead. The calibration error itself is sized only by closure
+  arms that
+  have not run: `v1_xcallo` (the ACIS/PN spline of Schellenberger et al. 2015 applied to every camera, MOS included;
+  per camera it misses the paper's Table 2; the range is [v1_xcallo, nominal])
+  and `v1_nustarlo` / `v1_nustarhi` (the SOC's EPIC-to-NuSTAR correction); `v1_obsresp_shared` measures the
+  real-side error of the shared responses through the whole fit.
+- `instrument.pn_soft_protons_inout`: the pn IN/OUT soft-proton excess is a lower bound (the pn corners receive
+  soft protons and photons, Marelli et al. 2021) and is not validated: no source calibrates a pn IN/OUT excess
+  against a soft-proton level, and the pn uses the MOS quiescent soft-proton spectrum. One replay (job 1891399) moved
+  the pn field background from 0.08-0.10 dex below the donors' to within 0.03 dex above 1 keV, left the pn / MOS
+  background ratio below the real one (1.18 against 1.32) and made the background slightly too hard (1.72 against
+  1.68). A size of the bias, e.g. from the pn level predicted by the MOS2 corners (Marelli et al. 2021, Sect. 5.2),
+  is not measured.
+- `fit.particle_background_esas`: the level errors d of the closure arms `v1_qpbhi`, `v1_qpblo`, `v1_qpbsoft` and
+  `v1_qpbhard` (per camera and band, `closure_grid.QPB_LEVEL_ERROR`) are measured on the CCF filter-wheel-closed
+  exposures (tools/fwc_qpb_level.py, docs/dev/reports/QPB-LEVEL-FWC.md) and are a lower bound. Choices of ours: the
+  circle inside each square crop about the detector centre standing for the fit region (the circle holding the crop
+  gives up to 0.010 less; a high-z crop within 5 arcmin sees up to 1.7 times the value); every FWC exposure weighted
+  alike (the real observations are later on average, median 2013); NFLAG 1-2 of the FWC exposure table read as the
+  anomalous state. Not in d: the pn corners lit by the cluster's own photons (Marelli et al. 2021 advise against the
+  pn corners under bright extended sources and give no size); soft protons in the pn corners beyond the 2.3 per cent
+  bound measured on cleaned 10-14 keV data (our pn level in each band comes from that band's own corners, 0.5-12 keV;
+  only the relative scale of the quadrants uses 5-12 keV), and the out-of-time events the pn model leaves there; the
+  part of the corners of MOS CCDs 2 and 7 that X-ray photons and low-energy particles reach (De Luca & Molendi 2004,
+  Sect. 3.1, mask it from their corner data; our corner selection keeps it). Masking that region is a proposed code
+  change, not made: the paper gives no outline, so the region must first be found in the corner images of the
+  donors against the FWC data, and the change touches the donor tables, the mocks and the real templates.
+- The closure test fails with a realistic background: on the 120 fits of the closure factorial (2026-10-17, the
+  configuration before the release 1.1 instrument switches) the median M500_fit / M500_true is 0.970 for clean cells
+  and 0.845 for cells with sky, particle background and AGN (0.921 background only, 0.779 AGN only). The gate as
+  first registered (1.00 +- 0.03 in every cell) fails; it was moved to the clean cells and the catastrophic tail of
+  the real cells after the results were seen. The deficit is not subtracted from any mock result. The
+  `validation:` blocks of the ledger quote measurements, not passes. Status page: docs/validation.md.
+- Journal page numbers of every cited paper are NOT verified: the proofs use arXiv PDF pages.
+
+## C. Citations needed but not in `citations/*.yml`
+
+Read in the private methods-justification pass and used as precedents there; a key needs a BibTeX record fetched from
+Crossref or arXiv, never typed. Added in the third pass (section G): Ettori et al. 2019 (`ettori2019`), Biffi et al.
+2016 (`biffi2016`), Rosen et al. 2016 (3XMM, `rosen2016`), Scheck et al. 2023 (`scheck2023`), Nelson et al. 2019 (TNG
+data release, `nelson2019_tngdr`), Ansarifard et al. 2020 (`ansarifard2020`), Rasia et al. 2012 (`rasia2012`).
+
+Every other paper of that pass has a record now, so nothing of this section is missing:
+
+- since release 1.1.3: Leccardi and Molendi 2008 (`leccardi2008`), Snowden et al. 2008 (`snowden2008`) and Lodders
+  2003 (`lodders2003`, ApJ 591, 1220; the code and the XSPEC option `lodd` are Lodders 2003, not Lodders et al. 2009,
+  which is the XSPEC `lpgp`/`lpgs` table; it has no arXiv version, and its proofs are made from the journal PDF,
+  `proof_source`). `sim.apec_abund_table` (value `lodd`) cites `lodders2003` in `config.py` (it cited `ag89`; the
+  citation key is not part of the spec hash, so no hash moved); `massfit.abund_table` cites `heasoft_xspec`.
+- since 2026-11-03 (section Q), with metadata from Crossref and the arXiv API and the arXiv PDFs in the references
+  area: Ettori et al. 2013 (`ettori2013`), Nelson et al. 2014a (`nelson2014`; no ledger entry rests on it yet), Carter
+  and Read 2007 (`carter2007`), Seppi et al. 2026 (`seppi2026`, the `xmm_simulator` paper, published as A&A 711,
+  A213), Molendi et al. 2016 (`molendi2016`) and Smith et al. 2016 (`smith2016`). The year of `smith2016` is the issue
+  date of MNRAS 456 (2016-02-11, from INSPIRE); Crossref dates the print 2015-12-23.
+
+## D. Nodes with no assumption entry
+
+These registered nodes carry no entry: `obs.check_reference_masses` and `massfit.link_percam` (plumbing),
+`bank.select_sources`, `bank.convert_frame_to_mosaic`, `bank.render_bank`, `bank.build_manifest`,
+`bank.build_ml_view` and `embed.extract_embeddings` (the ML stage, outside the mass-bias claim). The review
+page lists them under "Nodes with no assumption entry".
+
+## E. Resolved in the second pass
+
+The author's rule is "full traceability and no business logic": every number is a cited value or practice
+(BOXED by `tngxmm ledger proofs`), one of our measurements with its number, or a convention shown not to move a
+result. Two papers were added to `citations/` (`ghirardini2019`, `pacaud2016`, both with metadata from Crossref
+and the arXiv API, PDFs fetched into the private references area); `tngxmm ledger proofs` reports 54 of 54
+evidence blocks BOXED. The measurements are scripts in `internal/ledger_tests/` with their results in
+`SENSITIVITY_TESTS.md` (part 1).
+
+| ledger id | how | result |
+|---|---|---|
+| `instrument.image_band` | citation | 0.5-2 keV is the band of XXL (Pacaud et al. 2016, p. 4), CCCP (Vikhlinin et al. 2009, p. 1) and REXCESS (Pratt et al. 2009, p. 3), all BOXED. The X-COP imaging band is 0.7-1.2 keV (Ghirardini et al. 2019, p. 3), which differs and is said so in the entry; their point-source band is 0.5-2 keV. |
+| `sim.tvir_mu` | measurement and citation | `mu_tvir` enters only the ECF of the Lx (R2): a 2 % change of mu moves the ECF by at most 0.6 % at z = 0.9. 0.588 is 1/(2 X + 3 Y / 4) for X = 0.76; Barnes et al. (2021) use 0.59 (BOXED). |
+| `method.qc_prior_edge_fraction` | measurement | R1: 1, 2.5, 5 % flag 46, 50, 53 of 172 production fits and move the median ln_br at 1.0 R500c by 0.016 at most (run-to-run noise 0.018-0.027). |
+| `method.hse_crossing_rule` | measurement | R3: 0.12 % of the views cross more than once (for them the outermost crossing would be 2-3 times more massive, flagged not cut); the 0.4 R500c inner exclusion changes no headline mass for 0.2 to 0.5. |
+| `instrument.pattern_loss` | code and CCF | The 0.92 was only a switch (`pattern_loss_factor != 1` selected the CCF rule) and never multiplied anything; since 2026-11-03 the field is the switch itself, `pattern_loss = 'ccf'`. The applied efficiency is the CCF table, 1.0000 in 0.5-2 keV (R6). |
+| `donors.aperture_and_fov_legacy` | convention, shown | Both act only through the dither cap, off in all five V4 presets, and through flag columns no node reads. |
+| `instrument.legacy_geometry` (split) | measurement and convention | pn tilt: 24.44 +- 0.02 against 24.5 deg is 0.9 arcsec at 15 arcmin (entry `instrument.pn_readout_tilt`). `ra0, dec0` only in WCS headers; `dither_clear_arcmin` only in the legacy random placement V4 does not use; the 648 px canvas leaves at least 4.2 arcmin of margin in 150 sampled views (R4). Entry `instrument.canvas_and_placement_constants`. |
+| `photometry.legacy_apertures` (split) | convention, shown | `center_search_arcmin` (read only for `center = "auto"`, no caller) and `z_floor` (smallest z_obs 0.0426 against 0.01) never act: entry `photometry.inactive_constants`. The two background annuli stay open (section A). |
+| `fit.crop` (split) | argument | The block-centre convention is a geometric identity, 2 arcsec off the data otherwise (entry `fit.rebin_centre`, unit test). The crop radius stays open (section A). |
+
+### Findings for the author's decision
+
+1. `apply_pattern_loss`'s docstring reports "0.985-0.988 at 1 keV" as the efficiency; that is `FRAC_SD`. The
+   ratio the code applies is 1 because the CCF table carries no triple or quadruple events. Whether the
+   image selection should lose the 1.5 % of events not in S+D at 1 keV (about 5 % at 8 keV) is a question for
+   the SAS pattern convention, not settled here. The spec field is also better a boolean than 0.92 (changing
+   it changes the spec hash, so it was not done).
+2. The red headline takes the innermost crossing, the black SO line (`m500_at_z`) the outermost; they differ
+   only for the 0.12 % multiple-crossing views.
+3. About 30 % of the 514 D1/J1 fits are flagged excluded at every prior-edge fraction tried (R1); this is a
+   property of the c200 and Z priors on these 43 views, not of the threshold.
+4. The tolerance of the part-2 tests (0.015 in ln M ratio) is derived from three re-seeds of the same views
+   (sd 0.013). The author may prefer a different bar; the tests report the measured change either way.
+
+## F. Decisions taken on the recommended options (2026-10-17)
+
+1. **Mock AGN band** (superseded in release 1.1, see section B, `fit.mock_agn`). The decision of 2026-10-17 kept the
+   upstream hard-band constants, consistent end to end with the hard-band template. Release 1.1 moved production to the
+   soft-band counts (`instrument.agn_counts_band`). The mass effect of the AGN measured before that change is
+   E = +0.007 [-0.007, +0.010]: removing the AGN from 43 mock views changes ln M_X by +0.028 (off minus on), and E is
+   the quarter of that change attributed to the excess of mock AGN detections (x1.33).
+2. **Pattern loss.** Keep the behaviour (the applied ratio is 1.0000 in 0.5-2 keV). Fix the docstring. The boolean is not
+   replaced, because that would change the spec hash for no effect.
+3. **Crossing rule.** The paper's estimands (`analysis.estimands`) take red AND black at their outermost 500 ρc(z_obs) crossing
+   with the same function (`m500_at_z`), so they are consistent by construction. The production headline column (innermost
+   crossing) is not used by the estimands; the 0.12 % multiple-crossing views stay flagged.
+4. **Tolerance of the part-2 sensitivity tests.** 0.015 in the median ln(blue/red) at 1.0 R500c, the measured scatter of the
+   median between three re-seeds of the same views (sd 0.013). It is a measured noise floor, not a chosen number.
+
+## G. Literature pass (third pass): what became literature-backed, what stays ours
+
+Seven papers were added to `citations/` (metadata from Crossref, checked against the arXiv API: title, author count,
+first author; arXiv PDFs fetched with the private tool). `tngxmm ledger proofs`: 79 of 79 evidence blocks BOXED (the second pass had
+54, the first ledger build fewer). Every new block was read in its page context and a sample of the PNGs was
+inspected.
+
+**Converted to kind literature (1):** `sim.projection_axes` (three projections along the box axes: `barnes2021` p. 5,
+`rasia2012` p. 4).
+
+**Supporting literature added, kind kept (14 entries, each block carries a note on what it does and does not support):**
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `sim.snapshots` | `nelson2019_tngdr` p. 7, p. 9 | 20 full and 80 mini snapshots, mini ones have a subset of fields; Table 3 lists our nine snapshots as full | the named missing fields (on the TNG web site) |
+| `sim.plasma_model` | `wilms2000_tbabs` p. 12 | TBabs absorption | lodd table (Lodders 2003), APEC 3.1.3 |
+| `truth.sphere` | `barnes2021` p. 4, `biffi2016` p. 3 | spherical radial binning of all gas, no substructure removal | the 3 R200c radius |
+| `truth.star_forming_gas` | `biffi2016` p. 3 | precedent for removing cold and multiphase gas | our exact cut |
+| `truth.own_mu`, `fit.molecular_weight` | `ettori2019` p. 3, `ansarifard2020` p. 10 | mu from the composition of the ionised plasma; 0.59 as the literature constant | the per-cell mu |
+| `method.estimand_fixed_radius` | `ansarifard2020` p. 10 | bias evaluated at one common radius | R500c(z_obs) and the SO estimands |
+| `fit.point_sources` | `webb2020` p. 3, `lovisari2020` p. 3, `ghirardini2019` p. 3 | SAS detection on five bands and three cameras jointly; edetect_chain in the XMM hydrostatic reference sample; SAS detection plus exclusion in X-COP | mask radius, per-donor flux threshold |
+| `instrument.sas_ready_products` | `rosen2016` p. 7, `webb2020` p. 3 | the five PPS band edges; joint detection on them | pn band 1 single-pixel treatment, header keywords |
+| `fit.outer_pressure` | `scheck2023` p. 4, `sanders2018` p. 6 | free logarithmic outer pressure, bounds 1e-16 to 1e-8 erg/cm^3 (ln P -36.8 to -18.4, our range) | the run-away flag at -30 |
+| `method.chain_budget` | `sanders2018` p. 4, `scheck2023` p. 4 | 2000-step chains (the long runs) | the 450-step quick chains (MBProj2 users run longer) |
+| `fit.metallicity` | `sanders2018` p. 6, `scheck2023` p. 4 | 0.3 Z_sun as the MBProj2 convention | a FREE metallicity: both papers fix it |
+| `fit.background_seed` | `sanders2018` p. 3 | background scaled to the large-radius surface brightness (the diagnostic mixture model) | 2 R500 and the 0.3 dex fallback width |
+| `method.qc_prior_edge_fraction` | `sanders2018` p. 6 | c flat in ln c over 1-10 | the 2.5 % fraction |
+
+**Still our own validation only (searched, nothing found that supports the number or choice):** `sim.gas_selection`,
+`sim.gas_periodic_wrap`, `sim.photon_floor`, `sim.photon_ceiling`, `sim.redshift_clamp`, `truth.shell_filling` (Ansarifard
+et al. 2020 p. 8 divide by the shell volume, not by the filled volume, so they do not support it), `truth.tngref`,
+`donors.replica_design`, `donors.donor_jitter`, `donors.excluded_observations`, `instrument.donor_conditions` (the entry
+already says no published mock study does this), `instrument.camera_layout`, `instrument.pn_readout_tilt`,
+`instrument.out_of_fov`, `instrument.pn_edge_rows` (the RAWY <= 12 rule is ESAS/SAS documentation, not found in an arXiv
+paper), `instrument.exposure_maps` (SAS `eexpmap` documentation), `instrument.generator_versions`,
+`photometry.lx_core_protection`, `photometry.lx_background_clip`, `fit.optimiser`, `fit.closure_clean_background`,
+`fit.pixel`, `fit.psf` (X-COP neglects the PSF cross-talk because its bins are wide, Ghirardini et al. 2019 p. 7; the
+Chandra analysis of Sanders et al. 2018 p. 24 neglects it too; neither is our King on-axis convolution), `fit.optical_axis`,
+`method.qc_flags`, `method.background_fallback_fov`, `method.reference_families`, `method.multistart_optimiser`,
+`method.closure_factorial`, `method.matched_draw`, `method.bank_filter`, and the conventions (`run.random_streams`,
+`sim.paths`, `sim.tvir_floor_off`, `donors.nh_fallback`, `donors.aperture_and_fov_legacy`,
+`instrument.canvas_and_placement_constants`, `instrument.output_conventions`, `sim.rng_pairing`, `photometry.inactive_constants`,
+`fit.rebin_centre`, `method.random_seeds`).
+
+**Still open (section A, unchanged):** `sim.photon_sampling_numerics`, `photometry.legacy_apertures`,
+`fit.point_source_thresholds` (no cluster paper with DET_ML > 10 found; Rosen et al. 2016 p. 20 and Webb et al. 2020 keep
+the catalogue threshold at 6), `method.matched_kernel_widths`, `method.maximal_list_donors`.
+
+**Needs the author:** (1) Lodders 2003 PDF or an ADS-only citation for the `lodd` table (above). (2) `fit.metallicity`: the
+MBProj2 literature fixes Z = 0.3 Z_sun; our free Z rests on the closure tests only, and the paper must say that it departs
+from Sanders et al. (2018) and Scheck et al. (2023). (3) Scheck et al. (2023) p. 4 analyse their simulations with APEC 2.0.1
+and WABS; the pipeline uses APEC 3.1.3 and TBabs on both sides, which is our choice, not theirs. (4) Journal page numbers
+of the new papers are not verified (arXiv PDF pages). (5) Whether the Nelson et al. (2014) PDF in the references area should
+back a truth entry (the hydrostatic bias at r500 against the true mass) is the author's call.
+
+## H. Resolved by J1c (2026-10-18)
+
+| entry | resolution |
+|---|---|
+| `fit.crop` | Validation (DECISIONS "Fit crop stays 3 R500"). Crop 5 and 8 R500 against 3: the closure cells are equivalent within ±0.015, and the TNG views move by -0.009 [-0.026, +0.000]. That is recorded as the crop systematic; the strict S2 rule is INCONCLUSIVE for the views. The absent angular cap is covered only insofar as the crop is clipped to the detector. |
+
+## I. Third literature pass (2026-10-18)
+
+Four papers were added to `citations/instrument.yml` (metadata from Crossref, arXiv ids checked against the PDFs):
+`snowden2008`, `read2011`, `croston2008`, `chexmate_sb2023`. Nine evidence blocks were added beside the validation
+blocks of four entries; no kind, value or validation block was changed. `tngxmm ledger proofs`: 88 of 89 evidence
+blocks BOXED (the 89th is the Lodders 2003 block of `sim.plasma_model`, which has no arXiv version and is listed
+as NO_PAGE by design). The PNGs of the new proofs were read in page context.
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `fit.psf` | `read2011` p. 2, p. 4 | the SAS describes the EPIC PSF per camera by a King profile (core radius, slope) as a function of energy and off-axis angle, in the XRTi_XPSF files; the analytic core is a 2-D King (beta2d) | the on-axis-only simplification (the paper shows the PSF varies with off-axis angle and azimuth), the missing spokes and Gaussian core |
+| `fit.psf` | `croston2008` p. 2, `chexmate_sb2023` p. 4 | REXCESS and CHEX-MATE correct their XMM profiles for the PSF with the Ghizzardi parametrisation (REXCESS weights it by camera) | the King form (not stated on those pages) and the on-axis choice |
+| `fit.point_source_thresholds` | `chexmate_sb2023` p. 3, `snowden2008` p. 14 | XMM cluster work masks only the bright point sources, by a stated criterion (wavelet S/N 5 plus a LogN-LogS count-rate threshold; a flux level of a few 1e-13 erg/cm2/s, by hand) | DET_ML > 10 (neither paper uses a likelihood) and the 90 arcsec core protection; the entry stays open |
+| `instrument.out_of_fov` | `snowden2008` p. 3, p. 4 | the outer MOS CCD corners lie outside the field of view, are shielded from the sky and register the instrumental background | the drop rule itself, the 15 arcmin field and the PPS OUT_OF_FOV flag (documentation, check C14) |
+| `instrument.exposure_maps` | `chexmate_sb2023` p. 6 | a published XMM mock folds the vignetting from the calibration files into simulated cluster images | the inverse-transform maps, the count-weighted vignetting energy, the half-pixel offset, the MOS2 mirror CCF |
+
+**Searched, no published support found (nothing was added):**
+
+- `fit.point_source_thresholds`, the 90 arcsec core protection: no XMM cluster paper in the references area or among
+  those searched protects a core radius from the point-source mask. Rosen et al. 2016 and Webb et al. 2020 keep the
+  catalogue criterion at DET_ML 6 (section G). The entry stays open.
+- `fit.pixel`: the papers read (Sanders 2018 p. 3, 0.492 arcsec Chandra pixels; CHEX-MATE p. 3, 2 arcsec bins) use other
+  sizes. Nothing supports 8 arcsec or 40 pixels per R500.
+- `photometry.lx_core_protection`, `photometry.lx_background_clip`: no paper of the area was found by text search to state a
+  rule that protects a core from the mask or clips azimuthal sectors (Pratt 2009 p. 14 only removes point sources and
+  refills them with Poisson noise from a ring). Mantz 2010b was not read in full.
+- `fit.optical_axis`: Read et al. 2011 p. 4 only defines the off-axis angle as measured from the optical axis. That does
+  not support the OPTAXX/OPTAXY header choice. The XMM Users Handbook and the CCF notes have no arXiv version, so the
+  proof tool cannot box them.
+- `instrument.pn_edge_rows`: Webb et al. 2020 p. 6 avoids the source's RAWY column in the background of pn sources
+  because of out-of-time events; that is a different rule from RAWY <= 12.
+- `instrument.pn_readout_tilt`: no paper states the -24.5 deg tilt (a calibration-file geometry).
+- `sim.gas_selection`: the star-forming exclusion is already evidenced under `sim.gas_cut` and `truth.star_forming_gas`
+  (Barnes 2021 p. 7, Nelson 2024 p. 7; Truong et al. 2018 p. 5 also sums only hot, non-star-forming particles for the
+  gas mass, but is not a TNG paper and was not added). The FoF-group choice and the 2 R200c clip have no published
+  precedent: Nelson 2024 p. 7 projects through the full box depth, which is the opposite choice.
+- `sim.redshift_clamp`, `truth.shell_filling` (Ansarifard 2020 p. 8 divides by the shell volume, section G),
+  `method.qc_flags` (the prior-edge part is covered by `method.qc_prior_edge_fraction`; the other flags are ours),
+  `method.bank_filter`: no precedent; all are internal consistency or data-handling rules.
+
+**Needs the author:** `leccardi2008` (arXiv 0804.1909) was fetched and read but contains no usable page, so it was not
+added to `citations/`; its PDF stays in the references area. Journal page numbers of the new papers are arXiv PDF pages.
+
+## J. Resolved by the SENS job (2026-10-18, job 1887659)
+
+| entry | resolution |
+|---|---|
+| `sim.photon_sampling_numerics` | Validation: grid error 0.23% at 5000 bins; event counts within 0.2% of 20000 bins; area margin 1.58. The fit-level arms (9 pairs) are INCONCLUSIVE because a regeneration is a new realisation (scatter ~0.2), and the image-level comparison fails even for the same grid, so neither is used. |
+| `photometry.legacy_apertures` | Validation through its only channel, the seed R500 (S6): -20% / +25% change the mass by -0.004 (PASS) / -0.002 [-0.018, +0.013] (INCONCLUSIVE). |
+| `fit.point_source_thresholds` (DET_ML part) | DET_ML 6 and 14 against 10: PASS. |
+| `method.matched_kernel_widths` | Validation (S4): gate P passes in all 100 draws. |
+
+## K. Literature pass 4A (2026-10-18)
+
+Supporting evidence only; no kind, value, statement or validation block was changed. Page numbers are arXiv PDF pages
+and every new proof is BOXED. New citations (`citations/literature4a.yml`): `seppi2022`, `gianfagna2021`.
+
+| entry | evidence added (paper, page) | supports | does NOT support |
+|---|---|---|---|
+| `fit.metallicity` | Ghirardini 2019 p. 7; Mernier 2017 p. 3 and p. 6 (Table 2); Sanders 2018 p. 2 | The abundance is a free parameter of the XMM-Newton spectral fits behind the X-COP hydrostatic masses (Ghirardini 2019: temperature, emission measure and metal abundance free) and of the CHEERS fits (Mernier 2017: Fe free, free abundances allowed negative values); measured Fe runs from 0.8 (cores) to 0.2 (outskirts) with 0.1-0.26 scatter, so a fixed 0.3 is not universal; MBProj2 authors say the metallicity could be fitted given enough data quality. | A single global abundance in a hydrostatic-mass fit; the flat 0-2 Z_sun prior; any mock-side result. Both free-abundance papers fit one abundance per annulus and neither fits a mass. Mernier values are relative to Lodders proto-solar. Vikhlinin 2006 p. 3-4 uses measured projected metallicity profiles but the page does not call them free, so it was not added. |
+| `fit.point_source_thresholds` | Pacaud 2016 p. 18; Seppi 2022 p. 1 | A cool core or a central AGN can look point-like to a detection pipeline (XXL: at most 1.1 per cent of point-like sources above the flux limit are clusters; eROSITA digital twin: the cool core bias affects faint clusters classified as point sources). | The 90 arcsec radius, or not masking inside it. No paper was found that leaves central sources unmasked. Counter-evidence read: Rasia 2012 p. 6 excises the cluster centre to avoid the central active galaxy and cool core, and Vikhlinin 2006 p. 4 raises r_min to exclude central AGN activity; Pratt 2009 p. 14, Ghirardini 2019 p. 3-4 and Vikhlinin 2009 p. 6 describe masking detected sources and mention no core exemption. The core protection stays without precedent. |
+| `method.maximal_list_donors` | Seppi 2022 p. 5; Gianfagna 2021 p. 5 | The idea of taking the observing conditions of real data (attitude, good time intervals, background) for a mock; the idea of choosing simulated clusters to match a real sample in mass and redshift. | n_nearest = 10, cap factor 2.0, the (z, mass) distance, any reuse of a donor. Neither paper matches or reuses observations. |
+| `method.matched_draw` | Gianfagna 2021 p. 5; Seppi 2022 p. 23 | A simulated sample drawn to match a real one in mass-redshift space, with the same mass cut on both; real background maps resampled for a mock. | K' = 5, reuse cap 12 or 9, dz_max 0.25. |
+| `donors.replica_design` | Gianfagna 2021 p. 5; Seppi 2022 p. 5 | A simulated twin of a real observed sample; simulated data that inherit the real instrument conditions. | K = 5 per observation, the reuse cap of 3, the redshift rule. |
+| `method.multistart_optimiser` | Scheck 2023 p. 4 | The MBProj2 fit can be trapped in local minima, so the start matters. | The 6-start grid and the choice of start values; the paper uses a good first-guess model instead. |
+| `fit.seed_lx` | Bulbul 2019 pp. 8, 9, 22; Piffaretti 2011 p. 7 | The published 0.5-2 keV core-included L_X-M500 relation and the MCXC iteration of R500 through an L-M relation. | Re-measuring L_X in each trial R500 (MCXC uses a model profile); masses below 3e14 Msun, which the relation does not sample. |
+| `fit.closure_clean_background` | Rasia 2012 p. 6; Barnes 2021 p. 5 | Background-free mock hydrostatic analyses are published practice, claimed to add scatter but no bias. | Freezing the model background at zero in the fit; our closure grid (real/clean 0.916) shows the background does shift the mass here, so the two papers are context, not a validation. |
+| `donors.nh_fallback` | HI4PI 2016 p. 5 | HI4PI covers the full sky, so the fallback is for a failed lookup only. | The value 0.03e22 cm^-2 (a donor-table median); HI4PI is neutral hydrogen only. |
+| `method.qc_flags`, `method.closure_factorial`, `method.bank_filter`, `fit.pixel` | none | Nothing found (no new angle beyond pass 3: Sanders 2018 p. 3, 0.492 arcsec pixels, and Scheck 2023 p. 2, eROSITA pixel size, use other sizes; Sanders 2018 p. 6 tests prior ranges but supports no flag). | n/a |
+
+Read and not used: Hudson et al. 2010 (arXiv 0911.0409) and Lovisari and Reiprich 2019 (arXiv 1811.05987) were fetched
+into the references area. Hudson p. 38 checks the central AGN flux of single clusters by hand, which says nothing about a
+mask rule; Lovisari and Reiprich p. 4 fit abundances with linked temperatures but do not call them free on the page.
+Comparat 2019 (an eROSITA AGN mock) was fetched; a text search found no use of real exposure or background conditions.
+Pop et al. 2022 and Zuhone et al. 2023 could not be identified by an arXiv API search and were not read; Nelson et al.
+2024 (already cited for the simulation) and Barnes 2021 were searched for real-observation matching and state none.
+## L. Literature pass 4B (2026-10-18)
+
+Two papers were added in the new fragment `citations/literature4b.yml` (metadata from Crossref and the arXiv API):
+`pillepich2018` (arXiv 1703.02970, the TNG model paper, also one of the two methods papers bundled under
+`illustristng`) and `katayama2004` (arXiv astro-ph/0210135, EPIC-pn background). The Turner et al. 2001 MOS paper
+(`epic_mos`, astro-ph/0011498) was already in `citations/instrument.yml` and is now read. 36 evidence blocks were added
+beside the existing blocks of 15 entries; no kind, value, statement, validation or instrument block was changed.
+`tngxmm ledger proofs`: 124 of 125 evidence blocks BOXED (the 125th is the Lodders 2003 block, NO_PAGE by design).
+Of the new proofs 20 distinct pages were opened as PNGs and the boxed text was the cited text.
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `sim.gas_selection` | `barnes2021` p. 7 (twice), `tngcluster` p. 6 | a published TNG mock-X-ray method generates the spectrum of every gas cell within the FoF group and projects onto a square grid of side 3 r500; the TNG-Cluster paper speaks of the FoF-scope gas | the 2 R200c clip, the zoom-gas alternative, any line-of-sight depth (Barnes also removes substructure gas, which this selection does not); the FoF choice now has one precedent, the clip still has none |
+| `sim.gas_periodic_wrap` | `barnes2021` p. 3, `nelson2019_tngdr` p. 10, `pillepich2018` p. 3 | the TNG boxes are periodic (TNG300 explicitly; the subboxes are called non-periodic unlike the full boxes; periodic boundary conditions) | the minimum-image implementation and its size (our own closure test) |
+| `sim.photon_floor` | `epic_mos` p. 1, `rosen2016` p. 7, `pyxsim` p. 3, `barnes2021` p. 7 | EPIC is calibrated from 0.2 keV; PPS band 1 is 0.2-0.5 keV; photons are redshifted by 1/(1+z), so a rest-frame floor covers the observed band; a mock photon table takes its energy range from the instrument | the value 0.2 keV itself |
+| `sim.photon_ceiling` | `rosen2016` p. 7, `pyxsim` p. 3, `barnes2021` p. 7 | PPS band 5 ends at 12 keV observed, so 12 (1+z) keV rest frame is needed (20 keV covers z up to 0.67); the redshift relation; instrument-set photon energy range | the value 20 keV, and the 15 keV ARF and sky-background grid (no paper found for it) |
+| `sim.redshift_clamp` | `pyxsim` p. 3 | in the pyXSIM scheme the observed redshift is a free parameter of the projection, separate from the redshift of the photon sample | observing at the replica redshift with a 3 % jitter, or dropping the 0.05 clamp (no precedent found) |
+| `truth.tngref` | `tngcluster` p. 5, p. 14 | the TNG-Cluster X-ray observables are broadband luminosities, typically 0.5-2.0 keV, computed per gas cell from the AtomDB collisional tables; the official luminosity is the soft-band luminosity within R500c in 3D | the 0.5-5.0 keV band, the 2000-pixel grid, the FoF-gas selection of the reference |
+| `instrument.pattern_loss` | `epic_mos` p. 5, `lovisari2020` p. 3, `mernier2017` p. 3 | MOS PATTERN <= 12 (patterns 0-12 are X-ray events; standard cluster selection); a published reason for single-pixel pn events (CTI of pn double events) | pn PATTERN <= 4 (both papers keep pn PATTERN == 0 only), the CCF fractions |
+| `instrument.pn_out_of_time` | `webb2020` p. 6, `chexmate_sb2023` p. 3, `rosen2016` p. 8 | pn out-of-time events lie along the column of the source; epchain produces an out-of-time dataset; the XMM pipeline models and flags out-of-time streaks | the fractions per mode (Users Handbook), the full-column placement on both sides, the CTI 1.4e-3 per row |
+| `instrument.pn_edge_rows` | `katayama2004` p. 3, `webb2020` p. 3 | the pn has excess non-X-ray noise near its readout node; the pipeline cleaning removes bad rows and edge effects | the rule RAWY <= 12 in every band, the number of rows |
+| `instrument.mos_ccd_loss` | `snowden2008` p. 3, p. 4 | MOS1 CCD6 was lost to a micrometeorite hit on 2005 March 9 (13 of 14 MOS CCDs working in 2007) | the 2012 CCD3 loss (the paper predates it); the revolution number (the paper says near 950, this entry 961, so the date is the cross-check) |
+| `instrument.camera_layout` | `epic_mos` p. 4, `snowden2008` p. 3 | seven MOS CCDs, the central one on the optical axis, the outer six hexagonal; MOS1 and MOS2 mounted orthogonally, the pn at 45 degrees to them | the donor-offset placement, the zero camera offsets, the missing dither cap (our own validation) |
+| `instrument.readout_window_geometry` | `epic_mos` p. 4, `webb2020` p. 3 (twice) | MOS large window 300 x 300 and small window 100 x 100 pixels on the central CCD only; the pn large window is half the height of the full window; W2 is the small and W3 the large central window | the pn small window (63 x 64 pixels), the exact pn row counts (Users Handbook) |
+| `instrument.donor_conditions` | `webb2020` p. 3, `epic_mos` p. 4 | real observations differ by mode and filter per camera, and the window changes the active area, so the conditions are observation-specific | that a mock should inherit them (no mock study does, as the entry says) |
+| `photometry.arf_band_mean` | `epic_mos` p. 2 | the MOS cameras receive 44 % of the telescope flux after the gratings while the pn beam is unobstructed, the direction of pn > MOS | the mean values in the Lx band (CCF numbers) |
+| `fit.optical_axis` | `rosen2016` p. 10, `pacaud2016` p. 3 | vignetting depends on the boresight position; an XMM cluster survey defines its field about the (average) optical axis | reading the true axis from the OPTAXX/OPTAXY header keywords or the CRPIX fallback |
+
+**Searched, nothing added (honest negatives):**
+
+- `sim.tvir_floor_off`: a convention with no effect (the floor is off); no paper was searched beyond the gas-cut evidence of `sim.gas_cut`.
+- `truth.shell_filling`: the shell density in the literature is the gas mass over the full shell volume (Pearce et al.
+  2020 p. 5 after removing particles with kT < 1e5 K or n >= 0.1 cm^-3, Gianfagna et al. 2021 p. 17, Gianfagna et al. 2023 p. 3,
+  Ansarifard et al. 2020 p. 8); that is the opposite of the summed cell volume and of the 0.1 filling threshold of this entry.
+  Nelson et al. 2014 p. 3 uses volume-weighted density in angular bins, which does not bear on shells either. No evidence added.
+- `instrument.pn_readout_tilt`: no paper states the -24.5 deg tilt. Dennerl et al. 2002 (astro-ph/0204242) only shows the pn
+  CCD layout with the readout direction in a figure.
+- `fit.optical_axis`: only the indirect support above; the header keywords are in the CCF and SAS documentation.
+- Strüder et al. 2001 (pn), Abbey et al. 2006 (MOS1 CCD6 and micrometeoroids) and Kuntz and Snowden 2008 have no arXiv
+  version (the A&A PDF of Strüder returned HTTP 403), so no claim from them could be checked against a page and none was
+  cited. The 2012 MOS1 CCD3 loss and the pn out-of-time fractions (6.3 / 2.3 / 0.16 / 1.1 %) stay with the Users Handbook.
+- `arf_energy_max_kev` (15 keV) and the effective-area values of `photometry.arf_band_mean`: no paper found for the numbers.
+- Not usable: CHEX-MATE (`chexmate_sb2023` p. 3) writes PATTERN > 4 for MOS and > 12 for pn, the reverse of the usual
+  selection (a likely typo); it was not cited for the pattern rule. Mernier et al. 2017 p. 3 limits its fits to
+  0.5-10 keV (MOS) and 0.6-10 keV (pn) because of calibration issues below 0.5 keV and above 10 keV, which bears on the
+  use of photons below 0.5 keV (no entry in this pass).
+- PDFs fetched for reading but not cited, left in the references area: `kuster2002`, `kirsch2002` (Dennerl et al.),
+  `gianfagna2021`, `gianfagna2023`.
+
+## N. Literature pass 5B (2026-10-18)
+
+Method and fit side. 26 evidence blocks were added beside the existing blocks of 10 entries (25 with a page proof, all
+BOXED; the 26th, Austin 2011, has no arXiv version and is NO_PAGE by design, its note quotes the abstract sentence
+verbatim). No kind, value, statement, validation, instrument or open block was changed. Seven citations are new, in
+`citations/literature5b.yml` (metadata from Crossref and the arXiv API): `gelman2020` (arXiv 2011.01808, no DOI),
+`vehtari2021` (1903.08008), `stuart2010` (1010.5586), `nagai2007` (astro-ph/0609247), `meneghetti2010` (0912.1343),
+`kelly2007` (0705.2774) and `austin2011` (DOI 10.1002/pst.433). Page numbers are arXiv PDF pages. Thirteen distinct new
+proof PNGs were opened and the boxed text was the cited text.
+
+| entry | evidence added (paper, page) | supports | does NOT support |
+|---|---|---|---|
+| `method.qc_prior_edge_fraction` | Gelman 2020 p. 35 | comparing the posterior with the prior (standard deviations, quantiles) is a published workflow check on whether the data constrain a parameter beyond the prior | a hard-bound pile-up as a named diagnostic; the 2.5 % fraction |
+| `method.qc_flags` | Gelman 2020 p. 35; Nagai 2007 p. 1; Sanders 2018 p. 5; Mantz 2016 p. 16; Snowden 2008 p. 14 | the idea behind the prior-edge flags; the same analysis for mock and real data; a published MBProj2 analysis spots fits with unconstrained or unphysical parameters (a central mass component, 10 clusters) and reports them; a scaling-relation paper gives results with all clusters and with the mis-centred and problem clusters excluded; XMM-Newton cluster work excludes observations that violate the model geometry | the flags, their thresholds, P_out runaway, the guarded-peak centre flag, exclusion by a posterior-based criterion (none of the papers does this) |
+| `method.closure_factorial` | Rasia 2006 p. 1; Nagai 2007 p. 3; Meneghetti 2010 p. 6; Gelman 2020 p. 16 | switching the mock background between levels (Rasia: Chandra level and a factor 100 lower) changes the hydrostatic mass; mock mass tests separate background, detection and masking from the intrinsic analysis and run the analysis as for real data (Nagai); the background is a documented switch of mock X-ray studies (Meneghetti); fitting simulated data with known truth is the standard check of a fitting procedure (Gelman) | the four-mode factorial itself (no paper varies background, AGN and detection together), XMM-Newton, the size of the 0.916 ratio |
+| `method.multistart_optimiser` | emcee p. 10; Gelman 2020 p. 13, p. 25, p. 60; Vehtari 2021 p. 2 | seeding the ensemble sampler from a point near the maximum (emcee, the paper's recommended approach when multimodality is possible); initial values can matter in practice; the minor modes can be avoided with chosen initial values; examine every chain and then focus on the mode that holds the mass; diverse starting points as standard practice for convergence | six starts, the grid values, choosing the highest log posterior alone |
+| `fit.pixel` | Ansarifard 2020 p. 7 (indirect) | the resolution element of a mock profile is tied to R500 (bins of 5 % of R500) instead of fixed in arcsec | 8 arcsec, 40 pixels per R500, any XMM-Newton image pixel (a profile bin of a simulation map, no PSF) |
+| `fit.point_source_thresholds` | Nagai 2007 p. 3 | a detection threshold set from a stated false-detection count on mock images, and masking what is detected | DET_ML 10, any core protection; the 90 arcsec protection stays without precedent and the entry stays open |
+| `method.maximal_list_donors` | Stuart 2010 p. 9, p. 8; Austin 2011 (abstract) | matching with replacement lets a control serve several units, concentrates the estimate on few controls, and the reuse count must be monitored; a caliper bounds the distance of a match, at the price of unmatched units; a caliper is a pre-specified maximum difference and its width was optimised by simulation | n_nearest 10, cap factor 2.0, the (z, mass) distance; the entry stays open (S5) |
+| `method.bank_filter` | Kelly 2007 p. 2 | a non-detection is a separate kind of datum (censored data), not a measured zero | dropping the row: the paper models the censoring, the bank filter discards the row |
+| `photometry.lx_core_protection` | Mantz 2010b p. 1; Pratt 2009 p. 7 | the central 0.15 r500 is a distinct, cool-core dominated region that luminosity work treats explicitly (90 arcsec is about 0.15 r500 at z = 0.1) | the action: both papers excise the core, whereas this entry keeps its sources unmasked; 90 arcsec, 0.4 |
+| `photometry.lx_background_clip` | Ansarifard 2020 p. 7; Ghirardini 2019 p. 4, p. 3 | 12 azimuthal sectors as a published split of a mock map; robust azimuthal statistics against outlying structure; sigma clipping to reject background outliers (in time) | clipping whole sectors, 3 sigma, 1.4826 MAD, a sector mean after clipping |
+
+**Counter-evidence and cautions (not evidence):**
+
+- `method.closure_factorial`: Meneghetti 2010 p. 6 leaves the background out because Rasia 2006 found no systematic on the
+  bias; Rasia 2006 p. 1 itself finds the estimated mass changes when the background is reduced by a factor of 100
+  (attributed to bulk motions and temperature bias, not to the background). Our closure grid (real/clean 0.916, CHECKS)
+  finds that the background does shift the mass here, so these papers are context for the question, not agreement with the
+  answer. Nagai 2007 p. 3 omits background subtraction in its main analysis.
+- `method.multistart_optimiser`: Gelman 2020 p. 60 says that ignoring non-converging chains is poor practice and
+  recommends examining all of them first; the ledger code records every start's optimum, but picking the highest log
+  posterior without that examination has no support. The same paper (p. 60) shows that sampling the starts from the prior
+  made the chains converge quickly, a different design from a grid of dispersed M500 and c200 values.
+- `method.qc_flags`: no cluster or X-ray paper was found that flags or excludes fits whose posterior sits at a hard prior
+  bound; the prior-edge flags and the outer-pressure runaway remain our own diagnostics. Gelman 2020 p. 60 also warns
+  against discarding non-converging results without diagnosis (the flags report the excluded fits).
+- `method.maximal_list_donors`: Stuart 2010 and Austin 2011 concern matching in observational studies of treatment effects;
+  they support the idea of a reuse count and a caliper, not any numerical value, and no astronomy paper was found that caps
+  the reuse of a real observation for a mock.
+
+**Searched, nothing found:**
+
+- `fit.pixel`: no XMM-Newton surface-brightness or forward-model paper read states an image pixel size or a minimum number
+  of pixels across R500. X-COP (Ghirardini 2019 p. 4, Eckert 2016 p. 6) uses Voronoi bins of 20 counts, CHEX-MATE 2 arcsec
+  bins (section I), Sanders 2018 0.492 arcsec pixels. Nothing supports 8 arcsec or 40 pixels.
+- `fit.point_source_thresholds`, the 90 arcsec protection: no paper found that leaves the central source or BCG unmasked
+  (Pacaud 2016, Seppi 2022 in section K only support the premise). Rasia 2012 and Vikhlinin 2006 do the opposite (section K).
+  Bulbul 2024, Clerc 2012 and Pacaud 2006 were not read (not in the references area).
+- `photometry.lx_background_clip`: no paper was found that clips azimuthal sectors of an annulus at a multiple of a Poisson
+  or MAD error to estimate a background; X-COP clips in time and uses the azimuthal median instead.
+- Not read, not cited: Le Brun 2014 (arXiv 1312.5462) and Eckert 2016 (arXiv 1606.05657, A2142) were fetched into the
+  references area; a text search found no use for them. Bahar 2022 was not identified, Feigelson and Nelson 1985 (upper
+  limits as censored data) has no arXiv version and no quote could be checked.
+
+### N addendum: counter-evidence moved out of `photometry.lx_core_protection`
+
+Mantz et al. 2010b (abstract) and Pratt et al. 2009 (p. 7) treat the central 0.15 R500 as a distinct, cool-core
+dominated region, but they EXCISE it from the luminosity; REXCESS removes point sources with no core exemption
+(Pratt 2009 p. 14). That is the opposite of protecting core sources from masking, so they are recorded here as
+counter-evidence and not as support. The entry rests on its validation (the masked-core cases of the campaign
+Lx background check).
+## M. Literature pass 5A (2026-10-18)
+
+Instrument and simulation side. Nine papers and three official documents were added in the new fragment
+`citations/literature5a.yml`: `baldi2012` (arXiv 1111.4337), `bartalucci2017` (1709.06570), `tozzi2015` (1505.06913),
+`pierre2016` (1512.04317, XXL I), `tholken2018` (1708.07208), `gouin2023` (2306.04694), `galarraga2021` (2010.15139),
+`lebrun2014` (1312.5462) and `hudson2010` (0911.0409), with arXiv id and DOI from the arXiv API and Crossref; and
+`xmm_cal_tn0018` (XMM-SOC-CAL-TN-0018 Issue 3.14), `xmm_mos1_ccd3` (ESA news page of revolution 2382) and `pyxsim_docs`
+(pyXSIM online documentation), with `url:` and no DOI. The existing keys `xmm_uhb` (Users Handbook), `rasia2012` and
+`biffi2016` were also used. 31 evidence blocks were added beside the existing blocks of 13 entries; no kind, value,
+statement, validation, instrument or open block was changed. Official documents are cited page-less like `lodders2003`,
+and every quoted sentence was checked against the text of the document as read on 2026-10-18 (54 quotations, all found).
+`tngxmm ledger proofs`: 154 of 154 paged evidence blocks BOXED, 19 NO_PAGE by design. Of the 13 new paged proofs, 8 were
+opened as PNGs and the boxed text was the cited text.
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `instrument.pattern_loss` | `xmm_uhb` Table 7; `xmm_cal_tn0018` p. 33; `baldi2012` p. 2; `bartalucci2017` p. 11; `tozzi2015` p. 3 | in the official pattern table the calibrated pn imaging patterns are exactly 0 (singles) and 1-4 (doubles), so pn PATTERN <= 4 is the calibrated set; the calibration note offers response matrices only for singles, doubles and singles+doubles and recommends singles below 0.4 keV for soft images (the reason of the single-pixel band 1); three cluster papers select pn PATTERN <= 4 (Baldi: 'patterns 0 to 4 (single and double)') | that PATTERN <= 4 is the standard selection for every image (the note says 0-12 can in principle be used), the CCF pattern fractions; the bold flag of Table 7 is read from the page source; Tozzi uses MOS < 12 |
+| `instrument.mos_ccd_loss` | `xmm_uhb` Sect. 3.3; `xmm_mos1_ccd3`; `xmm_cal_tn0018` p. 25; `pierre2016` p. 7; `tholken2018` p. 2 | the loss of MOS1 CCD3 on 11 December 2012 (revolution 2382) and of CCD6 on 9 March 2005 (revolution 961), by date and revolution in three official documents; the ESA page gives the geometry (about 14 % of the MOS1 area) and says observations continue without CCD3 and CCD6; the XXL paper names revolutions 961 and 2382; a cluster paper discards both CCDs | the epoch rule for a donor without an exposure map (our own rule); the XXL and Thölken papers give no dates. The revolution 961 settles the 'near 950' of `snowden2008` |
+| `instrument.readout_window_geometry` | `xmm_uhb` Table 3 | pn Large window 198 x 384 and Small window 63 x 64, MOS Large 300 x 300 and Small 100 x 100, the pn large window reads half the area of all 12 CCDs and the small window part of CCD 4 | the per-CCD row counts of the masks (99 and 64), which come from the CCF mode tables and the PPS maps |
+| `instrument.pn_out_of_time` | `xmm_uhb` Table 6 and Sect. 3.3.10 | exactly the four fractions: full frame 6.3 %, extended full frame 2.3 %, large window 0.16 %, small window 1.1 % (the 1.1 % is the small window, not the large window); the mechanism (events registered during the readout shift along a column get a wrong RAWY and so a wrong CTI correction); epchain simulates the out-of-time list; energy mis-correction on both sides of a bright source row | the CTI 1.4e-3 per row, the uniform distribution on the column; counter-indication: the Fig. 42 caption describes the visible strip as 'running from the source toward the top of the image (in detector coordinates)', i.e. on the readout-node side, not on both sides |
+| `instrument.pn_edge_rows` | `xmm_uhb` Table 3 note 5; `xmm_cal_tn0018` p. 32 | 'The first 12 rows at the readout-node are not transmitted to ground (are set to "bad", equivalent to "bad pixels")', the official basis of RAWY <= 12; the low-energy noise rises towards the readout node | the note is attached to the pn Full frame and Extended full frame rows only, so Large Window and Small Window have no official 12-row statement in that table; the rule 'in every band' is not discussed |
+| `instrument.camera_layout` | `xmm_uhb` Sects. 3.3 and 3.3.1.1 | seven MOS chips, the MOS cameras 'orthogonally oriented'; the pn chip array is offset from the optical axis, with the nominal boresight about 40 arcsec from the chip gaps | the donor-offset placement, the zero camera offsets, the missing dither cap |
+| `fit.optical_axis` | `xmm_uhb` Sect. 3.3 | the optical axis is a defined point, not the centre of the pn chip array ('slightly offset'), and the nominal boresight is marked in Fig. 19 | the OPTAXX/OPTAXY keywords (no official page names them), the CRPIX fallback, that the true axis differs from the nominal one |
+| `sim.tvir_floor_off` | `rasia2012` p. 18, `biffi2016` p. 7, `hudson2010` p. 4 | temperature limits and core excision have precedent: central 15 % of R500 excised and an a priori temperature-density cut on particles with short cooling time (X-MAS mocks), a 0.3 keV floor for the spectroscopic-like temperature, and a core-excised T_vir in an observed sample ('the largest source of bias in the determination of Tvir') | a floor proportional to T_vir (no mock paper found), and the choice of leaving it off; Hudson applies the excision to an observed profile |
+| `sim.gas_selection` | `rasia2012` p. 6, `lebrun2014` p. 5 | published mocks limit the emitting gas: all particles within a 10 Mpc depth along the line of sight centred on the cluster (X-MAS); the hot gas particles within r500 (cosmo-OWLS synthetic X-ray analysis) | the 2 R200c clip and the FoF group (Rasia's 10 Mpc is much larger, Le Brun's r500 smaller); the clip itself still has only these loose precedents |
+| `sim.photon_floor` | `xmm_uhb` Sect. 3.3, `pyxsim_docs` | EPIC covers 'the energy range from 0.2 to 12 keV'; pyXSIM leaves emin to the user | the rest-frame value 0.2 keV (the pyXSIM example uses 0.1 and 10 keV) |
+| `sim.photon_ceiling` | `xmm_uhb` Sect. 3.3, `pyxsim_docs` | the observed band ends at 12 keV, so 12 (1+z) keV is needed; pyXSIM leaves emax to the user | the value 20 keV and the 15 keV ARF and sky-background grid |
+| `sim.redshift_clamp` | `pyxsim_docs` | make_photons takes the redshift as a free argument and names no minimum; a nearby source is given as a distance with redshift zero | observing at the replica redshift with a 3 % jitter or dropping the 0.05 clamp; absence of a documented floor is not support |
+| `truth.shell_filling` | `gouin2023` p. 3 (twice), `galarraga2021` p. 7 | a published IllustrisTNG cluster-profile analysis averages cell quantities in radial shells as sum(Q V) / sum(V), including the hydrogen and electron density (for Q = density this is the gas mass over the SUMMED CELL VOLUME), and defines the volume covering fraction (summed cell volume over shell volume) that this average ignores, as the filling factor here; a second TNG paper explains the volume weighting with the broad distribution of AREPO cell volumes | the threshold of 0.1 (neither paper cuts on the covering fraction), non-star-forming gas, the use in a hydrostatic mass; Galarraga's Eqs. 6-7 are temperature and pressure in cylindrical shells around filaments |
+
+**Searched, still unsupported (honest negatives):**
+
+- `instrument.pn_readout_tilt` (-24.5 deg): nothing found. The Users Handbook only shows the pn layout and the orientation
+  of RAWX/RAWY against DETX/DETY in the caption of Fig. 22 and gives no angle; the CCF coordinate tables (EPN_LINCOORD)
+  are not an arXiv paper or a readable page, so the number rests on our own line fits to the CCD edges.
+- `fit.optical_axis`: no official page that names OPTAXX/OPTAXY was found (SAS eexpmap, emosaic and the Data Files
+  Handbook pages were read and do not mention them). The time-dependent boresight of XMM-SOC-CAL-TN-0018 p. 7 concerns
+  the star-tracker alignment, not the optical-axis pixel on the detector, and was not cited.
+- `sim.photon_floor` and `sim.photon_ceiling`: neither SOXS nor pyXSIM documentation states a recommended generation
+  limit; the values 0.2 and 20 keV, and the 15 keV grids, stay with the bias audit and the redshift arithmetic.
+- `sim.redshift_clamp`: no documentation or paper supports observing a TNG cluster at an unclamped low redshift.
+- `sim.gas_selection`: no mock paper clips at 2 R200c about GroupPos with a FoF group; only looser (10 Mpc depth) or
+  tighter (r500) volumes were found.
+- `sim.tvir_floor_off`: no paper applies a T_vir-relative floor to the gas cells of an X-ray mock.
+- `truth.shell_filling`: the counter-evidence of section L stands. Pearce et al. 2020, Gianfagna et al. 2021 and 2023 and
+  Ansarifard et al. 2020 divide the shell gas mass by the full shell volume, the opposite of the summed cell volume;
+  Gouin et al. 2023 and Galarraga-Espinosa et al. 2021 use the summed cell volume (volume weighting) and so support the
+  denominator, but nobody uses the 0.1 filling threshold. The two conventions give the same density where the shell is
+  filled and differ by the filling factor where it is not, which is what the threshold of 0.1 bounds.
+- `instrument.pattern_loss`: Ghirardini et al. 2019, Tchernin et al. 2016 (X-COP, A2142), Pratt et al. 2009 and 2010 (0909.3776) were
+  searched; none states pn PATTERN <= 4 (Lovisari 2020 and Mernier et al. 2017 keep pn singles only, section L). The
+  support above comes from other XMM cluster papers and the official documents.
+- Rejected candidates: 2501.18346 (soft proton flares) says the MOS1 CCD3 data are 'not available after 2005', which is
+  wrong for CCD3 (lost in 2012), so it was not cited; the Chandra paper Hudson et al. 2010 is observational and used
+  only for the core-excised T_vir criterion.
+- Duplicate-key note for the integrator: `lebrun2014` and `hudson2010` are new keys in `citations/literature5a.yml`;
+  a parallel pass that also adds either key must keep one definition only.
+
+### M addendum: `sim.tvir_floor_off` is a validation, not a literature entry
+
+Pass 5A attached Rasia 2012 (p. 18), Biffi 2016 (p. 7) and Hudson 2010 (p. 4) to this entry. All three APPLY a
+temperature floor or a core-excised temperature, while V4 switches the T_vir floor off. They are therefore
+context for the V2 choice, not support for V4. The entry rests on V4-TEMET-done section 6: the 0.5 T_vir floor of
+V2 masked temet's under-count of soft gas and makes three of four halos 5-12 % too faint.
+
+## O. Release V4.1 (2026-10-19)
+
+| entry | resolution |
+|---|---|
+| `sim.table_metal_unit` | Fixed in the release presets (0.019366, the table's own AG89 unit). The ZAG89 job (1887779) measures the size of the change on 24 paired views for the record. |
+| `instrument.pattern_loss` | The pn PATTERN<=4 loss in the mocks and the PATTERN<=4 pn ARF in every fit (arfgen convention, verified to 0.2 %). |
+
+## P. Design parameters (independent review, round 1, 2026-11-03)
+
+These numbers decide what is simulated, how finely it is sampled or which outputs are flagged.  None of them is the
+value of a measured quantity, none was fitted to make a result come out, and none has a literature value to replace
+it.  They are listed so that a reader does not take them for physics.
+
+| parameter | value | what it does | why it is not a tuned factor |
+|---|---|---|---|
+| `donors.jitter_scale_sigma`, `jitter_cam_sigma`, `jitter_nh_sigma`, z jitter | 0.15, 0.05, 0.10 ln; 0.03 | spread replicas of one donor so no two are identical | under the production conditions rule the exposure and N_H come from the conditions donor; the jitter only decorrelates replicas |
+| condition-space penalties (`conditions_donor.CATEGORY_PENALTY`) | 9 (filter), 4 (pn submode) | rank near neighbours with a different filter or mode behind those with the same | an ordering of candidates in squared standard units; it never scales a count |
+| replica mass windows, `halo_reuse_cap`, max-list `cap_factor` | 0.10 / 0.15 / 0.20 dex; 3; 2.0 | which halos and donors may be paired, and how often one is reused | sample design; the matched population is checked against the donors (gate P). The cap factor (decided 2026-11-04) stays 2.0 with 1.5 and 3 as a stated arm of any result read off the maximal list (S5: median donor distance +16 / -15 per cent); the release 1.2 comparison pairs on the fit mass and does not use these donors |
+| matched-sampler kernel width | 0.05 | smoothing of the matched draw | sample design |
+| release 1.2 pairing, redshift window and distance (`donors.pair_projections.PairingSpec`) | dz 0.25 (`params:donors.matched.dz_max`); widths 0.05 in z and log M (`params:donors.matched.sigma_z`, `sigma_logm_dex`); a shortfall repeats the nearest donors in turn | which real observations may be the physics donors of a halo-snapshot's projections, in which order | the values of the matched draw (ledger `method.matched_draw`, `method.matched_kernel_widths`, design note of 2026-10-27); a sample design whose shortfall is reported by mass and z, not a factor on any number |
+| release 1.2 pairing, mass window (`PairingSpec.mass_window_dex`; decided 2026-11-04) | a caliper of 0.25 sd of the log10 fit mass of the reference pool (`CALIPER_SD`, `caliper_dex`), computed from the reference table before any halo is paired, never widened (0.070 dex on the 167 V4 real fits; the release value comes from the refitted pool, B3) | sets which observations may be a halo-snapshot's physics donors and so the shortfall | the published caliper of nearest-neighbour matching (Rosenbaum & Rubin 1985 via Stuart 2010, Sect. 2.2; ledger `method.pairing_caliper`; parameter `params:donors.pairing.caliper_sd`), written before the pairing runs; Cochran and Rubin's 98 per cent holds for a treated-to-control variance ratio of two, so the variance ratio of log M_fit (paired mocks against the pool) is reported with the pairing; a fixed window (the former 0.10 dex rung) is a sensitivity arm |
+| halo folds (`donors.halo_groups`) | 5 folds; seed 20261103 (`HALO_FOLD_SEED`); strata simulation and frozen split, blocks by decreasing largest M500c | which halo (all its snapshots and views) is in which fold (release 1.2) | a cross-validation design; the seed selects one assignment and was not chosen after seeing it |
+| halo bootstrap (`donors.halo_groups.halo_bootstrap`) | seed 20261103 (`HALO_BOOT_SEED`), when the caller gives none; no interval below two halos | which resamples of the halos are drawn | the seed selects one set of resamples; the certification rules pass their own |
+| `build_core_offsets.MAX_OFFSET_ARCMIN`, `donors.exclude_obsids` | 6 arcmin; listed obsids | donors whose cluster sits too far off axis or whose data are unusable are not used | a selection of the donor pool, stated per observation |
+| fill window of campaign check C17 (`truth_sphere.FILL_SANITY`; decided 2026-11-04) | 0.9-1.1, judged for the moving-mesh runs only; reported for SPH and meshless runs | flags a spherical truth whose cells do not fill the R500c shell | a sanity bound on a Voronoi tiling; kernel volumes m / rho of SPH and meshless runs do not tile space (ledger `truth.fill_check`), and a window fitted to the FLAMINGO spread would be tuned, so none is set |
+| `sim.snapshot_fields = 'mini'` (v1_common; decided 2026-11-04) | the mini-snapshot field set at all 60 snapshots | one rule for the gas of full and mini snapshots | TNG's primordial X_H (ledger `sim.snapshot_fields`); the 2 per cent against the gas's own hydrogen is uniform and stated |
+| `donor_soft_ccd.NSIG`, `CONTROL_MAX_FRAC` | 5 sigma, 0.25 | classify a MOS CCD as anomalous | classification thresholds; the papers name the state, not a number (ledger) |
+| centre search floor (`GUARD_MIN_SEARCH_ARCSEC`) | 48 arcsec | the smallest search radius | three times the 16 arcsec smoothing, so a peak can be found at all |
+| crop, pixel, pixels per R500 | 3 R500, 8 arcsec, 40 | fit region and sampling | numerical; the crop sensitivity (-0.009 on TNG views) is carried as a systematic |
+| `fit_qc.PRIOR_EDGE_FRAC`; P_out bounds; Z bounds | 0.025; -37 to -18; 0-2 | flag posteriors against a bound; prior support | QC flag (sensitivity R1 in section E); flat priors wide enough not to bind. The P_out range is the default of mbproj2d and the range of Scheck et al. (2023). The lower Z edge 0 is the physical bound of an abundance and a hard bound of mbproj2d (no count rate for Z < 0), with the X-COP fits as precedent (Ghizzardi et al. 2021, whose authors recommend allowing negative values) and the flat 0-1 Z_sun prior of Sanders et al. (2022); the upper Z edge 2 is ours, about twice theirs and above the mean and average core abundances (section Q) |
+| P_out run-away flag (`pout_runaway`) | posterior median of ln P_out above -30 (erg cm^-3) | flags a fit whose free outer pressure ran away from the floor and took up the background, the mode seen in the closure grid (-26 at z = 0.06); the flag leaves the fit out of the science samples | a classification threshold between the floor of the parameter (-37) and that mode; it sets a flag, not a fitted value, the same on both sides. No paper read flags the outer pressure (Sanders et al. 2018, 2022; Scheck et al. 2023; Ettori et al. 2010, 2019; Eckert et al. 2022) |
+| rising log posterior (`fit_qc.LP_RISE_FLAG_SD`; `sample_posterior.diagnostics`) | 2 standard deviations of the log posterior in the kept steps, between the means of their first and last tenth | sets the reported QC column `chain_lp_rising`; it is in no cut (not in `QC_EXCLUDING`) | the descriptive cut of the chain-convergence study (STATUS B9: 17 per cent of the long chains rise by more); a flag on the chain, not a fitted value, the same on both sides. It is one-sided: it marks a chain still climbing towards the posterior's bulk; a falling log posterior (a walker leaving a spike) is not flagged, and the tables of STATUS Q18 show the absolute rise beside it. Decided on 2026-11-04: it cuts nothing; its rate is compared between mocks and real fits (`Rqc_seed_chain`) and every science median is given with and without the flagged fits (docs/dev/PREREGISTRATION.md, section 5) |
+| moves of `sampler_moves = de` (`sample_posterior.emcee_moves`) | emcee's DEMove alone (weight 1), with its default settings | the proposal of the closure arms v1sas_de and v1sas_delong; no preset uses it | the differential-evolution move of ter Braak & Vrugt (2008), Sect. 2.1. emcee 3.1.6's snooker move (DESnookerMove) is not used: its direction is not a unit vector and its Metropolis factor has 0.5 (d - 1) instead of the (d - 1) of their eq. 4, and on N(0, s^2 I) at 34 dimensions it gives a variance of 0.54 s^2 (0.76 s^2 in the 0.8 / 0.2 mixture of the emcee tutorial); DEMove alone gives s^2 within 1 per cent (unit test at 10 and 34 dimensions, two scales). Not tuned on this fit |
+| covariance of `walker_start = scaled` (`sample_posterior.start_covariance`) | inverse of the expected Poisson information of the fitted pixels at the optimum plus 1 / sigma^2 of each Gaussian prior; model derivatives by central differences of 0.01 in each parameter's own units; a parameter the information leaves unconstrained (an eigenvalue below 1e3 machine epsilons of the largest: round-off), or whose one-standard-deviation interval reaches a bound of its prior, keeps mbproj2d's ball (0.01) and the others are drawn conditional on it, their mean moved by the regression on its ball offset; a draw outside a prior's support (hard bound or soft edge) is redrawn and counted | where the walkers of the closure arm v1sas_scaled start; no preset uses it | the normal approximation of the posterior at the optimum. The step is mbproj2d's own width of its walker ball (`MCMCSamplerEmcee` initspread, read from the package). On the real closure cells the start is over-dispersed: its median walker lies 74-1281 below the optimum in log posterior (pilot of 2026-11-04), against about 17 for an exact normal posterior of 34 parameters, and single walkers up to 4.1e13, 3.3e8 and 2.5e8 below: along a near-flat direction of the information matrix (a background level that the data barely constrain at the optimum and whose bound lies beyond one standard deviation, so it is drawn) the normal approximation allows steps the exponential model punishes hard. Those walkers return within the burn-in in the pilot (log-posterior rise of the kept steps below 0.9 sd). The one-standard-deviation rule marks where that approximation fails: at a bound the posterior is one-sided or set by the prior (a background level or P_out at its floor), and a first version that spread such a parameter over its flat prior started the walkers of a real cell a billion in log posterior below the optimum (pilot of 2026-11-03). It decides where the chain starts, not what it converges to |
+| background region of the fit (`prepare_images.preprocess_one`, the `outer.sum() < 50` test of the background seed) | 50 exposed fit pixels in the r > 2 R500 annulus (0.9 arcmin^2 at the 8 arcsec pixel) | an image with fewer such pixels counts as having no background region: the fit is flagged bg_fallback and left out of the science samples | a threshold on the existence of a region, the same on both sides; it sets a flag, not a fitted value. No paper states a smallest background region: Seppi et al. (2026) replace a region that falls off the field by a corner circle of about 3 arcmin, chosen by hand (section Q) |
+| background seed of an image without that region (`prepare_images.preprocess_one`, the fallback ring, the 10-pixel test and the ln SB = -15 floor of the background seed; the 50-pixel, 0.6 and 10-pixel parts also in the diagnostic `fit_hydrostatic.net_counts_r500`, which takes a background rate of 0 where an image would get ln SB = -15) | the outer 40 per cent of the crop, r > 0.6 r_max (of the exposed field under bg_seed = exposed); at least 10 pixels for a measured seed; ln SB = -15 when fewer | where the seed of the background level comes from, and the image's label (fallback or none), once the r > 2 R500 annulus is missing | only bg_fallback fits use them, and those fits are left out of the science samples; under the ESAS background of the presets the seed is not used at all (the sky level starts at half the mean residual surface brightness of the whole image, `fit_hydrostatic.build_esas_background`), so they change no fitted value of a science fit |
+| `photometry.arf_band_mean_cm2` | 395 / 400 / 1259 cm^2 | camera weights of the effective exposure | the same weights on both sides; t_eff enters only as a label of the data |
+| `t_vir_keV`, kT = mu m_p G M / (2 R) | factor 2 | the ECF temperature of the seed photometry | a convention for the ECF temperature only (effect < 0.6 per cent, ledger R2) |
+| photometry masks and background: `lx_mask_wing_frac`, mask radii, `lx_bkg_clip_sigma`, sectors, `lx_max_masked_frac`, annulus | 0.1; 30-150 arcsec; 3; 12; 0.5; 1.1-1.6 aperture radii | which pixels are masked and which form the local background, for every Lx and first guess | the same on both sides; they decide where the estimator looks, not the value it should return |
+| seed ring fill of an aperture off the field | up to half the aperture (the masked-area limit) | lets the first guess measure a large R500 at the field edge | the masked-pixel rule reused; symmetric |
+| core protection as a separation | one PSF half-energy width (16.487 arcsec) | sources nearer the centre are not masked | instrument number, design criterion (ledger `photometry.lx_core_protection`) |
+| `guess_mass.ITER_MAX_STEP` | one decade in mass | largest search step before the root is bracketed | shapes the search path only; the root found is the same |
+| point sources kept in the centre search | within max(r90, PSF HEW) of the nominal position (r90 up to 7.9' for PSZ2) | where the catalogue places the cluster, a point-like detection can be its core | the published positional error reused as the region the cluster may occupy; symmetric. Kept on 2026-11-04 with a one-sided mock-real check of the share of final centres within one HEW of a protected source (docs/dev/PREREGISTRATION.md, section 8): a failure is answered by a refit with those sources masked, carried as a real-side term, never by another radius |
+| centre search of a nearby cluster without a bright core (STATUS Q21; decided 2026-11-04: the rule kept on both sides, declared) | the rule of the row above, unchanged: SAS detections flagged extended are never masked in the peak search | whether a compact source flagged extended can hold the X-ray peak of a diffuse cluster (0675470901, z = 0.08: the peak sits on a source of extent 9.3" (emldetect `EXT` 2.33 pixels of 4") 5.9' from the PSZ2 position, 2.5 r90, 0.48 theta500) | CHEX-MATE removes "extended bright sources other than the cluster itself" by eye before taking the peak (Bartalucci et al. 2023, Sect. 3.1.1, p. 3), which cannot be done the same way on mocks. No automatic rule separates such a source from a cluster's own detection: of the 638 real centres, 79 lie on a SAS extended detection outside the protected circle, most of them the clusters' own detections (extent mostly 15-80"), and the distant ones are as compact as the source of 0675470901 (0884710101, z = 1.15: 8.2"; 0675010201, z = 0.93: 9.3"; 0914590701, z = 1.42: 9.9"), so any extent cut that masks it masks them; a smaller search radius for "nearby, diffuse" clusters has no published definition of the class. Kept: the rule is the same for mocks and real data and was fixed before this case was seen; the failure shows in the beyond-2 r90 tail of the catalogue-move check, which counts it (row "agreement of mock and real catalogue moves"), and 0675470901 is named in the paper's table of real targets. Mocks carry no unrelated extended sources (their sky has AGN only), so captures of this kind are a real-side term the check can show but not remove |
+| SZ position of a mock (`sim.catalogue_centre`, rule version 4) | the Compton-y map filtered with the beam-convolved universal pressure profile (ACT DR6 theta500 2.4' with the CMB + white-noise model; PSZ2 theta500 of the entry's MSZ, white noise), then the detection and the estimator of the rows below | the mock's catalogue position before its measurement error | template, filter scales, merge rule, segment threshold and estimators are the catalogues' (ledger `fit.centre`); the choices are the noise models (rows "noise model of the ACT filter" and "noise model of the PSZ2 filter") and the PSZ2 scale from MSZ instead of the S/N-maximising scale of the detection; checked against the real moves by `validation.catalogue_moves` after regeneration |
+| where the detection is looked for | the local maximum of the filtered map reached from the halo centre by steepest ascent within the 4 R500c cylinder; PSZ2: then the reference of its group under the 10' merge (the maxima taken from the highest down, each taking those within 10' not yet taken: the rule PSZ2 Sect. 3.1 states for its merges, row "PSZ2 merge by reference" below; rule version 4); ACT DR6: the S/N > 3 segment holding it, labelled inside the cylinder | which object of the projection the mock's catalogue entry is: the detection of the halo the view is made of, not the brightest object of the cylinder (rule version 1) | a catalogue entry is the cluster the observation targets, which the mock replicates; the 10' merge (PSZ2 Sect. 2.1) and the 3 sigma segments (ACT DR6 Sect. 2.2.2) are published. On the review's sample (46 halos of snapshot 78, 136 views with SZ donors: 69 ACT DR6, 67 PSZ2) the search from the halo centre changes the detection of 2 views against version 1; with the white-filter ACT centroid, version 2 moved 64 of the 136 positions by more than 1". Under version 3 the flags (header `CPFLAG`, `obs_meta.json`) are `global-elsewhere` 3 views (2 ACT, 1 PSZ2: the highest point of the map is not part of the detection), `merged` 1 (PSZ2: a neighbour within 10'; the ACT merge of version 2, a bridge through a saddle at S/N 3.4, is a product of the white filter and does not survive the CMB filter) and `off-halo` 3 (PSZ2: the position lies outside the halo's projected R500c; one after the merge, two on a neighbour 7-8.5' away whose slope leaves the halo no maximum of its own) |
+| PSZ2 merge by reference (`sim.catalogue_centre.merged_peak`; review 6, C11; decided 2026-11-04, rule version 4) | the positive local maxima of the filtered map taken from the highest down; each one not yet assigned becomes a reference and takes the unassigned maxima within 10'; the detection's position is its reference | where a PSZ2 mock's position ends when several maxima lie within 10' of each other: in a chain A-B-C (each within reach of the next, C the highest, A out of C's reach) C takes B and A stays a detection of its own, whatever the order of A and B; a merged candidate never merges again, so the position is never more than 10' from the detection reached from the halo centre | the assignment is the rule Sect. 3.1 (p. 4) states for the union of the three codes, used here for one code's merge (a reading): the union "identifies the highest S/N detection as the reference position during the merge: any detections by other codes within 5 arcmin are identified with the reference position"; the greedy ascent of version 3 (moving on from each merged maximum to a higher one in reach) is stated nowhere. The radius stays the 10' of Sect. 2.1 (p. 3: the MMF candidates "are then merged into a single all-sky catalogue by merging candidates separated by less than 10 arcmin"), the description of the codes' own merge, against the 5' Sect. 7.1 (p. 17) gives for the patch merge and the union; Declared here. On the 21 views of the seven cached halos of the round-5 check (9 PSZ2) the two rules give the same position (one view merged under both) |
+| `off-halo` flag threshold and the views it marks (STATUS Q23; decided 2026-11-04) | the halo's projected R500c; the flagged views stay in every comparison, and the realism and centring results are also given without them | marks a position that belongs to another object of the projection | a flag only, it changes no position; R500c is the halo's own size, not a fitted number; no catalogue states such a criterion. Kept because it is what the catalogue would report for that projection (PSZ2 Sect. 4.5, p. 9: for merging clusters the position "can be significantly offset from the centre of the peak of the SZ distribution"; the injections needed a 10' matching radius), and because the real sample cannot be cut the same way: no real target has a known halo centre, so leaving such mocks out would select on truth. The second set of numbers is a sensitivity, not a correction |
+| `edge` flag (STATUS Q22; decided 2026-11-04, rule version 4; `catalogue_centre.EDGE_TEST_RADIUS_FRACTION`, `EDGE_TOLERANCE_SIGMA`) | where the kernel's support (the template's 5 R500 plus four sigma of the double beam, or four sigma of the X-ray smoothing) about the position reaches beyond the cylinder, the position is measured again from the cells within 0.75 of the cylinder's radius (3 R500c of 4); `edge` when the two differ by more than 0.1 times the larger of the entry's published sigma and the map pixel; `edge_weight`, `edge_shift_arcsec` and `edge_tolerance_arcsec` recorded | marks views whose position depends on where the map's gas ends | the literal support test fired on every PSZ2 view of the review's sample (67 of 67) and 52 of 69 ACT views, so it carried no information. A threshold on `edge_weight` was considered and rejected: on an analytic universal-pressure-profile sky (the catalogues' own template, no mock) the shift that truncation at 4 R500 causes is not a function of the weight (PSZ2 template at theta500 = 3': 4" at weight 0.20; ACT 2.4' filter: 0.01" at 0.20 for a smooth cluster and 1.7-2.6" at 0.02-0.03 where the segment holds structure), and on the 21 cached TNG-Cluster views the test flags views at weight 0.04 and passes one at 0.10. The test measures the dependence itself. The quarter of the radius is one R500c of gas, a shell that holds more of the kernel than the gas beyond the cylinder does under a falling profile; 0.1 sigma added in quadrature widens the position's scatter by 0.5 per cent; 0.1 pixel is the precision the quadratic peak is held to (row "SZ and X-ray map numerics"). On the 21 cached views: the literal test 18 (9 of 9 PSZ2, 9 of 12 ACT), the new one 4 (3 PSZ2, 1 ACT), each of them a view with another flag or a position 2.2-12' from the halo centre. The proxy was checked against the truncation it stands for (the 4 R500c cylinder against 9 R500c) on the analytic sky (PSZ2 at theta500 3, 6, 12'; ACT at 2, 4, 8'; detections 0-2 R500 off the cylinder centre): wherever the detection stays the same, the cut to 3 R500c moves the position 1.1-42 times as much as the real truncation (PSZ2 up to 14.7" against 4.0"; ACT up to 0.27" against 0.01"), so the test is conservative; it understates the real truncation only where the detection itself changes (ACT 2' at 2 R500: 82" against 261", flagged; ACT 8' at 1.5 R500: 37.6" with the kernel inside the cylinder, so not tested), and those views carry `global-elsewhere` or `merged`. The ACT tolerance is the pixel floor (0.1 x 10.5" = 1.05") for every entry with S/N above 8.2 (sigma = 1.428'/q below the 10.5" pixel); it sits four times above the smooth-sky proxy shifts but near the shifts of real gas (one cached view at 1.01"), so near the floor the ACT flag reads numerical noise as much as truncation. A flag only: it selects nothing |
+| ACT DR6 position estimator | S/N-weighted centre of the S/N > 3 segment of the 2.4' map filtered with the CMB + white-noise model, the map scaled so that the halo's own maximum has the entry's `fixed_SNR`; no noise realisation | the position an ACT DR6 entry reports | the estimator is the catalogue's (Hilton et al. 2021, Sect. 2.2: the centre of mass of an object's pixels above the S/N threshold; ACT DR6 Sect. 2.2.2: 3 sigma segments, positions measured on them). Choices: DR6 does not say at which pixel fixed_SNR is read (the review measured that reading it at the centroid instead of the highest pixel moves the white-filter positions by at most 1.3" on unmerged views); scaling at the halo's own maximum keeps the start in its segment, so a higher maximum in the same segment has an S/N above fixed_SNR and the view is flagged `merged`, with the saddle S/N recorded; the scaling leaves out the map noise that makes up the real S/N. On the sample the centroid lies 0.4-45" from the white-filter peak of the same detection (median 2.3", 0.09 r90; 90th percentile 12", 0.37 r90), against 0.1-265" (median 4", 90th percentile 32") for the version-2 white-filter centroid; versions 2 to 3 move the ACT positions by 0.4-264" (median 6.5", 0.26 r90; 90th percentile 41", 1.6 r90; 66 of 69 by more than 1", 22 by more than 10"), the moves running back along the version-2 shift (the review's vector test: 1.1-1.4 times it, to 4.6-5.3" from the white peak) |
+| noise model of the ACT filter | tau B / (C_l B^2 + N_w): C_l the lensed TT spectrum of the Planck 2018 best fit (PLA, base plikHM TTTEEE + lowl + lowE + lensing, to l = 2508; CAMB 2.0.5 at the same parameters, lens_potential_accuracy = 2 and HMcode non-linear lensing, to l = 10000, within 0.3 per cent of the PLA spectrum over 2-2508; 0 beyond; `tngxmm/sim/calibration/cmb_tt_lensed_planck2018.csv` with its provenance, `tools/build_cmb_tt_table.py`), N_w = 14 uK arcmin, B the 1.4' f150 beam | shapes the filtered map the ACT detection and centroid work on | a CMB + white model standing in for DR6's map-estimated N: DR6 forms its noise from the maps, "dominated by the CMB on large scales, and white noise on small scales" (Sect. 2.2), and 14 uK arcmin is the median f150 depth inside the exposed area for day+night data (Naess et al. 2025, p. 15). Declared: one band stands for the three DR6 combines, one median depth for the whole survey, no foregrounds and no atmospheric 1/f noise. Measured on the sample: N_w = 10 or 20 instead of 14 moves the positions by median 0.9" (0.04 r90), at most 8" (0.48 r90); the three-band filter (f090/f150/f220 at 97.8/149.6/220 GHz, beams 2.1/1.4/1.0', depths 14/14/64 uK arcmin, the CMB common to the bands) by median 1.1" (0.04 r90), 90th percentile 5.5" (0.23 r90), at most 37" (1.6 r90), with no merged segment |
+| noise model of the PSZ2 filter (STATUS Q24; decided 2026-11-04: kept, declared) | white noise: the matched filter is the beam-convolved template | shapes the filtered map the PSZ2 detection and peak work on | PSZ2's matched multi-filter weights by the cross-channel power spectrum measured on the maps (Sect. 2.1, eqs. 3-4, p. 3: P(k) "is effectively the noise matrix for the MMF"), and with six channels it removes the primary CMB by its spectrum (Melin et al. 2006, p. 10: "With their additional spectral information, multiband surveys remove the primary CMB signal"; p. 3, Fig. 1: the filter "uses both spatial and frequency weighting to optimally extract the cluster signal from the CMB and instrument noise"). What remains is instrument noise, close to white on the scales of the template, so the white filter is the nearer stand-in; a single-channel CMB model, which the ACT filter uses because DR6 forms its noise from maps the CMB dominates on large scales, would put back what the six-channel filter takes out. Bracket, measured in the review of version 2 with a single 143 GHz channel (a lensed TT spectrum from CAMB 2.0.5 with unrecorded parameters, the earlier review's array, and 33 uK arcmin, an illustrative level): the peaks move by 1.3-722" at z < 0.2 (13 views, median 11", 90th percentile 70") and 0.9-465" at z >= 0.2 (54 views, median 4", 90th percentile 26"); on the views without a flag, median 0.06 r90 or less and 90th percentile 0.18 r90 or less. The large values are views where the white filter merges a neighbour that a filter suppressing large scales keeps apart (722" for h1475690-v0). Neither filter is the published one, so this is a sensitivity, not a bound; the catalogue-move check (row "agreement of mock and real catalogue moves") tests the result |
+| cluster region of the per-observation responses (`instrument.obs_responses.REGION_MAX_ARCSEC`; review 6, C9) | a circle of theta500 about the guarded centre, at most 300 arcsec (also a theta500 the table lacks) | the events whose detector image weights the per-observation RMF (rmfgen, `detmaptype=dataset`); the ARF is on axis with a flat map and does not use it | which counts average the redistribution over position and epoch; a choice of region, the same for every donor, not a fitted value; no source gives a radius. A production number since the per-observation responses were adopted (`instrument.responses = 'donor'`, `massfit.responses = 'per-observation'`) |
+| PSZ2 positional error and position pixels (STATUS Q25; decided 2026-11-04: pixels not modelled, declared) | sigma = POS_ERR / 2.146 (POS_ERR read as a 90 per cent radius); positions not quantised | the measurement error drawn for a PSZ2 mock | Sect. 7.2 uses theta_err (defined in Sect. 2.1, p. 3) as a 90 per cent radius when it accepts MCXC counterparts, the rule the centre search copies; the column note (p. 33, note 3) calls POS_ERR the 95 per cent interval of the radial displacement, under which sigma would be POS_ERR / 2.448 (0.88 times the value used). MMF3 positions lie on the 1.72' map pixels (Sect. 6.2, p. 15: "MMF3 does not allow for sub-pixel positioning"); PwS positions come from its posteriors (Sect. 2.2; 144 donors) and MMF1's too in PSZ2 (App. C.1, p. 32: "sub-pixel positioning using posteriors"; 136); 147 of the 427 PSZ2 donors have an MMF3 reference position (`Pipeline` 2). The quantisation, 1.72' / sqrt(12) = 0.50' rms per axis, is taken to be inside the MMF3 POS_ERR: App. C.2 (p. 32) says the MMF3 positional error "has been corrected and tested against the QA", and the quality assessment measures MMF3's positional accuracy on injected clusters from its own pixel-bound positions (Sect. 4.4, p. 8: a 67 per cent bound of 1.52 arcmin for MMF3), so the error was checked against offsets that include the pixels. The pixel grid itself (the tangential patches of MMF3) is not published, and the MMF3 positions are not on HEALPix Nside 2048 pixel centres (median distance 0.73', as for MMF1 and PwS). Bracket: adding the quantisation again would widen sigma for those 147 donors by a median 10 per cent (90th percentile 21). Aside: the MMF1 POS_ERR is 2.43' for 571 of the 596 MMF1 reference entries of the catalogue, one value for nearly all |
+| beam of the SZ filter | ACT DR6 f150 1.4'; Planck 143 GHz 7.22' | one Gaussian beam stands for the bands the filters combine | published FWHMs (ACT DR6 Sect. 2.1, PSZ2 Table 1); the alternatives are f090 2.1' or f220 1.0', and 100 GHz 9.66' or 353 GHz 4.92' |
+| SZ and X-ray map numerics | map pixel 1/8 of the beam FWHM (X-ray: of the 16" smoothing FWHM), at most 4096 pixels per side; cloud-in-cell binning; quadratic fit to 3 x 3 pixels; the CMB filter on a zero-padded FFT grid | locates the detection on the filtered map | numerical; halving the pixel moves the PSZ2 peak by less than a tenth of a pixel (tests/unit/test_sim_catalogue_centre.py); for the ACT centroid the review measured 0.35-2.96" (0.12 r90 or less) between 0.175' and 0.5' pixels |
+| X-ray start of the three MACS mocks | the peak of the 0.5-2 keV emission smoothed with 16" (the peak finder's `peak_smoothing_arcsec` of the preset), reached from the halo centre; no drawn error | the analogue of their real X-ray positions, which carry no published error | Mantz et al. (2010b, Sect. 2) centre their clusters on the centroid of the 0.7-2.0 keV Chandra emission after masking point sources, with no aperture given; the `observations.csv` positions of the three lie 1.0", 4.1" and 3.8" from the coordinates of the Mantz et al. table (J1532, J1423, J0744), so they are close to, but not shown to be, those centroids. The peak finder's own smoothing is reused. On 18 views of six snapshot-78 halos an emission-weighted centroid within 0.5 R500c of the peak, with the cube's x_e rho m of each cell standing for the 0.5-2 keV luminosity, lies 0.9-32" from it (median 5"). These donors stand behind 39 of the 9,774 views of `campaign_v4_full` (all four simulations) and 27 of the 7,389 TNG-Cluster views; sigma 0 because no positional error is published |
+| agreement of mock and real catalogue moves (`validation.catalogue_moves.agreement`, `AGREEMENT_TESTS`, `AGREEMENT_LEVEL`, `CENTRING_ARM_R95_MPC`; decision memo 2026-11-03, item 8; fixed 2026-11-04 and revised after review the same day, before any mock of rule version 4) | each test on the difference mock minus real of one statistic, its interval from a bootstrap that resamples the real clusters and the mock physics donors independently (each donor weighted once); ACT DR6: share beyond r90 and median move / r90, two-sided at 95 per cent; PSZ2: share beyond 2 r90, failing only when the one-sided 95 per cent lower bound of mock minus real is above 0; the three X-ray positions not tested; every view enters, flagged or not | what counts as a mock catalogue entry good enough for the centring | the statistics are the report's own and the side of each test follows from the error model, not from the real interval. For PSZ2 the drawn error alone (a Rayleigh of POS_ERR read as a 90 per cent radius) puts 10 per cent of the moves beyond r90 with a median of 0.55 r90, and an SZ offset can only add to that, so those two statistics test the reading of POS_ERR (row "PSZ2 positional error and position pixels"), not the mocks, and are reported only (a test that the mock may not fall below the real lower bound, 5.8 per cent and 0.42, could never fail). Beyond 2 r90 the drawn error alone gives 1e-4, so the share there counts mock entries on the wrong object; a mock deficit is expected from real-only captures (row "centre search of a nearby cluster") and is reported as a real-side term. For ACT the published error is injection noise only (ACT DR6 Sect. 2.4), so both statistics test the simulated SZ offsets. Nominal false-failure rate 5 per cent per test; measured on 300 simulated pairs of samples of the real sizes (207 ACT and 427 PSZ2 clusters, three views per donor, the same distribution on both sides): 6, 6 and 7 per cent (binomial error 1.4), 10 per cent for either ACT test. A failure is never answered by rescaling the drawn error to the real moves (a factor fitted on real data): centring then enters the budget through an arm that adds to every mock position a circular Gaussian offset whose 95 per cent radius is 0.5 Mpc projected (sigma 0.204 Mpc per axis). That size is a declared design parameter: no SZ-to-X-ray positional dispersion is published for these catalogues; 0.5 Mpc is the 95 per cent radius ACT DR6 (Sect. 3.1, p. 8) quotes for cluster centres in the optical/IR miscentring model of Ding et al. (2025), for comparison with its cross-matching radius, not an SZ measurement. The matched filter with the catalogue beam is built before the paper |
+| redshift error of a mock | Gaussian of the published error for a photometric redshift (ACT DR6 `redshiftErr`; a PSZ2 redshift typed `phot` from its counterpart: `Z_LAMBDA_ERR`, the SPT-SZ `e_z`, ACT DR6 `redshiftErr`, or the catalogue paper's sigma_z), redrawn until z > 0; 0 for spectroscopic and untyped redshifts | the redshift a mock's catalogue entry would give it (ledger `fit.catalogue_redshift`) | ACT DR6 Appendix A lists `redshiftErr` only as the uncertainty of the redshift, and Bleem et al. (2015, Sect. 5.2) give the SPT-SZ `e_z` as the bootstrap error added in quadrature to the scatter of the red-sequence model: reading either as a Gaussian standard deviation is an assumption, as are the shape and the positivity bound; the three WaZP redshifts of the donors carry 0.030 each, a value that looks nominal, used as published. redMaPPer publishes its error as Gaussian (Rykoff et al. 2014, Table 1). WHL's 0.018 is an upper bound (Wen et al. 2012, Sect. 2.4: the standard deviation "is less than 0.018" in every redshift range) used as sigma for the 2 WHL photometric donors, so their mocks get a redshift scatter at least as large as the real one, probably larger (Fig. 4 of the paper has the per-range values; review 7, C2). Untyped redshifts get no error because nothing published types them (redshift rule 3, 377 of the 427 PSZ2 donors): the 4 WHL, 4 SPT and 2 ACT counterparts whose catalogue entry does not hold the PSZ2 value; the 270 MCXC counterparts (RXC names), whose redshifts MCXC takes over from its input catalogues without a type (Piffaretti et al. 2011, Sect. 3.1); the 46 other X-ray and database counterparts (MACS, RASS and EMSS names, Abell, Zwicky, NED and SIMBAD names, Planck follow-up), which PSZ2 types no more than the others (Sect. 7.6) and whose NED values it calls the least reliable of its assignments (Sect. 7.3.2); and the 51 donors whose PSZ2 entry names no counterpart (PSZ2 Sect. 7.6: values of the PSZ1 compilation and the Planck follow-up, with no record of which, so no published source to type them). For these the mock redshift errors are a lower bound. Decided 2026-11-04 (STATUS Q26): the untyped donors enter as exact-redshift donors, stated, and every realism and centring comparison is also given without them (the real targets whose redshift is untyped and the mocks of those donors, on both sides). Typing the MCXC values from their input catalogues was considered: MCXC takes the redshifts over unchanged and keeps only clusters with a measured redshift (Piffaretti et al. 2011, Sect. 3.1, p. 5: "No manipulation is needed for the cluster redshifts z. As stated above, only clusters with measured redshift are retained") and carries no type or source column per cluster, and a `spec` type would change no mock (a spectroscopic redshift gets no drawn error either); only a photometric value hidden among them would, and nothing published identifies one. Not a factor |
+| typing of a PSZ2 redshift from its counterpart (`catalogue_positions.psz2_redshift`, `Z_MATCH_TOL`, `PHOTZ_PAPER_SIGMA`; redshift rule 2, added 2026-11-04; rule 3, SPT and ACT, review 7) | spec / phot when the PSZ2 value is within 5e-4 of the counterpart's spectroscopic / photometric redshift; for redMaPPer phot also within the published z_lambda error, or when the public v5.10 catalogue lacks the cluster; an SPT-SZ redshift quoted without `e_z` is spectroscopic (Bleem et al. 2015, Table 4 note), one with it photometric; an ACT counterpart takes its ACT DR6 entry's `redshiftType`; error: the catalogue's per-cluster value, else the paper's (redMaPPer 0.006 at z ~ 0.1 and 0.02 at z ~ 0.5, the nearer quoted redshift; WHL 0.018, an upper bound used as sigma; MaxBCG 0.01) | which PSZ2 donors' mocks get a drawn redshift error, and its size (of the 40 photometric counterparts 31 phot, 5 spec, 4 untyped; of the 17 SPT 13 spec, 4 untyped; of the 3 ACT 1 spec, 2 untyped) | 5e-4 is half a unit of the third decimal, the coarsest precision among the published values compared (PSZ2's follow-up values, the MaxBCG zph and the SPT-SZ z, F5.3 and F6.3); the redMaPPer error window stands for the fact that PSZ2 used the authors' proprietary v5.10 run (Sect. 7.3.1), whose values the public v5.10 reproduces within 0.6 of its error for all 26 donors; the per-cluster v5.10 errors are those of the public run, which may differ slightly from the proprietary one; the two redMaPPer clusters absent from the public catalogue (z 0.070 and 0.396) take the abstract's value at the nearer quoted redshift, not an interpolation; WHL 0.018 is the paper's upper bound over its four redshift ranges, read as the standard deviation. No such window is given to SPT or ACT: PSZ2 took the SPT-SZ catalogue itself (Sect. 7.5.1), and its ACT values come from the earlier ACT catalogue (Sect. 7.5.2), so a value DR6 does not hold is untyped. None of these numbers is fitted or read from a mock |
+| match radii of the counterpart tool (`tools/psz2_counterpart_redshifts.py`; `catalogue_positions.PSZ2_ACT_MATCH_ARCMIN`; review 7, C1) | the nearest catalogue entry within 30" of the position in a redMaPPer zID (the central galaxy of the DR8 catalogue, for its spectrum), 120" of a WHL zID (WHL 2012 and the update of Wen & Han 2015), 60" of a MaxBCG zID; an SPT zID by its name in the SPT-SZ catalogue (no radius); an ACT zID the ACT DR6 entry nearest the PSZ2 position within 10' | which catalogue entry a PSZ2 counterpart's redshift is compared with, so whether it is typed spec, phot or untyped | the zID names carry truncated coordinates (redMaPPer 0.1 s in RA and 0.1" in Dec, MaxBCG 1e-4 deg, the WHL names of PSZ2 0.001 deg in RA and 0.01 deg, 36", in Dec at the coarsest): the radii are a few times that precision, chosen by hand, and the nearest entry is taken. The separations found are well inside them (redMaPPer at most 0.6", WHL 34", MaxBCG 0.3"; the ACT DR6 entries 0.7-1.4' from the PSZ2 positions, the next DR6 entry 13' or more away). The 10' for ACT is PSZ2's own radius for its ACT matches (Sect. 7.5.2), not ours |
+| vignetting calibration arms (`area_perturbation.VIGNETTING_TN18`, `v1_vighi` / `v1_viglo`; added 2026-11-04) | g(theta) = 1 +- 0.05 theta / 10 arcmin (or 1 / g), every energy and camera alike, continued beyond 10 arcmin | the true vignetting of the cells, fitted with the nominal one | the size is published (XMM-SOC-CAL-TN-0018, Sect. 4.5, p. 13): about 5 per cent, the residual flux difference of off-axis sources for each camera after the telescope-axis correction (MISCDATA 0020; for details the document refers to Lumb et al. 2004), not a measurement of the vignetting curve at one angle, so a radially coherent g(theta) of that size at 10 arcmin is the conservative reading; the form is ours: 1 on the axis (the vignetting is 1 there by definition; the on-axis area is the other arms' term), linear in theta through the quoted point, held linear beyond 10 arcmin where the document quotes nothing, and energy-independent because the document gives none. The MOS-to-pn term of Sect. 2.3 (up to 20 per cent at 12 arcmin) is not an arm. Pairing: the cells draw the base arm's parent photon list; from the camera partition on (it reads the perturbed area) the later draws are not the base cell's |
+| ELLBETA cluster PSF of `v1_psfell` (`simulate_instrument.ellbeta_offsets_energy_angle`; added 2026-11-04) | the CCF ELLBETA_PARAMS at the nearest tabulated energy, linear in theta from the vignetting centre, major axis tangential, King inside the 900 arcsec NORM_AT radius, spokes and azimuthal modulation not drawn | the cluster photons of the PSF arm | the rules of the AGN draw (ledger `instrument.agn_psf_ellbeta`) applied per photon; one uniform per photon picks the component and the radius, so the parent photon list and the PSF draw are paired with the base cell; the later draws (mask, RMF, out-of-time) are not, because the photons kept on the detector differ. Read et al. (2011, Sect. 2.1, p. 4) could not fit the two highest-energy stacks (10.25 and 13.25 keV) stably and combined them, and some CCF rows have a slope near 1 (pn alpha 1.009 at 8 keV and 15 arcmin, MOS2 1.03 at 6 keV and 12 arcmin), whose wings carry much of the flux to large radii: the arm's result is to be reported per band, and no cap is put on the slope |
+| PPS check of the pn CTI table (`pn_oot_energy.PPS_CHECK_TOLERANCE`, `PPS_CHECK_MIN_EVENTS`, `PPS_CHECK_PHA_BINS`; added 2026-11-03) | 0.05 on the median of k_PPS / k_table over the CCD and amplitude cells of an event list; cells of at least 2000 single-pixel events in seven raw-amplitude bins of +-5-10 per cent, 0.45-5.5 keV | `tools/pn_cti/pps_cti_slope_check.py` and `tests/unit/test_pn_cti_pps_check.py` fail when the RAWY slope of the table departs from the correction the PPS applied (the slope of ln(PI / 5 PHA) in RAWY) | the threshold of a check, never a factor on the table: the ratio scatters by 1.8 per cent from cell to cell (sd, 711 cells of 21 observations, 2000-2025; the statistical error of a cell is 0.2 per cent, so the scatter is the cells' own spread) and the observations' means by 0.5 per cent about 0.99, so 0.05 is about three times the cell scatter; the table evaluated without the CCD temperature (1.24) fails |
+| per-observation responses: cluster region and detector image (`obs_responses.REGION_MAX_ARCSEC`, `ResponseSettings.detmap_pi`, `detmap_bin`; added 2026-11-04) | radius theta500, at most 300 arcsec, about the fit centre; detector image of the 0.5-7 keV events in 4 arcsec pixels | the region whose spectrum and detector map weight rmfgen's redistribution (the boresight patch of the MOS) and the energies of the map | the cap keeps the region on the central CCDs and the map on the band of the cluster signal; a choice of the region a real spectrum would take, not fitted to any result; its effect on the redistribution is not measured |
+| allowance of the paired streak shift (`tests/e2e/test_instrument_oot.PAIRED_SCATTER`; added 2026-11-03) | 3 x PAIRED_SCATTER about the expected shift | the e2e test of the out-of-time energies through the streak estimator: far / source ratio with the energy factor minus the same seed without it, against the change the factor gives on the fixture's own column | the scatter of that difference about its expectation, sd 0.062 over 12 paired seeds of the same geometry and donor (95 per cent upper bound 0.097), rounded to 0.06; it sets a pass range, it changes no simulated number.  With one seed the allowance (0.18) exceeds the expected shift (-0.13), so the test catches a factor of the wrong sign or one more than about 2.5 times too strong, not a missing one; the size of the factor is checked against the PPS event lists (row above) |
+| vignetting nodes of the fit model (`massfit.vignetting_tolerance`; `band_response.TOLERANCE_EMAX_KEV`, `THETA_MAX_ARCMIN`, `TAIL_EMAX_KEV`, `TAIL_FACTOR`; added 2026-11-03, STATUS B11) | 0.01 at every tabulated energy up to 10 keV and every tabulated off-axis angle up to 15 arcmin; 0.05 from 10 to 12 keV; one segment above | the energies E_j at which the cluster model takes the CCF vignetting (`massfit.vignetting_model = 'sub-band'`): rows of the XRTn_XAREAEF table, chosen from the lowest energy so that the linear interpolation between them stays within the tolerance of the table; 14 nodes for every camera (0.11, 2.21, 2.29, 2.73, 4.5, 5.4, 6.4, 7.27, 9.25, 9.87, 11.77, 11.92, 11.96, 20.0 keV: the Au M and L edges of the mirror) | the accuracy of an interpolation of a calibration table, never a factor on a count: the model's vignetting is within 1 per cent of the CCF wherever it is calibrated, which bounds the change of any band's predicted counts at 1 per cent (the stage's and the fit's responses agree within 0.25 per cent on the closure cells); above 10 keV a cluster puts 0.2-3 per cent of its 4.5-12 keV counts (kT 3-15 keV), so the looser tail moves a band by at most 0.15 per cent |
+| merging of node rate tables (`band_response.HAT_MERGE_ERROR`; added 2026-11-03) | 1e-3 of a band's counts | a band's node tables are merged into a neighbour while the counts that would get the neighbour's vignetting stay below this fraction of the band (flat photon spectrum, worst angle up to 15 arcmin); the pn keeps two tables in 0.5-1 and 1-2 keV, four in 2-4.5 keV and seven in 4.5-12 keV, MOS five to seven in every band (its redistribution puts hard photons into the soft channels) | a bound on a numerical error, chosen ten times below the node tolerance; it sets how many model images a band costs, not a value of the model |
+| check of the folded node rates (`band_response.FOLD_CHECK_RTOL`; added 2026-11-03) | 1e-5 | the node rate tables are folded from XSPEC's model spectrum (`tcloutr modval`); at build time their sum over the nodes is compared with XSPEC's own rate of the whole ARF in the same channels, and the build is refused beyond this | the threshold of a check that the fold and XSPEC agree (they do to 1e-11); it changes no table |
+| unvignetted exposure of the cluster model (`band_response.UNVIG_BAND`, `UNVIG_E_KEV`; added 2026-11-03) | the 0.5-1 keV map (band code 2000) at 0.75 keV | U = EXPMAP_2000 / V(theta, 0.75 keV), carried to every band with that band's masks and scales | 0.75 keV is the energy eexpmap vignettes that map at (the mean of its PI boundaries), so the division undoes what SAS applied; the band is the one where the vignetting depends least on energy (less than 0.1 per cent across 0.5-1 keV up to 14 arcmin). A choice of map, the same for mocks and real data |
+| acceptance rule of the closure grid B1 (`validation.closure_grid.CLOSURE_RULE`; DESIGN v4, 2026-11-04) | clean: 95 per cent interval of the pooled median inside 0.95-1.05, every redshift median in 0.90-1.10; real: at most 5 per cent of the ok fits outside 0.67-1.5 (the gate), the pooled median in 0.92-1.08 and every redshift median in 0.85-1.15 (the hydrostatic-bias claim); more than 10 per cent failed fits FAIL, a missing fit or more than 10 per cent pivot starts INCOMPLETE | whether the fitter is accepted and whether a mock M_X / M_true may be quoted as a hydrostatic bias | DESIGN v2's windows, set before any v2 fit and restored before any B1 fit; placed against the 5 per cent method systematics of X-COP (Ettori et al. 2019) and the 10 per cent below which Pratt et al. (2019) place the bias of relaxed clusters; no closure threshold for a mock-image pipeline is published |
+| domain of the closure statistics (`CLOSURE_RULE` `min_usable_frac_z`, `min_z_in_domain`) | a redshift with fewer than half of its fits usable leaves the medians; two redshifts needed | keeps a regime the science QC removes (field-filling clusters at z = 0.06) from deciding the gate | the QC flags are those of every mock and real fit; the half is ours. Proposed (memo of 2026-11-03, item 2(c)) after the z = 0.06 cells of earlier configurations were known to fail, as was the pooled form (argued from power after the per-cell rule failed); every median is also reported with all ok fits and every redshift |
+| paired study arm (`ARM_RULE`) | delta 0.03 in ln M500 on the 95 per cent interval of the median paired difference, real-background cells, at least 27 usable pairs; NEGLIGIBLE / SYSTEMATIC / INCONCLUSIVE | which arm enters the budget, and how | DESIGN v2's MATERIAL line (R2), equal to the 3 per cent median statistical error of the X-COP masses (Ettori et al. 2019); the re-seed arms `v1sas_r2`, `v1sas_r3` measure the power: if they are not NEGLIGIBLE, seeds are added and delta stays |
+| combination of the budget (`ARM_ROLE`) | terms in quadrature; a two-direction pair as the asymmetric interval of its medians; a range one-sided; a bound two-sided | how the arms that are not NEGLIGIBLE make one systematic term | each arm changes a different calibration file or model choice; no published budget combines them |
+| sampler rule (`SAMPLER_RULE`, STATUS Q18) | eligible: NEGLIGIBLE against `v1sas_delong` and a Monte-Carlo scatter (1.4826 MAD of a fit minus its re-seed, over sqrt 2) at most 0.015 in ln M500; converged: R-hat < 1.01 and bulk ESS > 400 in every fit; among candidates within 0.005 of the smallest scatter the cheapest (40 core-h per 108 quick fits, 100 long), equal costs to the smaller scatter | which sampler serves every production fit | Vehtari et al. (2021) give the R-hat and ESS targets and leave the size of a tolerable Monte-Carlo error to the field; 0.015 is half the X-COP statistical error and the SENS tolerance |
+| R3p sample and blocks (`certify.yml`, DESIGN v4) | 16 views per cell (192); a width above 0.07 is INCOMPLETE while blocks remain: two more views per cell, a new sample seed, no cluster drawn before, at most two blocks, then FAIL | the size of the confirmation sample | n = 111 meets 0.07 at sd 0.3 only half the time, so the plan is about 136 science fits; the stop reads the width, never the median |
+| QPB level rule and size (`QPB_LEVEL_RULE`, `qpb_level_error_from_fits`) | free in production if `v1_qpbfree` is NEGLIGIBLE, else fixed by the corners with arms at 1 + (q84 - m) and 1 - (m - q16): q16, q84 of the fitted over corner level of the real free-level refits, m the median of the same ratio on the `v1_qpbfree` cells | the particle-background level of every fit, and the size of its arms | fixed is the XMM-ESAS and X-COP imaging practice; the 16-84 range is one standard deviation each way, the noise of the free fits left in (an upper estimate) |
+| soft-proton tie rule (`sp_tie_decision`, `massfit.sp_band_tie`) | tied in production only if `v1_sptie` is SYSTEMATIC and its real-cell median is nearer the truth than `v1`'s by a gain g, and the paired real refit tied - free is NEGLIGIBLE or smaller than g (then a real-side term); the per-band ratios of the real free fits against Leccardi & Molendi reported (`sp_band_ratio_check`) | one level per camera or one per image | the tie is X-COP's spectral model (Ghirardini et al. 2019) and exact for the mocks; for real data it is an assumption, and for the pn an extrapolation of a MOS spectrum, so it is taken only when it removes a measured bias larger than its real-side shift |
+| first-guess arms (`v1sas_seedhi`, `v1sas_seedlo`; STATUS B4, S6) | the seed mass times exp(+-0.27 / 1.89) | the size of the first-guess sensitivity | the scatter and slope are Bulbul et al. (2019, p. 22); taking one standard deviation at fixed luminosity is ours |
+| B7, donor jitter | not an arm: the second-order bias (1/2) c sigma^2 from the curvature c of ln M_fit in ln t over `v1_half`, `v1`, `v1_deep`, sigma^2 = 0.15^2 + 0.05^2, enters only above 0.03 | the effect of the replica jitter on M_fit | a zero-mean jitter adds scatter to first order; the jitter widths are the design parameters of the first row |
+| pairing on the fit mass (`pair_projections.CONVERGENCE_MAX_CHANGED_FRAC`, `CONVERGENCE_MAX_ITERATIONS`, `EDGE_TENTH`, `EDGE_MAX_SHARE`, `pass1_reference`) | stop below 5 per cent of halo-snapshots changing a physics donor, or after three iterations; at most 5 per cent of a streamed simulation's pairs in either outer tenth of its window; pass 1 under the full-frame observation with the smallest summed abs(percentile rank - 0.5) in exposure per camera, HI4PI column, N_H,tot / N_HI and particle background | when the matching mass is final, and under which conditions pass 1 is observed | the design note of 2026-10-27, written before any pass; no published iterative matching gives these numbers |
+| sub-pixels of the painted model (`massfit.model_pixel_average`, `model_shells.PIXEL_AVERAGE_HALF_WIDTH`; added 2026-11-10) | 8 per side, within 24 fit pixels of the centre | the model is averaged over each pixel near the centre instead of read at the pixel's centre | a numerical resolution: 16 per side or a 48-pixel half-width change ln M500 by at most 0.21 per cent on three real closure cells; never adjusted to a mass |
+| shells of the cluster model (`massfit.model_shells_per_pixel`; added 2026-11-04, STATUS B12) | 8 per fit pixel | the hydrostatic profiles are evaluated and projected on shells a pixel / 8 wide; the image stays on the fit pixel | a numerical resolution written as a convergence rule before it was used: doubling it changes the counts within R500 of every clean closure cell by less than 0.1 per cent (measured: at most 0.03 per cent; 4 per pixel misses that by 0.12 per cent on one cell); never adjusted on a fitted mass |
+| off-axis nodes of the fit PSF (`massfit.psf = 'king-angle'`, `fit_psf.KingAnglePSF`; added 2026-11-04, STATUS B13) | the angles of the camera's KING_PARAMS table (0-14 arcmin, every 2 arcmin), linear (hat) weights between them, the last held beyond 14 arcmin | which King kernel the emission of each pixel is convolved with | the calibration's own grid; the stage interpolates the parameters per photon, the fit the kernels per pixel, a difference of second order in the 2-arcmin step |
+| energies of the fit PSF within a band (`fit_psf.band_energy_mixture`, `BAND_ENERGY_PARTS`, `BAND_ENERGY_GRID`; `fit_hydrostatic.guess_kt_keV`; added 2026-11-05, review of 52d132c) | three equal parts of the band in ln E, each at its count-weighted mean energy and with its share of the counts; counts = the image's ARF times the bremsstrahlung photon spectrum exp(-E/kT)/E (Gaunt factor 1, no lines, no absorption) at the virial temperature of the first-guess mass | the energies, and their weights, at which the King parameters of a band are taken | the band's own count spectrum, as the stage scatters each photon at its energy; on Asimov data made with eight energies of the same spectrum the mixture returns M500 within 0.1 per cent (one energy at sqrt(E_min E_max): +0.3 to +0.8 per cent; one count-weighted energy: -0.2 to -0.5 per cent); weights at kT 3 or 10 keV instead of the cell's 6.8 keV move M500 by -0.25 or +0.07 per cent. Left: the APEC lines and the absorption the proxy spectrum lacks, the first guess's error in kT |
+| painting of the cluster at the pixel centres (mbproj2d `add_sb_prof`; review of 52d132c) | the projected annuli interpolated to each pixel centre, not integrated over the pixel | the radial shape of the model on the fit pixel | mbproj2d's scheme kept; Asimov data integrated over the pixels to second order are fitted +0.1 to +0.4 per cent high in M500; expected in the closure grid (B1), removable by sub-pixel painting |
+| sky level of the regenerated views (STATUS A1 / A2; written 2026-11-04, before the run) | per camera and PPS band, the median over the views of ln(mock / real) of the field level; pass when within 0.10 (the rule of memo 4); the split into vignetted and flat parts is reported, not gated | decides whether the stage's sky is accepted as it is | a camera and band outside it is stated with its value as a real-side term and carried by the closure arm of that background; no scale is put on the sky (no-calibration rule); the model changes only for a cause found in the calibration or the sky data |
+
+Two notes from the same review that are consequences, not choices: the Bulbul et al. (2019) relation is used below
+its mass range (< 3e14 Msun), and TNG's luminosity excess makes mock first guesses heavier than real ones at equal
+mass, so mock crops and pixels are larger; this is reported with the crop systematic.  `build_fit_targets.select_views`
+selects on the true theta500; it is not used in production.
+
+## Q. Evidence pass of 2026-11-03 (fit metallicity, molecular weight, outer pressure, background region)
+
+The four fit entries whose evidence section B called incomplete got 24 evidence blocks beside their existing ones,
+and the existing Mernier et al. (2017) p. 3 block got a second needle (abundances allowed negative values). No kind,
+value or validation block of them was changed. The statement of `fit.outer_pressure` now names the papers read
+behind its sentence on freezing at a floor and gained one on the published ways of fixing the boundary pressure; the
+statement of `fit.priors_low_signal` no longer says that abundances outside 0-2 Z_sun are not seen in clusters (only
+the mean and average core abundances are covered). Six citations are new in `citations/evidence2026.yml`
+(`eckert2022`, `ettori2010`, `ettori2013`, `ghizzardi2021`, `molendi2016`, `seppi2026`); three more in the same file
+are records of section C that back no block (`carter2007`, `nelson2014`, `smith2016`); and `sanders2022_mbproj2d`
+(`citations/massfit.yml`, a candidate reference of the MBProj2D code) is now evidence as well. Metadata from Crossref
+and the arXiv API; the PDFs were fetched from arXiv into the references area. Page numbers are arXiv PDF pages. Seppi
+et al. (2026) is read in its arXiv v1, the submitted version; its three quoted passages carry the same content in the
+version of record (A&A 711, A213, open access; Sect. 4.1 on p. 5 and Appendix A on p. 14 of the journal PDF), reworded
+in the past tense. Every new block is BOXED by the references area's proof tool, and the PNGs of the new proofs were
+read in page context.
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `fit.metallicity` | `sanders2022_mbproj2d` p. 18, p. 2 | a free metallicity with a flat prior from 0, in a published hydrostatic MBProj2 fit by the author of the code | the upper edge 2: theirs is 1 Z_sun of Asplund et al. (2009), about 1.07 in lodd units; a single global value (theirs is a profile); XMM-Newton |
+| `fit.metallicity` | `ghizzardi2021` p. 2, p. 6 | a precedent for the edge at 0: the X-COP abundances were fitted bounded at 0 (APEC in XSPEC), and the bound did not bias them | 0 as the better choice: the authors call the bound a limitation with significant implications, warn that it can bias small, poorly measured abundances (the low-count regime here) and call negative values the obvious solution, as Mernier et al. (2017, p. 3) allow them; here that would need a change to mbproj2d, which returns no count rate below 0; the upper edge |
+| `fit.metallicity` | `sanders2018` p. 21 | emissivities tabulated at 0 and 1 Z_sun and scaled linearly, so the upper edge 2 extrapolates the scaling and is a choice of the prior | a value for either edge; the lower edge is also the code's bound (ApecRateCalc.get returns NaN for Z < 0 and the log-likelihood becomes -inf) |
+| `fit.metallicity` | `molendi2016` p. 1, p. 2 | the mean ICM abundance within r180 is at most 0.26 Z_sun of Anders and Grevesse (1989), 0.41 in lodd units (factor 1.59), far below the upper edge | single cores (the average core is about 0.8 proto-solar, Mernier et al. 2017, Table 2); the lower edge |
+| `fit.metallicity` | `seppi2026` p. 5 | the abundance is free when mock XMM-Newton observations are analysed like real data | a single global value, an imaging fit, the range |
+| `fit.metallicity` | `bulbul2019` p. 4 | one free metallicity per cluster region in XMM-Newton fits of SZ-selected clusters | low-count data, where that paper fixes 0.3 Z_sun and this fit keeps the flat prior |
+| `fit.molecular_weight` | `ettori2013` p. 8, p. 9 | mu ~ 0.6, from the mass fractions X, Y and Z, quoted for the hydrostatic mass of the review of X-ray masses | either particle count: its own pressure, P_gas = n_gas kT, takes n_gas = n_e + n_p ~ 1.826 n_e, the count of mbproj2d, while its mu = 0.6 and mu_e = 1.155 imply 1.925; its gas mass uses mu_e n_e |
+| `fit.molecular_weight` | `yeung2024` p. 15 | a fully ionised plasma holds about 1.92 particles per electron | a cluster fit. Its footnote 6 (Lodders 2003 closer to 1.9) is not used: for H and He the count rises as the helium fraction falls, to 1.93 for Lodders |
+| `fit.molecular_weight` | `nagai2007` p. 4, `martino2014` p. 6 | mu = 0.592, the fully ionised H-He plasma, in a mock hydrostatic analysis, and 0.5964 in the LoCuSS hydrostatic masses of real clusters, consistent with full ionisation | metals in the count; the table composition |
+| `fit.molecular_weight` | `seppi2026` p. 13 | the molecular weight per electron computed from the chosen abundance table (hydromass) | the particle count of the pressure |
+| `fit.outer_pressure` | `sanders2018` p. 19 | P_out is a parameter of the hydrostatic model of MBProj2, the boundary value from which the pressure is summed inwards | the prior range, the run-away flag |
+| `fit.outer_pressure` | `sanders2022_mbproj2d` p. 17 | a free outer pressure with a flat prior on its logarithm in a published hydrostatic MBProj2 fit | the bounds (mbproj2d's defaults), the run-away flag |
+| `fit.outer_pressure` | `eckert2022` p. 5, p. 6 | the X-COP code fits the boundary pressure, free within a Gaussian prior on the measured SZ pressure (truncated at 2 sigma), and starts its mock profiles at 5 R500 to keep it out of the fitted range | a free outer pressure without a measurement, the case of these fits and of their flat logarithmic prior; the size of the effect here |
+| `fit.outer_pressure` | `ettori2010` p. 6, p. 9, p. 19 | the backward method fixed the boundary pressure at the pressure measured at the outermost data point; freeing it over a grid of values from the best-fit density and temperature (dataset 'Pout', Table 4) moved the mass by about 3 per cent | freezing it at a floor, far below any measured pressure, which no paper read does; the free parameter of this fit |
+| `method.background_fallback_fov` | `eckert2022` p. 3 | a background region beyond 2 R500 (X-COP) | the 50-pixel minimum, the fallback |
+| `method.background_fallback_fov` | `seppi2026` p. 5 | a background region that falls off the field is a case of its own and is replaced by a corner region | the 50-pixel minimum, flagging and excluding the fit instead, 2 R500 (theirs 1.5-2.0 R500c) |
+
+**No source found (design parameters, section P):** the upper edge 2 of the Z prior (the papers read fix Z or use
+0-1 Z_sun), the run-away level -30 of P_out (no paper read flags the outer pressure), the 50-exposed-pixel minimum of
+the background region (no paper states a smallest region; Seppi et al. 2026 pick a corner circle of about 3 arcmin by
+hand) and the three seed constants of an image without that region (0.6 r_max, 10 pixels, ln SB = -15), which only
+excluded fits use.
+
+**Read, nothing added:** Ettori et al. (2019), p. 3, for the outer pressure: the backward method of the X-COP masses
+fits the measured SZ pressure (out to a median 2.3 R500, abstract) and the paper names no free boundary constant.
+Carter and Read (2007), Nelson et al. (2014a) and Smith et al. (2016) only got their records (section C).
+
+**Other ledger and citation changes of the same day:**
+
+- The closed row of the entropy cut of the L_X exploration: its `open:` and its row in section A were removed; the
+  cut was not adopted, and the statement of the entry keeps its numbers and says that no paper removes low-entropy gas
+  from a mock luminosity.
+- `multisim.net_heating` says that the truth estimators reading GFM_CoolingRate as a diagnostic (the X-ray-image
+  cells of `barnes21_xcut` and `barnes21_tsl`, the spectroscopic-like temperature inside R500c, the mock-phase
+  cells) read the converted field in the P2 route (DECISIONS "P2: SIMBA and EAGLE"), where the SIMBA and EAGLE truth
+  came from the TNG-format conversions, and that P2b replaced that route: the presets `v1_simba` and `v1_eagle`
+  compute the truth from the cubes of the original snapshots, which carry no cooling rate, and the conversions supply
+  only the halo catalogue.
+- `multisim.truth_on_cubes`: its statement and value said that SIMBA and EAGLE are read from the snapshot; since P2b
+  their presets compute the truth from the canonical cubes, like FLAMINGO (`tngxmm.config._v1_source`), and the P2
+  route is named as replaced.
+- Five citation keys had two records each, in two fragments: `barnes2018`, `bulbul2019` and `pop2022` (in
+  `lm2026.yml` and `lxexplore2026.yml`), `braspenning2024` (`ingest.yml`, `lxexplore2026.yml`) and `dutton2014`
+  (`massfit.yml`, `obs.yml`). Each now has one record, in the first of these fragments, with the used_for lines of
+  both and the full author lists of Crossref and arXiv (`bulbul2019` with I-Non Chiu, status used; `dutton2014` with
+  its DOI and pages); the other fragment says where the record is. `tests/unit/test_cites.py` fails when a key is
+  defined twice.
+- Six papers were recorded under two keys (the same DOI or arXiv id). The second key of each is now an alias
+  (`alias_of`) of the first, so each paper has one record in the bibliography and in CREDITS.md and every key that
+  @cites or the ledger names still exists: `piffaretti2011` of `mcxc`, `flamingo_release2026` of `flamingo_dr`,
+  `schaller2024` of `swift`, `soap2025` of `soap`, `dave2019` of `simba` and `eagle2017` of `eagle_particles`.
+  Aliases cited in ledger evidence keep their arXiv id for the page proofs. The title of `swift` lost its Crossref
+  markup, and `soap` took the version and licence lines of `soap2025`. `schaye2023`, `kugel2023` and `schaye2015`
+  stay as they are: they are single papers of the multi-paper keys `flamingo` and `eagle`, and an alias would make
+  them cite every paper of those keys (the same holds for `pillepich2018` in `illustristng` and `nelson2019_tngdr` in
+  `tngcluster`). `tests/unit/test_cites.py` fails when two single-paper records share a DOI or an arXiv id, or when
+  an alias carries an id that is not its target's.
+
+## R. Concentration-mass prior (2026-11-12)
+
+New entry `fit.cm_prior`, 13 evidence blocks. The Dutton and Maccio (2014) relation, which the code carried with a
+row of the reference ledger that said "from memory", was read on the arXiv PDF: eqs. 7, 8, 10 and 11, Table 3, the
+0.11 dex scatter, the cosmology and the halo selection are as coded. Two citations are new in
+`citations/cmprior2026.yml` (`bhattacharya2013`, `schellenberger2017`); metadata from Crossref and the arXiv API, PDFs
+from arXiv in the references area, page numbers those of the arXiv PDFs. Every block is BOXED by the proof tool and
+the PNGs were read in page context. The numbers that compare the relations (4 to 15 per cent, 0.2 to 0.65 standard
+deviations) are our evaluation of the printed formulae; they are printed in none of the papers.
+
+| ledger id | key, page | supports | does not support |
+|---|---|---|---|
+| `fit.cm_prior` | `dutton2014` p. 8, p. 9, p. 11 | the relation as coded: form, pivot in h^-1 Msun, 200 rho_crit, z = 0 coefficients, redshift terms, and the Table 3 rows the unit test reproduces | a power law at the highest masses (the paper sees some evidence for a flattening there); haloes that are not relaxed |
+| `fit.cm_prior` | `dutton2014` p. 8 | log-normal scatter of 0.11 dex | that width at z > 0 or for unrelaxed haloes |
+| `fit.cm_prior` | `dutton2014` p. 2, p. 5 | Planck 2013 parameters; relaxed haloes are about 80 per cent of the sample at z = 0 | the pipeline's Planck 2015 parameters (third digit); the other 20 per cent |
+| `fit.cm_prior` | `lovisari2020` p. 4 | the reference masses were made with a concentration-mass relation as a prior | our relation or width: the page gives no formula and no scatter |
+| `fit.cm_prior` | `schellenberger2017` p. 14 | the method Lovisari et al. point to fixes c200 on a power law in M200 and leaves R500 as the only free parameter | a prior with scatter, a redshift term |
+| `fit.cm_prior` | `bhattacharya2013` p. 7, p. 8 | the relation Lovisari et al. name, its slope -0.08 at z = 0, its scatter, and the wider scatter of all haloes (0.16 dex against 0.12 dex) | the normalisation 2.519e22 Msun of Schellenberger and Reiprich, which is not printed there; the Dutton and Maccio coefficients |
+| `fit.cm_prior` | `hoekstra2015` p. 15 | the same relation in a published cluster mass analysis (CCCP weak lensing) | a prior with scatter (c fixed on the relation), an X-ray fit |
+| `fit.cm_prior` | `eckert2022` p. 5 | a hydrostatic X-ray code names a mass-concentration prior as the option for data of lower quality | a relation or a width; its default is a normal prior 4 +- 4 |
+| `fit.cm_prior` | `sanders2018` p. 6 | 0.5-20 as a published range of c for this method | the log-normal inside it |
+
+Left open by this pass: no hydrostatic X-ray analysis was found that uses a log-normal prior with the simulation
+scatter, so the width rests on the simulation paper alone; and whether Lovisari et al. (2020) changed anything in the
+method of Schellenberger and Reiprich (2017), for instance for the redshift range of their sample, is not on the page.

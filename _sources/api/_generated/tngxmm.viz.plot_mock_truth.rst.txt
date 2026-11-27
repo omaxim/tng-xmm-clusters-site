@@ -1,0 +1,28 @@
+tngxmm.viz.plot\_mock\_truth
+============================
+
+.. automodule:: tngxmm.viz.plot_mock_truth
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CURVES
+      RED_TRUSTED_R500
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      core_class
+      crop_square
+      estimand_row
+      mass_curves
+      mock_image
+      plot_mock_truth
+      plot_view
+      rotate_to_mock
+      tngref_map
+      write_table
+   

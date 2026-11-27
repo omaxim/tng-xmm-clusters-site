@@ -1,0 +1,44 @@
+tngxmm.massfit.qpb\_template
+============================
+
+.. automodule:: tngxmm.massfit.qpb_template
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DET_NPIX
+      DET_TO_SKY_EVENTS
+      SMOOTH_ARCMIN
+      SUBSAMPLE
+      PN_QUADRANTS
+      ESAS_PN_SUBMODES
+      DET_HALF_DIAGONAL
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ccd_label_image
+      ccd_scales
+      check_det_to_sky
+      check_templates
+      defined_sky
+      det_edges
+      det_to_image
+      esas_supported
+      expmap_path
+      fit_det_to_sky
+      flare_detmap
+      fwc_band_rates
+      image_good_times
+      image_pixel_sky
+      in_good_times
+      observation_templates
+      reference_epoch
+      sky_to_pixel
+      spdetmap
+      template_signature
+      unit_of
+   

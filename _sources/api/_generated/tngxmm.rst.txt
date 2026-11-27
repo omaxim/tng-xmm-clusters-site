@@ -1,0 +1,43 @@
+﻿tngxmm
+======
+
+.. automodule:: tngxmm
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      STAGES
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   analysis
+   bank
+   certify
+   cites
+   cli
+   config
+   core
+   donor_tables
+   donors
+   embed
+   ingest
+   instrument
+   ledger
+   massfit
+   ml
+   obs
+   photometry
+   pipeline_registry
+   realism
+   schemas
+   settings
+   setup
+   sim
+   validation
+   viz

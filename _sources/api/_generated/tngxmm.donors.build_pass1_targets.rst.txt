@@ -1,0 +1,34 @@
+tngxmm.donors.build\_pass1\_targets
+===================================
+
+.. automodule:: tngxmm.donors.build_pass1_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PASS1_VIEW
+      CAMPAIGN_SUFFIX
+      RANK_COLUMNS
+      FULL_FRAME_PN
+      MATCH_COLUMNS
+      DONOR_RULE
+      Z_RULES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_pass1_targets
+      choose_reference
+      pool_ranks
+      reference_pool
+      reference_record
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      Pass1Error
+   

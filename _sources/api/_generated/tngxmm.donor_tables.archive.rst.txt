@@ -1,0 +1,37 @@
+tngxmm.donor\_tables.archive
+============================
+
+.. automodule:: tngxmm.donor_tables.archive
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KINDS
+      COUNTS
+      CHUNK_BYTES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      coverage
+      download
+      fetch_archive
+      fetch_donor
+      index_files
+      list_names
+      name_pattern
+      none_record_path
+      parse_listing
+      read_none_record
+      skipped_donors
+      summary
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      UnclearAnswer
+   

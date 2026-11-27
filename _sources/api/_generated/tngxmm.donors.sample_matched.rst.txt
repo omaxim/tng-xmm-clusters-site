@@ -1,0 +1,24 @@
+tngxmm.donors.sample\_matched
+=============================
+
+.. automodule:: tngxmm.donors.sample_matched
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      markdown_table
+      reference_convention
+      reuse_stats
+      run_one
+      sample_matched
+      scan_matched
+      subset_for_gate
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MatchSpec
+   

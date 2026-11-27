@@ -1,0 +1,18 @@
+tngxmm.obs.pipeline
+===================
+
+.. automodule:: tngxmm.obs.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_observations_node
+      build_pps_mosaics
+      check_reference_masses_node
+      create_pipeline
+      fetch_pps_products
+      fetch_reference_sources
+      rebuild_reference_masses
+   

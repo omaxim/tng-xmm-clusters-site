@@ -1,0 +1,26 @@
+tngxmm.massfit.psf\_window
+==========================
+
+.. automodule:: tngxmm.massfit.psf_window
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PSF_EVAL_MODES
+      FFT_FLAGS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      good_size
+      windowed
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      WindowedAnglePSF
+   

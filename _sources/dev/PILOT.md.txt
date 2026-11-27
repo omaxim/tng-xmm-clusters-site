@@ -1,0 +1,196 @@
+# The pilot run before the freeze
+
+Written 2026-11-10, before any pilot fit. The pilot fits a small set of FLAMINGO mock views and of real observations
+with the configuration that is to be frozen, and asks the two questions the freeze depends on:
+
+1. Do the fit's masses of real clusters agree with published XMM-Newton hydrostatic masses of the same clusters?
+2. What M_fit / M_true does the same fit give on FLAMINGO mocks, and is it a hydrostatic bias of the size the
+   literature expects?
+
+The closure grid stays what it is, the test of the fitter on clusters in exact hydrostatic equilibrium. Its numbers
+are quoted beside the pilot's (below); it does not answer either question.
+
+## What is fitted
+
+| | list | rule |
+|---|---|---|
+| mocks | `campaigns/pilot_v1/pilot_mock_views.csv`, 60 views | FLAMINGO L1_m8 views of the generation of 2026-11-05 (job 1895395, commit 428a3f5, generation hash fb0a32d23c71b36f, the hash of the preset on 2026-11-10): projection 0, split `train`, z_obs inside the redshift range of the real list, spread over four bins of true M500c and over redshift |
+| real | `campaigns/pilot_v1/pilot_real_obs.csv`, 60 observations | observations with a hydrostatic M500c of Lovisari et al. (2020), spread evenly in redshift; rows with no image, an excluded donor or a centre flag are left out |
+
+`tools/make_pilot_lists.py` writes both and states the rules in full. Neither list was chosen with a fit result in
+hand. The mock views carry the observing conditions they were generated with (the donor rows borrowed from the
+TNG-Cluster list by the cross-simulation rule, DECISIONS "Cross-simulation mocks"), not those of the FLAMINGO target
+list of 2026-11-05, which was written after them.
+
+Fit: preset `v1` for the real observations and `v1_flamingo_l1m8` for the mocks (one `massfit` section, spec hashes
+03b55819bfd0ff0d and 951c4fa187514dd9, seed hash dbcd9c755fb3a153), quick chains, the batch driver of
+`slurm/fits_vera.sh` with two streams on one node. The sampler choice (PREREGISTRATION section 5) was open on
+2026-11-10; the pilot uses the gate arm's sampler, so its Monte-Carlo scatter is the quick chains'.
+
+## What is measured
+
+A fit is inside the domain of the measurement when it carries none of the flags that are known before it runs: the
+centre, a cluster that fills the field (no image has a region beyond 2 R500), a first guess limited by the field or
+missing. These come from the target row and the geometry of the images, the same for mocks and real data, so the
+domain does not depend on what the fit returns. Fits outside it are reported apart, as a known limit. The flags a
+fit earns from its own result (prior edge, outer-pressure runaway) are different: cutting on them can remove the very
+fits that disagree. Every statistic is therefore given inside the domain twice, without those fits and with them.
+
+About half of each pilot list lies outside the domain (the clusters were not chosen by angular size), which was seen
+only once the job ran: by the seed R500, 33 of the 60 real clusters and 23 of the 60 views have theta500 below 6.5
+arcmin, about where the first finished fits change from flagged to clean.
+
+* **Real.** Median of ln(M500_fit / M500_published) with a bootstrap 95 per cent interval, the scatter (1.4826 MAD),
+  and the trend with redshift and with mass. The published mass is converted to the analysis cosmology as
+  `obs.mass_conversion` does for every reference mass.
+* **Mock, against the true mass.** Median of ln(M500_fit / M500c_true), interval, scatter, trend with mass and
+  redshift.
+* **Mock, against the simulation's own hydrostatic mass.** Median of ln(M500_fit / M500_HSE), where M500_HSE is the
+  spherical hydrostatic mass of the truth stage from the three-dimensional gas profiles. This separates the bias of
+  the gas (M_HSE / M_true, a property of the simulation) from what the X-ray measurement adds.
+* **Run facts.** Core-hours per fit by stream, the longest fits, failures, QC losses: the inputs of the production
+  estimate and of the speed-up work.
+
+## How the result is read
+
+Published numbers the result is set against (quotes and pages in PREREGISTRATION, "Published precision"):
+
+| source | what it says |
+|---|---|
+| Ettori et al. (2019) | hydrostatic masses with a 3 per cent median statistical error at R500; method systematics of the order of 5 per cent |
+| Pratt et al. (2019) | the hydrostatic bias of simulated clusters lies below 10 to 30 per cent |
+| CHEX-MATE Collaboration (2021) | individual hydrostatic masses accurate to 15 to 20 per cent |
+| closure grid, job 1896730 | this fit on clusters in exact equilibrium: 1.015 (54 clean fits), 1.046 (the 27 usable ones); 0.88 on real backgrounds (17 usable, job unfinished at the time of writing) |
+
+Reading, as set by the author on 2026-11-10 (it replaces a first proposal of "within 10 per cent of 1", which said
+nothing about the errors): a real cluster agrees with its published mass when the two 68 per cent intervals overlap,
+and what is looked for is tension, not a small offset.
+
+| question | read by | otherwise |
+|---|---|---|
+| real against published | tension per cluster: the fit's interval against the published one (both 68 per cent, the published errors carried to our cosmology with the mass); the report counts the clusters whose intervals do not overlap and those beyond 2 and 3 sigma, and names them. The median ratio is given with its interval, for the size of any common offset | the clusters in tension are traced one by one (conventions below first) before any freeze |
+| mock against its own hydrostatic mass | the test of the measurement: same gas, same assumption, so the median M_fit / M_HSE,sim should be 1; the report says whether the interval of the median includes 1. No pull per view: the simulation's value is a point and the fit's interval is statistical only | the measurement adds a bias of its own, stated with the result |
+| the simulation's hydrostatic mass against true mass | no fit involved; set against the literature | |
+| mock against true mass | the product of the two above; the median M_fit / M_true lies between 0.70 and 1.00, the range of Pratt et al. (2019). On its own this cannot tell a biased fit from the simulation's bias, so it is read last | above 1: the fit is biased high on realistic gas, and the freeze waits |
+
+No line is drawn through the tension counts: for Gaussian errors of the right size about a third of the pulls lie
+beyond 1 sigma and one in twenty beyond 2. The fit's intervals come from quick chains, which the closure grid found
+not converged (Rhat 1.3 to 2.2), so they may be too narrow; a pull is then too large, not too small.
+
+### Amendment of 2026-11-11 (after 79 of the 120 fits)
+
+Made by the author with pilot results in hand, so it is an amendment and not a rule set in advance.
+
+The real clusters are read by three things together: no common offset inside the domain (the interval of the median
+fit / published ratio includes 1), a scatter comparable to the scatter between published hydrostatic analyses of the
+same clusters, and every cluster beyond 3 sigma traced and listed with what was found. Overlap of every pair of
+intervals is not asked for. The reason: the statistical errors of both sides are 2 to 10 per cent, while independent
+X-ray analyses of the same data differ by more than that cluster by cluster, so no pair of published analyses would
+pass a test of overlap either. The size of that scatter in the literature still has to be read on the page and
+entered in the ledger before the number is quoted here; until then the pilot's scatter is given without a verdict.
+
+The sample is split by what is known before the fit. A target with a `centre`, `bg_fallback`, `field_edge` or
+`no_seed` flag is outside the domain of the fit and is reported apart; inside the domain the statistics are given
+once for the fits without a flag from the fit's own result and once for every finished fit.
+
+The closure grid is reported beside the pilot as the measured error of the method on clusters in exact equilibrium.
+It is no longer the gate of the freeze (PREREGISTRATION section 1, amendment of the same day).
+
+Observation 0780291001 is excluded from the real list.
+
+### Conventions of the published masses
+
+The published number and ours are not the same quantity until these are accounted for. Checked on the pages of the
+arXiv PDFs on 2026-11-11; the quotes in full, with the table checks, are kept with the pilot's working files
+(`tngxmm_dev/PILOT/conventions/QUOTES.md`).
+
+Which paper. The masses are those of Lovisari et al. (2020, ApJ 892, 102, arXiv 2002.11740; key `lovisari2020`),
+Table A1 column (3) "M500", which Wicker et al. (2023) copy into their Table A.1 column (4), "Total mass derived
+assuming hydrostatic equilibrium" (p. 24). Wicker et al. call this paper "Lovisari et al. (2020b)" ("The redshifts
+and gas and total masses for the clusters were taken from Lovisari et al. (2020b)", App. A, p. 16; reference list p.
+15: "2020b, ApJ, 892, 102"). Their "2020a" is the other paper of that year, Lovisari, Ettori, Sereno et al. (2020,
+A&A 644, A78, arXiv 2010.03582; key `lovisari2020_massest`), which compares the same masses with other estimates and
+which Wicker et al. use only for its hydrostatic-to-lensing ratio. Below, L20 is the ApJ paper and L20M the A&A one.
+
+| | published (where it is said) | this fit | status |
+|---|---|---|---|
+| cosmology | flat, H0 = 70, Om = 0.3 (L20 p. 2, end of sect. 1; L20M p. 2) | Planck 2015 | handled: the published M500 is read as an NFW at the same angle in our cosmology (`obs.mass_conversion.m500c_to_cosmology`), errors scaled with it |
+| quantity and radius | hydrostatic M500 inside the R500 of that same mass: "fited an NFW model [...] which constrains the posterior distribution of R500 [...] The mass of the gas is then calculated by integrating the density profile within R500 estimated from Eq. 1" (L20 p. 4, sect. 3.3); "each measured at their R500" (L20M p. 3, sect. 2.3). The M-YX R500 of L20 p. 3, sect. 2 is the one of the sample definition (R500 covered by XMM-Newton, Lovisari et al. 2017), not of the mass | M500 at the fit's own R500 | same definition |
+| mass model | NFW for the mass profile with the Bhattacharya et al. (2013) relation between c500 and R500 as a prior, fitted to the hydrostatic masses solved "for the radii of the spectral extraction regions" (L20 p. 4); this is the "backward" method in the terms of Ettori et al. (2013) (L20M p. 3) | NFW (M500, c200) with hydrostatic equilibrium and a Vikhlinin density profile, flat in ln c200 over 1 to 10 (Sanders et al. 2018), fitted to the band images; also a parametric mass model, so backward in the same terms | not handled: a method difference, part of what is measured. The concentration prior differs (theirs tied to the mass, ours free) |
+| temperature and density | 3-D temperature of the Vikhlinin (2006) form, projected and fitted to the annular spectra by MCMC (L20 p. 3, sect. 3.2); density from a double beta-model (L20M p. 3, sect. 2.3) | no separate temperature profile: the temperature follows from the density, the NFW and a free outer pressure; the projection is done in the model images | not handled, as above |
+| extent of the data | Table A1 gives fT, "fraction of R500 covered by the temperature profile", and fsb for the surface brightness (L20 p. 17). fT < 1 for 84 of the 120 clusters and 42 of the 60 pilot ones, below 0.8 for 39 and 18, as low as 0.34; beyond it the NFW with the prior carries the mass to R500. Their forward masses are 13, 9 and 7 per cent below the backward ones for a last temperature bin below 0.6, at 0.6-0.8 and beyond 0.8 R500: "the smaller the extrapolation required, the better the two estimates agree" (L20M p. 3) | images cropped at 3 R500 of the first guess; the temperature reach is set by the hard-band counts, not by a binning rule | not handled. The clusters with small fT or few bins (NT; one pilot cluster, G285.63-17.24, has a single bin) are where a difference of prior and of method shows most |
+| errors | "Uncertainties are at the 68% c.l." (L20 p. 2); all MCMC chains of the temperature profile are carried into the mass (L20 p. 3-4); asymmetric errors per cluster in Table A1; no systematic term. The sentence on "the uncertainties in the derivation of R500" (L20 p. 3, sect. 3.1) is about the luminosities, not the masses | 16th to 84th percentile of the chain, statistical | compared as they are |
+| mean molecular weight | mu appears in the hydrostatic equation (L20 p. 4) but its value is not given in L20 or L20M | full ionisation of the fit's composition, about 0.60 (`set_molecular_weight`) | open: the mass scales as 1/mu; a value of theirs between 0.59 and 0.61 would change it by less than 2 per cent |
+| abundance table, plasma code | APEC in XSPEC, version not given; the abundance table is not given (L20 p. 3, sect. 3.2). L20 p. 13, sect. 6 lists both among the causes of offsets between studies | APEC 3.1.3 rate tables, Lodders (2003), metallicity free | open for the table; the same plasma code |
+| band | spectra in 0.3-10 keV, MOS and pn fitted together with free normalisations; surface brightness in 0.3-2 keV (L20 p. 3) | four images per camera, 0.5-1, 1-2, 2-4.5, 4.5-12 keV | a different data selection; cannot be removed |
+| Galactic column | "fixed at the total (neutral and molecular, see Willingale et al. 2013) NH", except a few starred clusters fitted with a different column (L20 p. 3); the total column makes the masses lower by 10-15 per cent where NH > 1e21 cm-2, a few per cent in most clusters (L20M p. 8, sect. 4.1) | the Willingale et al. (2013) total column (`fit_galactic_nh`) | handled, the same column; not for the 6 starred clusters of our table (4 in the pilot: G086.45+15.29, G167.65+17.64, G285.63-17.24, G308.32-20.23), whose published column we do not have |
+| centre | temperature annuli "around the X-ray peak" (L20 p. 3); the centre of the density profiles is not stated | guarded X-ray peak | same choice, independent measurements |
+| point sources, substructure | edetect_chain detections, inspected by eye and excluded (L20 p. 3, sect. 2); no substructure masking is mentioned | SAS edetect_chain list, DET_ML > 10, PSF-derived radius; no substructure mask | about the same for point sources; neither masks substructure |
+| dynamical state | not flagged in Table A1. The split uses the concentration and centroid shift of Lovisari et al. (2017, ApJ 846, 51): relaxed above c = 0.18 and below w = 0.0137, a third of the sample each (L20 p. 5 and Table 2 note, p. 8); L20M combines the two into one parameter Mpar (p. 3), with no per-cluster table | not part of the fit or of the report | not used; the per-cluster values are in Lovisari et al. (2017), not read here |
+| data | XMM-Newton, SAS 16, MOS PATTERN <= 12, pn singles (L20 p. 3); observations not listed | our observation of the same cluster | the two are not independent: same telescope, often the same exposure |
+
+How these masses compare with other X-ray hydrostatic ones, from L20M: average differences "smaller than ~10%"
+(abstract); 4 +- 2 per cent below Planck Collaboration (2011) with the M-YX masses (2 per cent for relaxed, 7 for
+disturbed clusters), 7 +- 10 (Chandra) and 10 +- 8 (XMM) per cent below Martino et al. (2014), 9 +- 11 per cent
+below Schellenberger & Reiprich (2017), about 5 and 2 per cent below the CLASH Chandra and XMM masses, and 11 per cent
+below X-COP (Ettori et al. 2019), with two clusters about 30 per cent lower (p. 4, sect. 2.3; p. 7, sect. 4.1).
+Their forward masses are on average 9 per cent below the backward ones, 7 per cent at z < 0.2 and 11 per cent above,
+"mainly due to higher quality data of the low redshift clusters" (p. 3-4), and agree within 1 per cent for the 25
+clusters with at least ten temperature bins (p. 7). Wicker et al. (2023, p. 10, sect. 5.1.1) find the same masses
+below the Chandra ones of Andrade-Santos et al. (2021): log M_XMM = 0.959 log M_Chandra - 0.029, scatter 15 per cent.
+L20 itself writes that different ways of computing the total mass "can easily result in an offset of 10-20%" (p. 13,
+sect. 6), so a common offset of that size is a difference of method before it is an error of either.
+
+What could make the disagreement depend on the cluster rather than be common: the concentration prior together with
+the extrapolation beyond the temperature data (a cluster whose concentration is far from the Bhattacharya relation
+and whose temperature profile stops short of R500 carries the prior in its published mass, not in ours), and the
+depth of the temperature profile, which falls with redshift (median NT 9.5 below z = 0.2 and 5 above in the pilot
+list, although fT does not fall). The cosmology conversion also depends on redshift but is done.
+
+Transcription. The reference is L20's own Table A1 (author decision 2026-11-11), read from the arXiv LaTeX source
+of the paper (`plckscaling.tex`, the longtable of the appendix) by the private literature fetcher: 120 rows, the same
+113 of them in our table as before, key `lovisari2020`, reference `hse_lovisari2020_xmm` of the real fits. The parse
+agrees in every row with the table read from the PDF text on the same day (M500, both errors, z, gas mass, N_T, f_T
+and the N_H star). Until then the packaged rows were Wicker et al.'s Table A.1, which copies the column but differs
+from L20 in 20 of the 120 clusters, all 20 in our table and 10 in the pilot list. Thirteen are truncated to one
+decimal with their errors (G006.78+30.46: 17.56 +0.28 -0.27 in L20, 17.50 +- 0.20 in Wicker; G266.03-21.25:
+12.56 +- 0.34 and 12.50 +- 0.30), a change of the value below 1 per cent and of the error up to 30 per cent. Seven
+have lost the leading digit of the lower error: G096.87+24.21, G139.19+56.35, G229.21-17.24, G262.71-40.91,
+G271.50-56.55, G280.19+47.81 and G285.63-17.24 (6.59 +1.00 -1.17 in L20, -0.17 in Wicker), all but G229.21-17.24 in
+the pilot. For these the lower error was 3 to 12 times too small, so a fit below the published mass read as tension
+that is not there. Wicker's rows stay in the catalogue as superseded rows and as the comparison reference
+`hse_wicker2023_xmm` (`pilot_report --reference-key`).
+
+On the 60 real fits of the pilot (all finished) the change leaves the median ratio and the scatter as they were (inside
+the domain without a fit flag: 22 fits, 1.020, 0.878 to 1.185, scatter 0.32 in ln; with every ok fit: 39 fits,
+0.978). It changes the tension counts. Without a fit flag, beyond 2 sigma 10 become 9 and beyond 3 sigma 7 become 5;
+with every ok fit, the intervals overlap for 14 fits instead of 13, beyond 2 sigma 21 become 19 and beyond 3 sigma
+14 become 12. The pulls that move are those of the lost digit: G262.73-40.92 from -3.1 to -1.2, G285.63-17.23 from
+-5.4 to -2.4, G096.88+24.18 from -2.5 to -0.9 (now overlapping), G280.17+47.83 from -1.2 to -0.3; the truncated
+values move G180.25+21.03 (-11.6 to -10.7), Abell 2219 and G266.04-21.25 by less than 0.2.
+
+The report is written by `python -m tngxmm.analysis.pilot_report` (tables, the statistics above, the tension of each
+fit, a figure with both error bars). It can be run while the job is going and then covers the fits finished so far.
+
+The code is frozen on a pilot without unexplained tension on the real clusters and inside the range on the mocks.
+The pilot is not the science result: 60 views of one projection are too few for a bias to two digits, and on
+2026-11-10 the pairing on the fit mass had not been done (pass 1 has run since, {doc}`STATUS`).
+
+### After the pilot: changes of 2026-11-12
+
+- MACS J0717.5+3745 (0672420201) refitted with the corrected templates: M500 = 11.87 (11.28-12.42) e14 against
+  12.91 (12.22-13.46) from Lovisari et al. in the analysis cosmology. The intervals overlap (pull -1.2); the pilot fit
+  without a particle background had given 6.62 (pull -10.7). The numbers of the report above still contain the old
+  fit.
+- Concentration prior. With the flat prior, 11 of 28 in-domain mock fits and 7 of 39 in-domain real fits ended at a
+  bound of c200. The fit now uses the concentration-mass relation of Dutton & Maccio (2014) as a prior (ledger entry
+  fit.cm_prior). The reference masses of Lovisari et al. (2020) were made with the concentration fixed on a power
+  law in M200 (Schellenberger & Reiprich 2017, eq. 32); ours stays free within the simulation scatter. Reweighting
+  the flat-prior chains of the fits not at a bound moves M500 by a median of 0.3 per cent (real, 32 fits) and 0.0 per
+  cent (mock, 17 fits), at most 10 per cent. This does not cover the 18 fits at a bound, which have to be refitted,
+  and no fit has run with the new prior yet.
+- The two mock fits without a result. `mock_74_80599466_v0`: the sampler could not start (no walker with a finite
+  likelihood) after a 6.6 h optimisation. `mock_76_73968578_v0`: per-fit timeout (38 h) inside the optimiser. Neither
+  was the disk or the time limit of the job.
+- The hashes quoted in this document are those of the pilot's day. Since 2026-11-12 the observation table is hashed
+  by its read columns and the prior changed, so the presets have other hashes (CHANGELOG).

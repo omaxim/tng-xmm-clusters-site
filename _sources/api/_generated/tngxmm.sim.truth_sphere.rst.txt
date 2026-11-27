@@ -1,0 +1,73 @@
+tngxmm.sim.truth\_sphere
+========================
+
+.. automodule:: tngxmm.sim.truth_sphere
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CUTOUT_FORMAT
+      STAGE_VERSION
+      SELECTION
+      PTYPES
+      LOWRES
+      HSE_RMAX_R500
+      MOCK_CLIP_R200
+      RMAX_MARGIN
+      GAS_READ
+      METALS_COLUMNS
+      BLOCK_GAP_ROWS
+      COORD_BLOCK_ROWS
+      GATHER_GB
+      CUTOUT_DIR
+      SHAPES
+      MOCK_CUTOUT_FORMAT
+      BACKUP_SUFFIX
+      FILL_SANITY
+      TRUTH_MODES
+      STREAM_ABOVE_PARTICLES
+      BYTES_PER_PARTICLE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_sphere_truth
+      attr_prefix
+      compute_sphere_truth
+      cutout_radius_kpc
+      cutouts_path
+      fill_at_r500
+      gather_fields
+      halo_spheres
+      inside_shape
+      memory_batches
+      open_store
+      read_cutouts
+      read_group_rows
+      resolve_truth_mode
+      run_snapshot
+      select_zoom
+      selection_text
+      sphere_attrs
+      sphere_parts
+      sphere_rows_brute
+      stream_box
+      targets_halos
+      truth_rmax_kpc
+      write_cutouts
+      zoom_fields
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CutoutStore
+      HaloSphere
+      SnapshotStore
+      SphereSelector
+      SphereSource
+      StreamedSphereSource
+   

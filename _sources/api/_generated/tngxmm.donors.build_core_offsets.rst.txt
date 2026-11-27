@@ -1,0 +1,32 @@
+tngxmm.donors.build\_core\_offsets
+==================================
+
+.. automodule:: tngxmm.donors.build_core_offsets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PA_REF_DEG
+      MAX_OFFSET_ARCMIN
+      DEFAULT_IMAGE_ROOT
+      CENTRE_METHOD
+      REBUILD
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attach_core_offset
+      build_core_offsets
+      check_core_offsets_table
+      core_offsets_provenance
+      default_table_path
+      gnomonic_offset_arcmin
+      mask_roll_deg
+      read_core_offsets
+      rotate
+      sky_to_mask_offset
+      write_core_offsets
+   

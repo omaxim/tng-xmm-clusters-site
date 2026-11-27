@@ -1,0 +1,39 @@
+tngxmm.massfit.sample\_posterior
+================================
+
+.. automodule:: tngxmm.massfit.sample_posterior
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SAMPLER_MOVES
+      WALKER_STARTS
+      RHAT_RESOLVED
+      INFO_EPS
+      LNM500_KEY
+      TAU_WINDOW_C
+      BOUND_REACH_SIGMA
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      acceptance
+      ball_inside_bounds
+      chain_diagnostics
+      diagnostics
+      emcee_moves
+      ess_bulk
+      ess_bulk_truncated
+      hard_bounds
+      information_matrix
+      make_sampler
+      mbproj2d_initspread
+      near_bound
+      rhat_classic
+      rhat_rank
+      start_covariance
+      tau_emcee
+   

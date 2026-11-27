@@ -1,0 +1,13 @@
+tngxmm.instrument.calibrate\_boresight
+======================================
+
+.. automodule:: tngxmm.instrument.calibrate_boresight
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      calibrate_boresight
+      mask_centroids
+   

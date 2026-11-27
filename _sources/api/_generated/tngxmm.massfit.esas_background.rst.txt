@@ -1,0 +1,30 @@
+tngxmm.massfit.esas\_background
+===============================
+
+.. automodule:: tngxmm.massfit.esas_background
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LOG_FLOOR
+      SP_REFERENCE_KEV
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      exposure_live
+      sp_band_factor
+      template_provider
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ScaledCountsTemplateBackModel
+      ScaledTemplateBackModel
+      SkyBackModel
+      TiedTemplateBackModel
+   

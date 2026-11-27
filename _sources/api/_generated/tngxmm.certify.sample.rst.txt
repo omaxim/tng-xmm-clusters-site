@@ -1,0 +1,12 @@
+tngxmm.certify.sample
+=====================
+
+.. automodule:: tngxmm.certify.sample
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      select_sample
+   

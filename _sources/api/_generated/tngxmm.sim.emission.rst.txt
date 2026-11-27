@@ -1,0 +1,28 @@
+tngxmm.sim.emission
+===================
+
+.. automodule:: tngxmm.sim.emission
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KERNEL_GAMMA
+      LEGACY_METALS
+      N_NGB_SWIFT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      emission_from_cells
+      emission_masks
+      resample_cells
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GasCells
+   

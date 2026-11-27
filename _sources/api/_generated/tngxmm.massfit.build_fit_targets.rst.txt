@@ -1,0 +1,31 @@
+tngxmm.massfit.build\_fit\_targets
+==================================
+
+.. automodule:: tngxmm.massfit.build_fit_targets
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_ZOOM_TARGET_IDS
+      SEED_COLUMNS
+      MOCK_OFFSET_COLUMNS
+      MOCK_ENTRY_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_fit_targets
+      link_percam
+      load_campaign
+      main
+      measure_seed
+      mock_entry
+      mock_position_rule
+      physics_donor
+      select_views
+      theta500_arcmin
+      view_redshift
+   

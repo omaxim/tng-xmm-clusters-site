@@ -1,0 +1,14 @@
+# instrument
+
+```{eval-rst}
+.. automodule:: tngxmm.instrument.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline instrument`; catalog `conf/base/catalog/instrument.yml`.
+
+## Nodes
+
+```{kedro-pipeline} instrument
+```

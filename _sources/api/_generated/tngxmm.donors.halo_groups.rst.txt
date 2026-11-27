@@ -1,0 +1,48 @@
+tngxmm.donors.halo\_groups
+==========================
+
+.. automodule:: tngxmm.donors.halo_groups
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      N_FOLDS
+      HALO_FOLD_SEED
+      HALO_BOOT_SEED
+      HALO_IDENTITY_COLUMN
+      HALO_SNAPSHOT_RULE
+      HALO_FOLD_COLUMNS
+      DONOR_ROLES
+      CANDIDATE_HALO_FOLDS
+      CANDIDATE_HALO_FOLDS_SHA256
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign_halo_folds
+      attach_halo_folds
+      check_cross_fit_leakage
+      check_halo_folds
+      cross_fit_coverage
+      cross_fit_masks
+      donor_n_folds
+      fold_usage
+      halo_bootstrap
+      halo_bootstrap_indices
+      halo_fold_report
+      halo_group_key
+      halo_group_table
+      identity_rule
+      load_halo_folds
+      resolve_identity
+      table_identity
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      HaloFoldError
+   

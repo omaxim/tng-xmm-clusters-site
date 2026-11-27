@@ -1,0 +1,30 @@
+tngxmm.massfit.build\_responses
+===============================
+
+.. automodule:: tngxmm.massfit.build_responses
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LEGACY_CCF
+      LEGACY_RESP
+      CCF_INDEX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      arf_ccf_types
+      build_responses
+      ccf_epoch
+      ccf_epoch_dir
+      latest_ccf
+      main
+      onaxis_arf
+      pn_pattern_fraction
+      rmf_grid
+      selection_intervals
+      write_arf
+   

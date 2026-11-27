@@ -1,0 +1,32 @@
+tngxmm.schemas.ids
+==================
+
+.. automodule:: tngxmm.schemas.ids
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      VIEW_ID_PATTERN
+      MOCK_OBSID_V4_MAX_HALO_ID
+      MOCK_OBSID_PATTERN
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      campaign_tag
+      is_mock_obsid
+      make_cluster_id
+      make_mock_obsid
+      make_view_id
+      normalise_obsid
+      parse_view_id
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ViewKey
+   

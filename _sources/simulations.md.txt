@@ -1,0 +1,163 @@
+# Simulations and the ingest stage
+
+The pipeline observes clusters from five simulations: TNG-Cluster (with the TNG300, TNG100 and TNG50 boxes),
+FLAMINGO, SIMBA and EAGLE.  TNG-Cluster and FLAMINGO L1_m8 are the production pair.  SIMBA and EAGLE are internal
+validation runs (see "Data use" below).
+
+## One graph for every simulation
+
+Only the `ingest` stage reads a simulation's own files.  Each simulation is described by a YAML descriptor
+(`src/tngxmm/ingest/descriptors/<name>.yml`): cosmology, snapshots and redshifts, halo catalogue and centre, the
+conversion of every native field to the canonical one, and the rules for star-forming, wind and net-heating gas.
+A preset that names a descriptor (`sim.source`) carries its hash, so a changed descriptor changes the spec hash.
+
+The stage dispatches a planned run to the loader of its simulation (`tngxmm.ingest.loaders`):
+
+| loader | simulations | route |
+|---|---|---|
+| `ingest.tng` | TNG-Cluster, TNG300, TNG100, TNG50 | the snapshot read through the cube index files of the mock-cutout stage, converted to canonical cells in memory |
+| `ingest.simba_remote`, `ingest.eagle_remote` | SIMBA m100n1024, EAGLE Ref-L0100N1504 | canonical cubes streamed from the original snapshots (SIMBA by HTTP ranges from the SIMBA team's server, EAGLE from the hdfstream service), checked against their manifests; the TNG-format conversions on Vera supply the halo catalogue only (descriptors `simba_tngformat`, `eagle_tngformat`) |
+| `ingest.swift` | FLAMINGO L1_m10 (local copy) | canonical cubes written from the SWIFT snapshots and SOAP catalogues |
+| `ingest.swift_remote` | FLAMINGO L1_m8 | canonical cubes streamed from the FLAMINGO data service; the Kedro node checks them against their manifests |
+
+After the stage every simulation passes through the same nodes with the same inputs and outputs: the preset enters
+the graph only as a parameter.  `tests/unit/test_single_graph.py` builds the Kedro pipelines under the presets `v1`,
+`v1_tng300`, `v1_flamingo`, `v1_flamingo_l1m8`, `v1_simba` and `v1_eagle` and asserts that every node (name, inputs,
+outputs, function, tags) is identical, and that no module outside `tngxmm.ingest` branches on the simulation or its
+family, apart from the pinned list of TNG target-list builders.  What still differs is data, not graph: the
+generation reads materialised cubes for FLAMINGO, SIMBA and EAGLE (`runtime.cube_store = 'canonical'`) and the index
+files for TNG (`'index'`).
+
+The mocks of each simulation are made in its own cosmology: the luminosity and angular-diameter distances at z_obs
+and the critical density of R500c and of the hydrostatic truth come from the simulation's descriptor (for TNG, the
+preset's cosmology, which is TNG's own).  Every fit, mock
+and real, uses one analysis cosmology, Planck 2015 as TNG adopts it (H0 = 67.74 km/s/Mpc, Omega_m = 0.3089; ledger
+`multisim.generation_cosmology`).  A FLAMINGO view (H0 = 68.1 km/s/Mpc, Omega_m = 0.306) is therefore fitted in a
+cosmology other than its own: the angular scale differs by about 0.5 per cent at low z, the fitted mass by at most
+0.01 dex (measured in the L_X gap investigation; STATUS F6).
+
+## Emission abundances
+
+The emission uses the element abundances of the gas (`sim.emission_abundances`):
+
+* `full` (the default of every production preset since 2026-10-28): every element the simulation tracks, per cell;
+  helium from the simulation; the untracked metals at solar ratios scaled by the remaining metal mass
+  (`sim.emission_untracked = 'other-solar'`; Lodders 2003, Table 4);
+* `common`: the total metallicity with solar ratios for every simulation (preset `v1_common`, the only mode that
+  reads the TNG mini snapshots, which carry no element fractions);
+* unset: the legacy table of release 1.1 (AG89 helium, metals scaled by total Z).  It made TNG-Cluster 0.022 dex
+  brighter than `full` does, FLAMINGO 0.005 dex.
+
+The ledger entries are `multisim.abundance_modes`, `multisim.helium`, `multisim.apec_elements` and
+`multisim.tracked_elements` ({doc}`assumptions`).
+
+## FLAMINGO L1_m8
+
+L1_m8 (L1000N3600, 3600^3 gas particles of 1.3e8 Msun) is the highest-resolution hydrodynamical run
+of FLAMINGO (Schaye et al. 2023).  It is read from the public FLAMINGO data service (Helly et al. 2026) with the
+`hdfstream` client, which returns any slice or index list of a remote HDF5 dataset and decodes the lossy SWIFT
+compression on the server.  The service is reachable from the login node only.  Snapshots 78, 76, 74, 72, 70, 68,
+63, 58 and 48 (z = 0 to 1.5); halos from SOAP-HBT, centrals only, centred on the most bound particle, with the HBT+
+track id for the identity across snapshots.  The local L1000N0900 copy (L1_m10, preset `v1_flamingo`) is kept as
+the low-resolution comparison.
+
+The sample (`internal/ledger_tests/multisim/l1m8_sample.py`, seed 20261028; the rule was written before the
+streaming) fills the (mass, redshift) plane of the 638 real observations with about 5,000
+halo-snapshots:
+
+* each real observation is assigned to the nearest of the nine snapshots; its candidates are the halos there with
+  log10 M500c(true) between log M_cat - 0.15 and log M_cat + 0.25 (hydrostatic fit masses are 0.75-0.9 of the true
+  mass, so the window is centred above the catalogue mass; it decides only which halos are streamed);
+* every central above 6e14 Msun is kept at every snapshot;
+* below that, in cells of 0.1 dex in mass from 1.2e14 Msun and one snapshot, a random subsample of
+  min(available, max(8, f w)) halos, w the density of the real pool in the cell and f = 13.9 set so that the total
+  is 5,000;
+* halos whose track is not yet in the sample at another snapshot are drawn first.
+
+The result is 5,000 halo-snapshots on 2,143 distinct tracks.  The download finished on 2026-10-30.
+
+`python -m tngxmm.ingest.swift_remote soap` writes the SOAP tables; `... cubes` streams each halo's
+particles and writes one HDF5 file per snapshot, `<cube_root>/flamingo_l1m8/cubes_<snap:03d>.h5`, with a
+`cubes_<snap:03d>.manifest.json` beside it.  Each cube holds every particle (gas, dark matter, stars, black holes)
+in the axis-aligned cube of half-side max(5.66 R500c, 1.001 x 3 R200c) about the halo centre, in physical units,
+with a sha256 per dataset.  5.66 = 4 sqrt(2): a cylinder of radius and half-length 4 R500c fits inside this cube
+along any line of sight, which the icosahedral projections of release 1.2 need; the 3 R200c term keeps the truth
+sphere inside the cube for the few halos with R200c / R500c > 1.89.  The file records the remote snapshot, the SOAP
+path and its version, and FLAMINGO's own per-particle 0.5-2 keV luminosity summed inside R500c as a check of our
+emission (ours is +0.028 dex higher, the APEC against Cloudy offset).  Halos are read in Morton order of their
+top-level cell, one request at a time; a cell's coordinates are read once and every other field only for the
+particles inside some cube.
+
+Streaming the whole sample took about 35 hours on the login node, so it is a documented pre-step
+(`tngxmm_dev/MULTISIM/l1m8/run_sample.sh`), not a node.  The node `ingest.build_canonical_cubes` then opens the
+cube files read-only and checks every planned halo against the manifest: present, complete, particle counts and
+stored sha256 per dataset (`ingest.verify_deep` also rehashes the data).  It returns the same `canonical_cubes`
+record as the other loaders, and the post-ingest nodes are those of TNG-Cluster.  The check takes about 0.7 s per
+halo (snapshot 78: 665 halos, no failure).  Away from the cluster, `ingest.stream_missing=true` makes the node
+fetch the planned halos that the cube file lacks before it checks them (about 25 s and 440 MB of transfer per halo),
+so the cubes need not be copied: `kedro run --pipeline ingest --params
+preset=v1_flamingo_l1m8,ingest.cube_root=<dir>,ingest.stream_missing=true`.
+
+`tngxmm donors sim-targets` builds the list of any simulation stored as canonical cubes from the
+cube manifests, with the TNG-Cluster split and donor rules (`tngxmm.donors.build_sim_targets`).  For L1_m8 the
+object is the HBT+ track:
+
+    tngxmm donors sim-targets --preset v1_flamingo_l1m8 --cube-root <cube_root> --identity track_id \
+        --replica campaigns/v4/targets_v4.csv --coverage campaigns/v4/replica_coverage.csv \
+        --out-dir campaigns/v4_flamingo_l1m8
+
+It gives 15,003 views of 5,001 halo-snapshots on 2,145 tracks; four halos at z = 1.0 and 1.5 have SOAP indices too
+long for the mock obsid and get no view (`campaigns/v4_flamingo_l1m8/README.md`).
+
+L1_m8 is not a resolution-converged version of L1_m10 in L_X.  At the same true M500c and z = 0.2,
+L1_m8 is fainter than L1_m10 by 0.13-0.17 dex at 4-10e14 Msun and brighter by 0.1 dex at 1-1.6e14 Msun; the gas
+fractions account for 0.04-0.06 dex of the difference at the high-mass end (SOAP luminosities in the R500c sphere,
+3,285 L1_m8 centrals; `LXGAP_INVESTIGATION/REPORT.md`, section 5).  Comparisons of TNG-Cluster with FLAMINGO in
+this documentation use L1_m8.
+
+## The L_X difference between TNG-Cluster and FLAMINGO
+
+At catalogue level TNG-Cluster is 0.2-0.4 dex brighter in 0.5-2 keV than the observed L_X-M relations at fixed true
+mass, and FLAMINGO lies close to them ({doc}`dev/LX_CROSS_SIM`).  A pair test asked whether the same difference
+appears through our own mock pipeline (DECISIONS, "L_X gap test", job 1890897; the reading rule was fixed before
+the job).
+
+The test has 199 TNG-Cluster views at z = 0.1-0.5, as many per snapshot as the real pool has at that redshift, each
+paired with the L1_m8 halo of the matching snapshot nearest in true M500c (median |dlog M| 0.001 dex); within a pair
+the same donor observation, redshift, line of sight and roll, the same instrument and background code, `full`
+abundances, 5.66 R500c cubes.
+
+The result (median log10 L_FLAMINGO / L_TNG, 95 per cent bootstrap interval over pairs):
+
+| quantity | all pairs | 1-2e14 Msun | 2-4e14 Msun | above 4e14 Msun |
+|---|---|---|---|---|
+| L_X(1 Mpc), photometry of the mocks | -0.325 [-0.375, -0.292] (193) | -0.244 | -0.323 | -0.391 |
+| intrinsic, R500c cylinder | -0.351 [-0.379, -0.305] (199) | -0.278 | -0.330 | -0.393 |
+
+The photometry reproduces the intrinsic difference to 0.03 dex.  In the median the measurement reads both arms low:
+the median of log10(measured / intrinsic L_X(1 Mpc)), the net ratio of the measurement chain, is -0.052 dex for
+TNG-Cluster and -0.041 dex for FLAMINGO (193 views each; on the v1.0.1 trees, an earlier configuration, -0.071 dex
+over 6,967 TNG-Cluster views).  Against the real pool (each mock against the median real L_X(1 Mpc) within 0.1 dex in
+catalogue mass and 0.1 in z; different mass definitions, no conversion): FLAMINGO L1_m8 -0.04 dex on true M500c
+and +0.03 dex on its 3-D hydrostatic mass; TNG-Cluster +0.31 and +0.41 dex.  The ratio is not known for the real
+clusters, so whether it cancels in these offsets is not measured ({doc}`definitions`, L_X).
+
+An independent recomputation of the intrinsic luminosities of the same pairs gives
+-0.36 dex, and the catalogue-level comparison of temet's luminosities of TNG-Cluster with FLAMINGO's SOAP
+luminosities at matched mass gives -0.42 dex.  About 60 per cent of the difference comes from the gas fraction, the
+rest from the structure of the gas (the emission measure of the 0.15-1 R500c shell beyond what the gas fraction
+gives).  An audit of every step of the emission, projection, photometry and mass axis found no step that raises the
+TNG-Cluster luminosities by more than 0.022 dex (the legacy abundance table, now replaced by `full`).
+
+The excess is a property of the TNG-Cluster gas.  The same pipeline puts FLAMINGO on the observed
+relation, so the pipeline does not create it, and no defensible change of the emission model removes it
+({doc}`dev/LX_GAS_EXPLORATION`: physically defensible departures remove at most about 0.06 dex).  The excess is
+reported as a model property and is not calibrated away.
+
+## Data use
+
+SIMBA and EAGLE are read from the particle data their teams released (since 2026-11-01); the TNG-format conversions on
+Vera still supply their halo catalogues.  The readme of the conversions asks users to contact their author before
+use, which has not been done, so both stay internal validation runs as they stand.  SIMBA's decoupled wind particles
+are identified in the original snapshots (DelayTime > 0) and do not emit (DECISIONS "P2b").  FLAMINGO L1_m8 and
+L1_m10 are public data.

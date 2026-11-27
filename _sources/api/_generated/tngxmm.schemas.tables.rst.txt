@@ -1,0 +1,18 @@
+tngxmm.schemas.tables
+=====================
+
+.. automodule:: tngxmm.schemas.tables
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LX_FLAGS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      validate_figure_sidecar
+   

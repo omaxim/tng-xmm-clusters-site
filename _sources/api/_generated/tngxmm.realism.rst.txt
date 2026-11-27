@@ -1,0 +1,20 @@
+tngxmm.realism
+==============
+
+.. automodule:: tngxmm.realism
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   c2st
+   dino
+   features
+   matching
+   pipeline
+   report
+   selection
+   split

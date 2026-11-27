@@ -1,0 +1,28 @@
+tngxmm.realism.features
+=======================
+
+.. automodule:: tngxmm.realism.features
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BAND_CODES
+      SIM_CENTRE_DEG
+      ID_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      donor_aperture
+      feature_row
+      mock_feature_table
+      mock_features
+      mock_start_centre
+      real_feature_table
+      real_features
+      simulation_centre
+      summed_bands
+   

@@ -1,0 +1,33 @@
+tngxmm.instrument.fwc\_state
+============================
+
+.. automodule:: tngxmm.instrument.fwc_state
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FWC_REFERENCE_RULE
+      NORMAL_NFLAG
+      ROW_COLUMNS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ccd_exposure
+      epoch_by_first
+      epochs
+      event_rows
+      exptime_rows
+      row_selection
+      select_epoch
+      selected_events
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Epoch
+   

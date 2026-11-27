@@ -1,0 +1,52 @@
+tngxmm.sim.compute\_hse\_mass
+=============================
+
+.. automodule:: tngxmm.sim.compute_hse_mass
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ESTIMATORS
+      LIT_ESTIMATORS
+      FIT_ESTIMATORS
+      MU059_FIT_ESTIMATOR
+      NOSF_FD_ESTIMATOR
+      S8_ESTIMATORS
+      BARNES_NBINS
+      BARNES_RMAX_R500
+      BARNES_XCUT_T_K
+      PEARCE_NBINS
+      PEARCE_RMIN_R500
+      PEARCE_RMAX_R500
+      T_SL_VALID_KEV
+      SHELL_DENSITIES
+      MIN_FILLING
+      SLUGS
+      MU_OF
+      HSE_VARIANTS
+      COLUMN_ESTIMATORS
+      TRUTH_COLUMNS
+      GAS_FIELDS_COMPOSITION
+      FIT_MIN_SHELLS
+      VIK_GAMMA
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      barnes_edges
+      compute_hse_truth
+      crossing_flag
+      m500_at_z
+      metal_columns
+      metallicity_summary
+      pearce_edges
+      rho_crit_msun_kpc3
+      shell_gas_density
+      solar_units_of_table
+      truth_columns
+      variant_for
+      write_hse_truth
+   

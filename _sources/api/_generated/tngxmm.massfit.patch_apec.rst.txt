@@ -1,0 +1,32 @@
+tngxmm.massfit.patch\_apec
+==========================
+
+.. automodule:: tngxmm.massfit.patch_apec
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_APECROOT
+      CONTAINER_BOUND_PREFIXES
+      BAND_RULES
+      ABUND_TABLES
+      XSPEC_UNSAFE_CHARS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apecroot
+      apply
+      apply_abundance_table
+      apply_xspec_tempdir
+      band_channel_scope
+      check_tables
+      container_visible
+      current_band_rule
+      import_mbproj2d
+      patch_apec
+      xspec_safe_path
+   

@@ -1,0 +1,37 @@
+tngxmm.validation.ideal\_cluster
+================================
+
+.. automodule:: tngxmm.validation.ideal_cluster
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MB_CONST
+      H0
+      OM0
+      PROFILE_SHAPES
+      GRID_KPC
+      TNG_METAL_Z
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cylinder_luminosity
+      element_abundances
+      hydrostatic_mass_msun
+      ideal_cluster
+      nfw_parameters
+      particle_constants
+      rho_crit_cgs
+      sample_cells
+      vikhlinin_ne
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      IdealCluster
+   

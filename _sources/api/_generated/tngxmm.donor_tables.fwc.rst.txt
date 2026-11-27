@@ -1,0 +1,26 @@
+tngxmm.donor\_tables.fwc
+========================
+
+.. automodule:: tngxmm.donor_tables.fwc
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FWC_STEMS
+      AREA_GRID_DET
+      DET_HALF_RANGE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_fwc_reference
+      camera_fwc_reference
+      ccd_areas
+      epoch_area_share
+      fwc_file
+      reference_rule
+      select_reference
+   

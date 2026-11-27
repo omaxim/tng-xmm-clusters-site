@@ -1,0 +1,6 @@
+tngxmm.photometry.cli
+=====================
+
+.. automodule:: tngxmm.photometry.cli
+
+   

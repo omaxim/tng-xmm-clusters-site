@@ -1,0 +1,19 @@
+tngxmm.analysis.estimands
+=========================
+
+.. automodule:: tngxmm.analysis.estimands
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      BAND
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      mock_estimands
+      truth_estimands
+   

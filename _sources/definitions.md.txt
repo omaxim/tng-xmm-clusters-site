@@ -1,0 +1,212 @@
+# Science definitions
+
+The quantities the pipeline measures, how each is defined, and the column that holds it. Labels and version names
+are in the {doc}`glossary`.
+
+## Redshifts
+
+z_snap
+: The redshift of the snapshot the halo is taken from. TNG presets: the nine full snapshots, z = 0, 0.1, 0.2, 0.3,
+  0.4, 0.5, 0.7, 1.0, 1.5 (`v1_common` also uses the mini snapshots in between); the other simulations: the snapshot
+  nearest each of these redshifts (`config.V1_SNAPSHOT_Z`).
+
+z_obs
+: The redshift at which the view is observed: the redshift of its reference observation times exp(e), e drawn from
+  a normal distribution of width 0.03 (`sim.z_obs_source = 'replica'`, `donors.build_replica_targets`). The lists
+  of the pairing on the fit mass have no jitter: a pass-1 view is observed at z_snap (`donors.build_pass1_targets`),
+  a pass-2 view at the redshift of its paired observation (`donors.pair_six_views`). Distances, angular sizes, the redshifting of the
+  photons and every estimand below use z_obs; the structure and temperature of the gas are those of z_snap. The
+  size of the mismatch and its effect on M500c are on {doc}`samples` (ledger entry `method.snapshot_to_zobs`).
+
+## Radii
+
+R500c(z_obs)
+: The radius inside which the mean density of the halo's particles (every particle type within a sphere about the
+  halo centre) is 500 rho_c(z_obs). The radius of every mock estimand. Column `r500c_zobs_kpc`.
+
+R500c (catalogue)
+: The halo catalogue value at z_snap (Subfind `Group_R_Crit500` for TNG, SIMBA and EAGLE; SOAP `SO/500_crit` for
+  FLAMINGO), column `R500c_kpc`; it sets the size of the gas cube and the truth spheres, not the estimands.
+
+theta500
+: The angle subtended by R500c(z_obs) at z_obs (`theta500_arcmin`).
+
+R500 of a fit
+: The radius at which the fitted mass profile crosses 500 rho_c(z_obs). Its starting value (the "first-guess R500")
+  comes from an L_X-mass relation and only sets the crop of the image and the starting point of the fit.
+
+R500 of a real cluster
+: The catalogue R500 of its reference mass (`r500_catalogue_kpc` of `obs.observations`), used for the apertures of
+  the photometry.
+
+## Masses
+
+Three masses are measured for every mock view, all at z_obs and all in Msun unless the column name says `1e14`.
+
+M_true (`m500c_zobs_msun`)
+: The true total mass inside R500c(z_obs), from the particle mass profile. Older notes and figures call it "black".
+  The catalogue mass at z_snap is `M500c`.
+
+M_HSE (`m500c_hse_msun`, `m500_red_zobs_msun`)
+: The intrinsic hydrostatic mass of the simulated gas: Barnes et al. (2021, secs. 2.1.5 and 2.4) with three
+  deviations, each disclosed in the ledger: (1) the thermal pressure of each cell with its own mean molecular
+  weight instead of a fixed 0.59; (2) star-forming cells excluded; (3) a filling-factor shell density. 50 linear
+  shells to 1.5 R500c, Vikhlinin et al. (2006) fits to the density and temperature profiles, analytic slopes, gas
+  from every particle within a sphere about the halo centre (not the FoF group). The combined effect of the
+  deviations is +0.024 in the median of ln M_HSE(R500c) against the literal Barnes et al. estimator (7,380 views).
+  The campaign column `m500c_hse_msun` takes the innermost 500 rho_c crossing when there are several (0.12 per cent
+  of the views); the estimands of `analysis.mock_fits` (`m500_red_zobs_msun`) take the outermost, like the true
+  mass. Older notes call it "red".
+
+M_X (`m500_blue_1e14`, `m500_1e14` of the fit tables [1e14 Msun])
+: The hydrostatic mass from the X-ray fit of the image (mbproj2d: an NFW total-mass model plus the gas
+  self-gravity, fitted to the per-camera images in the PPS bands 0.5-1, 1-2, 2-4.5 and 4.5-12 keV with XSPEC
+  responses and the King PSF of the calibration at each pixel's off-axis angle): the posterior median of M500 at 500 rho_c(z_obs), with the 16th and 84th
+  percentiles. The fit keeps the cumulative mass profile of every posterior sample, so M_X inside any radius is
+  available (`mblue_<f>`). The same function fits the real observations. Older notes call it "blue".
+
+## Bias ratios
+
+All three are ratios of the masses above for the same view.
+
+| name | definition | column (natural log) |
+|---|---|---|
+| total bias, (1 - b) | M_X / M_true | `ln_bt_<f>`, `ln_bt_so` |
+| intrinsic hydrostatic bias, (1 - b_HSE) | M_HSE / M_true | `ln_rt_<f>`, `ln_rt_so` |
+| bias of the X-ray method | M_X / M_HSE | `ln_br_<f>`, `ln_br_so` |
+
+Two versions of each (`tngxmm.analysis.estimands`):
+
+* **Fixed radius** (`_<f>`, f = 0.5, 0.8, 1, 1.2): masses inside f x R500c(z_obs), the true radius, for all three
+  curves. This is what a profile fit constrains, and it is the estimand of claim C. It was chosen after the second
+  round of results had been seen; the ledger entry `method.estimand_fixed_radius` says so.
+* **Spherical overdensity** (`_so`): each mass at its own 500 rho_c(z_obs) crossing, as observers report masses
+  (claims A and B). A ratio x at fixed radius becomes about x^(3 / (3 - alpha)) as a ratio of SO masses for a local
+  slope M ~ r^alpha, so SO ratios are further from 1.
+
+The real clusters have no true mass. Their fits are compared with published masses of the same definition
+(hydrostatic M500c at its own radius, `ln_fit_ref` of `analysis.real_fits`).
+
+## Luminosity and temperature
+
+L_X (`lx_r500`, `lx_1mpc`, `lx_1p5mpc`)
+: Rest-frame 0.5-2 keV luminosity inside the aperture, measured on the image with point sources masked and the
+  background from an annulus at 1.1-1.6 aperture radii. Mocks: aperture R500c(z_obs); real clusters: the catalogue
+  R500. NaN unless `lx_<ap>_flag == 'ok'`. The same function measures mocks and real observations.
+
+  In the median the measurement reads the mocks low. The truth ratio, the median of log10(`lx_1mpc` /
+  `lx_intr_1mpc`), is -0.071 dex (16-84 per cent -0.122 to -0.034) over the 6,967 TNG-Cluster views of the v1.0.1
+  trees (`LXGAP_INVESTIGATION/REPORT.md`, section 2, the row "L_X estimator"). The v1.0.1 trees are an earlier
+  configuration: FoF gas within 2 R200c, the legacy emission table, the instrument before release 1.1. Below z_obs =
+  0.8 the ratio stays within 0.015 dex of the median (bins of at least 820 views between -0.058 and -0.073 dex);
+  above z_obs = 0.8 it is -0.112 dex (851 views). Inside R500 it is -0.077 dex (6,634 views). It is not negative in
+  every aperture and sample: in the 1.5 Mpc aperture the median is -0.038 dex for TNG-Cluster (5,607 views) but
+  +0.012, +0.030 and +0.073 dex for TNG300, TNG100 and TNG50 (1,305, 77 and 5 views). On the 193 TNG-Cluster views
+  of the L_X gap test (release 1.1.3 instrument and background, `full` emission, cubes of 5.66 R500c) the 1 Mpc
+  ratio is -0.052 dex, against -0.065 dex for the same views in the v1.0.1 trees.
+
+  The ratio is the net result of the whole measurement chain, not of one step. Most of it is the count image: the
+  vignetting, chip gaps and inactive CCDs that the on-axis live time and ECF leave out, and the PSF; the cluster
+  light in the background annulus is a small part ({doc}`validation`, "The L_X estimator against the intrinsic
+  luminosity", gives every step). Real clusters have no intrinsic value, so whether the ratio cancels between mocks
+  and real data is not measured. No correction is applied on either side. The numbers come from
+  `internal/ledger_tests/lx_truth_ratio.py` and `lx_truth_ratio_terms.py`.
+
+L_X intrinsic (`lx_intr_r500`, ...)
+: The same band and aperture from the emission of the gas cells, without the instrument; `*_tngref` is the
+  temet-exact value of the official TNG X-ray products.  The two differ in convention: `lx_intr_*` is the
+  rest-frame 0.5-2 keV luminosity, `*_tngref` is temet's quantity, the rest-frame luminosity divided by (1 + z)
+  (temet weights each photon by E_emit / (1 + z)).  Compare `lx_intr_* / (lx_*_tngref (1 + z_snap))`; the raw ratio
+  `lx_intr_r500 / lx_intr_r500_tngref` grows with redshift, from +0.003 dex at z = 0 to +0.46 dex at z = 1.5, by
+  convention alone.
+
+Temperatures (`t_ew_kev`, `t_sl_r500c_kev`, `t_mw_r500c_kev`)
+: Emission-weighted, spectroscopic-like and mass-weighted temperatures within R500c from the gas cells.
+
+## What a mock observation contains
+
+Each item is a ledger entry ({doc}`assumptions`); the code reads the value from the preset.
+
+* Gas: every gas cell inside the cylinder of radius and line-of-sight half-depth 4 R500c about the halo centre;
+  cells colder than 3e5 K, star-forming cells and, in TNG, cells with net heating do not emit (`sim.gas_cutout`,
+  `sim.gas_cut`, `multisim.net_heating`). Three projections per halo, along the simulation axes; six, along the
+  icosahedral axes, under the pass-2 presets (`sim.projection = 'icosahedral6'`). Gas beyond +-4
+  R500c along the line of sight is absent: its emission inside the XMM field is below 0.62 per cent of the
+  background (figure "convergence"), but correlated structure beyond the cube, which adds projection scatter to
+  real observations, is not represented.
+* Emission: APEC 3.1.3 in collisional ionisation equilibrium, no non-equilibrium ionisation and no line broadening.
+  Abundances (`sim.emission_abundances`, ledger `multisim.abundance_modes`): `full` (the default) gives every
+  element the simulation tracks per cell, helium included, its own spectrum, and puts the untracked metals at
+  solar ratios scaled by the metal mass the simulation assigns to no tracked element; `common` (preset `v1_common`)
+  uses the cell's total metallicity with the Anders & Grevesse (1989) ratios for every simulation. Solar abundances
+  of Lodders (2003) on both sides of the fit (`sim.apec_abund_table`). The emission of the releases up to 1.1.3
+  (field unset) used the seven metals of TNG and tied the untracked ones to Fe.
+* Photons for the longest camera live time at z_obs, absorbed by the conditions donor's total Galactic column
+  (Willingale et al. 2013), the column the fit assumes for mocks and real clusters alike.
+* Instrument: the EPIC pn and MOS responses, vignetting about the calibrated telescope axis, the King PSF of the CCF
+  interpolated in energy and off-axis angle for the cluster (the fit uses the same table at each pixel's off-axis
+  angle and three energies of each band on both sides, `fit.psf`), the conditions donor's
+  exposure maps, filters, readout mode, active and anomalous CCDs, pn out-of-time events.
+* Backgrounds: the particle background and residual soft protons measured on the conditions donor; the sky (Local
+  Hot Bubble and Galactic halo levels of the donor field from its RASS spectrum, the unresolved CXB from the Moretti et
+  al. 2003 counts; `instrument.sky_background`); field AGN from the soft-band counts of Moretti et al. (2003).
+* Counts: production mocks and realism replays carry the luminosity of the simulation's gas; nothing is thinned to
+  the counts of the real cluster (the count-matching factor, median f = 0.54, is reported only). The mocks that are fitted for the mass
+  bias therefore have, at fixed observation, about twice the net counts of their real counterparts, because
+  TNG-Cluster halos are brighter than real clusters of the same mass (+0.28 dex in soft-band L_X at
+  5e14 Msun and z = 0.2; {doc}`validation`).
+
+## Scope of the bias measurement
+
+What sets the hydrostatic bias of an X-ray mass, and what the mocks and the comparison represent of it.
+
+Non-thermal pressure
+: M_HSE and M_X use the thermal pressure only, as X-ray analyses do. The gas of TNG has bulk and turbulent motions,
+  and the difference between the thermal hydrostatic mass and the true mass is the physical part of the bias. On the
+  2,463 TNG-Cluster halo-snapshots of the v1.0.1 trees, the thermal estimator of Pearce et al. (2020) gives
+  M_HSE / M500c = 0.866 at R500c (median; 16-84 per cent 0.731-1.032), and adding the kinetic pressure rho sigma^2
+  (1-D velocity dispersion of the gas) gives 1.054 (0.856-1.316): the motions of the gas account for the deficit
+  (with some overshoot, because the kinetic term also holds streaming and rotation that do not support the gas). The
+  headline M_HSE (Barnes et al. 2021 estimator, 0.883) is thermal. TNG follows magnetic fields (ideal MHD); their
+  pressure enters no estimator. TNG has no cosmic rays.
+
+Clumping and multiphase gas
+: The mocks emit from the simulated gas cell by cell, so density clumps and temperature structure enter the images
+  and bias the X-ray density and temperature profiles as in real data (TNG-Cluster: sqrt(C) about 1.07 at R500,
+  {doc}`validation`). The closure clusters are smooth and single-phase, so the closure test measures the method
+  without clumping; the TNG mocks measure it with clumping.
+
+Temperature
+: The fit infers the temperature from the band ratios of the per-camera images (spectral-like weighting); the
+  intrinsic estimators use mass-weighted shell temperatures. Mock clusters are hotter than the real clusters they are
+  matched to (band-ratio offset 0.46 ln(T_mock / T_donor), {doc}`validation`).
+
+Absorbing column
+: Mock photons are absorbed by the total Galactic column (N_HI + 2 N_H2, Willingale et al. 2013), and the fit
+  assumes the same column for mocks and real observations (`massfit.fit_galactic_nh = 'willingale13'`).
+
+Metallicity
+: TNG's Fe abundance is 0.13-0.23 solar (Lodders) at R500, below the observed value of about 0.48; the fit leaves Z
+  free on both sides. The effect of the lower metallicity on M_X is not measured.
+
+Geometry and epoch
+: Three projections along the simulation axes (six icosahedral axes in pass 2); gas within +-4 R500c along the line of sight; the gas of z_snap
+  observed at z_obs, which shifts the population's hydrostatic bias by -0.001 to -0.003 in ln and a redshift bin by at
+  most 0.01 ({doc}`samples`).
+
+Instrument
+: The cluster photons are scattered with the energy- and angle-dependent King PSF of the CCF
+  (`instrument.psf_model`); the fit convolves with the King of the same table at each pixel's off-axis angle, summed
+  over three count-weighted energies of each band (`massfit.psf = 'king-angle'`), as for real data; the closure arm `v1_psfon` draws the cluster with the
+  on-axis King instead and `v1_psfell` with the ELLBETA description. The sky background is each donor field's foreground from RASS with the Moretti CXB
+  (`instrument.sky_background`).
+
+## Units
+
+Masses in Msun with h removed; lengths in physical kpc after loading (comoving ckpc/h as read from the snapshots);
+angles in arcsec or arcmin as the name says; luminosities in erg/s; energies in keV; times in s. Exceptions:
+`fit_results.m500` and every `*_1e14` column are in 1e14 Msun. Live time is the on-axis level of the camera's
+exposure map in the 0.5-1 keV band (`live_s_*`); `exposure_*_s` of a view is the live time it was observed with.
+Cosmology: the fits and every literature mass use flat LCDM with H0 = 67.74 km/s/Mpc and Omega_m = 0.3089 (Planck
+2015, as TNG). The generation uses each simulation's own cosmology from its descriptor (FLAMINGO 68.1 and 0.306,
+SIMBA 68 and 0.3, EAGLE 67.77 and 0.307; ledger `multisim.generation_cosmology`).

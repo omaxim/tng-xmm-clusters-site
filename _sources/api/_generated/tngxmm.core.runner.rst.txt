@@ -1,0 +1,49 @@
+tngxmm.core.runner
+==================
+
+.. automodule:: tngxmm.core.runner
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      EXIT_TEMPLATE
+      EXIT_DISK
+      SITE_PROD_ROOT
+      GUARD_MARKER
+      SLURM_LIB
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_exports
+      check_disk
+      check_one_node_guard
+      current_user
+      git_state
+      parse_template
+      run_preflight
+      slurm_command
+      stamp_job
+      submit
+      template_lib
+      user_jobs
+      validate_template
+      write_provenance
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GitState
+      SubmitResult
+      Template
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      RunnerRefusal
+   

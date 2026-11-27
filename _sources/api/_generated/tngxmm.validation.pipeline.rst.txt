@@ -1,0 +1,17 @@
+tngxmm.validation.pipeline
+==========================
+
+.. automodule:: tngxmm.validation.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      analyse_closure_grid
+      create_pipeline
+      fit_closure_views
+      generate_closure_views
+      plan_closure_grid
+      warm_closure_rate_caches
+   

@@ -1,0 +1,14 @@
+# donor_tables
+
+```{eval-rst}
+.. automodule:: tngxmm.donor_tables.pipeline
+   :noindex:
+   :no-members:
+```
+
+`kedro run --pipeline donor_tables`; catalog `conf/base/catalog/donor_tables.yml`.
+
+## Nodes
+
+```{kedro-pipeline} donor_tables
+```

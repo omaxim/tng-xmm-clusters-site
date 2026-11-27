@@ -1,0 +1,25 @@
+tngxmm.sim.load\_catalog\_meta
+==============================
+
+.. automodule:: tngxmm.sim.load_catalog_meta
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MDOT_TO_MSUN_YR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      extended_catalog_fields
+      load_catalog_meta
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CatalogMeta
+   

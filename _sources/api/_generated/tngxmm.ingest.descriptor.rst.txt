@@ -1,0 +1,25 @@
+tngxmm.ingest.descriptor
+========================
+
+.. automodule:: tngxmm.ingest.descriptor
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_FOR_SIM_NAME
+      TILING_SCHEMES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      available
+      descriptor_hash
+      for_sim_name
+      load
+      tracked_elements
+      validate
+      volumes_tile
+   

@@ -1,0 +1,37 @@
+tngxmm.bank.write\_mosaic
+=========================
+
+.. automodule:: tngxmm.bank.write_mosaic
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MOSAIC_FORMAT
+      MOSAIC_SUFFIX
+      UINT16_LIMIT
+      MOSAIC_BAND_KEV
+      MOSAIC_HEADER_KEYS
+      MOSAIC_HEADER_PATTERNS
+      OVERFLOW_POLICIES
+      CHECKSUM_COMMENT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      convert_frame_to_mosaic
+      encode_mosaic
+      mosaic_relpath
+      read_frame
+      read_mosaic
+      to_uint16_counts
+      write_mosaic
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      MosaicRangeError
+   

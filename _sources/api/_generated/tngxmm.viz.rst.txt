@@ -1,0 +1,19 @@
+tngxmm.viz
+==========
+
+.. automodule:: tngxmm.viz
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   cli
+   doc_figures
+   export_pipeline_graph
+   pipeline
+   plot_mock_truth
+   plot_realfit_masses
+   schemas

@@ -1,0 +1,38 @@
+tngxmm.massfit.set\_molecular\_weight
+=====================================
+
+.. automodule:: tngxmm.massfit.set_molecular_weight
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      MU_COMPOSITIONS
+      MB_NE_NH
+      M_P_U
+      ATOMIC_WEIGHTS
+      ABUNDANCE_TABLES
+      TNG_HE_H
+      FREE_Z_REFERENCE
+      AUDIT_FACTORS
+      AUDIT_DIR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_mu_convention
+      composition_constants
+      constants_for
+      g3_chain_rows
+      legacy_constants
+      main
+      mass_factor
+      mu_shift_table
+      plasma_constants
+      remeasure_m500_from_chain
+      set_molecular_weight
+      summarise_mu_shift
+      tng_constants
+   

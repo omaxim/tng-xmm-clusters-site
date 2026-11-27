@@ -1,0 +1,46 @@
+tngxmm.obs.candidate\_quality
+=============================
+
+.. automodule:: tngxmm.obs.candidate_quality
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      PRODUCT
+      SOFT_BANDS
+      LIVE_EXPOSURE_FRACTION
+      CENTRE_RADIUS_ARCMIN
+      BACKGROUND_FROM_R500
+      BLOCK_PIXELS
+      SMOOTH_SIGMA_PIXELS
+      MIN_CLEAN_EXPOSURE_S
+      SHORT_EXPOSURE_S
+      MIN_CENTRE_EXPOSURE_FRACTION
+      N_CAMERAS
+      MIN_R500_COVER
+      MIN_SNR_HALF_R500
+      MAX_CORE_FRACTION
+      MAX_PEAK_OFFSET_ARCMIN
+      HARD_BACKGROUND_QUANTILE
+      STATUS_OK
+      STATUS_NO_IMAGES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bank_hard_background_limits
+      bank_jobs
+      block_median
+      candidate_jobs
+      contact_sheets
+      grade_table
+      index_products
+      load_image_set
+      measure_image_set
+      measure_table
+      plain_flags
+      quality_flags
+   

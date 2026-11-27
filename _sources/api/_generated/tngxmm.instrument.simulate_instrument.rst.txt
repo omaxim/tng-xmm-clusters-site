@@ -1,0 +1,82 @@
+tngxmm.instrument.simulate\_instrument
+======================================
+
+.. automodule:: tngxmm.instrument.simulate_instrument
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CAMERA_OFFSET_ARCMIN
+      PN_OOT_FRAC
+      P_CUM_TOL
+      PN_COLUMN_ARCMIN
+      PN_OOT_MODEL
+      PN_BAND1_RAWY_MIN
+      PN_ROW_ARCSEC
+      PN_EDGE_ROWS
+      PSF_MODEL
+      DONOR_FILTERS
+      VIG_AXIS_RULES
+      REALISM_SWITCHES
+      CLUSTER_PSF_MODELS
+      SKY_MODELS
+      PN_HARD_BANDS
+      QPB_UNITS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      agn_channel_cdfs
+      apply_vignetting_calibration
+      band_gaps
+      camera_events
+      camera_model_images
+      camera_qpb_maps
+      catalogue_position_parameters
+      channel_cdf_from_coarse
+      check_agn_switches
+      check_camera_partition
+      check_pn_gap_level
+      check_psf_model
+      check_qpb_model_options
+      donor_core_offset
+      donor_filters
+      donor_offset_displacement
+      donor_submodes
+      drop_out_of_fov
+      efficiency_thinning
+      ellbeta_offsets_energy_angle
+      ellbeta_scatter
+      expectation_image
+      fov_map
+      generate_agn_sources
+      in_band
+      king_offsets
+      king_offsets_energy_angle
+      king_table
+      output_pixel
+      pn_band1_single_pixel
+      pn_out_of_time
+      pn_rawy
+      qpb_expectation
+      qpb_lambda
+      rga_factor
+      rga_offset_map
+      sample_channels
+      simulate_instrument
+      skybkg_spectrum
+      soft_proton_shape
+      soft_protons_on
+      view_context
+      with_rga_modulation
+      with_vignetting_axis
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      InstrumentOptions
+   

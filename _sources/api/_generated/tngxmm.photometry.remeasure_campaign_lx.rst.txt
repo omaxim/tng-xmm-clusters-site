@@ -1,0 +1,20 @@
+tngxmm.photometry.remeasure\_campaign\_lx
+=========================================
+
+.. automodule:: tngxmm.photometry.remeasure_campaign_lx
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      REMEASURE_LX_TAG
+      BACKUP_SUFFIX
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      remeasure_campaign_lx
+      remeasure_view_lx
+   

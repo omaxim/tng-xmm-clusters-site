@@ -1,0 +1,13 @@
+tngxmm.viz.pipeline
+===================
+
+.. automodule:: tngxmm.viz.pipeline
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_pipeline
+      render_fits
+   

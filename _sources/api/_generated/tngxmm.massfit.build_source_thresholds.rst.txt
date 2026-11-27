@@ -1,0 +1,36 @@
+tngxmm.massfit.build\_source\_thresholds
+========================================
+
+.. automodule:: tngxmm.massfit.build_source_thresholds
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      LOGNLOGS
+      MOCK_FLUX_RANGE
+      MOCK_GAMMA
+      DEFAULT_IMAGE_ROOT
+      MEASURE_VERSION
+      DEFAULT_AGN_LOGNLOGS
+      F_2_10_OVER_2_12
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      band_fraction
+      build_parser
+      build_source_thresholds
+      default_table_path
+      donor_threshold_row
+      find_expmap
+      flux_for_density
+      main
+      mock_counts_above
+      pps_density
+      pps_path_for
+      read_source_thresholds
+      threshold_for_donor
+   

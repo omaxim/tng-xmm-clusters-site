@@ -1,0 +1,21 @@
+tngxmm.instrument.run\_xmm\_simulator
+=====================================
+
+.. automodule:: tngxmm.instrument.run_xmm_simulator
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NH_REF_DEFAULT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cameras_from_exposure
+      merge_images
+      run_upstream_reference
+      run_xmm_simulator
+   

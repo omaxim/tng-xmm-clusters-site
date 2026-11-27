@@ -1,0 +1,24 @@
+tngxmm.obs.extra\_observations
+==============================
+
+.. automodule:: tngxmm.obs.extra_observations
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      EXTRA_FILES
+      GRADE
+      IMAGE_DIR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_extra_inputs
+      camera_exposures
+      cluster_dir
+      extra_rows
+      load_extra_inputs
+   
